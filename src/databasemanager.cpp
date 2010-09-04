@@ -40,20 +40,20 @@ bool DatabaseManager::open(){
     path.append(QDir::separator()).append(filepath);
     path = QDir::toNativeSeparators(path);
     if(QFile::exists(path)){
-        qDebug()<<"Notice - Database: Database file exists.";
+        qDebug("Database file exists.");
     }
     else{
-        qDebug()<<"Notice - Database: Database file does not exist.";
+        qDebug("Database file does not exist.");
     }
     db.setDatabaseName(path);
 
 
     #else
     if(QFile::exists(DATABASE_NAME)){
-        qDebug()<<"Notice - Database: Database file exists.";
+        qDebug("Database file exists.");
     }
     else{
-        qDebug()<<"Notice - Database: Database file does not exist.";
+        qDebug("Database file does not exist.");
     }
     db.setDatabaseName(DATABASE_NAME);
     #endif
@@ -64,7 +64,7 @@ bool DatabaseManager::open(){
         return true;
     }
     else{
-        qDebug()<<"Error: "<<db.lastError();
+        qDebug("Error opening database: %s",qPrintable(db.lastError().databaseText()));
         return false;
     }
 
@@ -95,46 +95,46 @@ bool DatabaseManager::init_structure(){
     QString strQuery;
     strQuery=""
              "CREATE TABLE department"
-                 "(name varchar(128),"
-                 "address varchar(128));"
+                 "(name TEXT,"
+                 "address TEXT);"
              "CREATE TABLE firefighters"
-                 "(id integer primary key,"
-                 "fname varchar(64),"
-                 "mname varchar(64),"
-                 "lname varchar(64),"
+                 "(id INTEGER PRIMARY KEY,"
+                 "fname TEXT,"
+                 "mname TEXT,"
+                 "lname TEXT,"
                  "dob TEXT,"
-                 "deptid varchar(32),"
-                 "stateid varchar(32),"
-                 "address varchar(128),"
-                 "city varchar(32),"
-                 "state varchar(2),"
-                 "zip varchar(5),"
+                 "deptid TEXT,"
+                 "stateid TEXT,"
+                 "address TEXT,"
+                 "city TEXT,"
+                 "state TEXT,"
+                 "zip TEXT,"
                  "joindate TEXT,"
-                 "status varchar(32),"
-                 "hphone varchar(16),"
-                 "wphone varchar(16),"
-                 "cphone varchar(16),"
-                 "drvlic varchar(16),"
-                 "cdl varchar(16));"
+                 "status TEXT,"
+                 "hphone TEXT,"
+                 "wphone TEXT,"
+                 "cphone TEXT,"
+                 "drvlic TEXT,"
+                 "cdl TEXT);"
             "CREATE TABLE drills"
-                 "(id integer primary key, "
-                 "location varchar(128),"
-                 "inhouse integer,"
-                 "description text,"
-                 "starttime integer,"
-                 "endtime integer,"
-                 "incidentcommander varchar(192),"
-                 "drillnum varchar(16))";
+                 "(id INTEGER PRIMARY KEY, "
+                 "location TEXT,"
+                 "inhouse INTEGER,"
+                 "description TEXT,"
+                 "starttime INTEGER,"
+                 "endtime INTEGER,"
+                 "incidentcommander TEXT,"
+                 "drillnum TEXT)";
 
-    // QSqlQuery::exec and SQLite will not execute multiple queries in a single execution.
+    // QSqlQuery::exec with SQLite will not execute multiple queries in a single execution.
     // Split the compound query into individual queries and execute each
     QStringList strQueries=strQuery.split(";");
     for(int i=0;i<strQueries.size();i++){
         if(query.exec(strQueries[i])){
-            qDebug()<<query.lastQuery();
+            qDebug("Database Structure Initialization: %s",qPrintable(query.lastQuery()));
         }
         else{
-            qDebug()<<query.lastError();
+            qDebug("Database Structure Initialization: %s",qPrintable(query.lastError().databaseText()));
             return false;
         }
     }
@@ -172,13 +172,16 @@ bool DatabaseManager::verify_structure(){
     QByteArray md5bytearray(
             QCryptographicHash::hash(TableSchema.toAscii(),
             QCryptographicHash::Md5));
+
     QString chksum=md5bytearray.toHex().constData();
 
+    /*
     qDebug()<<chksum;
     qDebug()<<TableSchema;
+    */
 
     // And compare to expected value
-    if(chksum!="09489c49bf0fc14fe4bf0c49d1f7110e"){
+    if(chksum!="8c1be6c76a53846e407236b398cff733"){
         return false;
     }
 
@@ -199,7 +202,7 @@ QSqlError DatabaseManager::lastError(){
 bool DatabaseManager::query(QSqlQuery query){
    QSqlQuery queryobject=query;
    bool ret=queryobject.exec();
-   qDebug()<<queryobject.executedQuery();
+   qDebug("Database Query: %s",qPrintable(queryobject.executedQuery()));
    return ret;
 }
 

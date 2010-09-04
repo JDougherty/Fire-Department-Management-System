@@ -65,29 +65,28 @@ void wndNewFirefighter::btnAdd_Clicked(){
                      "?,?,?,"
                      "?,?,?,"
                      "?,?)");
-    addQuery.addBindValue(this->ui->txtFirstName->text());
-    addQuery.addBindValue(this->ui->txtMiddleName->text());
-    addQuery.addBindValue(this->ui->txtLastName->text());
-    addQuery.addBindValue(this->ui->dateDob->date().toString("yyyy-MM-dd 00:00:00.000"));
-    addQuery.addBindValue(this->ui->txtLocalID->text());
-    addQuery.addBindValue(this->ui->txtStateID->text());
-    addQuery.addBindValue(this->ui->txtAddress->text());
-    addQuery.addBindValue(this->ui->txtCity->text());
-    addQuery.addBindValue(this->ui->txtState->itemText(0));
-    addQuery.addBindValue(this->ui->txtZipCode->text());
-    addQuery.addBindValue(this->ui->dateJoin->date().toString("yyyy-MM-dd 00:00:00.000"));
-    addQuery.addBindValue(this->ui->txtStatus->text());
-    addQuery.addBindValue(this->ui->txtHphone->text());
-    addQuery.addBindValue(this->ui->txtWphone->text());
-    addQuery.addBindValue(this->ui->txtCphone->text());
-    addQuery.addBindValue(this->ui->txtDrvLic->text());
-    addQuery.addBindValue(this->ui->txtCDL->text());
+    addQuery.addBindValue(ui->txtFirstName->text());
+    addQuery.addBindValue(ui->txtMiddleName->text());
+    addQuery.addBindValue(ui->txtLastName->text());
+    addQuery.addBindValue(ui->dateDob->date().toString("yyyy-MM-dd 00:00:00.000"));
+    addQuery.addBindValue(ui->txtLocalID->text());
+    addQuery.addBindValue(ui->txtStateID->text());
+    addQuery.addBindValue(ui->txtAddress->text());
+    addQuery.addBindValue(ui->txtCity->text());
+    addQuery.addBindValue(ui->txtState->itemText(0));
+    addQuery.addBindValue(ui->txtZipCode->text());
+    addQuery.addBindValue(ui->dateJoin->date().toString("yyyy-MM-dd 00:00:00.000"));
+    addQuery.addBindValue(ui->txtStatus->text());
+    addQuery.addBindValue(ui->txtHphone->text());
+    addQuery.addBindValue(ui->txtWphone->text());
+    addQuery.addBindValue(ui->txtCphone->text());
+    addQuery.addBindValue(ui->txtDrvLic->text());
+    addQuery.addBindValue(ui->txtCDL->text());
 
     if(db->query(addQuery)){
-        qDebug()<<"Notice: New firefighter added successfully. ";
+        qDebug("New firefighter added successfully. ");
     }
     else{
-        qDebug()<<"Error: Firefighter not added. ";
-        qDebug()<<db->lastError();
+        qWarning("Firefighter not added. %s",qPrintable(db->lastError().databaseText()));
     }
 }

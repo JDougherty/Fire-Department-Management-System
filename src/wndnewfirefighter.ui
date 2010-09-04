@@ -747,6 +747,26 @@
    </widget>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>txtFirstName</tabstop>
+  <tabstop>txtMiddleName</tabstop>
+  <tabstop>txtLastName</tabstop>
+  <tabstop>dateDob</tabstop>
+  <tabstop>txtLocalID</tabstop>
+  <tabstop>txtStateID</tabstop>
+  <tabstop>txtAddress</tabstop>
+  <tabstop>txtCity</tabstop>
+  <tabstop>txtState</tabstop>
+  <tabstop>txtZipCode</tabstop>
+  <tabstop>dateJoin</tabstop>
+  <tabstop>txtStatus</tabstop>
+  <tabstop>txtHphone</tabstop>
+  <tabstop>txtWphone</tabstop>
+  <tabstop>txtCphone</tabstop>
+  <tabstop>txtDrvLic</tabstop>
+  <tabstop>txtCDL</tabstop>
+  <tabstop>btnAdd</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

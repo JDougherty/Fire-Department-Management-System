@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'wndNewFirefighter.ui'
 **
-** Created: Fri Sep 3 03:21:25 2010
+** Created: Sat Sep 4 02:38:27 2010
 **      by: Qt User Interface Compiler version 4.6.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -188,6 +188,23 @@ public:
         btnAdd->setObjectName(QString::fromUtf8("btnAdd"));
         btnAdd->setGeometry(QRect(304, 270, 91, 23));
         wndNewFirefighter->setCentralWidget(centralwidget);
+        QWidget::setTabOrder(txtFirstName, txtMiddleName);
+        QWidget::setTabOrder(txtMiddleName, txtLastName);
+        QWidget::setTabOrder(txtLastName, dateDob);
+        QWidget::setTabOrder(dateDob, txtLocalID);
+        QWidget::setTabOrder(txtLocalID, txtStateID);
+        QWidget::setTabOrder(txtStateID, txtAddress);
+        QWidget::setTabOrder(txtAddress, txtCity);
+        QWidget::setTabOrder(txtCity, txtState);
+        QWidget::setTabOrder(txtState, txtZipCode);
+        QWidget::setTabOrder(txtZipCode, dateJoin);
+        QWidget::setTabOrder(dateJoin, txtStatus);
+        QWidget::setTabOrder(txtStatus, txtHphone);
+        QWidget::setTabOrder(txtHphone, txtWphone);
+        QWidget::setTabOrder(txtWphone, txtCphone);
+        QWidget::setTabOrder(txtCphone, txtDrvLic);
+        QWidget::setTabOrder(txtDrvLic, txtCDL);
+        QWidget::setTabOrder(txtCDL, btnAdd);
 
         retranslateUi(wndNewFirefighter);
         QObject::connect(btnAdd, SIGNAL(clicked()), wndNewFirefighter, SLOT(btnAdd_Clicked()));

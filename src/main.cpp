@@ -22,10 +22,12 @@
 #include <QMessageBox>
 #include <QString>
 #include <QFile>
+#include <QDateTime>
+#include "databasemanager.h"
+#include "LogFunctions.h"
 #include "mainwindow.h"
 #include "wndnewfirefighter.h"
 #include "wndsetup.h"
-#include "databasemanager.h"
 #include "wndActiveDrill.h"
 #include "wndsplash.h"
 
@@ -44,44 +46,53 @@ int main(int argc, char *argv[]){
 
 
 
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    QDateTime initstamp=QDateTime::currentDateTime();
+    QString filename = "fdms.db";
     DatabaseManager db;
+
+    setupDebugRedirection();
+
+    qDebug("Initialized at %s",initstamp.toString().toStdString().c_str());
 
     wndNewFirefighter splash(0,&db);
     splash.show();
-    QString filename = "fdms.db";
 
     // Load existing databse
     if(QFile::exists(filename)){
         if(db.open()){
-            qDebug()<<"Verifying database structure.";
+            qDebug("Verifying database structure.");
             if(db.verify_structure()){
-                qDebug()<<"Notice - Database: Structure verified.";
+                qDebug("Valid database structure.");
                 wndNewFirefighter newfirefighter;
                 newfirefighter.show();
             }
             else{
-                qDebug()<<"Error - Database: Invalid database structure.";
+                QMessageBox::critical(&splash,"Critical Error","Database exists but has invalid structure.",QMessageBox::Ok);
+                qCritical("Invalid database structure.");
+                return 0;
+
             }
         }
         else{
-            qDebug()<<"Fatal Error - Database: Database could not be opened. Exiting.";
-            QMessageBox::critical(&splash,"Fatal Error","Database exists but could not be opened.",QMessageBox::Ok);
+            QMessageBox::critical(&splash,"Critical Error","Database exists but could not be opened.",QMessageBox::Ok);
+            qCritical("Critical Error - Database: Database could not be opened. Exiting.");
             return 0;
         }
     }
     else{
-        qDebug()<<"Running program setup. ";
+        qDebug("Running program setup. ");
         db.open();
         db.init_structure();
         wndSetup setup;
         setup.show();
     }
 
-    qDebug()<<"Herpderp";
 
     return a.exec();
 }
+
 

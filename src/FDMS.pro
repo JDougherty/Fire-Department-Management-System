@@ -16,7 +16,8 @@ HEADERS += databasemanager.h \
     mainwindow.h \
     wndsetup.h \
     wndactivedrill.h \
-    wndsplash.h
+    wndsplash.h \
+    LogFunctions.h
 FORMS += wndNewFirefighter.ui \
     mainwindow.ui \
     wndsetup.ui \

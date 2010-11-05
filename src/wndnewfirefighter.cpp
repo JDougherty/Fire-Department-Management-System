@@ -48,45 +48,36 @@ void wndNewFirefighter::changeEvent(QEvent *e)
 }
 
 void wndNewFirefighter::btnAdd_Clicked(){
-    if(!(db->isOpen())){
-        db->open();
-    }
-    QSqlQuery addQuery;
-    addQuery.prepare("INSERT INTO firefighters "
-                     "(fname,mname,lname,"
-                     "dob,deptid,stateid,"
-                     "address,city,state,"
-                     "zip,joindate,status,"
-                     "hphone,wphone,cphone,"
-                     "drvlic,cdl) VALUES "
-                     "(?,?,?,"
-                     "?,?,?,"
-                     "?,?,?,"
-                     "?,?,?,"
-                     "?,?,?,"
-                     "?,?)");
-    addQuery.addBindValue(ui->txtFirstName->text());
-    addQuery.addBindValue(ui->txtMiddleName->text());
-    addQuery.addBindValue(ui->txtLastName->text());
-    addQuery.addBindValue(ui->dateDob->date().toString("yyyy-MM-dd 00:00:00.000"));
-    addQuery.addBindValue(ui->txtLocalID->text());
-    addQuery.addBindValue(ui->txtStateID->text());
-    addQuery.addBindValue(ui->txtAddress->text());
-    addQuery.addBindValue(ui->txtCity->text());
-    addQuery.addBindValue(ui->txtState->itemText(0));
-    addQuery.addBindValue(ui->txtZipCode->text());
-    addQuery.addBindValue(ui->dateJoin->date().toString("yyyy-MM-dd 00:00:00.000"));
-    addQuery.addBindValue(ui->txtStatus->text());
-    addQuery.addBindValue(ui->txtHphone->text());
-    addQuery.addBindValue(ui->txtWphone->text());
-    addQuery.addBindValue(ui->txtCphone->text());
-    addQuery.addBindValue(ui->txtDrvLic->text());
-    addQuery.addBindValue(ui->txtCDL->text());
+    QVector<QString> ffattributes;
 
-    if(db->query(addQuery)){
+    // Build attribute list for firefighter based on forms
+    ffattributes.append(ui->txtFirstName->text());
+    ffattributes.append(ui->txtMiddleName->text());
+    ffattributes.append(ui->txtLastName->text());
+    ffattributes.append(ui->dateDob->date().toString("yyyy-MM-dd 00:00:00.000"));
+    ffattributes.append(ui->txtLocalID->text());
+    ffattributes.append(ui->txtStateID->text());
+    ffattributes.append(ui->txtAddress->text());
+    ffattributes.append(ui->txtCity->text());
+    ffattributes.append(ui->txtState->itemText(0));
+    ffattributes.append(ui->txtZipCode->text());
+    ffattributes.append(ui->dateJoin->date().toString("yyyy-MM-dd 00:00:00.000"));
+    ffattributes.append(ui->txtStatus->text());
+    ffattributes.append(ui->txtHphone->text());
+    ffattributes.append(ui->txtWphone->text());
+    ffattributes.append(ui->txtCphone->text());
+    ffattributes.append(ui->txtDrvLic->text());
+    ffattributes.append(ui->txtCDL->text());
+
+    // Construct new firefighter with attributes
+    Firefighter newFF(ffattributes);
+
+    if(newFF.InsertToDatabase(this->db)){
         qDebug("New firefighter added successfully. ");
+        QMessageBox::information(0,"Database Operation","Firefighter successfully added to database!");
     }
     else{
         qWarning("Firefighter not added. %s",qPrintable(db->lastError().databaseText()));
+        QMessageBox::warning(0,"Database Operation","Firefighter was not added to database! See log file for details.");
     }
 }

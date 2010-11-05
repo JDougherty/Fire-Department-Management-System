@@ -10,14 +10,16 @@ SOURCES += main.cpp \
     mainwindow.cpp \
     wndsetup.cpp \
     wndactivedrill.cpp \
-    wndsplash.cpp
+    wndsplash.cpp \
+    firefighter.cpp
 HEADERS += databasemanager.h \
     wndnewfirefighter.h \
     mainwindow.h \
     wndsetup.h \
     wndactivedrill.h \
     wndsplash.h \
-    LogFunctions.h
+    LogFunctions.h \
+    firefighter.h
 FORMS += wndNewFirefighter.ui \
     mainwindow.ui \
     wndsetup.ui \

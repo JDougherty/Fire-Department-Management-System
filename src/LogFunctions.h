@@ -29,8 +29,9 @@ void setupDebugRedirection()
 {
     debugLogFile.setFileName( "fdms.log" );
     debugErr.setDevice( &debugLogFile );
-    debugLogFile.open( QIODevice::WriteOnly | QIODevice::Text );
+    debugLogFile.open( QIODevice::Append | QIODevice::Text );
     qInstallMsgHandler( msgRedirection );
+    debugErr<<endl;
 }
 
 

@@ -25,7 +25,7 @@
 #include <QMessageBox>
 #include <QSqlQuery>
 #include "databasemanager.h"
-
+#include "firefighter.h"
 
 namespace Ui {
     class wndNewFirefighter;

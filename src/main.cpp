@@ -55,7 +55,6 @@ int main(int argc, char *argv[])
     DatabaseManager db;
 
     setupDebugRedirection();
-
     qDebug("Initialized at %s",initstamp.toString().toStdString().c_str());
 
     wndNewFirefighter splash(0,&db);

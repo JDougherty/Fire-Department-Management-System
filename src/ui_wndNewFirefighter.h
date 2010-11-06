@@ -1,8 +1,8 @@
 /********************************************************************************
 ** Form generated from reading UI file 'wndNewFirefighter.ui'
 **
-** Created: Sat Sep 4 02:38:27 2010
-**      by: Qt User Interface Compiler version 4.6.3
+** Created: Fri Nov 5 18:24:42 2010
+**      by: Qt User Interface Compiler version 4.7.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/

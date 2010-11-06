@@ -1,8 +1,8 @@
 /********************************************************************************
 ** Form generated from reading UI file 'wndsplash.ui'
 **
-** Created: Tue Aug 31 03:14:09 2010
-**      by: Qt User Interface Compiler version 4.6.3
+** Created: Fri Nov 5 18:24:42 2010
+**      by: Qt User Interface Compiler version 4.7.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/

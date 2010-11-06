@@ -25,20 +25,24 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
     mdiArea = new QMdiArea;
     mdiArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     setCentralWidget(mdiArea);
 
-    windowMapper = new QSignalMapper(this);
-    //connect(windowMapper, SIGNAL(mapped(QWidget*)),this, SLOT(setActiveSubWindow(QWidget*)));
 
+
+    //windowMapper = new QSignalMapper(this);
+    //connect(windowMapper, SIGNAL(mapped(QWidget*)),this, SLOT(setActiveSubWindow(QWidget*)));
 
     this->showMaximized();
 
-    setWindowTitle(tr("MDI"));
-    setUnifiedTitleAndToolBarOnMac(true);
-    //createMdiChild();
+
+    connect(ui->actFirefighterAdd, SIGNAL(triggered()), this, SLOT(mdiNewFirefighter()));
+    connect(ui->actSearch, SIGNAL(triggered()), this, SLOT(mdiSearch()));
+    connect(ui->actActive_Drill, SIGNAL(triggered()), this, SLOT(mdiActiveDrill()));
+
 
 }
 
@@ -60,16 +64,25 @@ void MainWindow::changeEvent(QEvent *e)
 }
 
 
-
-
-/*
-frmCreateFireFighter *MainWindow::createMdiChild()
+// THESE FUNCTIONS SHOW CHILD MDI WINDOWS
+void MainWindow::mdiNewFirefighter()
 {
-    frmCreateFireFighter *child = new frmCreateFireFighter;
+    wndNewFirefighter *child = new wndNewFirefighter;
     mdiArea->addSubWindow(child);
-    return child;
+    child->show();
 }
 
+void MainWindow::mdiSearch()
+{
+    wndSearch *child = new wndSearch;
+    mdiArea->addSubWindow(child);
+    child->show();
+}
 
-*/
+void MainWindow::mdiActiveDrill()
+{
+    wndActiveDrill *child = new wndActiveDrill;
+    mdiArea->addSubWindow(child);
+    child->show();
+}
 

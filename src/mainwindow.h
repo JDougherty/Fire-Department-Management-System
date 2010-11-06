@@ -21,16 +21,14 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QMdiArea>
 #include <QSignalMapper>
+#include <QMdiArea>
 
-class frmCreateFireFighter;
-QT_BEGIN_NAMESPACE
-class QAction;
-class QMenu;
-class QMdiArea;
-class QMdiSubWindow;
-class QSignalMapper;
+// Children Forms
+#include "wndnewfirefighter.h"
+#include "wndsearch.h"
+#include "wndactivedrill.h"
+
 QT_END_NAMESPACE
 
 namespace Ui {
@@ -44,19 +42,18 @@ class MainWindow : public QMainWindow {
 public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
-
     QMdiArea *mdiArea;
+
 protected:
     void changeEvent(QEvent *e);
 
 private slots:
-    //frmCreateFireFighter *createMdiChild();
+    void mdiNewFirefighter();
+    void mdiSearch();
+    void mdiActiveDrill();
 
 
 private:
-
-    //frmCreateFireFighter *activeMdiChild();
-    QMdiSubWindow *findMdiChild(const QString &fileName);
 
     QSignalMapper *windowMapper;
     Ui::MainWindow *ui;

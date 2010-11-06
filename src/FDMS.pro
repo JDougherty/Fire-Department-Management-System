@@ -4,6 +4,7 @@
 QT += sql
 TARGET = FDMS
 TEMPLATE = app
+UI_DIR = ../src/
 SOURCES += main.cpp \
     databasemanager.cpp \
     wndnewfirefighter.cpp \
@@ -11,7 +12,8 @@ SOURCES += main.cpp \
     wndsetup.cpp \
     wndactivedrill.cpp \
     wndsplash.cpp \
-    firefighter.cpp
+    firefighter.cpp \
+    wndsearch.cpp
 HEADERS += databasemanager.h \
     wndnewfirefighter.h \
     mainwindow.h \
@@ -19,9 +21,11 @@ HEADERS += databasemanager.h \
     wndactivedrill.h \
     wndsplash.h \
     LogFunctions.h \
-    firefighter.h
+    firefighter.h \
+    wndsearch.h
 FORMS += wndNewFirefighter.ui \
     mainwindow.ui \
     wndsetup.ui \
     wndactivedrill.ui \
-    wndsplash.ui
+    wndsplash.ui \
+    wndsearch.ui

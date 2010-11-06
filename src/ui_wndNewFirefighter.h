@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'wndNewFirefighter.ui'
 **
-** Created: Fri Nov 5 18:24:42 2010
+** Created: Sat Nov 6 14:36:04 2010
 **      by: Qt User Interface Compiler version 4.7.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -74,6 +74,9 @@ public:
         wndNewFirefighter->resize(432, 320);
         wndNewFirefighter->setMinimumSize(QSize(432, 320));
         wndNewFirefighter->setMaximumSize(QSize(432, 320));
+        QIcon icon;
+        icon.addFile(QString::fromUtf8(":/icons/Logo.png"), QSize(), QIcon::Normal, QIcon::Off);
+        wndNewFirefighter->setWindowIcon(icon);
         centralwidget = new QWidget(wndNewFirefighter);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         gbxNewFirefighter = new QGroupBox(centralwidget);

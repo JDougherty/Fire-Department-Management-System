@@ -27,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     mdiArea = new QMdiArea;
+    mdiArea->setBackground(QBrush::QBrush(QColor::QColor(128,0,0)));
     mdiArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     setCentralWidget(mdiArea);
@@ -41,8 +42,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->actFirefighterAdd, SIGNAL(triggered()), this, SLOT(mdiNewFirefighter()));
     connect(ui->actSearch, SIGNAL(triggered()), this, SLOT(mdiSearch()));
-    connect(ui->actActive_Drill, SIGNAL(triggered()), this, SLOT(mdiActiveDrill()));
+    connect(ui->actNew_Drill, SIGNAL(triggered()), this, SLOT(mdiActiveDrill()));
 
+
+    ui->toolBar->addSeparator();
+    ui->toolBar->addWidget(ui->lblSearch);
+    ui->toolBar->addWidget(ui->txtSearch);
+    ui->toolBar->addWidget(ui->cmbSearch );
 
 }
 

@@ -23,7 +23,8 @@
 #include <QMainWindow>
 #include <QSignalMapper>
 #include <QMdiArea>
-
+#include <QToolButton>
+#include <QSpacerItem>
 // Children Forms
 #include "wndnewfirefighter.h"
 #include "wndsearch.h"

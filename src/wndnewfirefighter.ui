@@ -25,6 +25,10 @@
   <property name="windowTitle">
    <string>Add New Firefighter</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="icons.qrc">
+    <normaloff>:/icons/Logo.png</normaloff>:/icons/Logo.png</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QGroupBox" name="gbxNewFirefighter">
     <property name="geometry">
@@ -767,7 +771,9 @@
   <tabstop>txtCDL</tabstop>
   <tabstop>btnAdd</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="icons.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>btnAdd</sender>

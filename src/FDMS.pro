@@ -29,3 +29,6 @@ FORMS += wndNewFirefighter.ui \
     wndactivedrill.ui \
     wndsplash.ui \
     wndsearch.ui
+
+RESOURCES += \
+    icons.qrc

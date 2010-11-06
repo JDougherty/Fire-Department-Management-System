@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'wndsearch.ui'
 **
-** Created: Fri Nov 5 20:18:18 2010
+** Created: Sat Nov 6 13:56:08 2010
 **      by: Qt User Interface Compiler version 4.7.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -16,7 +16,6 @@
 #include <QtGui/QButtonGroup>
 #include <QtGui/QHeaderView>
 #include <QtGui/QMainWindow>
-#include <QtGui/QTabWidget>
 #include <QtGui/QTableWidget>
 #include <QtGui/QWidget>
 
@@ -27,10 +26,6 @@ class Ui_wndSearch
 public:
     QWidget *centralwidget;
     QTableWidget *tableWidget;
-    QTabWidget *tabWidget;
-    QWidget *tabFirefighters;
-    QWidget *tabDrills;
-    QWidget *tabCalls;
 
     void setupUi(QMainWindow *wndSearch)
     {
@@ -54,25 +49,10 @@ public:
         QTableWidgetItem *__qtablewidgetitem2 = new QTableWidgetItem();
         tableWidget->setHorizontalHeaderItem(2, __qtablewidgetitem2);
         tableWidget->setObjectName(QString::fromUtf8("tableWidget"));
-        tableWidget->setGeometry(QRect(10, 110, 311, 211));
-        tabWidget = new QTabWidget(centralwidget);
-        tabWidget->setObjectName(QString::fromUtf8("tabWidget"));
-        tabWidget->setGeometry(QRect(10, 10, 311, 91));
-        tabFirefighters = new QWidget();
-        tabFirefighters->setObjectName(QString::fromUtf8("tabFirefighters"));
-        tabWidget->addTab(tabFirefighters, QString());
-        tabDrills = new QWidget();
-        tabDrills->setObjectName(QString::fromUtf8("tabDrills"));
-        tabWidget->addTab(tabDrills, QString());
-        tabCalls = new QWidget();
-        tabCalls->setObjectName(QString::fromUtf8("tabCalls"));
-        tabWidget->addTab(tabCalls, QString());
+        tableWidget->setGeometry(QRect(10, 10, 311, 311));
         wndSearch->setCentralWidget(centralwidget);
 
         retranslateUi(wndSearch);
-
-        tabWidget->setCurrentIndex(0);
-
 
         QMetaObject::connectSlotsByName(wndSearch);
     } // setupUi
@@ -86,9 +66,6 @@ public:
         ___qtablewidgetitem1->setText(QApplication::translate("wndSearch", "Last Name", 0, QApplication::UnicodeUTF8));
         QTableWidgetItem *___qtablewidgetitem2 = tableWidget->horizontalHeaderItem(2);
         ___qtablewidgetitem2->setText(QApplication::translate("wndSearch", "First name", 0, QApplication::UnicodeUTF8));
-        tabWidget->setTabText(tabWidget->indexOf(tabFirefighters), QApplication::translate("wndSearch", "Firefighters", 0, QApplication::UnicodeUTF8));
-        tabWidget->setTabText(tabWidget->indexOf(tabDrills), QApplication::translate("wndSearch", "Drills", 0, QApplication::UnicodeUTF8));
-        tabWidget->setTabText(tabWidget->indexOf(tabCalls), QApplication::translate("wndSearch", "Calls", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

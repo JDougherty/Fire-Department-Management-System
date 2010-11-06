@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'wndactivedrill.ui'
 **
-** Created: Fri Nov 5 18:24:42 2010
+** Created: Sat Nov 6 15:11:32 2010
 **      by: Qt User Interface Compiler version 4.7.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -51,6 +51,11 @@ public:
         if (wndActiveDrill->objectName().isEmpty())
             wndActiveDrill->setObjectName(QString::fromUtf8("wndActiveDrill"));
         wndActiveDrill->resize(661, 451);
+        wndActiveDrill->setMinimumSize(QSize(661, 451));
+        wndActiveDrill->setMaximumSize(QSize(661, 451));
+        QIcon icon;
+        icon.addFile(QString::fromUtf8(":/icons/Badge_Base.png"), QSize(), QIcon::Normal, QIcon::Off);
+        wndActiveDrill->setWindowIcon(icon);
         centralwidget = new QWidget(wndActiveDrill);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         groupBox_2 = new QGroupBox(centralwidget);

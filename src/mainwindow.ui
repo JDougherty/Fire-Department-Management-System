@@ -13,7 +13,66 @@
   <property name="windowTitle">
    <string>Fire Department Management System</string>
   </property>
-  <widget class="QWidget" name="centralWidget"/>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>Logo.png</normaloff>Logo.png</iconset>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <widget class="QComboBox" name="cmbSearch">
+    <property name="geometry">
+     <rect>
+      <x>500</x>
+      <y>0</y>
+      <width>111</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>Firefighters</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Drills</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Calls</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QLineEdit" name="txtSearch">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>0</y>
+      <width>121</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>121</width>
+      <height>16777215</height>
+     </size>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lblSearch">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>0</y>
+      <width>46</width>
+      <height>13</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Search:</string>
+    </property>
+   </widget>
+  </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -37,8 +96,8 @@
     <addaction name="actSearch"/>
     <addaction name="separator"/>
     <addaction name="actFirefighterAdd"/>
-    <addaction name="separator"/>
-    <addaction name="actActive_Drill"/>
+    <addaction name="actNew_Drill"/>
+    <addaction name="actionNew_Call"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -54,12 +113,21 @@
    <property name="windowTitle">
     <string>toolBar</string>
    </property>
+   <property name="iconSize">
+    <size>
+     <width>32</width>
+     <height>32</height>
+    </size>
+   </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
-    <bool>false</bool>
+    <bool>true</bool>
    </attribute>
+   <addaction name="actFirefighterAdd"/>
+   <addaction name="actNew_Drill"/>
+   <addaction name="actionNew_Call"/>
   </widget>
   <action name="actQuit">
    <property name="text">
@@ -72,6 +140,10 @@
    </property>
   </action>
   <action name="actFirefighterAdd">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/Firefighter_Base.png</normaloff>:/icons/Firefighter_Base.png</iconset>
+   </property>
    <property name="text">
     <string>Firefighter Add</string>
    </property>
@@ -84,14 +156,32 @@
     <string>About</string>
    </property>
   </action>
-  <action name="actActive_Drill">
+  <action name="actNew_Drill">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/Drill_Base.png</normaloff>:/icons/Drill_Base.png</iconset>
+   </property>
    <property name="text">
-    <string>Active Drill</string>
+    <string>New Drill</string>
+   </property>
+   <property name="toolTip">
+    <string>New Drill</string>
+   </property>
+  </action>
+  <action name="actionNew_Call">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/Call_Base.png</normaloff>:/icons/Call_Base.png</iconset>
+   </property>
+   <property name="text">
+    <string>New Call</string>
    </property>
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="icons.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>actQuit</sender>

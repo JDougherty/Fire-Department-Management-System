@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'wndactivedrill.ui'
 **
-** Created: Sat Nov 6 15:11:32 2010
+** Created: Sat Nov 6 17:42:41 2010
 **      by: Qt User Interface Compiler version 4.7.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -78,34 +78,6 @@ public:
         tblTimesheet->setHorizontalHeaderItem(1, __qtablewidgetitem1);
         QTableWidgetItem *__qtablewidgetitem2 = new QTableWidgetItem();
         tblTimesheet->setHorizontalHeaderItem(2, __qtablewidgetitem2);
-        if (tblTimesheet->rowCount() < 5)
-            tblTimesheet->setRowCount(5);
-        QTableWidgetItem *__qtablewidgetitem3 = new QTableWidgetItem();
-        tblTimesheet->setItem(0, 0, __qtablewidgetitem3);
-        QTableWidgetItem *__qtablewidgetitem4 = new QTableWidgetItem();
-        tblTimesheet->setItem(0, 1, __qtablewidgetitem4);
-        QTableWidgetItem *__qtablewidgetitem5 = new QTableWidgetItem();
-        tblTimesheet->setItem(0, 2, __qtablewidgetitem5);
-        QTableWidgetItem *__qtablewidgetitem6 = new QTableWidgetItem();
-        tblTimesheet->setItem(1, 0, __qtablewidgetitem6);
-        QTableWidgetItem *__qtablewidgetitem7 = new QTableWidgetItem();
-        tblTimesheet->setItem(1, 1, __qtablewidgetitem7);
-        QTableWidgetItem *__qtablewidgetitem8 = new QTableWidgetItem();
-        tblTimesheet->setItem(1, 2, __qtablewidgetitem8);
-        QTableWidgetItem *__qtablewidgetitem9 = new QTableWidgetItem();
-        tblTimesheet->setItem(2, 0, __qtablewidgetitem9);
-        QTableWidgetItem *__qtablewidgetitem10 = new QTableWidgetItem();
-        tblTimesheet->setItem(2, 1, __qtablewidgetitem10);
-        QTableWidgetItem *__qtablewidgetitem11 = new QTableWidgetItem();
-        tblTimesheet->setItem(2, 2, __qtablewidgetitem11);
-        QTableWidgetItem *__qtablewidgetitem12 = new QTableWidgetItem();
-        tblTimesheet->setItem(3, 0, __qtablewidgetitem12);
-        QTableWidgetItem *__qtablewidgetitem13 = new QTableWidgetItem();
-        tblTimesheet->setItem(3, 1, __qtablewidgetitem13);
-        QTableWidgetItem *__qtablewidgetitem14 = new QTableWidgetItem();
-        tblTimesheet->setItem(3, 2, __qtablewidgetitem14);
-        QTableWidgetItem *__qtablewidgetitem15 = new QTableWidgetItem();
-        tblTimesheet->setItem(4, 0, __qtablewidgetitem15);
         tblTimesheet->setObjectName(QString::fromUtf8("tblTimesheet"));
         tblTimesheet->setEnabled(true);
         tblTimesheet->setGeometry(QRect(10, 50, 359, 371));
@@ -114,9 +86,9 @@ public:
         tblTimesheet->setShowGrid(true);
         tblTimesheet->setGridStyle(Qt::SolidLine);
         tblTimesheet->setCornerButtonEnabled(false);
-        tblTimesheet->setRowCount(5);
+        tblTimesheet->setRowCount(0);
         tblTimesheet->setColumnCount(3);
-        tblTimesheet->horizontalHeader()->setVisible(true);
+        tblTimesheet->horizontalHeader()->setVisible(false);
         tblTimesheet->horizontalHeader()->setCascadingSectionResizes(false);
         tblTimesheet->horizontalHeader()->setDefaultSectionSize(119);
         tblTimesheet->horizontalHeader()->setHighlightSections(true);
@@ -175,11 +147,6 @@ public:
         ___qtablewidgetitem1->setText(QApplication::translate("wndActiveDrill", "Time In", 0, QApplication::UnicodeUTF8));
         QTableWidgetItem *___qtablewidgetitem2 = tblTimesheet->horizontalHeaderItem(2);
         ___qtablewidgetitem2->setText(QApplication::translate("wndActiveDrill", "Time Out", 0, QApplication::UnicodeUTF8));
-
-        const bool __sortingEnabled = tblTimesheet->isSortingEnabled();
-        tblTimesheet->setSortingEnabled(false);
-        tblTimesheet->setSortingEnabled(__sortingEnabled);
-
         groupBox->setTitle(QApplication::translate("wndActiveDrill", "Drill Information", 0, QApplication::UnicodeUTF8));
         label->setText(QApplication::translate("wndActiveDrill", "Start:", 0, QApplication::UnicodeUTF8));
         label_2->setText(QApplication::translate("wndActiveDrill", "End:", 0, QApplication::UnicodeUTF8));

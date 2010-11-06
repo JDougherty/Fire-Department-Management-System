@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'wndsetup.ui'
 **
-** Created: Fri Nov 5 18:24:42 2010
+** Created: Sat Nov 6 17:14:48 2010
 **      by: Qt User Interface Compiler version 4.7.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!

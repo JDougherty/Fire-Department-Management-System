@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Sat Nov 6 14:40:46 2010
+** Created: Sat Nov 6 18:08:09 2010
 **      by: Qt User Interface Compiler version 4.7.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -83,11 +83,11 @@ public:
         cmbSearch->setGeometry(QRect(500, 0, 111, 20));
         txtSearch = new QLineEdit(centralWidget);
         txtSearch->setObjectName(QString::fromUtf8("txtSearch"));
-        txtSearch->setGeometry(QRect(370, 0, 121, 20));
-        txtSearch->setMaximumSize(QSize(121, 16777215));
+        txtSearch->setGeometry(QRect(390, 0, 100, 20));
+        txtSearch->setMaximumSize(QSize(100, 20));
         lblSearch = new QLabel(centralWidget);
         lblSearch->setObjectName(QString::fromUtf8("lblSearch"));
-        lblSearch->setGeometry(QRect(320, 0, 46, 13));
+        lblSearch->setGeometry(QRect(350, 0, 46, 20));
         MainWindow->setCentralWidget(centralWidget);
         statusBar = new QStatusBar(MainWindow);
         statusBar->setObjectName(QString::fromUtf8("statusBar"));
@@ -106,7 +106,6 @@ public:
         toolBar->setObjectName(QString::fromUtf8("toolBar"));
         toolBar->setIconSize(QSize(32, 32));
         MainWindow->addToolBar(Qt::TopToolBarArea, toolBar);
-        MainWindow->insertToolBarBreak(toolBar);
 
         menuBar->addAction(menuFile->menuAction());
         menuBar->addAction(menuTools->menuAction());
@@ -124,6 +123,7 @@ public:
 
         retranslateUi(MainWindow);
         QObject::connect(actQuit, SIGNAL(triggered()), MainWindow, SLOT(close()));
+        QObject::connect(txtSearch, SIGNAL(returnPressed()), MainWindow, SLOT(txtSearchReturnPressed()));
 
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi
@@ -133,7 +133,7 @@ public:
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Fire Department Management System", 0, QApplication::UnicodeUTF8));
         actQuit->setText(QApplication::translate("MainWindow", "Quit", 0, QApplication::UnicodeUTF8));
         actSearch->setText(QApplication::translate("MainWindow", "Search", 0, QApplication::UnicodeUTF8));
-        actFirefighterAdd->setText(QApplication::translate("MainWindow", "Firefighter Add", 0, QApplication::UnicodeUTF8));
+        actFirefighterAdd->setText(QApplication::translate("MainWindow", "Add Firefighter", 0, QApplication::UnicodeUTF8));
 #ifndef QT_NO_TOOLTIP
         actFirefighterAdd->setToolTip(QApplication::translate("MainWindow", "Firefighter Add", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_TOOLTIP

@@ -26,6 +26,7 @@
 #include <QToolButton>
 #include <QSpacerItem>
 // Children Forms
+#include "databasemanager.h"
 #include "wndnewfirefighter.h"
 #include "wndsearch.h"
 #include "wndactivedrill.h"
@@ -42,22 +43,30 @@ class MainWindow : public QMainWindow {
     Q_OBJECT
 public:
     MainWindow(QWidget *parent = 0);
+    MainWindow(QWidget *parent2 = 0, DatabaseManager *newDb=0);
     ~MainWindow();
     QMdiArea *mdiArea;
+    void StatusUpdate(QString message,int timeout=0);
 
 protected:
     void changeEvent(QEvent *e);
 
 private slots:
     void mdiNewFirefighter();
-    void mdiSearch();
     void mdiActiveDrill();
+
+
+    void menuSearchTriggered();
+
+    void txtSearchReturnPressed();
 
 
 private:
 
     QSignalMapper *windowMapper;
     Ui::MainWindow *ui;
+
+    DatabaseManager *db;
 };
 
 #endif // MAINWINDOW_H

@@ -46,26 +46,26 @@
    <widget class="QLineEdit" name="txtSearch">
     <property name="geometry">
      <rect>
-      <x>370</x>
+      <x>390</x>
       <y>0</y>
-      <width>121</width>
+      <width>100</width>
       <height>20</height>
      </rect>
     </property>
     <property name="maximumSize">
      <size>
-      <width>121</width>
-      <height>16777215</height>
+      <width>100</width>
+      <height>20</height>
      </size>
     </property>
    </widget>
    <widget class="QLabel" name="lblSearch">
     <property name="geometry">
      <rect>
-      <x>320</x>
+      <x>350</x>
       <y>0</y>
       <width>46</width>
-      <height>13</height>
+      <height>20</height>
      </rect>
     </property>
     <property name="text">
@@ -123,7 +123,7 @@
     <enum>TopToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
-    <bool>true</bool>
+    <bool>false</bool>
    </attribute>
    <addaction name="actFirefighterAdd"/>
    <addaction name="actNew_Drill"/>
@@ -145,7 +145,7 @@
      <normaloff>:/icons/Firefighter_Base.png</normaloff>:/icons/Firefighter_Base.png</iconset>
    </property>
    <property name="text">
-    <string>Firefighter Add</string>
+    <string>Add Firefighter</string>
    </property>
    <property name="toolTip">
     <string>Firefighter Add</string>
@@ -199,5 +199,24 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>txtSearch</sender>
+   <signal>returnPressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>txtSearchReturnPressed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>409</x>
+     <y>75</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>409</x>
+     <y>134</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
+ <slots>
+  <slot>txtSearchReturnPressed()</slot>
+ </slots>
 </ui>

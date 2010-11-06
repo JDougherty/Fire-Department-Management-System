@@ -21,10 +21,12 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow::MainWindow(QWidget *parent, DatabaseManager *newDb) :
     QMainWindow(parent),ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    this->showMaximized();
+    db=newDb;
 
     mdiArea = new QMdiArea;
     mdiArea->setBackground(QBrush::QBrush(QColor::QColor(128,0,0)));
@@ -37,12 +39,12 @@ MainWindow::MainWindow(QWidget *parent) :
     //windowMapper = new QSignalMapper(this);
     //connect(windowMapper, SIGNAL(mapped(QWidget*)),this, SLOT(setActiveSubWindow(QWidget*)));
 
-    this->showMaximized();
 
 
     connect(ui->actFirefighterAdd, SIGNAL(triggered()), this, SLOT(mdiNewFirefighter()));
-    connect(ui->actSearch, SIGNAL(triggered()), this, SLOT(mdiSearch()));
     connect(ui->actNew_Drill, SIGNAL(triggered()), this, SLOT(mdiActiveDrill()));
+
+    connect(ui->actSearch, SIGNAL(triggered()), this, SLOT(menuSearchTriggered()));
 
 
     ui->toolBar->addSeparator();
@@ -69,21 +71,33 @@ void MainWindow::changeEvent(QEvent *e)
     }
 }
 
+void MainWindow::StatusUpdate(QString message, int timeout){
+    ui->statusBar->showMessage(message,timeout);
+}
+
+
+void MainWindow::txtSearchReturnPressed(){
+    wndSearch *child= new wndSearch(this, db, ui->cmbSearch->currentText(), ui->txtSearch->text());
+    mdiArea->addSubWindow(child);
+    child->show();
+
+}
+
+
+
+void MainWindow::menuSearchTriggered()
+{
+    ui->txtSearch->setFocus();
+}
 
 // THESE FUNCTIONS SHOW CHILD MDI WINDOWS
 void MainWindow::mdiNewFirefighter()
 {
-    wndNewFirefighter *child = new wndNewFirefighter;
+    wndNewFirefighter *child = new wndNewFirefighter(this,db);
     mdiArea->addSubWindow(child);
     child->show();
 }
 
-void MainWindow::mdiSearch()
-{
-    wndSearch *child = new wndSearch;
-    mdiArea->addSubWindow(child);
-    child->show();
-}
 
 void MainWindow::mdiActiveDrill()
 {

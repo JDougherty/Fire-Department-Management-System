@@ -31,21 +31,6 @@
 #include "wndActiveDrill.h"
 #include "wndsplash.h"
 
-
-/*
-// INT MAIN FOR TESTING FORM DESIGN IN APPLICATION
-int main(int argc, char *argv[]){
-    QApplication a(argc, argv);
-
-    wndSearch w;
-    w.show();
-    return a.exec();
-}
-*/
-
-
-
-
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
@@ -56,13 +41,15 @@ int main(int argc, char *argv[])
     setupDebugRedirection();
     qDebug("Initialized at %s",initstamp.toString().toStdString().c_str());
 
-    MainWindow splash(0);
+    MainWindow splash(0,&db);
     splash.show();
+    splash.StatusUpdate("Loading database...");
 
     // Load existing databse
     if(QFile::exists(filename)){
         if(db.open()){
             qDebug("Verifying database structure.");
+
             if(db.verify_structure()){
                 qDebug("Valid database structure.");
                 wndNewFirefighter newfirefighter;
@@ -74,6 +61,7 @@ int main(int argc, char *argv[])
                 return 0;
 
             }
+            splash.StatusUpdate("Ready");
         }
         else{
             QMessageBox::critical(&splash,"Critical Error","Database exists but could not be opened.",QMessageBox::Ok);
@@ -81,6 +69,9 @@ int main(int argc, char *argv[])
             return 0;
         }
     }
+
+
+
     else{
         qDebug("Running program setup. ");
         db.open();

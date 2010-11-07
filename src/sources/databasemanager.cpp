@@ -116,6 +116,19 @@ bool DatabaseManager::init_structure(){
                  "cphone TEXT,"
                  "drvlic TEXT,"
                  "cdl TEXT);"
+            "CREATE TABLE training"
+                "(id INTEGER PRIMARY KEY,"
+                "title TEXT);"
+            "CREATE TABLE fftraining"
+                "(id INTEGER PRIMARY KEY,"
+                "tid INTEGER,"
+                "ffid INTEGER,"
+                "ffesig TEXT,"
+                "supesig TEXT,"
+                "tdate TEXT);"
+            "CREATE TABLE equipment"
+                "(id INTEGER PRIMARY KEY,"
+                "title TEXT);"
             "CREATE TABLE drills"
                  "(id INTEGER PRIMARY KEY, "
                  "location TEXT,"
@@ -175,13 +188,13 @@ bool DatabaseManager::verify_structure(){
 
     QString chksum=md5bytearray.toHex().constData();
 
-    /*
+
     qDebug()<<chksum;
     qDebug()<<TableSchema;
-    */
+
 
     // And compare to expected value
-    if(chksum!="8c1be6c76a53846e407236b398cff733"){
+    if(chksum!="d4c1086743f4e0c05ce7e3869c56afc3"){
         return false;
     }
 

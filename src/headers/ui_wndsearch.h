@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'wndsearch.ui'
 **
-** Created: Sat Nov 6 17:49:35 2010
+** Created: Sat Nov 6 20:02:55 2010
 **      by: Qt User Interface Compiler version 4.7.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -31,13 +31,13 @@ public:
     {
         if (wndSearch->objectName().isEmpty())
             wndSearch->setObjectName(QString::fromUtf8("wndSearch"));
-        wndSearch->resize(322, 332);
+        wndSearch->resize(332, 332);
         QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(wndSearch->sizePolicy().hasHeightForWidth());
         wndSearch->setSizePolicy(sizePolicy);
-        wndSearch->setMinimumSize(QSize(322, 332));
+        wndSearch->setMinimumSize(QSize(332, 332));
         centralwidget = new QWidget(wndSearch);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         tblResults = new QTableWidget(centralwidget);
@@ -50,9 +50,10 @@ public:
         QTableWidgetItem *__qtablewidgetitem2 = new QTableWidgetItem();
         tblResults->setHorizontalHeaderItem(2, __qtablewidgetitem2);
         tblResults->setObjectName(QString::fromUtf8("tblResults"));
-        tblResults->setGeometry(QRect(10, 10, 302, 311));
+        tblResults->setGeometry(QRect(10, 10, 312, 311));
         tblResults->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         tblResults->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        tblResults->setAlternatingRowColors(true);
         wndSearch->setCentralWidget(centralwidget);
 
         retranslateUi(wndSearch);

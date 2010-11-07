@@ -46,8 +46,10 @@ MainWindow::MainWindow(QWidget *parent, DatabaseManager *newDb) :
 
     connect(ui->actSearch, SIGNAL(triggered()), this, SLOT(menuSearchTriggered()));
 
-
-    ui->toolBar->addSeparator();
+    QWidget *spacer=new QWidget(this);
+    spacer->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+    ui->toolBar->addWidget(spacer);
+    //ui->toolBar->addSeparator();
     ui->toolBar->addWidget(ui->lblSearch);
     ui->toolBar->addWidget(ui->txtSearch);
     ui->toolBar->addWidget(ui->cmbSearch );

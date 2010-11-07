@@ -14,8 +14,12 @@ wndSearch::wndSearch(QWidget *parent, DatabaseManager *newDb, QString dtype,QStr
 {
     ui->setupUi(this);
     db=newDb;
-    ui->tblResults->verticalHeader()->hide();
     this->setWindowTitle(this->windowTitle() + dtype);
+
+
+    ui->tblResults->horizontalHeader()->setStretchLastSection( true );
+    ui->tblResults->setEditTriggers(0);
+
     if(dtype=="Firefighters"){
         ui->tblResults->setHorizontalHeaderLabels(QStringList()<<"ID"<<"Last Name"<<"First Name");
         Search(dtype,query);
@@ -37,9 +41,11 @@ void wndSearch::Search(QString dtype, QString query){
         selection.addBindValue("%" + query + "%");
         selection.addBindValue("%" + query + "%");
         selection.addBindValue("%" + query + "%");
+
         db->query(selection);
         while(selection.next()){
             ui->tblResults->setRowCount(ui->tblResults->rowCount()+1);
+            ui->tblResults->setVerticalHeaderItem(ui->tblResults->rowCount()-1, new QTableWidgetItem("*"));
             for(int i=0;i<=2;i++){
                 ui->tblResults->setItem(ui->tblResults->rowCount()-1, i, new QTableWidgetItem(selection.value(i).toString()));
             }

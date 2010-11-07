@@ -5,30 +5,30 @@ QT += sql
 TARGET = FDMS
 TEMPLATE = app
 UI_DIR = ../src/
-SOURCES += main.cpp \
-    databasemanager.cpp \
-    wndnewfirefighter.cpp \
-    mainwindow.cpp \
-    wndsetup.cpp \
-    wndactivedrill.cpp \
-    wndsplash.cpp \
-    firefighter.cpp \
-    wndsearch.cpp
-HEADERS += databasemanager.h \
-    wndnewfirefighter.h \
-    mainwindow.h \
-    wndsetup.h \
-    wndactivedrill.h \
-    wndsplash.h \
-    LogFunctions.h \
-    firefighter.h \
-    wndsearch.h
-FORMS += wndNewFirefighter.ui \
-    mainwindow.ui \
-    wndsetup.ui \
-    wndactivedrill.ui \
-    wndsplash.ui \
-    wndsearch.ui
+SOURCES += sources/main.cpp \
+    sources/databasemanager.cpp \
+    sources/wndnewfirefighter.cpp \
+    sources/mainwindow.cpp \
+    sources/wndsetup.cpp \
+    sources/wndactivedrill.cpp \
+    sources/wndsplash.cpp \
+    sources/firefighter.cpp \
+    sources/wndsearch.cpp
+HEADERS += headers/databasemanager.h \
+    headers/wndnewfirefighter.h \
+    headers/mainwindow.h \
+    headers/wndsetup.h \
+    headers/wndactivedrill.h \
+    headers/wndsplash.h \
+    headers/LogFunctions.h \
+    headers/firefighter.h \
+    headers/wndsearch.h
+FORMS += forms/wndNewFirefighter.ui \
+	forms/mainwindow.ui \
+    forms/wndsetup.ui \
+    forms/wndactivedrill.ui \
+    forms/wndsplash.ui \
+    forms/wndsearch.ui
 
 RESOURCES += \
-    icons.qrc
+    resources/icons.qrc

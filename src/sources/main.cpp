@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
         qDebug("Running program setup. ");
         db.open();
         db.init_structure();
-        wndSetup setup;
+        wndSetup setup(0);
         setup.show();
     }
 

@@ -1,8 +1,0 @@
-<RCC>
-    <qresource prefix="/icons">
-        <file>Badge_Base.png</file>
-        <file>Call_Base.png</file>
-        <file>Drill_Base.png</file>
-        <file>Firefighter_Base.png</file>
-    </qresource>
-</RCC>

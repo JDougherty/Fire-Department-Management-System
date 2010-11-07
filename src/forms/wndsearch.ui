@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>322</width>
+    <width>332</width>
     <height>332</height>
    </rect>
   </property>
@@ -18,7 +18,7 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>322</width>
+    <width>332</width>
     <height>332</height>
    </size>
   </property>
@@ -31,7 +31,7 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>302</width>
+      <width>312</width>
       <height>311</height>
      </rect>
     </property>
@@ -40,6 +40,9 @@
     </property>
     <property name="horizontalScrollBarPolicy">
      <enum>Qt::ScrollBarAlwaysOff</enum>
+    </property>
+    <property name="alternatingRowColors">
+     <bool>true</bool>
     </property>
     <column>
      <property name="text">

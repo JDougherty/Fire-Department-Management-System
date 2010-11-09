@@ -25,11 +25,11 @@
 #include <QMdiArea>
 #include <QToolButton>
 #include <QSpacerItem>
-// Children Forms
 #include "databasemanager.h"
+// Children Forms
 #include "wndnewfirefighter.h"
-#include "wndsearch.h"
 #include "wndactivedrill.h"
+#include "wndsearch.h"
 
 QT_END_NAMESPACE
 
@@ -47,6 +47,8 @@ public:
     ~MainWindow();
     QMdiArea *mdiArea;
     void StatusUpdate(QString message,int timeout=0);
+
+    void mdiEditFirefighter(QString deptid);
 
 protected:
     void changeEvent(QEvent *e);

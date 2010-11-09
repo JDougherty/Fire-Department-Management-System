@@ -18,7 +18,7 @@
 */
 
 
-#include "wndnewfirefighter.h"
+#include "../headers/wndnewfirefighter.h"
 #include "ui_wndnewfirefighter.h"
 
 
@@ -59,7 +59,7 @@ void wndNewFirefighter::btnAdd_Clicked(){
     ffattributes.append(ui->txtStateID->text());
     ffattributes.append(ui->txtAddress->text());
     ffattributes.append(ui->txtCity->text());
-    ffattributes.append(ui->txtState->itemText(0));
+    ffattributes.append(ui->txtState->itemText(ui->txtState->currentIndex()));
     ffattributes.append(ui->txtZipCode->text());
     ffattributes.append(ui->dateJoin->date().toString("yyyy-MM-dd 00:00:00.000"));
     ffattributes.append(ui->txtStatus->text());

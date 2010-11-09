@@ -31,6 +31,7 @@ class wndSplash : public QMainWindow {
 public:
     wndSplash(QWidget *parent = 0);
     ~wndSplash();
+    void StatusUpdate(QString message,int timeout=0);
 
 protected:
     void changeEvent(QEvent *e);

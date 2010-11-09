@@ -18,7 +18,7 @@
 */
 
 
-#include "mainwindow.h"
+#include "../headers/mainwindow.h"
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent, DatabaseManager *newDb) :
@@ -79,7 +79,7 @@ void MainWindow::StatusUpdate(QString message, int timeout){
 
 
 void MainWindow::txtSearchReturnPressed(){
-    wndSearch *child= new wndSearch(this, db, ui->cmbSearch->currentText(), ui->txtSearch->text());
+    wndSearch *child= new wndSearch(this, this, db, ui->cmbSearch->currentText(), ui->txtSearch->text());
     mdiArea->addSubWindow(child);
     child->show();
 
@@ -108,3 +108,8 @@ void MainWindow::mdiActiveDrill()
     child->show();
 }
 
+void MainWindow::mdiEditFirefighter(QString deptid){
+    wndEditFirefighter *child = new wndEditFirefighter(this,db,deptid);
+    mdiArea->addSubWindow(child);
+    child->show();
+}

@@ -17,41 +17,27 @@
 
 */
 
-#ifndef WNDSEARCH_H
-#define WNDSEARCH_H
+#ifndef WNDEDITFIREFIGHTER_H
+#define WNDEDITFIREFIGHTER_H
 
 #include <QMainWindow>
-#include <QTableWidgetItem>
 #include "databasemanager.h"
-#include "wndeditfirefighter.h"
-#include "mainwindow.h"
-
-class MainWindow;
-
+#include "firefighter.h"
 namespace Ui {
-    class wndSearch;
+    class wndEditFirefighter;
 }
 
-class wndSearch : public QMainWindow
+class wndEditFirefighter : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit wndSearch(QWidget *parent = 0);
-    explicit wndSearch(QWidget *parent = 0,
-                       MainWindow *nmdiparent=0,
-                       DatabaseManager *newDb=0, QString newdtype="", QString query="");
-    ~wndSearch();
+    explicit wndEditFirefighter(QWidget *parent = 0);
+    wndEditFirefighter(QWidget *parent2 = 0, DatabaseManager *newDb=0, QString ffid="");
+    ~wndEditFirefighter();
 
 private:
-    Ui::wndSearch *ui;
-    void Search(QString dtype, QString query);
-    DatabaseManager *db;
-    QString dtype;
-    MainWindow *mdiparent;
-
-private slots:
-    void tableDoubleClicked(int tmp);
+    Ui::wndEditFirefighter *ui;
 };
 
-#endif // WNDSEARCH_H
+#endif // WNDEDITFIREFIGHTER_H

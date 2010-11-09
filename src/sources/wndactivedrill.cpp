@@ -17,7 +17,7 @@
 
 */
 
-#include "wndActiveDrill.h"
+#include "../headers/wndActiveDrill.h"
 #include "ui_wndActiveDrill.h"
 #include <QMessageBox>
 

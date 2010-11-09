@@ -17,7 +17,7 @@
 
 */
 
-#include "databasemanager.h"
+#include "../headers/databasemanager.h"
 
 
 
@@ -189,8 +189,8 @@ bool DatabaseManager::verify_structure(){
     QString chksum=md5bytearray.toHex().constData();
 
 
-    qDebug()<<chksum;
-    qDebug()<<TableSchema;
+    //qDebug()<<chksum;
+    //qDebug()<<TableSchema;
 
 
     // And compare to expected value

@@ -23,13 +23,13 @@
 #include <QString>
 #include <QFile>
 #include <QDateTime>
-#include "databasemanager.h"
-#include "LogFunctions.h"
-#include "mainwindow.h"
-#include "wndnewfirefighter.h"
-#include "wndsetup.h"
-#include "wndActiveDrill.h"
-#include "wndsplash.h"
+#include "../headers/databasemanager.h"
+#include "../headers/LogFunctions.h"
+#include "../headers/mainwindow.h"
+#include "../headers/wndnewfirefighter.h"
+#include "../headers/wndsetup.h"
+#include "../headers/wndActiveDrill.h"
+#include "../headers/wndsplash.h"
 
 int main(int argc, char *argv[])
 {
@@ -41,9 +41,9 @@ int main(int argc, char *argv[])
     setupDebugRedirection();
     qDebug("Initialized at %s",initstamp.toString().toStdString().c_str());
 
-    MainWindow splash(0,&db);
-    splash.show();
-    splash.StatusUpdate("Loading database...");
+    wndSplash *splash = new wndSplash(0);
+    splash->show();
+    splash->StatusUpdate("Loading database...");
 
     // Load existing databse
     if(QFile::exists(filename)){
@@ -52,19 +52,20 @@ int main(int argc, char *argv[])
 
             if(db.verify_structure()){
                 qDebug("Valid database structure.");
-                wndNewFirefighter newfirefighter;
-                newfirefighter.show();
+                MainWindow *mw = new MainWindow(0,&db);
+                mw->show();
+                mw->StatusUpdate("Ready");
+                delete splash;
             }
             else{
-                QMessageBox::critical(&splash,"Critical Error","Database exists but has invalid structure.",QMessageBox::Ok);
+                QMessageBox::critical(splash,"Critical Error","Database exists but has invalid structure.",QMessageBox::Ok);
                 qCritical("Invalid database structure.");
                 return 0;
 
             }
-            splash.StatusUpdate("Ready");
         }
         else{
-            QMessageBox::critical(&splash,"Critical Error","Database exists but could not be opened.",QMessageBox::Ok);
+            QMessageBox::critical(splash,"Critical Error","Database exists but could not be opened.",QMessageBox::Ok);
             qCritical("Critical Error - Database: Database could not be opened. Exiting.");
             return 0;
         }

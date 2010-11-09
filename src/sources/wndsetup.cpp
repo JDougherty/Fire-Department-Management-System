@@ -18,7 +18,7 @@
 */
 
 
-#include "wndsetup.h"
+#include "../headers/wndsetup.h"
 #include "ui_wndsetup.h"
 
 wndSetup::wndSetup(QWidget *parent) :

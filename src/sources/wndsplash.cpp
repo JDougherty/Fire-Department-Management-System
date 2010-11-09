@@ -17,7 +17,7 @@
 
 */
 
-#include "wndsplash.h"
+#include "../headers/wndsplash.h"
 #include "ui_wndsplash.h"
 
 wndSplash::wndSplash(QWidget *parent) :
@@ -42,4 +42,9 @@ void wndSplash::changeEvent(QEvent *e)
     default:
         break;
     }
+}
+
+
+void wndSplash::StatusUpdate(QString message, int timeout){
+    ui->statusbar->showMessage(message,timeout);
 }

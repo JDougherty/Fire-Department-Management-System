@@ -13,7 +13,8 @@ SOURCES += sources/main.cpp \
     sources/wndactivedrill.cpp \
     sources/wndsplash.cpp \
     sources/firefighter.cpp \
-    sources/wndsearch.cpp
+    sources/wndsearch.cpp \
+    sources/wndeditfirefighter.cpp
 HEADERS += headers/databasemanager.h \
     headers/wndnewfirefighter.h \
     headers/mainwindow.h \
@@ -22,13 +23,15 @@ HEADERS += headers/databasemanager.h \
     headers/wndsplash.h \
     headers/LogFunctions.h \
     headers/firefighter.h \
-    headers/wndsearch.h
+    headers/wndsearch.h \
+    headers/wndeditfirefighter.h
 FORMS += forms/wndNewFirefighter.ui \
 	forms/mainwindow.ui \
     forms/wndsetup.ui \
     forms/wndactivedrill.ui \
     forms/wndsplash.ui \
-    forms/wndsearch.ui
+    forms/wndsearch.ui \
+    forms/wndeditfirefighter.ui
 
 RESOURCES += \
     resources/icons.qrc

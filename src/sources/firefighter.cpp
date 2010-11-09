@@ -1,16 +1,60 @@
-#include "firefighter.h"
+/*
+    Fire Department Management System
+    Copyright (C) 2010  Joseph W. Dougherty
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+*/
+
+#include "../headers/firefighter.h"
 #include <QMessageBox>
 Firefighter::Firefighter()
 {
 
 }
 
-Firefighter::Firefighter(int uid){
-
-}
-
 Firefighter::Firefighter(QVector<QString> nattributes){
     attributes=nattributes;
+}
+
+
+bool Firefighter::LoadAttributes(QString localid, DatabaseManager *newDb){
+    attributes.clear();
+
+    if(!(newDb->isOpen())){
+        newDb->open();
+    }
+    QSqlQuery infoQuery;
+    infoQuery.prepare("SELECT fname,mname,lname,"
+                      "dob,deptid,stateid,"
+                      "address,city,state,"
+                      "zip,joindate,status,"
+                      "hphone,wphone,cphone,"
+                      "drvlic,cdl FROM firefighters WHERE deptid=?");
+    infoQuery.addBindValue(localid);
+
+
+    if(newDb->query(infoQuery)){
+        infoQuery.next();
+        for(int i=0;i<=17;i++){
+            attributes.push_back(infoQuery.value(i).toString());
+        }
+        return true;
+    }
+    else{
+        return false;
+    }
 }
 
 bool Firefighter::InsertToDatabase(DatabaseManager *newDb){
@@ -34,27 +78,6 @@ bool Firefighter::InsertToDatabase(DatabaseManager *newDb){
     for(int i=0; i<attributes.size();i++){
         addQuery.addBindValue(attributes[i]);
     }
-
-    /*
-    addQuery.addBindValue(FirstName);
-    addQuery.addBindValue(MiddleName);
-    addQuery.addBindValue(LastName);
-    addQuery.addBindValue(Dob);
-    addQuery.addBindValue(LocalID);
-    addQuery.addBindValue(StateID);
-    addQuery.addBindValue(Address);
-    addQuery.addBindValue(City);
-    addQuery.addBindValue(State);
-    addQuery.addBindValue(ZipCode);
-    addQuery.addBindValue(dateJoin);
-    addQuery.addBindValue(Status);
-    addQuery.addBindValue(Hphone);
-    addQuery.addBindValue(Wphone);
-    addQuery.addBindValue(Cphone);
-    addQuery.addBindValue(DrvLic);
-    addQuery.addBindValue(CDL);
-    */
-
     if(newDb->query(addQuery)){
         return true;}
     else{

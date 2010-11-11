@@ -36,7 +36,7 @@ bool Firefighter::LoadAttributes(QString localid, DatabaseManager *newDb){
         newDb->open();
     }
     QSqlQuery infoQuery;
-    infoQuery.prepare("SELECT fname,mname,lname,"
+    infoQuery.prepare("SELECT id,fname,mname,lname,"
                       "dob,deptid,stateid,"
                       "address,city,state,"
                       "zip,joindate,status,"
@@ -47,7 +47,8 @@ bool Firefighter::LoadAttributes(QString localid, DatabaseManager *newDb){
 
     if(newDb->query(infoQuery)){
         infoQuery.next();
-        for(int i=0;i<=17;i++){
+        id=infoQuery.value(0).toInt();
+        for(int i=1;i<=18;i++){
             attributes.push_back(infoQuery.value(i).toString());
         }
         return true;
@@ -85,8 +86,41 @@ bool Firefighter::InsertToDatabase(DatabaseManager *newDb){
 
 }
 
+bool Firefighter::UpdateInDatabase(QVector<QString> nattributes, DatabaseManager *newDb){
+    if(!(newDb->isOpen())){
+        newDb->open();
+    }
+
+    attributes=nattributes;
+
+    QSqlQuery updateQuery;
+    updateQuery.prepare("UPDATE firefighters SET "
+                     "fname=?,mname=?,lname=?,"
+                     "dob=?,deptid=?,stateid=?,"
+                     "address=?,city=?,state=?,"
+                     "zip=?,joindate=?,status=?,"
+                     "hphone=?,wphone=?,cphone=?,"
+                     "drvlic=?,cdl=? WHERE id=? ");
+    for(int i=0; i<attributes.size();i++){
+        updateQuery.addBindValue(attributes[i]);
+    }
+
+    updateQuery.addBindValue(id);
+
+    if(newDb->query(updateQuery)){
+        return true;}
+    else{
+        qDebug("Database Error: %s",qPrintable(updateQuery.lastError().text()));
+        return false;}
+}
+
+
 
 // ACCESSORS
+int Firefighter::ID(){
+    return id;
+}
+
 QString Firefighter::FirstName(){
     return attributes[0];
 }

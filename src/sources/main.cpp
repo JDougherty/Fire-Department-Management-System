@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
     QString filename = "fdms.db";
     DatabaseManager db;
 
-    setupDebugRedirection();
+    //setupDebugRedirection();
     qDebug("Initialized at %s",initstamp.toString().toStdString().c_str());
 
     wndSplash *splash = new wndSplash(0);

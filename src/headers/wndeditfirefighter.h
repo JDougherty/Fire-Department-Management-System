@@ -38,6 +38,15 @@ public:
 
 private:
     Ui::wndEditFirefighter *ui;
+    DatabaseManager *db;
+    Firefighter *edit;
+
+
+    void updateFirefighterFields();
+    void updateTrainingList();
+
+private slots:
+            void btnUpdatePersonalClicked();
 };
 
 #endif // WNDEDITFIREFIGHTER_H

@@ -83,6 +83,7 @@ void MainWindow::txtSearchReturnPressed(){
     mdiArea->addSubWindow(child);
     child->show();
 
+
 }
 
 
@@ -112,4 +113,5 @@ void MainWindow::mdiEditFirefighter(QString deptid){
     wndEditFirefighter *child = new wndEditFirefighter(this,db,deptid);
     mdiArea->addSubWindow(child);
     child->show();
+
 }

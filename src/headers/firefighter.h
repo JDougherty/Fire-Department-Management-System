@@ -26,13 +26,14 @@ class Firefighter
 {
 public:
     Firefighter();
-    bool LoadAttributes(QString uid, DatabaseManager *newDb=0);
     Firefighter(QVector<QString> nattributes);
     bool InsertToDatabase(DatabaseManager *newDb=0);
-
+    bool LoadAttributes(QString uid, DatabaseManager *newDb=0);
+    bool UpdateInDatabase(QVector<QString> nattributes, DatabaseManager *newDb);
 
 
     // accessors
+    int ID();
     QString FirstName();
     QString MiddleName();
     QString LastName();
@@ -53,6 +54,7 @@ public:
 
 private:
     QVector<QString> attributes;
+    int id;
 };
 
 #endif // FIREFIGHTER_H

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>332</width>
+    <width>331</width>
     <height>332</height>
    </rect>
   </property>
@@ -18,54 +18,53 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>332</width>
-    <height>332</height>
-   </size>
-  </property>
-  <property name="maximumSize">
-   <size>
-    <width>332</width>
-    <height>332</height>
+    <width>331</width>
+    <height>200</height>
    </size>
   </property>
   <property name="windowTitle">
    <string>Search Results: </string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QTableWidget" name="tblResults">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>312</width>
-      <height>311</height>
-     </rect>
-    </property>
-    <property name="verticalScrollBarPolicy">
-     <enum>Qt::ScrollBarAlwaysOff</enum>
-    </property>
-    <property name="horizontalScrollBarPolicy">
-     <enum>Qt::ScrollBarAlwaysOff</enum>
-    </property>
-    <property name="alternatingRowColors">
-     <bool>true</bool>
-    </property>
-    <column>
-     <property name="text">
-      <string>COL1</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>COL2</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>COL3</string>
-     </property>
-    </column>
-   </widget>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QTableWidget" name="tblResults">
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAsNeeded</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAsNeeded</enum>
+      </property>
+      <property name="alternatingRowColors">
+       <bool>true</bool>
+      </property>
+      <attribute name="verticalHeaderDefaultSectionSize">
+       <number>19</number>
+      </attribute>
+      <column>
+       <property name="text">
+        <string>COL1</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>COL2</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>COL3</string>
+       </property>
+      </column>
+     </widget>
+    </item>
+   </layout>
   </widget>
  </widget>
  <resources/>

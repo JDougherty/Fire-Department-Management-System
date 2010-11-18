@@ -34,15 +34,10 @@ MainWindow::MainWindow(QWidget *parent, DatabaseManager *newDb) :
     mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     setCentralWidget(mdiArea);
 
-
-
-    //windowMapper = new QSignalMapper(this);
-    //connect(windowMapper, SIGNAL(mapped(QWidget*)),this, SLOT(setActiveSubWindow(QWidget*)));
-
-
-
     connect(ui->actFirefighterAdd, SIGNAL(triggered()), this, SLOT(mdiNewFirefighter()));
     connect(ui->actNew_Drill, SIGNAL(triggered()), this, SLOT(mdiActiveDrill()));
+    connect(ui->actInventory_Control, SIGNAL(triggered()), this, SLOT(mdiInventoryControl()));
+    connect(ui->actInventory_Check, SIGNAL(triggered()), this, SLOT(mdiInventoryCheck()));
 
     connect(ui->actSearch, SIGNAL(triggered()), this, SLOT(menuSearchTriggered()));
 
@@ -108,6 +103,21 @@ void MainWindow::mdiActiveDrill()
     mdiArea->addSubWindow(child);
     child->show();
 }
+
+void MainWindow::mdiInventoryControl()
+{
+    wndinventorycontrol *child = new wndinventorycontrol;
+    mdiArea->addSubWindow(child);
+    child->show();
+}
+
+void MainWindow::mdiInventoryCheck()
+{
+    wndInventoryCheck *child = new wndInventoryCheck;
+    mdiArea->addSubWindow(child);
+    child->show();
+}
+
 
 void MainWindow::mdiEditFirefighter(QString deptid){
     wndEditFirefighter *child = new wndEditFirefighter(this,db,deptid);

@@ -97,7 +97,10 @@
     <addaction name="separator"/>
     <addaction name="actFirefighterAdd"/>
     <addaction name="actNew_Drill"/>
-    <addaction name="actionNew_Call"/>
+    <addaction name="actNew_Call"/>
+    <addaction name="separator"/>
+    <addaction name="actInventory_Control"/>
+    <addaction name="actInventory_Check"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -127,7 +130,7 @@
    </attribute>
    <addaction name="actFirefighterAdd"/>
    <addaction name="actNew_Drill"/>
-   <addaction name="actionNew_Call"/>
+   <addaction name="actNew_Call"/>
   </widget>
   <action name="actQuit">
    <property name="text">
@@ -168,13 +171,26 @@
     <string>New Drill</string>
    </property>
   </action>
-  <action name="actionNew_Call">
+  <action name="actNew_Call">
    <property name="icon">
     <iconset resource="../resources/icons.qrc">
      <normaloff>:/icons/Call_Base.png</normaloff>:/icons/Call_Base.png</iconset>
    </property>
    <property name="text">
     <string>New Call</string>
+   </property>
+  </action>
+  <action name="actInventory_Control">
+   <property name="text">
+    <string>Inventory Control</string>
+   </property>
+   <property name="toolTip">
+    <string>Inventory Control</string>
+   </property>
+  </action>
+  <action name="actInventory_Check">
+   <property name="text">
+    <string>Inventory Check</string>
    </property>
   </action>
  </widget>

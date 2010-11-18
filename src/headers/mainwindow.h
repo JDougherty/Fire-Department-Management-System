@@ -30,6 +30,8 @@
 #include "wndnewfirefighter.h"
 #include "wndactivedrill.h"
 #include "wndsearch.h"
+#include "wndinventorycontrol.h"
+#include "wndinventorycheck.h"
 
 QT_END_NAMESPACE
 
@@ -56,6 +58,8 @@ protected:
 private slots:
     void mdiNewFirefighter();
     void mdiActiveDrill();
+    void mdiInventoryControl();
+    void mdiInventoryCheck();
 
 
     void menuSearchTriggered();

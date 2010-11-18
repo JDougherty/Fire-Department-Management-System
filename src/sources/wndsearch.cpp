@@ -41,8 +41,13 @@ wndSearch::wndSearch(QWidget *parent,
     ui->setupUi(this);
     this->setWindowTitle(this->windowTitle() + dtype);
 
-    ui->tblResults->horizontalHeader()->setStretchLastSection( true );
+    //ui->tblResults->horizontalHeader()->setStretchLastSection( false );
+    ui->tblResults->horizontalHeader()->setResizeMode(0,QHeaderView::Stretch);
+    ui->tblResults->horizontalHeader()->setResizeMode(1,QHeaderView::Stretch);
+    ui->tblResults->horizontalHeader()->setResizeMode(2,QHeaderView::Stretch);
     ui->tblResults->setEditTriggers(0);
+
+
 
     if(dtype=="Firefighters"){
         ui->tblResults->setHorizontalHeaderLabels(QStringList()<<"ID"<<"Last Name"<<"First Name");

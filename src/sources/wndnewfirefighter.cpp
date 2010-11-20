@@ -77,7 +77,6 @@ void wndNewFirefighter::btnAdd_Clicked(){
         QMessageBox::information(0,"Database Operation","Firefighter successfully added to database!");
     }
     else{
-        qWarning("Firefighter not added. %s",qPrintable(db->lastError().databaseText()));
         QMessageBox::warning(0,"Database Operation","Firefighter was not added to database! See log file for details.");
     }
 }

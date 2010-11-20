@@ -149,7 +149,6 @@ bool DatabaseManager::init_structure(){
                  "drillnum TEXT);"
              "CREATE TABLE inventory"
                  "(id INTEGER PRIMARY KEY,"
-                 "barcode TEXT,"
                  "name TEXT,"
                  "description TEXT,"
                  "category TEXT);";
@@ -210,7 +209,7 @@ bool DatabaseManager::verify_structure(){
 
 
     // And compare to expected value
-    if(chksum!="d4c1086743f4e0c05ce7e3869c56afc3"){
+    if(chksum!="8e7f753665232d50d0d7f5c923aeffbd"){
         return false;
     }
 

@@ -82,6 +82,7 @@ bool Firefighter::InsertToDatabase(DatabaseManager *newDb){
     if(newDb->query(addQuery)){
         return true;}
     else{
+        qWarning("Database Error: %s",qPrintable(addQuery.lastError().text()));
         return false;}
 
 }
@@ -110,7 +111,7 @@ bool Firefighter::UpdateInDatabase(QVector<QString> nattributes, DatabaseManager
     if(newDb->query(updateQuery)){
         return true;}
     else{
-        qDebug("Database Error: %s",qPrintable(updateQuery.lastError().text()));
+        qWarning("Database Error: %s",qPrintable(updateQuery.lastError().text()));
         return false;}
 }
 

@@ -55,39 +55,6 @@
       </rect>
      </property>
     </widget>
-    <widget class="QTableWidget" name="tblInventory">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>50</y>
-       <width>532</width>
-       <height>192</height>
-      </rect>
-     </property>
-     <property name="columnCount">
-      <number>4</number>
-     </property>
-     <column>
-      <property name="text">
-       <string>Barcode</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Item</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Category</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Description</string>
-      </property>
-     </column>
-    </widget>
     <widget class="QPushButton" name="btnPrintLabel">
      <property name="geometry">
       <rect>
@@ -126,6 +93,22 @@
      <property name="text">
       <string>Print All</string>
      </property>
+    </widget>
+    <widget class="QTableView" name="tblInventory">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>50</y>
+       <width>531</width>
+       <height>191</height>
+      </rect>
+     </property>
+     <property name="alternatingRowColors">
+      <bool>true</bool>
+     </property>
+     <attribute name="verticalHeaderDefaultSectionSize">
+      <number>19</number>
+     </attribute>
     </widget>
    </widget>
    <widget class="QGroupBox" name="groupBox_2">
@@ -179,7 +162,7 @@
       <string>Description:</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="lineEdit">
+    <widget class="QLineEdit" name="txtNewName">
      <property name="geometry">
       <rect>
        <x>80</x>
@@ -189,7 +172,7 @@
       </rect>
      </property>
     </widget>
-    <widget class="QLineEdit" name="lineEdit_2">
+    <widget class="QLineEdit" name="txtNewCategory">
      <property name="geometry">
       <rect>
        <x>80</x>
@@ -199,7 +182,7 @@
       </rect>
      </property>
     </widget>
-    <widget class="QTextEdit" name="textEdit">
+    <widget class="QTextEdit" name="txtNewDescription">
      <property name="geometry">
       <rect>
        <x>80</x>

@@ -74,7 +74,6 @@ void wndEditFirefighter::btnUpdatePersonalClicked(){
     }
     else{
         QMessageBox::warning(this,"Firefighter: Update Failed","Firefighter information failed to update! Check log for more information.");
-        qDebug()<<db->lastError().text();
     }
 
 

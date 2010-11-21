@@ -4,6 +4,9 @@
 #include <QMainWindow>
 #include <QMessageBox>
 #include <QSqlQueryModel>
+#include <QPrinter>
+#include <QPrintDialog>
+#include <QPainter>
 #include "databasemanager.h"
 
 namespace Ui {
@@ -21,10 +24,14 @@ public:
 private:
     Ui::wndinventorycontrol *ui;
     DatabaseManager *db;
+    void PrintLabel(QVector<int> itemrow);
 
 private slots:
-    void on_cmbCategoryFilter_currentIndexChanged(QString );
-    void on_btnAdd_clicked();
+    void CreateItem();
+    void DeleteItem(QModelIndex);
+    void RefreshMasterList();
+    void PrintLabelCurrent();
+    void PrintLabelAll();
 };
 
 #endif // WNDINVENTORYCONTROL_H

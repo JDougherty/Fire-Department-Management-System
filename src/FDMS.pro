@@ -40,4 +40,4 @@ FORMS += forms/wndNewFirefighter.ui \
     forms/wndinventorycheck.ui
 
 RESOURCES += \
-    resources/icons.qrc
+    resources/resources.qrc

@@ -23,6 +23,7 @@
 #include <QString>
 #include <QFile>
 #include <QDateTime>
+#include <QFontDatabase>
 #include "../headers/databasemanager.h"
 #include "../headers/LogFunctions.h"
 #include "../headers/mainwindow.h"
@@ -37,6 +38,14 @@ int main(int argc, char *argv[])
     QDateTime initstamp=QDateTime::currentDateTime();
     QString filename = "fdms.db";
     DatabaseManager db;
+
+    QFile res(":/fonts/FRE3OF9X.TTF");
+    if(res.open(QIODevice::ReadOnly)) {
+        QFontDatabase::addApplicationFontFromData(res.readAll());
+    }
+    else{
+        qWarning("Could not load Free 3 of 9 Extended barcode font.");
+    }
 
     //setupDebugRedirection();
     qDebug("Initialized at %s",initstamp.toString().toStdString().c_str());

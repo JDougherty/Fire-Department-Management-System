@@ -151,7 +151,14 @@ bool DatabaseManager::init_structure(){
                  "(id INTEGER PRIMARY KEY,"
                  "name TEXT,"
                  "description TEXT,"
-                 "category TEXT);";
+                 "category TEXT);"
+             "CREATE TABLE inventorycheck"
+                 "(id INTEGER PRIMARY KEY,"
+                 "iid INTEGER,"
+                 "name TEXT,"
+                 "description TEXT,"
+                 "category TEXT,"
+                 "checked INTEGER)";
 
 
     // QSqlQuery::exec with SQLite will not execute multiple queries in a single execution.
@@ -204,12 +211,12 @@ bool DatabaseManager::verify_structure(){
     QString chksum=md5bytearray.toHex().constData();
 
 
-    //qDebug()<<chksum;
+   // qDebug()<<chksum;
     //qDebug()<<TableSchema;
 
 
     // And compare to expected value
-    if(chksum!="8e7f753665232d50d0d7f5c923aeffbd"){
+    if(chksum!="61526dd3fdf23ecfc1e295f23b847f67"){
         return false;
     }
 

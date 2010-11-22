@@ -25,6 +25,7 @@ wndinventorycontrol::wndinventorycontrol(QWidget *parent,DatabaseManager *newDb)
     ui(new Ui::wndinventorycontrol)
 {
     ui->setupUi(this);
+
     ui->cmbCategoryFilter->addItem("[All]");
     QSqlQuery selectCategories;
     selectCategories.prepare("SELECT DISTINCT category FROM inventory");

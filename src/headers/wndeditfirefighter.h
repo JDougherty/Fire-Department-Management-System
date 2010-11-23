@@ -44,14 +44,25 @@ private:
 
 
     void updateFirefighterFields();
+
     void updateTrainingList();
     void toggleTrainingInformationEnabled(QListWidgetItem* item);
 
+    void updateEquipmentList();
+    void toggleEquipmentInformationEnabled(QListWidgetItem* item);
+
 private slots:
     void btnUpdatePersonalClicked();
+
     void trainingItemClicked(QListWidgetItem*);
     void btnUpdateTrainingClicked();
     void updateTrainingInfo(QListWidgetItem*);
+
+    void equipmentItemClicked(QListWidgetItem*);
+    void btnUpdateEquipmentClicked();
+    void updateEquipmentInfo(QListWidgetItem*);
+
+
 };
 
 #endif // WNDEDITFIREFIGHTER_H

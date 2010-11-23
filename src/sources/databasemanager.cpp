@@ -132,7 +132,7 @@ bool DatabaseManager::init_structure(){
              "CREATE TABLE ffequipment"
                  "(id INTEGER PRIMARY KEY,"
                  "eqid INTEGER,"
-                 "fid INTEGER,"
+                 "ffid INTEGER,"
                  "issued INTEGER,"
                  "size TEXT,"
                  "type TEXT,"
@@ -211,12 +211,12 @@ bool DatabaseManager::verify_structure(){
     QString chksum=md5bytearray.toHex().constData();
 
 
-   // qDebug()<<chksum;
+    //qDebug()<<chksum;
     //qDebug()<<TableSchema;
 
 
     // And compare to expected value
-    if(chksum!="61526dd3fdf23ecfc1e295f23b847f67"){
+    if(chksum!="95a972f6e9c84881298f617b1e5e5f64"){
         return false;
     }
 

@@ -21,6 +21,7 @@
 #define WNDEDITFIREFIGHTER_H
 
 #include <QMainWindow>
+#include <QListWidgetItem>
 #include "databasemanager.h"
 #include "firefighter.h"
 namespace Ui {
@@ -44,9 +45,13 @@ private:
 
     void updateFirefighterFields();
     void updateTrainingList();
+    void toggleTrainingInformationEnabled(QListWidgetItem* item);
 
 private slots:
-            void btnUpdatePersonalClicked();
+    void btnUpdatePersonalClicked();
+    void trainingItemClicked(QListWidgetItem*);
+    void btnUpdateTrainingClicked();
+    void updateTrainingInfo(QListWidgetItem*);
 };
 
 #endif // WNDEDITFIREFIGHTER_H

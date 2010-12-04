@@ -21,7 +21,10 @@
 #define wndActiveDrill_H
 
 #include <QMainWindow>
-#include <QString>
+#include <QMessageBox>
+#include <QSqlQueryModel>
+#include <QMenu>
+#include "databasemanager.h"
 
 namespace Ui {
     class wndActiveDrill;
@@ -30,18 +33,23 @@ namespace Ui {
 class wndActiveDrill : public QMainWindow {
     Q_OBJECT
 public:
-    wndActiveDrill(QWidget *parent = 0);
+    wndActiveDrill(QWidget *parent = 0, DatabaseManager *db=0);
     ~wndActiveDrill();
-
-private slots:
-    void txtSignIn_textEdited();
-
-
-protected:
-    void changeEvent(QEvent *e);
 
 private:
     Ui::wndActiveDrill *ui;
+    DatabaseManager *db;
+    int drillid;
+    QModelIndex lastCellRightClicked;
+
+    bool insert();
+    void updateSheet();
+
+private slots:
+    void updateInformation();
+    void scanId();
+    void sheetContextMenu(const QPoint &pos);
+    void sheetRemoveFirefighter();
 
 };
 

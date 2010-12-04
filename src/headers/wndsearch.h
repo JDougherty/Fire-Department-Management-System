@@ -22,6 +22,8 @@
 
 #include <QMainWindow>
 #include <QTableWidgetItem>
+#include <QSqlQueryModel>
+#include <QStringList>
 #include "databasemanager.h"
 #include "wndeditfirefighter.h"
 #include "mainwindow.h"
@@ -45,13 +47,18 @@ public:
 
 private:
     Ui::wndSearch *ui;
-    void Search(QString dtype, QString query);
     DatabaseManager *db;
     QString dtype;
+    QString query;
+    QStringList headers;
     MainWindow *mdiparent;
 
+    void Search(QString dtype, QString query);
+
 private slots:
-    void tableDoubleClicked(int tmp);
+    void tableDoubleClicked(QModelIndex);
+    void refreshClicked();
+    void showAllClicked();
 };
 
 #endif // WNDSEARCH_H

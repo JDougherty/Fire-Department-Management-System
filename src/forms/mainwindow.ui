@@ -144,7 +144,7 @@
   </action>
   <action name="actFirefighterAdd">
    <property name="icon">
-    <iconset resource="../resources/icons.qrc">
+    <iconset resource="../resources/resources.qrc">
      <normaloff>:/icons/Firefighter_Base.png</normaloff>:/icons/Firefighter_Base.png</iconset>
    </property>
    <property name="text">
@@ -161,7 +161,7 @@
   </action>
   <action name="actNew_Drill">
    <property name="icon">
-    <iconset resource="../resources/icons.qrc">
+    <iconset resource="../resources/resources.qrc">
      <normaloff>:/icons/Drill_Base.png</normaloff>:/icons/Drill_Base.png</iconset>
    </property>
    <property name="text">
@@ -173,7 +173,7 @@
   </action>
   <action name="actNew_Call">
    <property name="icon">
-    <iconset resource="../resources/icons.qrc">
+    <iconset resource="../resources/resources.qrc">
      <normaloff>:/icons/Call_Base.png</normaloff>:/icons/Call_Base.png</iconset>
    </property>
    <property name="text">
@@ -196,7 +196,7 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="../resources/icons.qrc"/>
+  <include location="../resources/resources.qrc"/>
  </resources>
  <connections>
   <connection>

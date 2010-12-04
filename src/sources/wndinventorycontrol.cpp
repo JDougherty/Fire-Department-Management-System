@@ -70,16 +70,16 @@ void wndinventorycontrol::CreateItem()
     insertItem.addBindValue(ui->txtNewDescription->toPlainText());
     insertItem.addBindValue(ui->txtNewCategory->text());
     if(db->query(insertItem)){
-        qDebug("Inventory item added successfully. ");
-        QMessageBox::information(0,"Database Operation","Item successfully added to database!");
+        qDebug("Inventory Information: Inventory item added successfully. ");
+        QMessageBox::information(0,"Inventory Information","Item successfully added to database!");
         ui->txtNewName->clear();
         ui->txtNewDescription->clear();
         ui->txtNewCategory->clear();
         ui->txtNewName->setFocus();
     }
     else{
-        qWarning("Invetory item not added. %s",qPrintable(insertItem.lastError().text()));
-        QMessageBox::warning(0,"Database Operation","Item was not added to database! See log file for details.");
+        qWarning("Inventory Error: Inventory item could not be added. Database Error: %s",qPrintable(insertItem.lastError().text()));
+        QMessageBox::warning(0,"Inventory Error","Item could not be added to database! See log file for details.");
     }
     RefreshMasterList();
 }
@@ -191,7 +191,7 @@ void wndinventorycontrol::PrintLabel(QVector<int> itemrow)
     QPainter painter;
 
     if (! painter.begin(&printer)) { // Link the painter to the printer
-             qWarning("Painter Error! Could not link to printer. ");
+             qWarning("Printer Error: Could not link painter to printer. ");
              return;
          }
 

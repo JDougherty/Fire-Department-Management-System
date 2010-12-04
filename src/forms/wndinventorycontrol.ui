@@ -208,6 +208,17 @@
    </widget>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>cmbCategoryFilter</tabstop>
+  <tabstop>tblInventory</tabstop>
+  <tabstop>btnPrintLabel</tabstop>
+  <tabstop>btnRemoveItem</tabstop>
+  <tabstop>btnPrintAll</tabstop>
+  <tabstop>txtNewName</tabstop>
+  <tabstop>txtNewCategory</tabstop>
+  <tabstop>txtNewDescription</tabstop>
+  <tabstop>btnAdd</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

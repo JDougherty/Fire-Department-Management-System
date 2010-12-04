@@ -99,7 +99,7 @@ void MainWindow::mdiNewFirefighter()
 
 void MainWindow::mdiActiveDrill()
 {
-    wndActiveDrill *child = new wndActiveDrill;
+    wndActiveDrill *child = new wndActiveDrill(this,db);
     mdiArea->addSubWindow(child);
     child->show();
 }
@@ -123,5 +123,4 @@ void MainWindow::mdiEditFirefighter(QString deptid){
     wndEditFirefighter *child = new wndEditFirefighter(this,db,deptid);
     mdiArea->addSubWindow(child);
     child->show();
-
 }

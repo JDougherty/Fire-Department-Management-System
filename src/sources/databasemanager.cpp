@@ -29,7 +29,17 @@ DatabaseManager::~DatabaseManager(){
 }
 
 
+/*
+   Function: open
 
+   Verifies the database file exists and then opens the database.
+
+   Returns:
+
+      Boolean true upon successfully opening the database,
+      false if unsuccesful.
+
+*/
 bool DatabaseManager::open(){
     // Use SQLite database driver
     db = QSqlDatabase::addDatabase("QSQLITE");
@@ -67,9 +77,22 @@ bool DatabaseManager::open(){
         qDebug("Error opening database: %s",qPrintable(db.lastError().databaseText()));
         return false;
     }
-
 }
 
+/*
+   Function: remove
+
+   Deletes the SQLite database file.
+
+   Returns:
+
+      Boolean true upon successfully deleting the file,
+      false upon failure.
+
+   See Also:
+
+      <Divide>
+*/
 bool DatabaseManager::remove(){
     // Close database
     db.close();
@@ -88,8 +111,19 @@ bool DatabaseManager::remove(){
 }
 
 
-// init_structure()
-//   Create the database schema for the SQLite database file
+/*
+   Function: init_structure
+
+   Creates the tables in the SQLite database.
+
+   Returns:
+
+      Boolean true upon success, false upon failure.
+
+   See Also:
+
+      verify_structure
+*/
 bool DatabaseManager::init_structure(){
     QSqlQuery query;
     QString strQuery;
@@ -115,14 +149,14 @@ bool DatabaseManager::init_structure(){
                  "wphone TEXT,"
                  "cphone TEXT,"
                  "drvlic TEXT,"
-                 "cdl TEXT);"  
+                 "cdl TEXT);"
              "CREATE TABLE training"
                  "(id INTEGER PRIMARY KEY,"
                  "title TEXT);"
              "CREATE TABLE fftraining"
                  "(id INTEGER PRIMARY KEY,"
-                 "tid INTEGER,"
-                 "ffid INTEGER,"
+                 "FOREIGN KEY(tid) REFERENCES training(id),"
+                 "FOREIGN KEY(ffid) REFERENCES firefighters(id),"
                  "ffesig TEXT,"
                  "supesig TEXT,"
                  "tdate TEXT);"
@@ -131,8 +165,8 @@ bool DatabaseManager::init_structure(){
                  "title TEXT);"
              "CREATE TABLE ffequipment"
                  "(id INTEGER PRIMARY KEY,"
-                 "eqid INTEGER,"
-                 "ffid INTEGER,"
+                 "FOREIGN KEY(eqid) REFERENCES equipment(id),"
+                 "FOREIGN KEY(ffid) REFERENCES firefighters(id),"
                  "issued INTEGER,"
                  "size TEXT,"
                  "type TEXT,"
@@ -147,6 +181,12 @@ bool DatabaseManager::init_structure(){
                  "endtime INTEGER,"
                  "incidentcommander TEXT,"
                  "drillnum TEXT);"
+             "CREATE TABLE drillsheet"
+                 "(id INTEGER PRIMARY KEY, "
+                 "FOREIGN KEY(did) REFERENCES drills(id) ,"
+                 "FOREIGN KEY(ffid) REFERENCES firefighters(id),"
+                 "timein TEXT,"
+                 "timeout TEXT);"
              "CREATE TABLE inventory"
                  "(id INTEGER PRIMARY KEY,"
                  "name TEXT,"
@@ -177,8 +217,20 @@ bool DatabaseManager::init_structure(){
 }
 
 
-// verify_structure
-//  Verify that the loaded database file follows the specified schema
+/*
+   Function: verify_structure
+
+   Verify that the loaded database file follows the specified schema.
+
+   Returns:
+
+      Boolean true if the database structure is verified correct,
+      false upon failure.
+
+   See Also:
+
+      create_structure
+*/
 bool DatabaseManager::verify_structure(){
     QSqlQuery qryTableNames;
     QSqlQuery qryTableInfo;
@@ -216,24 +268,43 @@ bool DatabaseManager::verify_structure(){
 
 
     // And compare to expected value
-    if(chksum!="95a972f6e9c84881298f617b1e5e5f64"){
+    if(chksum!="39003742eb44f06fa70c9ad111dc2147"){
         return false;
     }
 
     return true;
 }
 
+/*
+   Function: lastError
 
+   Wrapper to return the SQLite database last error.
 
+   Returns:
 
+      QSqlError  returned by the SQLite database.
 
-
-
+*/
 QSqlError DatabaseManager::lastError(){
     return db.lastError();
 }
 
 
+/*
+   Function: query
+
+   Executes a query through the database.
+
+   Parameters:
+
+      query - QSqlQuery which has been prepared and bound upon.
+
+   Returns:
+
+      Bolean true if the query is successfully executed,
+      false on failure.
+
+*/
 bool DatabaseManager::query(QSqlQuery query){
    QSqlQuery queryobject=query;
    bool ret=queryobject.exec();
@@ -241,7 +312,18 @@ bool DatabaseManager::query(QSqlQuery query){
    return ret;
 }
 
+/*
+   Function: isOpen
+
+   Checks if the database is open or not.
+
+   Returns:
+
+      Bolean true if the database is open, false if closed.
+
+*/
 bool DatabaseManager::isOpen(){
-    return this->_open;
+    return _open;
 
 }
+

@@ -36,7 +36,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -1039,6 +1039,40 @@
    </widget>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>txtFirstName</tabstop>
+  <tabstop>txtMiddleName</tabstop>
+  <tabstop>txtLastName</tabstop>
+  <tabstop>dateDob</tabstop>
+  <tabstop>txtLocalID</tabstop>
+  <tabstop>txtStateID</tabstop>
+  <tabstop>txtAddress</tabstop>
+  <tabstop>txtCity</tabstop>
+  <tabstop>txtState</tabstop>
+  <tabstop>txtZipCode</tabstop>
+  <tabstop>dateJoin</tabstop>
+  <tabstop>txtStatus</tabstop>
+  <tabstop>txtHphone</tabstop>
+  <tabstop>txtWphone</tabstop>
+  <tabstop>txtCphone</tabstop>
+  <tabstop>txtDrvLic</tabstop>
+  <tabstop>txtCDL</tabstop>
+  <tabstop>btnUpdatePersonal</tabstop>
+  <tabstop>txtFFSig</tabstop>
+  <tabstop>txtSupSig</tabstop>
+  <tabstop>dateTraining</tabstop>
+  <tabstop>btnUpdateTraining</tabstop>
+  <tabstop>txtEquipSize</tabstop>
+  <tabstop>txtEquipType</tabstop>
+  <tabstop>txtEquipSerial</tabstop>
+  <tabstop>radEquipmentNew</tabstop>
+  <tabstop>radEquipmentUsed</tabstop>
+  <tabstop>txtEquipYear</tabstop>
+  <tabstop>btnUpdateEquipment</tabstop>
+  <tabstop>lstEquipment</tabstop>
+  <tabstop>lstTraining</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

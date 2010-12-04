@@ -10,34 +10,34 @@ SOURCES += sources/main.cpp \
     sources/wndnewfirefighter.cpp \
     sources/mainwindow.cpp \
     sources/wndsetup.cpp \
-    sources/wndactivedrill.cpp \
     sources/wndsplash.cpp \
     sources/firefighter.cpp \
     sources/wndsearch.cpp \
     sources/wndeditfirefighter.cpp \
     sources/wndinventorycontrol.cpp \
-    sources/wndinventorycheck.cpp
+    sources/wndinventorycheck.cpp \
+    sources/wndactivedrill.cpp
 HEADERS += headers/databasemanager.h \
     headers/wndnewfirefighter.h \
     headers/mainwindow.h \
     headers/wndsetup.h \
-    headers/wndactivedrill.h \
     headers/wndsplash.h \
     headers/LogFunctions.h \
     headers/firefighter.h \
     headers/wndsearch.h \
     headers/wndeditfirefighter.h \
     headers/wndinventorycontrol.h \
-    headers/wndinventorycheck.h
+    headers/wndinventorycheck.h \
+    headers/wndactivedrill.h
 FORMS += forms/wndNewFirefighter.ui \
 	forms/mainwindow.ui \
     forms/wndsetup.ui \
-    forms/wndactivedrill.ui \
     forms/wndsplash.ui \
     forms/wndsearch.ui \
     forms/wndeditfirefighter.ui \
     forms/wndinventorycontrol.ui \
-    forms/wndinventorycheck.ui
+    forms/wndinventorycheck.ui \
+    forms/wndactivedrill.ui
 
 RESOURCES += \
     resources/resources.qrc

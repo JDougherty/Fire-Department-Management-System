@@ -72,11 +72,10 @@ void wndNewFirefighter::btnAdd_Clicked(){
     // Construct new firefighter with attributes
     Firefighter newFF(ffattributes);
 
-    if(newFF.InsertToDatabase(this->db)){
-        qDebug("New firefighter added successfully. ");
-        QMessageBox::information(0,"Database Operation","Firefighter successfully added to database!");
+    if(newFF.insertToDatabase(this->db)){
+        QMessageBox::information(0,"Firefighter Information","Firefighter successfully added to database!");
     }
     else{
-        QMessageBox::warning(0,"Database Operation","Firefighter was not added to database! See log file for details.");
+        QMessageBox::warning(0,"Firefighter Error","Firefighter could not be added to database! See log file for details.");
     }
 }

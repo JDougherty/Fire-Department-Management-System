@@ -30,67 +30,93 @@ wndSearch::wndSearch(QWidget *parent) :
 
 wndSearch::wndSearch(QWidget *parent,
                      MainWindow *nmdiparent,
-                     DatabaseManager *newDb, QString newdtype,QString query) :
+                     DatabaseManager *newDb, QString newdtype,QString newquery) :
         QMainWindow(parent),
         ui(new Ui::wndSearch)
 {
     db=newDb;
     dtype=newdtype;
+    query=newquery;
     mdiparent=nmdiparent;
 
     ui->setupUi(this);
     this->setWindowTitle(this->windowTitle() + dtype);
 
     //ui->tblResults->horizontalHeader()->setStretchLastSection( false );
-    ui->tblResults->horizontalHeader()->setResizeMode(0,QHeaderView::Stretch);
-    ui->tblResults->horizontalHeader()->setResizeMode(1,QHeaderView::Stretch);
-    ui->tblResults->horizontalHeader()->setResizeMode(2,QHeaderView::Stretch);
-    ui->tblResults->setEditTriggers(0);
-
 
 
     if(dtype=="Firefighters"){
-        ui->tblResults->setHorizontalHeaderLabels(QStringList()<<"ID"<<"Last Name"<<"First Name");
-        Search(dtype,query);
+       headers=QStringList()<<"ID"<<"Last Name"<<"First Name";
     }
-    else if(dtype=="Drills"){
-        ui->tblResults->setHorizontalHeaderLabels(QStringList()<<"ID"<<"Date"<<"Location");
-    }
-    else if(dtype=="Calls"){
-        ui->tblResults->setHorizontalHeaderLabels(QStringList()<<"ID"<<"Date"<<"Location");
+    else if(dtype=="Drills"||dtype=="Calls"){
+        headers=QStringList()<<"ID"<<"Date"<<"Location";
     }
 
+    Search(dtype,query);
 
-    connect(ui->tblResults->verticalHeader(),SIGNAL(sectionDoubleClicked(int)),this,SLOT(tableDoubleClicked(int)));
+
+    connect(ui->tblResults,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(tableDoubleClicked(QModelIndex)));
+    connect(ui->btnRefresh,SIGNAL(clicked()),this,SLOT(refreshClicked()));
+    connect(ui->btnShowAll,SIGNAL(clicked()),this,SLOT(showAllClicked()));
 
 
 
 }
 
-void wndSearch::tableDoubleClicked(int tmp){
-    QString deptid=ui->tblResults->item(tmp,0)->data(0).toString();
-    mdiparent->mdiEditFirefighter(deptid);
+void wndSearch::tableDoubleClicked(QModelIndex tmp){
+    QString deptid=tmp.sibling(tmp.row(),0).data().toString();
+    qDebug("%s",qPrintable(deptid));
+
 }
 
 void wndSearch::Search(QString dtype, QString query){
+
     QSqlQuery selection;
 
     if(dtype=="Firefighters"){
+        QString querystring="SELECT deptid,lname,fname FROM firefighters";
+        if(query!=""){
+            querystring+=" WHERE deptid LIKE ? OR lname LIKE ? or fname LIKE ?";
+            selection.prepare(querystring);
+            selection.addBindValue("%" + query + "%");
+            selection.addBindValue("%" + query + "%");
+            selection.addBindValue("%" + query + "%");
+        }
+        else{
+            selection.prepare(querystring);
+        }
 
-        selection.prepare("SELECT deptid,lname,fname FROM firefighters WHERE deptid LIKE ? OR lname LIKE ? or fname LIKE ?");
-        selection.addBindValue("%" + query + "%");
-        selection.addBindValue("%" + query + "%");
-        selection.addBindValue("%" + query + "%");
-
-        db->query(selection);
-        while(selection.next()){
-            ui->tblResults->setRowCount(ui->tblResults->rowCount()+1);
-            ui->tblResults->setVerticalHeaderItem(ui->tblResults->rowCount()-1, new QTableWidgetItem("*"));
-            for(int i=0;i<=2;i++){
-                ui->tblResults->setItem(ui->tblResults->rowCount()-1, i, new QTableWidgetItem(selection.value(i).toString()));
-            }
+    }
+    else if(dtype=="Drills"){
+        QString querystring="SELECT drillnum,strftime('%m/%d/%Y',starttime),location FROM drills";
+        if(query!=""){
+            querystring+=" WHERE drillnum LIKE ? OR location LIKE ?";
+            selection.prepare(querystring);
+            selection.addBindValue("%" + query + "%");
+            selection.addBindValue("%" + query + "%");
+        }
+        else{
+            selection.prepare(querystring);
         }
     }
+
+    db->query(selection);
+
+    QSqlQueryModel *searchModel = new QSqlQueryModel;
+    searchModel->setQuery(selection);
+
+    searchModel->setHeaderData(0, Qt::Horizontal, headers[0]);
+    searchModel->setHeaderData(1, Qt::Horizontal, headers[1]);
+    searchModel->setHeaderData(2, Qt::Horizontal, headers[2]);
+
+    // Set options for the QTableView
+    ui->tblResults->setModel(searchModel);
+    ui->tblResults->horizontalHeader()->setResizeMode(0,QHeaderView::Stretch);
+    ui->tblResults->horizontalHeader()->setResizeMode(1,QHeaderView::Stretch);
+    ui->tblResults->horizontalHeader()->setResizeMode(2,QHeaderView::Stretch);
+    ui->tblResults->horizontalHeader()->show();
+    ui->tblResults->verticalHeader()->hide();
+    ui->tblResults->setEditTriggers(0);
 }
 
 
@@ -99,4 +125,14 @@ void wndSearch::Search(QString dtype, QString query){
 wndSearch::~wndSearch()
 {
     delete ui;
+}
+
+// PRIVATE SLOTS:
+
+void wndSearch::refreshClicked(){
+    Search(dtype,query);
+}
+
+void wndSearch::showAllClicked(){
+    Search(dtype,"");
 }

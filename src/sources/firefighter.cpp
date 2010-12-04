@@ -19,6 +19,8 @@
 
 #include "../headers/firefighter.h"
 #include <QMessageBox>
+
+
 Firefighter::Firefighter()
 {
 
@@ -28,13 +30,31 @@ Firefighter::Firefighter(QVector<QString> nattributes){
     attributes=nattributes;
 }
 
+/*
+   Function: loadAttributes
 
-bool Firefighter::LoadAttributes(QString localid, DatabaseManager *newDb){
+   Loads the attributes for firefighter with the given id
+   from the database.
+
+   Parameters:
+
+      QString localid - The department id of the firefighter.
+      DatabaseManager *newDb - The database from which to load
+
+   Returns:
+
+      Boolean true upon successful load, false on failure.
+*/
+bool Firefighter::loadAttributes(QString localid, DatabaseManager *newDb){
+    // Clear current attributes
     attributes.clear();
 
+    // Verify the database is open
     if(!(newDb->isOpen())){
         newDb->open();
     }
+
+    // Create the query with parameterization
     QSqlQuery infoQuery;
     infoQuery.prepare("SELECT id,fname,mname,lname,"
                       "dob,deptid,stateid,"
@@ -44,24 +64,43 @@ bool Firefighter::LoadAttributes(QString localid, DatabaseManager *newDb){
                       "drvlic,cdl FROM firefighters WHERE deptid=?");
     infoQuery.addBindValue(localid);
 
-
+    // Execute the query
     if(newDb->query(infoQuery)){
         infoQuery.next();
         id=infoQuery.value(0).toInt();
         for(int i=1;i<=18;i++){
             attributes.push_back(infoQuery.value(i).toString());
         }
+        qDebug("Firefighter Information (%d): Personal information retrieved successfully. ",ID());
         return true;
     }
     else{
+        qWarning("Firefighter Error (%d): Could not retrieve personal information from database. Database Error: %s",ID(),qPrintable(infoQuery.lastError().text()));
         return false;
     }
 }
 
-bool Firefighter::InsertToDatabase(DatabaseManager *newDb){
+/*
+   Function: insertToDatabase
+
+   Creates the firefighter in the database with its
+   current attributes.
+
+   Parameters:
+
+      DatabaseManager *newDb - The database in which to save
+
+   Returns:
+
+      Boolean true upon successful save, false on failure.
+*/
+bool Firefighter::insertToDatabase(DatabaseManager *newDb){
+    // Ensure the database is open
     if(!(newDb->isOpen())){
         newDb->open();
     }
+
+    // Create the query with parameterization
     QSqlQuery addQuery;
     addQuery.prepare("INSERT INTO firefighters "
                      "(fname,mname,lname,"
@@ -79,21 +118,42 @@ bool Firefighter::InsertToDatabase(DatabaseManager *newDb){
     for(int i=0; i<attributes.size();i++){
         addQuery.addBindValue(attributes[i]);
     }
+
+    // Execute the query
     if(newDb->query(addQuery)){
+        qDebug("Firefighter Information: New firefighter added successfully. ");
         return true;}
     else{
-        qWarning("Database Error: %s",qPrintable(addQuery.lastError().text()));
+        qWarning("Firefighter Error: Could not add firefighter to database. Database Error: %s",qPrintable(addQuery.lastError().text()));
         return false;}
 
 }
 
-bool Firefighter::UpdateInDatabase(QVector<QString> nattributes, DatabaseManager *newDb){
+/*
+   Function: updateAttributes
+
+   Set the firefighter's attributes and update in the
+   database.
+
+   Parameters:
+
+      QVector<QString> nattributes - List of new attributes
+      DatabaseManager *newDb - The database in which to update
+
+   Returns:
+
+      Boolean true upon successful save, false on failure.
+*/
+bool Firefighter::updateAttributes(QVector<QString> nattributes, DatabaseManager *newDb){
+    // Ensure the database is open
     if(!(newDb->isOpen())){
         newDb->open();
     }
 
+    // Set the attributes
     attributes=nattributes;
 
+    // Create the query with parameterization
     QSqlQuery updateQuery;
     updateQuery.prepare("UPDATE firefighters SET "
                      "fname=?,mname=?,lname=?,"
@@ -108,10 +168,12 @@ bool Firefighter::UpdateInDatabase(QVector<QString> nattributes, DatabaseManager
 
     updateQuery.addBindValue(id);
 
+    // Execute the query
     if(newDb->query(updateQuery)){
+        qDebug("Firefighter Information (%d): Firefighter successfully updated in database.",ID());
         return true;}
     else{
-        qWarning("Database Error: %s",qPrintable(updateQuery.lastError().text()));
+        qWarning("Firefighter Error (%d): Could not update firefighter information in database. Database Error: %s",ID(),qPrintable(updateQuery.lastError().text()));
         return false;}
 }
 

@@ -50,6 +50,7 @@ class DatabaseManager : public QObject{
 
         QSqlError lastError();
 
+
     private:
         QSqlDatabase db;
         bool _open;

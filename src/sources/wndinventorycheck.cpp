@@ -69,7 +69,7 @@ void wndInventoryCheck::RefreshTables(){
 
 
 void wndInventoryCheck::ResetInventoryCheck(){
-    if(QMessageBox::question(0,"Confirm Reset","Are you sure you would like to reset the inventory check?",QMessageBox::Yes,QMessageBox::No)
+    if(QMessageBox::question(0,"Inventory Information: Confirm Reset","Are you sure you would like to reset the inventory check?",QMessageBox::Yes,QMessageBox::No)
         == QMessageBox::Yes){
 
         db->query(QSqlQuery("DELETE FROM inventorycheck WHERE 1=1"));
@@ -88,8 +88,8 @@ void wndInventoryCheck::ResetInventoryCheck(){
 
         }
         else{
-            QMessageBox::warning(0,"Database Error","Could not copy inventory into check table.");
-            qDebug("Could not copy inventory into check table. %s",qPrintable(copyQuery.lastError().text()));
+            QMessageBox::warning(0,"Inventory Error","Could not copy inventory into check table. See log for more information.");
+            qWarning("Inventory Error: Could not copy inventory into check table. Database Error: %s",qPrintable(copyQuery.lastError().text()));
         }
         RefreshTables();
     }
@@ -108,7 +108,7 @@ void wndInventoryCheck::itemScanned(){
         }
     }
     else{
-        QMessageBox::warning(0,"Inventory Warning","There was a problem checking this item into inventory. Please check the log for details.");
+        QMessageBox::warning(0,"Inventory Error","There was a problem checking this item into inventory. See log for more information.");
 
     }
     ui->txtScanID->clear();
@@ -134,7 +134,7 @@ void wndInventoryCheck::printReport(){
     QPainter painter;
 
     if (! painter.begin(&printer)) { // Link the painter to the printer
-             qWarning("Painter Error! Could not link to printer. ");
+             qWarning("Printer Error: Could not link painter to printer. ");
              return;
     }
 

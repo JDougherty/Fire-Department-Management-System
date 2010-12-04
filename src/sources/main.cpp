@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
         QFontDatabase::addApplicationFontFromData(res.readAll());
     }
     else{
-        qWarning("Could not load Free 3 of 9 Extended barcode font.");
+        qWarning("Resource Error: Could not load Free 3 of 9 Extended barcode font.");
     }
 
     //setupDebugRedirection();

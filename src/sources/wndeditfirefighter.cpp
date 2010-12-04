@@ -1,5 +1,3 @@
-#define odbug qDebug()<<"DEBUG LOC: "<<__FILE__<<" "<<__LINE__;
-
 /*
     Fire Department Management System
     Copyright (C) 2010  Joseph W. Dougherty
@@ -28,6 +26,7 @@ wndEditFirefighter::wndEditFirefighter(QWidget *parent) :
     ui(new Ui::wndEditFirefighter)
 {
     ui->setupUi(this);
+
 }
 
 
@@ -41,7 +40,9 @@ wndEditFirefighter::wndEditFirefighter(QWidget *parent, DatabaseManager *newDb, 
 
         // Create a firefighter object and load its attributes
         edit = new Firefighter;
-        edit->LoadAttributes(ffid,db);
+        if(!edit->loadAttributes(ffid,db)){
+            QMessageBox::warning(0,"Firefighter Error: Read","Could not retrieve firefighter information from database. See log for more information.");
+        }
 
         // Update the personal information fields, training list, and equipment list
         updateFirefighterFields();
@@ -114,7 +115,8 @@ void wndEditFirefighter::updateTrainingList(){
         }
     }
     else{
-        qDebug("Error! Could not get training information!");
+        qWarning("Firefighter Error (%d): Could not get training exam information. Database Error: %s",
+                 edit->ID(),qPrintable(traininglist.lastError().text()));
     }
 }
 
@@ -159,7 +161,7 @@ void wndEditFirefighter::updateEquipmentList(){
         }
     }
     else{
-        qWarning("Could not get equipment information for firefighter with id %d. Error: %s",
+        qWarning("Firefighter Error (%d): Could not get equipment information. Database Error: %s",
                  edit->ID(),qPrintable(equipmentlist.lastError().text()));
     }
 }
@@ -223,11 +225,11 @@ void wndEditFirefighter::btnUpdatePersonalClicked(){
     ffattributes.append(ui->txtDrvLic->text());
     ffattributes.append(ui->txtCDL->text());
 
-    if(edit->UpdateInDatabase(ffattributes,db)){
-        QMessageBox::information(this,"Firefighter: Update Successful","Firefighter was successfully updated in database!");
+    if(edit->updateAttributes(ffattributes,db)){
+        QMessageBox::information(this,"Firefighter Information: Update","Firefighter was successfully updated in database!");
     }
     else{
-        QMessageBox::warning(this,"Firefighter: Update Failed","Firefighter information failed to update! Check log for more information.");
+        QMessageBox::warning(this,"Firefighter Error: Update","Firefighter information failed to update! See log for more information.");
     }
 }
 
@@ -265,8 +267,8 @@ void wndEditFirefighter::trainingItemClicked(QListWidgetItem* item){
 
         // And execute the query, catching any problems
         if(!db->query(addFFTraining)){
-            qWarning("Could not link training exam %s to firefighter with id %d. Error: %s",
-                     qPrintable(exam),edit->ID(),qPrintable(addFFTraining.lastError().text()));
+            qWarning("Firefighter Error (%d): Could not link training exam `%s`. Database Error: %s",
+                     edit->ID(),qPrintable(exam),qPrintable(addFFTraining.lastError().text()));
         }
     }
 
@@ -284,8 +286,8 @@ void wndEditFirefighter::trainingItemClicked(QListWidgetItem* item){
 
             // Attempt to execute the query, catching any problems
             if(!db->query(removeFFTraining)){
-                qWarning("Could not unlink training exam %s to firefighter with id %d. Error: %s",
-                        qPrintable(exam),edit->ID(),qPrintable(removeFFTraining.lastError().text()));
+                qWarning("Firefighter Error (%d): Could not unlink training exam `%s`. Database Error: %s",
+                        edit->ID(),qPrintable(exam),qPrintable(removeFFTraining.lastError().text()));
             }
         }
 
@@ -326,12 +328,12 @@ void wndEditFirefighter::btnUpdateTrainingClicked(){
         updateQuery.addBindValue(exam);
 
         if(db->query(updateQuery)){
-            QMessageBox::information(0,"Training: Update","Training exam information successfully updated.");
+            QMessageBox::information(0,"Firefighter Information: Training Update","Training exam information successfully updated.");
         }
         else{
-            QMessageBox::warning(0,"Training: Update","There was a problem updating the training exam information. Please see the log for details.");
-            qWarning("Could not update training exam %s for firefighter with id %d. Error: %s",
-                     qPrintable(exam),edit->ID(),qPrintable(updateQuery.lastError().text()));
+            QMessageBox::warning(0,"Firefighter Error: Training Update","There was a problem updating the training exam information. See log for more information.");
+            qWarning("Firefighter Error (%d): Could not update training exam `%s`. Database Error: %s",
+                     edit->ID(),qPrintable(exam),qPrintable(updateQuery.lastError().text()));
         }
     }
 }
@@ -350,8 +352,8 @@ void wndEditFirefighter::updateTrainingInfo(QListWidgetItem* item){
             ui->dateTraining->setDate(selectQuery.value(2).toDate());
         }
         else{
-            qWarning("Could not retrieve information for training exam %s for firefighter with id %d. Error: %s",
-                     qPrintable(exam),edit->ID(),qPrintable(selectQuery.lastError().text()));
+            qWarning("Firefighter Error (%d): Could not retrieve information for training exam `%s`. Database Error: %s",
+                     edit->ID(),qPrintable(exam),qPrintable(selectQuery.lastError().text()));
         }
 }
 
@@ -377,8 +379,8 @@ void wndEditFirefighter::equipmentItemClicked(QListWidgetItem* item){
 
         // And execute the query, catching any problems
         if(!db->query(addFFequip)){
-            qWarning("Could not link equipment %s to firefighter with id %d. Error: %s",
-                     qPrintable(equip),edit->ID(),qPrintable(addFFequip.lastError().text()));
+            qWarning("Firefighter Error (%d): Could not link equipment `%s`. Database Error: %s",
+                     edit->ID(),qPrintable(equip),qPrintable(addFFequip.lastError().text()));
         }
     }
 
@@ -386,7 +388,7 @@ void wndEditFirefighter::equipmentItemClicked(QListWidgetItem* item){
     else{
 
         // First verify they intend to destruct information
-        if(QMessageBox::question(0,"Training: Confirm Removal","Are you sure you would like to remove this exam information?",QMessageBox::Yes,QMessageBox::No)==QMessageBox::Yes){
+        if(QMessageBox::question(0,"Equipment: Confirm Removal","Are you sure you would like to remove this exam information?",QMessageBox::Yes,QMessageBox::No)==QMessageBox::Yes){
 
             // If so, build a query to remove the link from the database
             QSqlQuery removeFFEquip;
@@ -396,8 +398,8 @@ void wndEditFirefighter::equipmentItemClicked(QListWidgetItem* item){
 
             // Attempt to execute the query, catching any problems
             if(!db->query(removeFFEquip)){
-                qWarning("Could not unlink equipment %s to firefighter with id %d. Error: %s",
-                        qPrintable(equip),edit->ID(),qPrintable(removeFFEquip.lastError().text()));
+                qWarning("Firefighter Error (%d): Could not unlink equipment `%s`. Database Error: %s",
+                        edit->ID(),qPrintable(equip),qPrintable(removeFFEquip.lastError().text()));
             }
         }
 
@@ -426,12 +428,12 @@ void wndEditFirefighter::btnUpdateEquipmentClicked(){
         updateQuery.addBindValue(edit->ID());
         updateQuery.addBindValue(equip);
         if(db->query(updateQuery)){
-            QMessageBox::information(0,"Equipment: Update","Equipment information successfully updated.");
+            QMessageBox::information(0,"Firefighter Information: Equipment Update","Equipment information successfully updated.");
         }
         else{
-            QMessageBox::warning(0,"Equipment: Update","There was a problem updating the equipment information. Please see the log for details.");
-            qWarning("Could not update equipment %s for firefighter with id %d. Error: %s",
-                     qPrintable(equip),edit->ID(),qPrintable(updateQuery.lastError().text()));
+            QMessageBox::warning(0,"Firefighter Error: Equipment Update","There was a problem updating the equipment information. See log for more information.");
+            qWarning("Firefighter Error (%d): Could not update equipment `%s`. Database Error: %s",
+                     edit->ID(),qPrintable(equip),qPrintable(updateQuery.lastError().text()));
         }
     }
 }
@@ -455,7 +457,7 @@ void wndEditFirefighter::updateEquipmentInfo(QListWidgetItem* item){
 
         }
         else{
-            qWarning("Could not retrieve information for equipment %s for firefighter with id %d. Error: %s",
-                     qPrintable(equip),edit->ID(),qPrintable(selectQuery.lastError().text()));
+            qWarning("Firefighter Error (%d): Could not retrieve information for equipment `%s`. Database Error: %s",
+                     edit->ID(),qPrintable(equip),qPrintable(selectQuery.lastError().text()));
         }
 }

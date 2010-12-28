@@ -26,11 +26,10 @@ wndEditFirefighter::wndEditFirefighter(QWidget *parent) :
     ui(new Ui::wndEditFirefighter)
 {
     ui->setupUi(this);
-
 }
 
 
-wndEditFirefighter::wndEditFirefighter(QWidget *parent, DatabaseManager *newDb, QString ffid):
+wndEditFirefighter::wndEditFirefighter(QWidget *parent, DatabaseManager *newDb, int id):
         QMainWindow(parent),
         ui(new Ui::wndEditFirefighter)
     {
@@ -40,7 +39,7 @@ wndEditFirefighter::wndEditFirefighter(QWidget *parent, DatabaseManager *newDb, 
 
         // Create a firefighter object and load its attributes
         edit = new Firefighter;
-        if(!edit->loadAttributes(ffid,db)){
+        if(!edit->loadAttributes(id,db)){
             QMessageBox::warning(0,"Firefighter Error: Read","Could not retrieve firefighter information from database. See log for more information.");
         }
 
@@ -270,6 +269,8 @@ void wndEditFirefighter::trainingItemClicked(QListWidgetItem* item){
             qWarning("Firefighter Error (%d): Could not link training exam `%s`. Database Error: %s",
                      edit->ID(),qPrintable(exam),qPrintable(addFFTraining.lastError().text()));
         }
+
+        toggleTrainingInformationEnabled(item);
     }
 
     // If the item is being unchecked, i.e. removed
@@ -289,6 +290,8 @@ void wndEditFirefighter::trainingItemClicked(QListWidgetItem* item){
                 qWarning("Firefighter Error (%d): Could not unlink training exam `%s`. Database Error: %s",
                         edit->ID(),qPrintable(exam),qPrintable(removeFFTraining.lastError().text()));
             }
+
+            toggleTrainingInformationEnabled(item);
         }
 
         // If the uncheck was not intended, replace the check without destroying information
@@ -299,7 +302,6 @@ void wndEditFirefighter::trainingItemClicked(QListWidgetItem* item){
             updateTrainingList();
         }
     }
-    toggleTrainingInformationEnabled(item);
 }
 
 
@@ -339,6 +341,7 @@ void wndEditFirefighter::btnUpdateTrainingClicked(){
 }
 
 void wndEditFirefighter::updateTrainingInfo(QListWidgetItem* item){
+    if(item){
         toggleTrainingInformationEnabled(item);
         QString exam(item->data(Qt::DisplayRole).toString());
         QSqlQuery selectQuery;
@@ -355,6 +358,7 @@ void wndEditFirefighter::updateTrainingInfo(QListWidgetItem* item){
             qWarning("Firefighter Error (%d): Could not retrieve information for training exam `%s`. Database Error: %s",
                      edit->ID(),qPrintable(exam),qPrintable(selectQuery.lastError().text()));
         }
+    }
 }
 
 
@@ -382,6 +386,8 @@ void wndEditFirefighter::equipmentItemClicked(QListWidgetItem* item){
             qWarning("Firefighter Error (%d): Could not link equipment `%s`. Database Error: %s",
                      edit->ID(),qPrintable(equip),qPrintable(addFFequip.lastError().text()));
         }
+
+        toggleEquipmentInformationEnabled(item);
     }
 
     // If the item is being unchecked, i.e. removed
@@ -401,6 +407,8 @@ void wndEditFirefighter::equipmentItemClicked(QListWidgetItem* item){
                 qWarning("Firefighter Error (%d): Could not unlink equipment `%s`. Database Error: %s",
                         edit->ID(),qPrintable(equip),qPrintable(removeFFEquip.lastError().text()));
             }
+
+            toggleEquipmentInformationEnabled(item);
         }
 
         // If the uncheck was not intended, replace the check without destroying information
@@ -411,7 +419,6 @@ void wndEditFirefighter::equipmentItemClicked(QListWidgetItem* item){
             updateEquipmentList();
         }
     }
-    toggleEquipmentInformationEnabled(item);
 }
 
 

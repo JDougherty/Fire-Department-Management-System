@@ -50,7 +50,8 @@ public:
     QMdiArea *mdiArea;
     void StatusUpdate(QString message,int timeout=0);
 
-    void mdiEditFirefighter(QString deptid);
+    void mdiEditFirefighter(int id);
+    void mdiActiveDrill(int id);
 
 protected:
     void changeEvent(QEvent *e);

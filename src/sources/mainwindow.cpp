@@ -104,6 +104,13 @@ void MainWindow::mdiActiveDrill()
     child->show();
 }
 
+void MainWindow::mdiActiveDrill(int id)
+{
+    wndActiveDrill *child = new wndActiveDrill(this,db,id);
+    mdiArea->addSubWindow(child);
+    child->show();
+}
+
 void MainWindow::mdiInventoryControl()
 {
     wndinventorycontrol *child = new wndinventorycontrol;
@@ -119,8 +126,8 @@ void MainWindow::mdiInventoryCheck()
 }
 
 
-void MainWindow::mdiEditFirefighter(QString deptid){
-    wndEditFirefighter *child = new wndEditFirefighter(this,db,deptid);
+void MainWindow::mdiEditFirefighter(int id){
+    wndEditFirefighter *child = new wndEditFirefighter(this,db,id);
     mdiArea->addSubWindow(child);
     child->show();
 }

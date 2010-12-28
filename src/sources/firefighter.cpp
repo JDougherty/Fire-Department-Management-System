@@ -45,7 +45,7 @@ Firefighter::Firefighter(QVector<QString> nattributes){
 
       Boolean true upon successful load, false on failure.
 */
-bool Firefighter::loadAttributes(QString localid, DatabaseManager *newDb){
+bool Firefighter::loadAttributes(int id, DatabaseManager *newDb){
     // Clear current attributes
     attributes.clear();
 
@@ -61,13 +61,13 @@ bool Firefighter::loadAttributes(QString localid, DatabaseManager *newDb){
                       "address,city,state,"
                       "zip,joindate,status,"
                       "hphone,wphone,cphone,"
-                      "drvlic,cdl FROM firefighters WHERE deptid=?");
-    infoQuery.addBindValue(localid);
+                      "drvlic,cdl FROM firefighters WHERE id=?");
+    infoQuery.addBindValue(id);
 
     // Execute the query
     if(newDb->query(infoQuery)){
         infoQuery.next();
-        id=infoQuery.value(0).toInt();
+        this->id=infoQuery.value(0).toInt();
         for(int i=1;i<=18;i++){
             attributes.push_back(infoQuery.value(i).toString());
         }

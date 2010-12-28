@@ -28,7 +28,7 @@ public:
     Firefighter();
     Firefighter(QVector<QString> nattributes);
     bool insertToDatabase(DatabaseManager *newDb=0);
-    bool loadAttributes(QString uid, DatabaseManager *newDb=0);
+    bool loadAttributes(int uid, DatabaseManager *newDb=0);
     bool updateAttributes(QVector<QString> nattributes, DatabaseManager *newDb);
 
 

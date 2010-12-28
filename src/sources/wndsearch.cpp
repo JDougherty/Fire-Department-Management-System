@@ -21,6 +21,7 @@
 #include "ui_wndsearch.h"
 #include <QMessageBox>
 #include "../headers/mainwindow.h"
+
 wndSearch::wndSearch(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::wndSearch)
@@ -42,9 +43,6 @@ wndSearch::wndSearch(QWidget *parent,
     ui->setupUi(this);
     this->setWindowTitle(this->windowTitle() + dtype);
 
-    //ui->tblResults->horizontalHeader()->setStretchLastSection( false );
-
-
     if(dtype=="Firefighters"){
        headers=QStringList()<<"ID"<<"Last Name"<<"First Name";
     }
@@ -54,27 +52,28 @@ wndSearch::wndSearch(QWidget *parent,
 
     Search(dtype,query);
 
+    ui->tblResults->setContextMenuPolicy(Qt::CustomContextMenu);
 
     connect(ui->tblResults,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(tableDoubleClicked(QModelIndex)));
+    connect(ui->tblResults,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(resultsContextMenu(const QPoint &)));
     connect(ui->btnRefresh,SIGNAL(clicked()),this,SLOT(refreshClicked()));
     connect(ui->btnShowAll,SIGNAL(clicked()),this,SLOT(showAllClicked()));
 
-
-
 }
 
-void wndSearch::tableDoubleClicked(QModelIndex tmp){
-    QString deptid=tmp.sibling(tmp.row(),0).data().toString();
-    qDebug("%s",qPrintable(deptid));
 
+wndSearch::~wndSearch()
+{
+    delete ui;
 }
+
 
 void wndSearch::Search(QString dtype, QString query){
 
     QSqlQuery selection;
 
     if(dtype=="Firefighters"){
-        QString querystring="SELECT deptid,lname,fname FROM firefighters";
+        QString querystring="SELECT id,deptid,lname,fname FROM firefighters";
         if(query!=""){
             querystring+=" WHERE deptid LIKE ? OR lname LIKE ? or fname LIKE ?";
             selection.prepare(querystring);
@@ -85,10 +84,10 @@ void wndSearch::Search(QString dtype, QString query){
         else{
             selection.prepare(querystring);
         }
-
     }
+
     else if(dtype=="Drills"){
-        QString querystring="SELECT drillnum,strftime('%m/%d/%Y',starttime),location FROM drills";
+        QString querystring="SELECT id,drillnum,strftime('%m/%d/%Y',starttime),location FROM drills";
         if(query!=""){
             querystring+=" WHERE drillnum LIKE ? OR location LIKE ?";
             selection.prepare(querystring);
@@ -109,25 +108,37 @@ void wndSearch::Search(QString dtype, QString query){
     searchModel->setHeaderData(1, Qt::Horizontal, headers[1]);
     searchModel->setHeaderData(2, Qt::Horizontal, headers[2]);
 
-    // Set options for the QTableView
+    // Apply the model to the table
     ui->tblResults->setModel(searchModel);
+
+    // Set columns to stretch to percentage of width of window
     ui->tblResults->horizontalHeader()->setResizeMode(0,QHeaderView::Stretch);
     ui->tblResults->horizontalHeader()->setResizeMode(1,QHeaderView::Stretch);
     ui->tblResults->horizontalHeader()->setResizeMode(2,QHeaderView::Stretch);
+
+    // Show the column header, hide the row header
     ui->tblResults->horizontalHeader()->show();
     ui->tblResults->verticalHeader()->hide();
+
+    // Do not allow editing
     ui->tblResults->setEditTriggers(0);
+
+    // Hide the primary key column
+    ui->tblResults->hideColumn(0);
 }
 
-
-
-
-wndSearch::~wndSearch()
-{
-    delete ui;
-}
 
 // PRIVATE SLOTS:
+
+void wndSearch::tableDoubleClicked(QModelIndex tmp){
+    QString id=tmp.sibling(tmp.row(),0).data().toString();
+    if(dtype=="Firefighters"){
+        mdiparent->mdiEditFirefighter(id.toInt());
+    }
+    if(dtype=="Drills"){
+        mdiparent->mdiActiveDrill(id.toInt());
+    }
+}
 
 void wndSearch::refreshClicked(){
     Search(dtype,query);
@@ -135,4 +146,34 @@ void wndSearch::refreshClicked(){
 
 void wndSearch::showAllClicked(){
     Search(dtype,"");
+}
+
+void wndSearch::resultsContextMenu(const QPoint &pos){
+    QMenu *menu = new QMenu;
+    QModelIndex cell = ui->tblResults->indexAt(pos);
+    if(cell.isValid()){
+        lastCellRightClicked=cell;
+
+        menu->addAction("Delete", this, SLOT(resultsDeleteDatum()));
+        menu->exec(ui->tblResults->mapToGlobal(pos));
+    }
+}
+
+void wndSearch::resultsDeleteDatum(){
+    QString id=lastCellRightClicked.sibling(lastCellRightClicked.row(),0).data().toString();
+    if(dtype=="Firefighters"){
+        if(QMessageBox::question(0,"Firefighter Delete","Are you sure you wish to delete this firefighter?",QMessageBox::Yes,QMessageBox::No)==QMessageBox::Yes){
+            QSqlQuery deleteFirefighter;
+            deleteFirefighter.prepare("DELETE FROM firefighters WHERE id=?");
+            deleteFirefighter.addBindValue(id);
+            if(db->query(deleteFirefighter)){
+                qDebug("Firefighter Information: Firefighter with department id %s successfully deleted.",qPrintable(id));
+                Search(dtype,query);
+            }
+            else{
+                qWarning("Firefighter Information: Firefighter with department id %s could not be deleted. Error: %s",qPrintable(id),qPrintable(deleteFirefighter.lastError().text()));
+                QMessageBox::warning(0,"Firefighter Error","Could not delete firefighter with department id "+id+". See log for more information.");
+            }
+        }
+    }
 }

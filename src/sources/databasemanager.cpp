@@ -155,23 +155,27 @@ bool DatabaseManager::init_structure(){
                  "title TEXT);"
              "CREATE TABLE fftraining"
                  "(id INTEGER PRIMARY KEY,"
-                 "FOREIGN KEY(tid) REFERENCES training(id),"
-                 "FOREIGN KEY(ffid) REFERENCES firefighters(id),"
+                 "tid INTEGER,"
+                 "ffid INTEGER,"
                  "ffesig TEXT,"
                  "supesig TEXT,"
-                 "tdate TEXT);"
+                 "tdate TEXT,"
+                 "FOREIGN KEY(tid) REFERENCES training(id),"
+                 "FOREIGN KEY(ffid) REFERENCES firefighters(id));"
              "CREATE TABLE equipment"
                  "(id INTEGER PRIMARY KEY,"
                  "title TEXT);"
              "CREATE TABLE ffequipment"
                  "(id INTEGER PRIMARY KEY,"
-                 "FOREIGN KEY(eqid) REFERENCES equipment(id),"
-                 "FOREIGN KEY(ffid) REFERENCES firefighters(id),"
+                 "eqid INTEGER,"
+                 "ffid INTEGER,"
                  "issued INTEGER,"
                  "size TEXT,"
                  "type TEXT,"
                  "serial TEXT,"
-                 "year TEXT);"
+                 "year TEXT,"
+                 "FOREIGN KEY(eqid) REFERENCES equipment(id),"
+                 "FOREIGN KEY(ffid) REFERENCES firefighters(id));"
              "CREATE TABLE drills"
                  "(id INTEGER PRIMARY KEY, "
                  "location TEXT,"
@@ -183,10 +187,12 @@ bool DatabaseManager::init_structure(){
                  "drillnum TEXT);"
              "CREATE TABLE drillsheet"
                  "(id INTEGER PRIMARY KEY, "
-                 "FOREIGN KEY(did) REFERENCES drills(id) ,"
-                 "FOREIGN KEY(ffid) REFERENCES firefighters(id),"
+                 "did INTEGER,"
+                 "ffid INTEGER,"
                  "timein TEXT,"
-                 "timeout TEXT);"
+                 "timeout TEXT,"
+                 "FOREIGN KEY(did) REFERENCES drills(id) ,"
+                 "FOREIGN KEY(ffid) REFERENCES firefighters(id));"
              "CREATE TABLE inventory"
                  "(id INTEGER PRIMARY KEY,"
                  "name TEXT,"
@@ -235,6 +241,9 @@ bool DatabaseManager::verify_structure(){
     QSqlQuery qryTableNames;
     QSqlQuery qryTableInfo;
     QString TableSchema;
+
+    // While we're here, let's turn on foreign key support
+    qryTableNames.exec("PRAGMA foreign_keys = ON;");
 
     // Get list of tables in database, loop through each
     qryTableNames.exec("select tbl_name from sqlite_master;");

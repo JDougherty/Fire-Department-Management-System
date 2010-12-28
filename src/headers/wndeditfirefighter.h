@@ -34,7 +34,7 @@ class wndEditFirefighter : public QMainWindow
 
 public:
     explicit wndEditFirefighter(QWidget *parent = 0);
-    wndEditFirefighter(QWidget *parent2 = 0, DatabaseManager *newDb=0, QString ffid="");
+    wndEditFirefighter(QWidget *parent2 = 0, DatabaseManager *newDb=0, int id=0);
     ~wndEditFirefighter();
 
 private:

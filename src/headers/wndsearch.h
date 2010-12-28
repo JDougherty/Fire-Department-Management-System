@@ -51,6 +51,7 @@ private:
     QString dtype;
     QString query;
     QStringList headers;
+    QModelIndex lastCellRightClicked;
     MainWindow *mdiparent;
 
     void Search(QString dtype, QString query);
@@ -59,6 +60,8 @@ private slots:
     void tableDoubleClicked(QModelIndex);
     void refreshClicked();
     void showAllClicked();
+    void resultsContextMenu(const QPoint &);
+    void resultsDeleteDatum();
 };
 
 #endif // WNDSEARCH_H

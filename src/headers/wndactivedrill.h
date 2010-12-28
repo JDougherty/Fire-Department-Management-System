@@ -33,7 +33,7 @@ namespace Ui {
 class wndActiveDrill : public QMainWindow {
     Q_OBJECT
 public:
-    wndActiveDrill(QWidget *parent = 0, DatabaseManager *db=0);
+    wndActiveDrill(QWidget *parent = 0, DatabaseManager *db=0, int id=0);
     ~wndActiveDrill();
 
 private:
@@ -43,6 +43,7 @@ private:
     QModelIndex lastCellRightClicked;
 
     bool insert();
+    bool read();
     void updateSheet();
 
 private slots:

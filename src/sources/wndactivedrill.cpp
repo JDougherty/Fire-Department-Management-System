@@ -20,33 +20,37 @@
 #include "../headers/wndactivedrill.h"
 #include "ui_wndactivedrill.h"
 
-wndActiveDrill::wndActiveDrill(QWidget *parent,DatabaseManager *newDb) :
+wndActiveDrill::wndActiveDrill(QWidget *parent,DatabaseManager *newDb, int id) :
     QMainWindow(parent),
     ui(new Ui::wndActiveDrill)
 {
     db=newDb;
-    drillid=0;
+    drillid=id;
 
-    if(!insert()){
-        delete this;
+    if(drillid==0){
+        if(!insert()){
+            delete this;
+        }
+
+        ui->setupUi(this);
+
+        ui->dateDrillStart->setDateTime(QDateTime::currentDateTime());
+        ui->dateDrillEnd->setDateTime(QDateTime::currentDateTime().addSecs(60*60*2));
+
+        ui->txtIDScan->setFocus();
+
     }
-
-    ui->setupUi(this);
-
-    ui->dateDrillStart->setDateTime(QDateTime::currentDateTime());
-    ui->dateDrillEnd->setDateTime(QDateTime::currentDateTime().addSecs(60*60*2));
-
-    ui->txtIDScan->setFocus();
-
+    else{
+        ui->setupUi(this);
+        if(!read()){
+            delete this;
+        }
+    }
     ui->tblTimesheet->setContextMenuPolicy(Qt::CustomContextMenu);
-
     connect(ui->btnSaveDrill,SIGNAL(clicked()),this,SLOT(updateInformation()));
-
     connect(ui->txtIDScan,SIGNAL(returnPressed()),this,SLOT(scanId()));
     connect(ui->btnSignIn,SIGNAL(clicked()),this,SLOT(scanId()));
     connect(ui->tblTimesheet,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(sheetContextMenu(const QPoint &)));
-
-
 }
 
 wndActiveDrill::~wndActiveDrill()
@@ -82,6 +86,29 @@ bool wndActiveDrill::insert(){
         qWarning("Drill Error: Could not retrieve new drill ID. Database Error: %s",qPrintable(selectQuery.lastError().text()));
         return false;
     }
+}
+
+bool wndActiveDrill::read(){
+    QSqlQuery selectInformation;
+    qDebug("drillid is %d",drillid);
+    selectInformation.prepare("SELECT location,inhouse,description,starttime,endtime,incidentcommander,drillnum FROM drills WHERE id=?");
+    selectInformation.addBindValue(drillid);
+    if(db->query(selectInformation)){
+        if(selectInformation.first()){
+            ui->txtLocation->setText(selectInformation.value(0).toString());
+            ui->chkInHouse->setCheckState(selectInformation.value(1).toBool()?Qt::Checked:Qt::Unchecked);
+            ui->txtDescription->setText(selectInformation.value(2).toString());
+            ui->dateDrillStart->setDateTime(selectInformation.value(3).toDateTime());
+            ui->dateDrillEnd->setDateTime(selectInformation.value(4).toDateTime());
+            ui->txtIncidentCommander->setText(selectInformation.value(5).toString());
+            ui->txtDrillNum->setText(selectInformation.value(6).toString());
+            updateSheet();
+        }
+        else{
+            qDebug("nope");
+        }
+    }
+    return true;
 }
 
 void wndActiveDrill::updateSheet(){

@@ -104,9 +104,9 @@ void wndSearch::Search(QString dtype, QString query){
     QSqlQueryModel *searchModel = new QSqlQueryModel;
     searchModel->setQuery(selection);
 
-    searchModel->setHeaderData(0, Qt::Horizontal, headers[0]);
-    searchModel->setHeaderData(1, Qt::Horizontal, headers[1]);
-    searchModel->setHeaderData(2, Qt::Horizontal, headers[2]);
+    searchModel->setHeaderData(1, Qt::Horizontal, headers[0]);
+    searchModel->setHeaderData(2, Qt::Horizontal, headers[1]);
+    searchModel->setHeaderData(3, Qt::Horizontal, headers[2]);
 
     // Apply the model to the table
     ui->tblResults->setModel(searchModel);

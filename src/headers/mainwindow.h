@@ -29,6 +29,7 @@
 // Children Forms
 #include "wndnewfirefighter.h"
 #include "wndactivedrill.h"
+#include "wndactivecall.h"
 #include "wndsearch.h"
 #include "wndinventorycontrol.h"
 #include "wndinventorycheck.h"
@@ -59,6 +60,7 @@ protected:
 private slots:
     void mdiNewFirefighter();
     void mdiActiveDrill();
+    void mdiActiveCall();
     void mdiInventoryControl();
     void mdiInventoryCheck();
 

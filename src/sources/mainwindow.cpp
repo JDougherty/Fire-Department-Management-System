@@ -114,7 +114,7 @@ void MainWindow::mdiActiveDrill(int id)
 
 void MainWindow::mdiActiveCall()
 {
-    wndActiveCall *child = new wndActiveCall(this);
+    wndActiveCall *child = new wndActiveCall(this,db);
     mdiArea->addSubWindow(child);
     child->show();
 }

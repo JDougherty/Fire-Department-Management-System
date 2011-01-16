@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Active Call</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QTabWidget" name="tabWidget">
@@ -45,7 +45,7 @@
      <enum>QTabWidget::Rounded</enum>
     </property>
     <property name="currentIndex">
-     <number>5</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -184,17 +184,17 @@
        </property>
       </widget>
      </widget>
-     <widget class="QPushButton" name="pushButton">
+     <widget class="QPushButton" name="btnSave">
       <property name="geometry">
        <rect>
-        <x>20</x>
-        <y>140</y>
+        <x>10</x>
+        <y>90</y>
         <width>75</width>
         <height>23</height>
        </rect>
       </property>
       <property name="text">
-       <string>PushButton</string>
+       <string>Save</string>
       </property>
      </widget>
     </widget>
@@ -3685,7 +3685,7 @@
   <tabstop>txtarraySF_AESFailureReason</tabstop>
   <tabstop>tabWidget</tabstop>
   <tabstop>btnSaveDrill</tabstop>
-  <tabstop>pushButton</tabstop>
+  <tabstop>btnSave</tabstop>
   <tabstop>tblTimesheet</tabstop>
   <tabstop>btnSignIn</tabstop>
  </tabstops>

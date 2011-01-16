@@ -119,6 +119,13 @@ void MainWindow::mdiActiveCall()
     child->show();
 }
 
+void MainWindow::mdiActiveCall(int id)
+{
+    wndActiveCall *child = new wndActiveCall(this,db,id);
+    mdiArea->addSubWindow(child);
+    child->show();
+}
+
 void MainWindow::mdiInventoryControl()
 {
     wndinventorycontrol *child = new wndinventorycontrol;

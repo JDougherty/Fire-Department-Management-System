@@ -99,6 +99,19 @@ void wndSearch::Search(QString dtype, QString query){
         }
     }
 
+    else if(dtype=="Calls"){
+        QString querystring="SELECT id,incidentnumber,strftime('%m/%d/%Y',alarm),location FROM calls";
+        if(query!=""){
+            querystring+=" WHERE incidentnumber LIKE ? OR location LIKE ?";
+            selection.prepare(querystring);
+            selection.addBindValue("%" + query + "%");
+            selection.addBindValue("%" + query + "%");
+        }
+        else{
+            selection.prepare(querystring);
+        }
+    }
+
     db->query(selection);
 
     QSqlQueryModel *searchModel = new QSqlQueryModel;
@@ -137,6 +150,9 @@ void wndSearch::tableDoubleClicked(QModelIndex tmp){
     }
     if(dtype=="Drills"){
         mdiparent->mdiActiveDrill(id.toInt());
+    }
+    if(dtype=="Calls"){
+        mdiparent->mdiActiveCall(id.toInt());
     }
 }
 

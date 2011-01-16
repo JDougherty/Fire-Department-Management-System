@@ -50,9 +50,9 @@ public:
     ~MainWindow();
     QMdiArea *mdiArea;
     void StatusUpdate(QString message,int timeout=0);
-
     void mdiEditFirefighter(int id);
     void mdiActiveDrill(int id);
+    void mdiActiveCall(int id);
 
 protected:
     void changeEvent(QEvent *e);

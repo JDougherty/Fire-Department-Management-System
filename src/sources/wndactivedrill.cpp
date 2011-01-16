@@ -105,7 +105,7 @@ bool wndActiveDrill::read(){
             updateSheet();
         }
         else{
-            qDebug("nope");
+            return false;
         }
     }
     return true;

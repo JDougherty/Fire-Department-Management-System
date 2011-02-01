@@ -19,8 +19,6 @@
 #ifndef DATABASEMANAGER_H
 #define DATABASEMANAGER_H
 
-#define DATABASE_NAME "fdms.db"
-
 #include <QObject>
 #include <QSqlDatabase>
 #include <QSqlError>
@@ -33,28 +31,37 @@
 #include <QCryptographicHash>
 
 
-class DatabaseManager : public QObject{
-    public:
-        DatabaseManager();
-        ~DatabaseManager();
-
-
-    public:
-        bool open();
-        bool remove();
-        bool init_structure();
-        bool verify_structure();
-        bool query(QSqlQuery query);
-        bool isOpen();
-
-
-        QSqlError lastError();
-
-
+class DatabaseManager : public QObject
+{
     private:
-        QSqlDatabase db;
-        bool _open;
-};
+        QSqlDatabase            _DB;
 
+        QString                 _sPath,
+                                _sDatabaseName;
+
+        QString                 buildPath( QString sDatabaseName );
+
+        bool                    buildStructure( void );
+        bool                    verifyStructure( void );
+
+    public:
+                                DatabaseManager( QString sDatabaseName );
+                                ~DatabaseManager( void );
+
+        bool                    exists( void );
+
+        bool                    open( void );
+        bool                    isOpen( void );
+        void                    close( void );
+
+        bool                    build( void );
+        bool                    verify( void );
+        bool                    remove( void );
+
+        bool                    query( QSqlQuery &qry );
+
+
+        QSqlError               lastError( void );
+};
 
 #endif

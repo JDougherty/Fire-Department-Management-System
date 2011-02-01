@@ -19,15 +19,53 @@
 
 #include "../headers/databasemanager.h"
 
+DatabaseManager::DatabaseManager( QString sDatabaseName )
+{
+    _sDatabaseName = sDatabaseName;
+    _sPath = buildPath( sDatabaseName );
 
-
-DatabaseManager::DatabaseManager(){
-    _open=false;
+    _DB = QSqlDatabase::addDatabase( "QSQLITE" );
+    _DB.setDatabaseName( _sPath );
 }
 
-DatabaseManager::~DatabaseManager(){
+DatabaseManager::~DatabaseManager( void )
+{
+    close();
 }
 
+void DatabaseManager::close( void )
+{
+     _DB.close();
+     QSqlDatabase::removeDatabase("QMYSQL");
+}
+
+QString DatabaseManager::buildPath( QString sDatabaseName )
+{
+    QString sPath;
+
+    #ifdef Q_OS_LINUX
+    // Database file must be located in user home folder in Linux
+    sPath = QDir::home().path();
+    sPath.append( QDir::separator() ).append( sDatabaseName );
+    sPath = QDir::toNativeSeparators( qsPath );
+    #else
+    sPath = sDatabaseName;
+    #endif
+
+    return sPath;
+}
+
+bool DatabaseManager::exists( void )
+{
+    if ( QFile::exists( _sPath ) )
+    {
+        qDebug( "Database file exists." );
+        return true;
+    }
+
+    qDebug( "Database file does not exist." );
+    return false;
+}
 
 /*
    Function: open
@@ -40,43 +78,32 @@ DatabaseManager::~DatabaseManager(){
       false if unsuccesful.
 
 */
-bool DatabaseManager::open(){
-    // Use SQLite database driver
-    db = QSqlDatabase::addDatabase("QSQLITE");
-
-    // Database file must be located in user home folder in Linux
-    #ifdef Q_OS_LINUX
-    QString path(QDir::home().path());
-    path.append(QDir::separator()).append(filepath);
-    path = QDir::toNativeSeparators(path);
-    if(QFile::exists(path)){
-        qDebug("Database file exists.");
-    }
-    else{
-        qDebug("Database file does not exist.");
-    }
-    db.setDatabaseName(path);
-
-
-    #else
-    if(QFile::exists(DATABASE_NAME)){
-        qDebug("Database file exists.");
-    }
-    else{
-        qDebug("Database file does not exist.");
-    }
-    db.setDatabaseName(DATABASE_NAME);
-    #endif
-
-    // Open database
-    if(db.open()){
-        _open=true;
+bool DatabaseManager::open( void )
+{
+    if ( _DB.open() ) // Wont fail even if the file dne
+    {
         return true;
     }
-    else{
-        qDebug("Error opening database: %s",qPrintable(db.lastError().databaseText()));
+    else
+    {
+        qDebug( "Error opening database: %s", qPrintable( _DB.lastError().databaseText() ) );
         return false;
     }
+}
+
+/*
+   Function: isOpen
+
+   Checks if the database is open or not.
+
+   Returns:
+
+      Bolean true if the database is open, false if closed.
+
+*/
+bool DatabaseManager::isOpen( void )
+{
+    return _DB.isOpen();
 }
 
 /*
@@ -93,23 +120,19 @@ bool DatabaseManager::open(){
 
       <Divide>
 */
-bool DatabaseManager::remove(){
-    // Close database
-    db.close();
-
-    #ifdef Q_OS_LINUX
-    // NOTE: We have to store database file into user home folder in Linux
-    QString path(QDir::home().path());
-    path.append(QDir::separator()).append("fdms.db");
-    path = QDir::toNativeSeparators(path);
-    return QFile::remove(path);
-    #else
+bool DatabaseManager::remove( void )
+{
+    // Close the database if it is already open
+    close();
 
     // Remove created database binary file
-    return QFile::remove("fdms.db");
-    #endif
+    return QFile::remove( _sPath );
 }
 
+bool DatabaseManager::build( void )
+{
+    return buildStructure();
+}
 
 /*
    Function: init_structure
@@ -124,10 +147,13 @@ bool DatabaseManager::remove(){
 
       verify_structure
 */
-bool DatabaseManager::init_structure(){
+bool DatabaseManager::buildStructure( void )
+{
     QSqlQuery query;
-    QString strQuery;
-    strQuery=""
+    QString sSchema;
+    QStringList slSplitSchema;
+
+    sSchema = ""
              "CREATE TABLE department"
                  "(name TEXT,"
                  "address TEXT);"
@@ -315,19 +341,27 @@ bool DatabaseManager::init_structure(){
 
     // QSqlQuery::exec with SQLite will not execute multiple queries in a single execution.
     // Split the compound query into individual queries and execute each
-    QStringList strQueries=strQuery.split(";");
-    for(int i=0;i<strQueries.size();i++){
-        if(query.exec(strQueries[i])){
-            qDebug("Database Structure Initialization: %s",qPrintable(query.lastQuery()));
+    slSplitSchema = sSchema.split( ";" );
+    for ( int i = 0; i < slSplitSchema.size(); i++ )
+    {
+        if ( query.exec( slSplitSchema[i] ) )
+        {
+            qDebug( "Database Structure Initialization: %s", qPrintable( query.lastQuery() ) );
         }
-        else{
-            qDebug("Database Structure Initialization: %s",qPrintable(query.lastError().databaseText()));
+        else
+        {
+            qDebug( "Database Structure Initialization: %s", qPrintable( query.lastError().databaseText() ) );
             return false;
         }
     }
+
     return true;
 }
 
+bool DatabaseManager::verify( void )
+{
+    return verifyStructure();
+}
 
 /*
    Function: verify_structure
@@ -343,47 +377,48 @@ bool DatabaseManager::init_structure(){
 
       create_structure
 */
-bool DatabaseManager::verify_structure(){
+bool DatabaseManager::verifyStructure( void )
+{
     QSqlQuery qryTableNames;
     QSqlQuery qryTableInfo;
     QString TableSchema;
 
+    qDebug( "Verifying database structure." );
+
     // While we're here, let's turn on foreign key support
-    qryTableNames.exec("PRAGMA foreign_keys = ON;");
+    qryTableNames.exec( "PRAGMA foreign_keys = ON;" );
 
     // Get list of tables in database, loop through each
-    qryTableNames.exec("select tbl_name from sqlite_master;");
-    while(qryTableNames.next()){
-
+    qryTableNames.exec( "select tbl_name from sqlite_master;" );
+    while( qryTableNames.next() )
+    {
         // Append the table name, column names and datatypes to TableSchema string
-        qryTableInfo.exec("pragma table_info(" + qryTableNames.value(0).toString() + ")");
-        TableSchema.append(qryTableNames.value(0).toString());
+        qryTableInfo.exec( "pragma table_info(" + qryTableNames.value(0).toString() + ")" );
+        TableSchema.append( qryTableNames.value(0).toString() );
 
-        while(qryTableInfo.next()){
+        while ( qryTableInfo.next() )
+        {
             // The pragma table_info query returns five columns
             //  regarding the columns in the table queried:
             //  Index, Name, Datatype, Null, Default
 
             // Name and Datatype are relevant here
-            TableSchema.append(qryTableInfo.value(1).toString());
-            TableSchema.append(qryTableInfo.value(2).toString());
+            TableSchema.append( qryTableInfo.value(1).toString() );
+            TableSchema.append( qryTableInfo.value(2).toString() );
         }
     }
 
     // Calculate the md5 hash of this string
-    QByteArray md5bytearray(
-            QCryptographicHash::hash(TableSchema.toAscii(),
-            QCryptographicHash::Md5));
+    QByteArray md5bytearray( QCryptographicHash::hash( TableSchema.toAscii(), QCryptographicHash::Md5 ) );
 
-    QString chksum=md5bytearray.toHex().constData();
-
+    QString chksum = md5bytearray.toHex().constData();
 
     //qDebug()<<chksum;
     //qDebug()<<TableSchema;
 
-
     // And compare to expected value
-    if(chksum!="9222c8dcad4670104628f6c6beec4761"){
+    if ( chksum != "9222c8dcad4670104628f6c6beec4761" )
+    {
         return false;
     }
 
@@ -400,10 +435,10 @@ bool DatabaseManager::verify_structure(){
       QSqlError  returned by the SQLite database.
 
 */
-QSqlError DatabaseManager::lastError(){
-    return db.lastError();
+QSqlError DatabaseManager::lastError( void )
+{
+    return _DB.lastError();
 }
-
 
 /*
    Function: query
@@ -420,25 +455,9 @@ QSqlError DatabaseManager::lastError(){
       false on failure.
 
 */
-bool DatabaseManager::query(QSqlQuery query){
-   QSqlQuery queryobject=query;
-   bool ret=queryobject.exec();
-   qDebug("Database Query: %s",qPrintable(queryobject.executedQuery()));
+bool DatabaseManager::query( QSqlQuery &qry )
+{
+   bool ret = qry.exec();
+   qDebug( "Database Query: %s", qPrintable( qry.executedQuery() ) );
    return ret;
 }
-
-/*
-   Function: isOpen
-
-   Checks if the database is open or not.
-
-   Returns:
-
-      Bolean true if the database is open, false if closed.
-
-*/
-bool DatabaseManager::isOpen(){
-    return _open;
-
-}
-

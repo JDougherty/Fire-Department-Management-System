@@ -17,79 +17,84 @@
 
 */
 
-
 #include <QtGui/QApplication>
 #include <QMessageBox>
 #include <QString>
 #include <QFile>
 #include <QDateTime>
 #include <QFontDatabase>
-#include "../headers/databasemanager.h"
+
 #include "../headers/LogFunctions.h"
+#include "../headers/databasemanager.h"
 #include "../headers/mainwindow.h"
 #include "../headers/wndnewfirefighter.h"
 #include "../headers/wndsetup.h"
 #include "../headers/wndActiveDrill.h"
 #include "../headers/wndsplash.h"
 
-int main(int argc, char *argv[])
+int main( int argc, char *argv[] )
 {
-    QApplication a(argc, argv);
-    QDateTime initstamp=QDateTime::currentDateTime();
-    QString filename = "fdms.db";
-    DatabaseManager db;
+    QApplication a( argc, argv );
+    QDateTime initstamp = QDateTime::currentDateTime();
+    QString sDatabaseName = "fdms.db";
+    DatabaseManager db( sDatabaseName );
+    wndSetup setup(0);
 
-    QFile res(":/fonts/FRE3OF9X.TTF");
-    if(res.open(QIODevice::ReadOnly)) {
-        QFontDatabase::addApplicationFontFromData(res.readAll());
-    }
-    else{
-        qWarning("Resource Error: Could not load Free 3 of 9 Extended barcode font.");
-    }
+    MainWindow *mw = new MainWindow( 0, &db );
+    mw->show();
 
     //setupDebugRedirection();
-    qDebug("Initialized at %s",initstamp.toString().toStdString().c_str());
 
-    wndSplash *splash = new wndSplash(0);
-    splash->show();
-    splash->StatusUpdate("Loading database...");
-
-    // Load existing databse
-    if(QFile::exists(filename)){
-        if(db.open()){
-            qDebug("Verifying database structure.");
-
-            if(db.verify_structure()){
-                qDebug("Valid database structure.");
-                MainWindow *mw = new MainWindow(0,&db);
-                mw->show();
-                mw->StatusUpdate("Ready");
-                delete splash;
-            }
-            else{
-                QMessageBox::critical(splash,"Critical Error","Database exists but has invalid structure.",QMessageBox::Ok);
-                qCritical("Invalid database structure.");
-                return 0;
-
-            }
-        }
-        else{
-            QMessageBox::critical(splash,"Critical Error","Database exists but could not be opened.",QMessageBox::Ok);
-            qCritical("Critical Error - Database: Database could not be opened. Exiting.");
-            return 0;
-        }
+    QFile res( ":/fonts/FRE3OF9X.TTF" );
+    if ( res.open( QIODevice::ReadOnly ) )
+    {
+        QFontDatabase::addApplicationFontFromData(res.readAll());
+    }
+    else
+    {
+        qWarning( "Resource Error: Could not load Free 3 of 9 Extended barcode font." );
     }
 
+    qDebug( "Initialized at %s", initstamp.toString().toStdString().c_str() );
 
 
-    else{
-        qDebug("Running program setup. ");
-        db.open();
-        db.init_structure();
-        wndSetup setup(0);
+    if ( !db.exists() )
+    {
+        qDebug( "Running program setup." );
+
+        if ( !db.open() )
+        {
+            QMessageBox::critical( mw, "Critical Error", "Database could not be opened.", QMessageBox::Ok );
+            qCritical( "Critical Error - Database: Could not be opened." );
+            return 0;
+        }
+
+        if ( !db.build() )
+        {
+            QMessageBox::critical( mw, "Critical Error", "Database could not be built.", QMessageBox::Ok );
+            qCritical( "Critical Error - Database: Could not be built." );
+            return 0;
+        }
+
+        mw->setEnabled( false );
+
         setup.show();
     }
 
+
+    if ( !db.open() )
+    {
+        QMessageBox::critical( mw, "Critical Error", "Database could not be opened.", QMessageBox::Ok );
+        qCritical( "Critical Error - Database: Could not be opened." );
+        return 0;
+    }
+
+    if ( !db.verify() )
+    {
+        QMessageBox::critical( mw, "Critical Error", "Database has an invalid structure.", QMessageBox::Ok );
+        qCritical( "Critical Error - Database: Invalid structure." );
+        return 0;
+    }
 
     return a.exec();
 }

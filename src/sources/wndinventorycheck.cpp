@@ -72,7 +72,9 @@ void wndInventoryCheck::ResetInventoryCheck(){
     if(QMessageBox::question(0,"Inventory Information: Confirm Reset","Are you sure you would like to reset the inventory check?",QMessageBox::Yes,QMessageBox::No)
         == QMessageBox::Yes){
 
-        db->query(QSqlQuery("DELETE FROM inventorycheck WHERE 1=1"));
+        QSqlQuery qryDelete ("DELETE FROM inventorycheck WHERE 1=1");
+        db->query(qryDelete);
+
         QSqlQuery copyQuery;
         // If the filter category is all, do not condition SELECT query
         if(ui->cmbCategory->currentText()=="[All]"){

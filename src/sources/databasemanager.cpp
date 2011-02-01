@@ -21,6 +21,9 @@
 
 DatabaseManager::DatabaseManager( QString sDatabaseName )
 {
+    _sDatabaseName = "";
+    _sPath = "";
+
     _sDatabaseName = sDatabaseName;
     _sPath = buildPath( sDatabaseName );
 
@@ -31,14 +34,16 @@ DatabaseManager::DatabaseManager( QString sDatabaseName )
 DatabaseManager::~DatabaseManager( void )
 {
     close();
+    QSqlDatabase::removeDatabase( "QSQLITE" );
 }
 
-void DatabaseManager::close( void )
-{
-     _DB.close();
-     QSqlDatabase::removeDatabase("QMYSQL");
-}
-
+/*
+    Function:    DatabaseManager::buildPath
+    Purpose:     Builds the file path for the database
+    Parameters:
+        QString sDatabaseName - file name
+    Returns:     QString - the file path + file name
+*/
 QString DatabaseManager::buildPath( QString sDatabaseName )
 {
     QString sPath;
@@ -55,6 +60,13 @@ QString DatabaseManager::buildPath( QString sDatabaseName )
     return sPath;
 }
 
+/*
+    Function:    DatabaseManager::exists
+    Purpose:     See if the SQL Lite file exists
+    Returns:     bool
+        true - DB file exists
+        false - DB file dne
+*/
 bool DatabaseManager::exists( void )
 {
     if ( QFile::exists( _sPath ) )
@@ -68,38 +80,37 @@ bool DatabaseManager::exists( void )
 }
 
 /*
-   Function: open
-
-   Verifies the database file exists and then opens the database.
-
-   Returns:
-
-      Boolean true upon successfully opening the database,
-      false if unsuccesful.
-
+    Function:    DatabaseManager::open
+    Purpose:     Attempts to open the database (and creates the file if DNE)
+    Returns:     bool
+        true - Successfully opened the database
+        false - Unable to open the database
 */
 bool DatabaseManager::open( void )
 {
-    if ( _DB.open() ) // Wont fail even if the file dne
-    {
-        return true;
-    }
-    else
+    if ( !_DB.open() ) // If database name (file) DNE it creates it then tries to open it
     {
         qDebug( "Error opening database: %s", qPrintable( _DB.lastError().databaseText() ) );
         return false;
     }
+    return true;
 }
 
 /*
-   Function: isOpen
+    Function:    DatabaseManager::close
+    Purpose:     Closes the database
+*/
+void DatabaseManager::close( void )
+{
+    _DB.close();
+}
 
-   Checks if the database is open or not.
-
-   Returns:
-
-      Bolean true if the database is open, false if closed.
-
+/*
+    Function:    DatabaseManager::isOpen
+    Purpose:     Checks if the database is open or not
+    Returns:     bool
+        true - DB opened
+        false - DB not opened
 */
 bool DatabaseManager::isOpen( void )
 {
@@ -107,45 +118,42 @@ bool DatabaseManager::isOpen( void )
 }
 
 /*
-   Function: remove
+    Function:    DatabaseManager::remove
+    Purpose:     Deletes the SQLite database file
+    Returns:     bool
+        true - Successfully deleted the db file
+        false - Failed to delete db file
 
-   Deletes the SQLite database file.
-
-   Returns:
-
-      Boolean true upon successfully deleting the file,
-      false upon failure.
-
-   See Also:
-
-      <Divide>
+    See Also:    <Divide>
 */
 bool DatabaseManager::remove( void )
 {
-    // Close the database if it is already open
-    close();
-
-    // Remove created database binary file
-    return QFile::remove( _sPath );
+    close(); // Close the database if it is already open
+    return QFile::remove( _sPath ); // Remove created database binary file
 }
 
+/*
+    Function:    DatabaseManager::build
+    Purpose:     Builds the SQLite database file
+    Returns:     bool
+        true - Successfully built the db file
+        false - Failed to build the db file
+
+    See Also:    DatabaseManager::verify
+*/
 bool DatabaseManager::build( void )
 {
     return buildStructure();
 }
 
 /*
-   Function: init_structure
+    Function:    DatabaseManager::buildStructure
+    Purpose:     Creates the tables in the SQLite database
+    Returns:     bool
+        true - Successfully created the tables
+        false - Failed to create the tables
 
-   Creates the tables in the SQLite database.
-
-   Returns:
-
-      Boolean true upon success, false upon failure.
-
-   See Also:
-
-      verify_structure
+    See Also:    DatabaseManager::verifyStructure
 */
 bool DatabaseManager::buildStructure( void )
 {
@@ -358,30 +366,34 @@ bool DatabaseManager::buildStructure( void )
     return true;
 }
 
+/*
+    Function:    DatabaseManager::verify
+    Purpose:     Verifies the database's integrity
+    Returns:     bool
+        true - Database is fine
+        false - Database is messed up
+
+    See Also:    DatabaseManager::build
+*/
 bool DatabaseManager::verify( void )
 {
     return verifyStructure();
 }
 
 /*
-   Function: verify_structure
+    Function:    DatabaseManager::verifyStructure
+    Purpose:     Verifies the database's table structure
+    Returns:     bool
+        true - Database tables are fine
+        false - Database tables are messed up
 
-   Verify that the loaded database file follows the specified schema.
-
-   Returns:
-
-      Boolean true if the database structure is verified correct,
-      false upon failure.
-
-   See Also:
-
-      create_structure
+    See Also:    DatabaseManager::buildStructure
 */
 bool DatabaseManager::verifyStructure( void )
 {
     QSqlQuery qryTableNames;
     QSqlQuery qryTableInfo;
-    QString TableSchema;
+    QString sTableSchema;
 
     qDebug( "Verifying database structure." );
 
@@ -394,7 +406,7 @@ bool DatabaseManager::verifyStructure( void )
     {
         // Append the table name, column names and datatypes to TableSchema string
         qryTableInfo.exec( "pragma table_info(" + qryTableNames.value(0).toString() + ")" );
-        TableSchema.append( qryTableNames.value(0).toString() );
+        sTableSchema.append( qryTableNames.value(0).toString() );
 
         while ( qryTableInfo.next() )
         {
@@ -403,13 +415,13 @@ bool DatabaseManager::verifyStructure( void )
             //  Index, Name, Datatype, Null, Default
 
             // Name and Datatype are relevant here
-            TableSchema.append( qryTableInfo.value(1).toString() );
-            TableSchema.append( qryTableInfo.value(2).toString() );
+            sTableSchema.append( qryTableInfo.value(1).toString() );
+            sTableSchema.append( qryTableInfo.value(2).toString() );
         }
     }
 
     // Calculate the md5 hash of this string
-    QByteArray md5bytearray( QCryptographicHash::hash( TableSchema.toAscii(), QCryptographicHash::Md5 ) );
+    QByteArray md5bytearray( QCryptographicHash::hash( sTableSchema.toAscii(), QCryptographicHash::Md5 ) );
 
     QString chksum = md5bytearray.toHex().constData();
 
@@ -426,14 +438,9 @@ bool DatabaseManager::verifyStructure( void )
 }
 
 /*
-   Function: lastError
-
-   Wrapper to return the SQLite database last error.
-
-   Returns:
-
-      QSqlError  returned by the SQLite database.
-
+    Function:    DatabaseManager::verifyStructure
+    Purpose:     Wrapper to return the SQLite database last error
+    Returns:     QSqlError - Returned by the SQLite database
 */
 QSqlError DatabaseManager::lastError( void )
 {
@@ -441,23 +448,17 @@ QSqlError DatabaseManager::lastError( void )
 }
 
 /*
-   Function: query
-
-   Executes a query through the database.
-
-   Parameters:
-
-      query - QSqlQuery which has been prepared and bound upon.
-
-   Returns:
-
-      Bolean true if the query is successfully executed,
-      false on failure.
-
+    Function:    DatabaseManager::query
+    Purpose:     Executes a query through the database
+    Parameters:
+        query - QSqlQuery which has been prepared and bound upon
+    Returns:     bool
+        true - Query has successfully executed
+        false - Query failed to execute
 */
-bool DatabaseManager::query( QSqlQuery &qry )
+bool DatabaseManager::query( QSqlQuery &query )
 {
-   bool ret = qry.exec();
-   qDebug( "Database Query: %s", qPrintable( qry.executedQuery() ) );
+   bool ret = query.exec();
+   qDebug( "Database Query: %s", qPrintable( query.executedQuery() ) );
    return ret;
 }

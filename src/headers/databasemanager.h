@@ -49,7 +49,6 @@ class DatabaseManager : public QObject
                                 ~DatabaseManager( void );
 
         bool                    exists( void );
-
         bool                    open( void );
         bool                    isOpen( void );
         void                    close( void );
@@ -59,7 +58,6 @@ class DatabaseManager : public QObject
         bool                    remove( void );
 
         bool                    query( QSqlQuery &qry );
-
 
         QSqlError               lastError( void );
 };

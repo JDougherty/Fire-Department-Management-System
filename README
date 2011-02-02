@@ -1,0 +1,27 @@
+Fire Department Management System
+by Joseph W. Dougherty
+
+The Fire Department Management System is a program which greatly simplifies
+the process of logging and tracking the large sum of data that fire departments
+deal with on a daily basis.
+
+License
+The Fire Department Management System is released under the GNU General
+Public License version 3, a copy of which is included in file `LICENSE`.
+
+Building
+The FDMS is currently distributed with a Qt .pro file for usage with
+qmake. Alternative build options will be available as soon as possible.
+
+Credits and Thanks
+Tom Rozanski - For developmental contributions
+
+Nate Stedman - http://nate.xen.prgmr.com/ - For graphical contributions
+
+Mukkai S. Krishnamoorthy - http://www.cs.rpi.edu/~moorthy/ - For support as
+faculty supervisor
+
+Sean O'Sullivan - For financial contribution to the Rensselaer Center for
+Open-source Software and funding this project
+
+

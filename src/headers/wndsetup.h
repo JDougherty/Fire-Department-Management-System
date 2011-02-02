@@ -22,6 +22,8 @@
 #define WNDSETUP_H
 
 #include <QMainWindow>
+#include "databasemanager.h"
+#include "mainwindow.h"
 
 namespace Ui {
     class wndSetup;
@@ -30,14 +32,22 @@ namespace Ui {
 class wndSetup : public QMainWindow {
     Q_OBJECT
 public:
-    wndSetup(QWidget *parent = 0);
+    wndSetup(QWidget *parent = 0, DatabaseManager *newDb = 0, MainWindow *mw = 0);
     ~wndSetup();
+
+
 
 protected:
     void changeEvent(QEvent *e);
 
 private:
     Ui::wndSetup *ui;
+    DatabaseManager *db;
+    MainWindow *mw;
+
+private slots:
+    void on_btnFinish_clicked();
 };
 
 #endif // WNDSETUP_H
+

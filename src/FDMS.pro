@@ -10,7 +10,6 @@ SOURCES += sources/main.cpp \
     sources/wndnewfirefighter.cpp \
     sources/mainwindow.cpp \
     sources/wndsetup.cpp \
-    sources/wndsplash.cpp \
     sources/firefighter.cpp \
     sources/wndsearch.cpp \
     sources/wndeditfirefighter.cpp \
@@ -22,7 +21,6 @@ HEADERS += headers/databasemanager.h \
     headers/wndnewfirefighter.h \
     headers/mainwindow.h \
     headers/wndsetup.h \
-    headers/wndsplash.h \
     headers/LogFunctions.h \
     headers/firefighter.h \
     headers/wndsearch.h \
@@ -34,7 +32,6 @@ HEADERS += headers/databasemanager.h \
 FORMS += forms/wndNewFirefighter.ui \
 	forms/mainwindow.ui \
     forms/wndsetup.ui \
-    forms/wndsplash.ui \
     forms/wndsearch.ui \
     forms/wndeditfirefighter.ui \
     forms/wndinventorycontrol.ui \

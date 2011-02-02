@@ -395,8 +395,6 @@ bool DatabaseManager::verifyStructure( void )
     QSqlQuery qryTableInfo;
     QString sTableSchema;
 
-    qDebug( "Verifying database structure." );
-
     // While we're here, let's turn on foreign key support
     qryTableNames.exec( "PRAGMA foreign_keys = ON;" );
 
@@ -425,15 +423,14 @@ bool DatabaseManager::verifyStructure( void )
 
     QString chksum = md5bytearray.toHex().constData();
 
-    //qDebug()<<chksum;
-    //qDebug()<<TableSchema;
-
     // And compare to expected value
     if ( chksum != "9222c8dcad4670104628f6c6beec4761" )
     {
+        qDebug( "Invalid database structure. Expected chksum 9222c8dcad4670104628f6c6beec4761, but got %s", chksum.toStdString().c_str() );
         return false;
     }
 
+    qDebug( "Valid database structure." );
     return true;
 }
 

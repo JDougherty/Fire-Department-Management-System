@@ -20,81 +20,82 @@
 #include <QtGui/QApplication>
 #include <QMessageBox>
 #include <QString>
-#include <QFile>
 #include <QDateTime>
 #include <QFontDatabase>
 
 #include "../headers/LogFunctions.h"
 #include "../headers/databasemanager.h"
 #include "../headers/mainwindow.h"
-#include "../headers/wndnewfirefighter.h"
 #include "../headers/wndsetup.h"
-#include "../headers/wndActiveDrill.h"
-#include "../headers/wndsplash.h"
 
 int main( int argc, char *argv[] )
 {
-    QApplication a( argc, argv );
-    QDateTime initstamp = QDateTime::currentDateTime();
-    QString sDatabaseName = "fdms.db";
-    DatabaseManager db( sDatabaseName );
-    wndSetup setup(0);
-
-    MainWindow *mw = new MainWindow( 0, &db );
-    mw->show();
+    QApplication application( argc, argv );
+    DatabaseManager db( "fdms.db" );
+    MainWindow mw( 0, &db );
 
     //setupDebugRedirection();
+
+    qDebug( "Initialized at %s", QDateTime::currentDateTime().toString().toStdString().c_str() );
 
     QFile res( ":/fonts/FRE3OF9X.TTF" );
     if ( res.open( QIODevice::ReadOnly ) )
     {
-        QFontDatabase::addApplicationFontFromData(res.readAll());
+        QFontDatabase::addApplicationFontFromData( res.readAll() );
     }
     else
     {
         qWarning( "Resource Error: Could not load Free 3 of 9 Extended barcode font." );
     }
 
-    qDebug( "Initialized at %s", initstamp.toString().toStdString().c_str() );
-
-
     if ( !db.exists() )
     {
+        wndSetup setup( 0, &db, &mw );
+        setup.show();
+
         qDebug( "Running program setup." );
 
         if ( !db.open() )
         {
-            QMessageBox::critical( mw, "Critical Error", "Database could not be opened.", QMessageBox::Ok );
+            QMessageBox::critical( &setup, "Critical Error", "Database could not be opened.", QMessageBox::Ok );
             qCritical( "Critical Error - Database: Could not be opened." );
             return 0;
         }
 
         if ( !db.build() )
         {
-            QMessageBox::critical( mw, "Critical Error", "Database could not be built.", QMessageBox::Ok );
+            QMessageBox::critical( &setup, "Critical Error", "Database could not be built.", QMessageBox::Ok );
             qCritical( "Critical Error - Database: Could not be built." );
             return 0;
         }
 
-        mw->setEnabled( false );
+        if ( !db.verify() )
+        {
+            QMessageBox::critical( &setup, "Critical Error", "Database has an invalid structure.", QMessageBox::Ok );
+            qCritical( "Critical Error - Database: Invalid structure." );
+            return 0;
+        }
 
-        setup.show();
+         return application.exec();
     }
-
-
-    if ( !db.open() )
+    else
     {
-        QMessageBox::critical( mw, "Critical Error", "Database could not be opened.", QMessageBox::Ok );
-        qCritical( "Critical Error - Database: Could not be opened." );
-        return 0;
-    }
+        mw.showMaximized();
 
-    if ( !db.verify() )
-    {
-        QMessageBox::critical( mw, "Critical Error", "Database has an invalid structure.", QMessageBox::Ok );
-        qCritical( "Critical Error - Database: Invalid structure." );
-        return 0;
-    }
+        if ( !db.open() )
+        {
+            QMessageBox::critical( &mw, "Critical Error", "Database could not be opened.", QMessageBox::Ok );
+            qCritical( "Critical Error - Database: Could not be opened." );
+            return 0;
+        }
 
-    return a.exec();
+        if ( !db.verify() )
+        {
+            QMessageBox::critical( &mw, "Critical Error", "Database has an invalid structure.", QMessageBox::Ok );
+            qCritical( "Critical Error - Database: Invalid structure." );
+            return 0;
+        }
+
+         return application.exec();
+    }
 }

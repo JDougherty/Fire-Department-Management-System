@@ -25,7 +25,6 @@ MainWindow::MainWindow(QWidget *parent, DatabaseManager *newDb) :
     QMainWindow(parent),ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    this->showMaximized();
     db=newDb;
 
     mdiArea = new QMdiArea;
@@ -78,11 +77,7 @@ void MainWindow::txtSearchReturnPressed(){
     wndSearch *child= new wndSearch(this, this, db, ui->cmbSearch->currentText(), ui->txtSearch->text());
     mdiArea->addSubWindow(child);
     child->show();
-
-
 }
-
-
 
 void MainWindow::menuSearchTriggered()
 {

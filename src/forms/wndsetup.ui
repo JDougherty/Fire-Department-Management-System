@@ -10,8 +10,36 @@
     <height>412</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>652</width>
+    <height>412</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>652</width>
+    <height>412</height>
+   </size>
+  </property>
+  <property name="contextMenuPolicy">
+   <enum>Qt::DefaultContextMenu</enum>
+  </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Fire Department Management System Setup</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../resources/resources.qrc">
+    <normaloff>:/icons/Icon.png</normaloff>:/icons/Icon.png</iconset>
+  </property>
+  <property name="layoutDirection">
+   <enum>Qt::LeftToRight</enum>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QTabWidget" name="tabWidget">
@@ -99,12 +127,12 @@
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QCommandLinkButton" name="commandLinkButton">
+     <widget class="QCommandLinkButton" name="btnContinue">
       <property name="geometry">
        <rect>
-        <x>510</x>
+        <x>500</x>
         <y>310</y>
-        <width>101</width>
+        <width>111</width>
         <height>41</height>
        </rect>
       </property>
@@ -125,11 +153,26 @@
      <attribute name="title">
       <string>Step 2:</string>
      </attribute>
+     <widget class="QCommandLinkButton" name="btnFinish">
+      <property name="geometry">
+       <rect>
+        <x>500</x>
+        <y>310</y>
+        <width>111</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Finish</string>
+      </property>
+     </widget>
     </widget>
    </widget>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="../resources/resources.qrc"/>
+ </resources>
  <connections/>
  <slots>
   <slot>netTab()</slot>

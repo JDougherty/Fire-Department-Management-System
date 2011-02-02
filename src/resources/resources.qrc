@@ -4,6 +4,7 @@
         <file>Call_Base.png</file>
         <file>Drill_Base.png</file>
         <file>Firefighter_Base.png</file>
+        <file>Icon.png</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>FRE3OF9X.TTF</file>

@@ -14,8 +14,8 @@
    <string>Fire Department Management System</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normaloff>Logo.png</normaloff>Logo.png</iconset>
+   <iconset resource="../resources/resources.qrc">
+    <normaloff>:/icons/Icon.png</normaloff>:/icons/Icon.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QComboBox" name="cmbSearch">

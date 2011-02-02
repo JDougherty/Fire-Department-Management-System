@@ -17,30 +17,42 @@
 
 */
 
-
 #include "../headers/wndsetup.h"
 #include "ui_wndsetup.h"
 
-wndSetup::wndSetup(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::wndSetup)
+wndSetup::wndSetup( QWidget *parent, DatabaseManager *newDb, MainWindow *newMw ) :
+        QMainWindow( parent ),
+        ui( new Ui::wndSetup )
 {
-    ui->setupUi(this);
+    ui->setupUi( this );
+    db = newDb;
+    mw = newMw;
 }
 
-wndSetup::~wndSetup()
+wndSetup::~wndSetup( void )
 {
     delete ui;
 }
 
-void wndSetup::changeEvent(QEvent *e)
+void wndSetup::on_btnFinish_clicked()
 {
-    QMainWindow::changeEvent(e);
-    switch (e->type()) {
-    case QEvent::LanguageChange:
-        ui->retranslateUi(this);
-        break;
-    default:
-        break;
+    if ( mw != NULL )
+    {
+        mw->showMaximized();
+        hide();
+    }
+}
+
+void wndSetup::changeEvent( QEvent *e )
+{
+    QMainWindow::changeEvent( e );
+
+    switch ( e->type() )
+    {
+        case QEvent::LanguageChange:
+            ui->retranslateUi( this );
+            break;
+        default:
+            break;
     }
 }

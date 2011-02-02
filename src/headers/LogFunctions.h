@@ -19,8 +19,9 @@
 
 #ifndef LOGFUNCTIONS_H
 #define LOGFUNCTIONS_H
-#include<QFile>
-#include<QTextStream>
+
+#include <QFile>
+#include <QTextStream>
 
 QFile debugLogFile;
 QTextStream debugErr;
@@ -50,8 +51,7 @@ void setupDebugRedirection()
     debugErr.setDevice( &debugLogFile );
     debugLogFile.open( QIODevice::Append | QIODevice::Text );
     qInstallMsgHandler( msgRedirection );
-    debugErr<<endl;
+    debugErr << endl;
 }
-
 
 #endif // LOGFUNCTIONS_H

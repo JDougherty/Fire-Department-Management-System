@@ -52,7 +52,7 @@ QString DatabaseManager::buildPath( QString sDatabaseName )
     // Database file must be located in user home folder in Linux
     sPath = QDir::home().path();
     sPath.append( QDir::separator() ).append( sDatabaseName );
-    sPath = QDir::toNativeSeparators( qsPath );
+    sPath = QDir::toNativeSeparators( sPath );
     #else
     sPath = sDatabaseName;
     #endif

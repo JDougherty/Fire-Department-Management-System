@@ -29,6 +29,7 @@
 #include <QVariant>
 #include <QtDebug>
 #include <QCryptographicHash>
+#include <QDir>
 
 
 class DatabaseManager : public QObject

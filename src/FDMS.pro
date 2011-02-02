@@ -29,7 +29,7 @@ HEADERS += headers/databasemanager.h \
     headers/wndinventorycheck.h \
     headers/wndactivedrill.h \
     headers/wndactivecall.h
-FORMS += forms/wndNewFirefighter.ui \
+FORMS += forms/wndnewfirefighter.ui \
 	forms/mainwindow.ui \
     forms/wndsetup.ui \
     forms/wndsearch.ui \

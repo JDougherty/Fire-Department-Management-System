@@ -22,6 +22,7 @@
 #include <QString>
 #include <QDateTime>
 #include <QFontDatabase>
+#include <QSettings>
 
 #include "../headers/LogFunctions.h"
 #include "../headers/databasemanager.h"
@@ -31,8 +32,18 @@
 int main( int argc, char *argv[] )
 {
     QApplication application( argc, argv );
+    QSettings settings( "config.ini", QSettings::IniFormat );
+    QString sDBFilename;
     DatabaseManager db( "fdms.db" );
     MainWindow mw( 0, &db );
+
+    // save the settings
+    settings.beginGroup( "database" );
+    settings.setValue( "filename", "fdms.db" );
+    settings.endGroup();
+
+    // load the settings
+    sDBFilename = settings.value( "database/filename" ).toString();
 
     //setupDebugRedirection();
 

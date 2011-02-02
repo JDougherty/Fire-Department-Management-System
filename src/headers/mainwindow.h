@@ -33,7 +33,6 @@
 #include "wndsearch.h"
 #include "wndinventorycontrol.h"
 #include "wndinventorycheck.h"
-#include "wndsetup.h"
 
 QT_END_NAMESPACE
 

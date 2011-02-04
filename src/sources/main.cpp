@@ -87,7 +87,7 @@ int main( int argc, char *argv[] )
             return 0;
         }
 
-         return application.exec();
+        return application.exec();
     }
     else
     {
@@ -107,6 +107,6 @@ int main( int argc, char *argv[] )
             return 0;
         }
 
-         return application.exec();
+        return application.exec();
     }
 }

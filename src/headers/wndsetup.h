@@ -44,9 +44,21 @@ private:
     Ui::wndSetup *ui;
     DatabaseManager *db;
     MainWindow *mw;
+    int _iInstallType;
+
+    enum { NOT_DEFINED, NEW_INST, EXISTING_INST };
 
 private slots:
-    void on_btnFinish_clicked();
+    void on_btnExInstFinish_clicked();
+    void on_btnExInstDBSettings_clicked();
+    void on_btnNewInstFinish_clicked();
+    void on_btnNewInstDBSettings_clicked();
+    void on_btnNewInstFDSettings_clicked();
+    void on_btnExInstDBFile_clicked();
+    void on_radioExInst_clicked();
+    void on_radioNewInst_clicked();
+    void on_btnSetupContinue_clicked();
+    void on_btnNewInstDBLocation_clicked();
 };
 
 #endif // WNDSETUP_H

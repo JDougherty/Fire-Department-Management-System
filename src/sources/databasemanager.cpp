@@ -19,16 +19,19 @@
 
 #include "../headers/databasemanager.h"
 
-DatabaseManager::DatabaseManager( QString sDatabaseName )
+DatabaseManager::DatabaseManager( void )
 {
-    _sDatabaseName = "";
-    _sPath = "";
-
-    _sDatabaseName = sDatabaseName;
-    _sPath = buildPath( sDatabaseName );
+    _sDBFile = QString::null;
 
     _DB = QSqlDatabase::addDatabase( "QSQLITE" );
-    _DB.setDatabaseName( _sPath );
+}
+
+DatabaseManager::DatabaseManager( QString sDBFile )
+{
+    _sDBFile = sDBFile;
+
+    _DB = QSqlDatabase::addDatabase( "QSQLITE" );
+    _DB.setDatabaseName( _sDBFile );
 }
 
 DatabaseManager::~DatabaseManager( void )
@@ -37,27 +40,11 @@ DatabaseManager::~DatabaseManager( void )
     QSqlDatabase::removeDatabase( "QSQLITE" );
 }
 
-/*
-    Function:    DatabaseManager::buildPath
-    Purpose:     Builds the file path for the database
-    Parameters:
-        QString sDatabaseName - file name
-    Returns:     QString - the file path + file name
-*/
-QString DatabaseManager::buildPath( QString sDatabaseName )
+void DatabaseManager::setDBFile( QString sDBFile )
 {
-    QString sPath;
-
-    #ifdef Q_OS_LINUX
-    // Database file must be located in user home folder in Linux
-    sPath = QDir::home().path();
-    sPath.append( QDir::separator() ).append( sDatabaseName );
-    sPath = QDir::toNativeSeparators( sPath );
-    #else
-    sPath = sDatabaseName;
-    #endif
-
-    return sPath;
+    close();
+    _sDBFile = sDBFile;
+    _DB.setDatabaseName( _sDBFile );
 }
 
 /*
@@ -69,14 +56,14 @@ QString DatabaseManager::buildPath( QString sDatabaseName )
 */
 bool DatabaseManager::exists( void )
 {
-    if ( QFile::exists( _sPath ) )
+    if ( !QFile::exists( _sDBFile ) )
     {
-        qDebug( "Database file exists." );
-        return true;
+        qDebug( "Database: %s does not exist.", qPrintable( _sDBFile ) );
+        return false;
     }
 
-    qDebug( "Database file does not exist." );
-    return false;
+    qDebug( "Database: %s exists.", qPrintable( _sDBFile ) );
+    return true;
 }
 
 /*
@@ -90,9 +77,11 @@ bool DatabaseManager::open( void )
 {
     if ( !_DB.open() ) // If database name (file) DNE it creates it then tries to open it
     {
-        qDebug( "Error opening database: %s", qPrintable( _DB.lastError().databaseText() ) );
+        qDebug( "Database: Error opening %s: %s", qPrintable( _sDBFile ), qPrintable( _DB.lastError().databaseText() ) );
         return false;
     }
+
+    qDebug( "Database: Opened %s", qPrintable( _sDBFile ) );
     return true;
 }
 
@@ -129,7 +118,7 @@ bool DatabaseManager::isOpen( void )
 bool DatabaseManager::remove( void )
 {
     close(); // Close the database if it is already open
-    return QFile::remove( _sPath ); // Remove created database binary file
+    return QFile::remove( _sDBFile ); // Remove created database binary file
 }
 
 /*
@@ -354,11 +343,11 @@ bool DatabaseManager::buildStructure( void )
     {
         if ( query.exec( slSplitSchema[i] ) )
         {
-            qDebug( "Database Structure Initialization: %s", qPrintable( query.lastQuery() ) );
+            //qDebug( "Database: Structure Initialization: %s", qPrintable( query.lastQuery() ) );
         }
         else
         {
-            qDebug( "Database Structure Initialization: %s", qPrintable( query.lastError().databaseText() ) );
+            //qDebug( "Database: Structure Initialization: %s", qPrintable( query.lastError().databaseText() ) );
             return false;
         }
     }
@@ -426,11 +415,11 @@ bool DatabaseManager::verifyStructure( void )
     // And compare to expected value
     if ( chksum != "9222c8dcad4670104628f6c6beec4761" )
     {
-        qDebug( "Invalid database structure. Expected chksum 9222c8dcad4670104628f6c6beec4761, but got %s", chksum.toStdString().c_str() );
+        qDebug( "Database: Invalid structure. Expected chksum 9222c8dcad4670104628f6c6beec4761, but got %s", chksum.toStdString().c_str() );
         return false;
     }
 
-    qDebug( "Valid database structure." );
+    qDebug( "Database: Valid structure." );
     return true;
 }
 
@@ -456,6 +445,6 @@ QSqlError DatabaseManager::lastError( void )
 bool DatabaseManager::query( QSqlQuery &query )
 {
    bool ret = query.exec();
-   qDebug( "Database Query: %s", qPrintable( query.executedQuery() ) );
+   qDebug( "Database: Executing Query: %s", qPrintable( query.executedQuery() ) );
    return ret;
 }

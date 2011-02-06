@@ -22,9 +22,10 @@
 #include <QString>
 #include <QDateTime>
 #include <QFontDatabase>
-#include <QSettings>
+#include <QFile>
 
 #include "../headers/LogFunctions.h"
+#include "../headers/settingsmanager.h"
 #include "../headers/databasemanager.h"
 #include "../headers/mainwindow.h"
 #include "../headers/wndsetup.h"
@@ -32,18 +33,9 @@
 int main( int argc, char *argv[] )
 {
     QApplication application( argc, argv );
-    QSettings settings( "config.ini", QSettings::IniFormat );
-    QString sDBFilename;
-    DatabaseManager db( "fdms.db" );
+    SettingsManager sm( "config.ini" );
+    DatabaseManager db;
     MainWindow mw( 0, &db );
-
-    // save the settings
-    settings.beginGroup( "database" );
-    settings.setValue( "filename", "fdms.db" );
-    settings.endGroup();
-
-    // load the settings
-    sDBFilename = settings.value( "database/filename" ).toString();
 
     //setupDebugRedirection();
 
@@ -59,38 +51,19 @@ int main( int argc, char *argv[] )
         qWarning( "Resource Error: Could not load Free 3 of 9 Extended barcode font." );
     }
 
-    if ( !db.exists() )
+    if ( !sm.exists() )
     {
-        wndSetup setup( 0, &db, &mw );
+        wndSetup setup( 0, &db, &sm, &mw );
         setup.show();
 
         qDebug( "Running program setup." );
-
-        if ( !db.open() )
-        {
-            QMessageBox::critical( &setup, "Critical Error", "Database could not be opened.", QMessageBox::Ok );
-            qCritical( "Critical Error - Database: Could not be opened." );
-            return 0;
-        }
-
-        if ( !db.build() )
-        {
-            QMessageBox::critical( &setup, "Critical Error", "Database could not be built.", QMessageBox::Ok );
-            qCritical( "Critical Error - Database: Could not be built." );
-            return 0;
-        }
-
-        if ( !db.verify() )
-        {
-            QMessageBox::critical( &setup, "Critical Error", "Database has an invalid structure.", QMessageBox::Ok );
-            qCritical( "Critical Error - Database: Invalid structure." );
-            return 0;
-        }
 
         return application.exec();
     }
     else
     {
+        sm.load();
+        db.setDBFile( sm.getDBFile() );
         mw.showMaximized();
 
         if ( !db.open() )

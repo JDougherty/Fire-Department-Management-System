@@ -16,7 +16,8 @@ SOURCES += sources/main.cpp \
     sources/wndinventorycontrol.cpp \
     sources/wndinventorycheck.cpp \
     sources/wndactivedrill.cpp \
-    sources/wndactivecall.cpp
+    sources/wndactivecall.cpp \
+    sources/settingsmanager.cpp
 HEADERS += headers/databasemanager.h \
     headers/wndnewfirefighter.h \
     headers/mainwindow.h \
@@ -28,7 +29,8 @@ HEADERS += headers/databasemanager.h \
     headers/wndinventorycontrol.h \
     headers/wndinventorycheck.h \
     headers/wndactivedrill.h \
-    headers/wndactivecall.h
+    headers/wndactivecall.h \
+    headers/settingsmanager.h
 FORMS += forms/wndnewfirefighter.ui \
 	forms/mainwindow.ui \
     forms/wndsetup.ui \

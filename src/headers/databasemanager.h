@@ -37,17 +37,17 @@ class DatabaseManager : public QObject
     private:
         QSqlDatabase            _DB;
 
-        QString                 _sPath,
-                                _sDatabaseName;
-
-        QString                 buildPath( QString sDatabaseName );
+        QString                 _sDBFile;
 
         bool                    buildStructure( void );
         bool                    verifyStructure( void );
 
     public:
-                                DatabaseManager( QString sDatabaseName );
+                                DatabaseManager( void );
+                                DatabaseManager( QString sDBFile );
                                 ~DatabaseManager( void );
+
+        void                    setDBFile( QString sDBFile );
 
         bool                    exists( void );
         bool                    open( void );

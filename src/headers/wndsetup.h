@@ -23,6 +23,7 @@
 
 #include <QMainWindow>
 #include "databasemanager.h"
+#include "settingsmanager.h"
 #include "mainwindow.h"
 
 namespace Ui {
@@ -32,22 +33,23 @@ namespace Ui {
 class wndSetup : public QMainWindow {
     Q_OBJECT
 public:
-    wndSetup(QWidget *parent = 0, DatabaseManager *newDb = 0, MainWindow *mw = 0);
+    wndSetup(QWidget *parent = 0, DatabaseManager *newDb = 0, SettingsManager *sm = 0, MainWindow *mw = 0);
     ~wndSetup();
-
-
 
 protected:
     void changeEvent(QEvent *e);
 
 private:
-    Ui::wndSetup *ui;
-    DatabaseManager *db;
-    MainWindow *mw;
+    Ui::wndSetup *_pUI;
+    DatabaseManager *_pDB;
+    SettingsManager *_pSM;
+    MainWindow *_pMW;
+
     int _iInstallType;
 
     enum { NOT_DEFINED, NEW_INST, EXISTING_INST };
 
+    void clearAndHideProgressBars();
 private slots:
     void on_btnExInstFinish_clicked();
     void on_btnExInstDBSettings_clicked();

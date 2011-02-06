@@ -22,27 +22,30 @@
 #include "../headers/wndsetup.h"
 #include "ui_wndsetup.h"
 
-wndSetup::wndSetup( QWidget *parent, DatabaseManager *newDb, MainWindow *newMw ) :
+wndSetup::wndSetup( QWidget *parent, DatabaseManager *pDB, SettingsManager *pSM, MainWindow *pMW ) :
         QMainWindow( parent ),
-        ui( new Ui::wndSetup )
+        _pUI( new Ui::wndSetup )
 {
-    ui->setupUi( this );
-    db = newDb;
-    mw = newMw;
+    _pUI->setupUi( this );
+    _pDB = pDB;
+    _pSM = pSM;
+    _pMW = pMW;
 
     _iInstallType = NOT_DEFINED;
 
     // Doesnt delete the tabs
-    ui->tabWidget->removeTab( 5 ); // tabExInstFinish
-    ui->tabWidget->removeTab( 4 ); // tabExInstDBSettings
-    ui->tabWidget->removeTab( 3 ); // tabNewInstFinish
-    ui->tabWidget->removeTab( 2 ); // tabNewInstDBSettings
-    ui->tabWidget->removeTab( 1 ); // tabExInstFDSettings
+    _pUI->tabWidget->removeTab( 5 ); // tabExInstFinish
+    _pUI->tabWidget->removeTab( 4 ); // tabExInstDBSettings
+    _pUI->tabWidget->removeTab( 3 ); // tabNewInstFinish
+    _pUI->tabWidget->removeTab( 2 ); // tabNewInstDBSettings
+    _pUI->tabWidget->removeTab( 1 ); // tabNewInstFDSettings
+
+    clearAndHideProgressBars();
 }
 
 wndSetup::~wndSetup( void )
 {
-    delete ui;
+    delete _pUI;
 }
 
 void wndSetup::changeEvent( QEvent *e )
@@ -52,18 +55,31 @@ void wndSetup::changeEvent( QEvent *e )
     switch ( e->type() )
     {
         case QEvent::LanguageChange:
-            ui->retranslateUi( this );
+            _pUI->retranslateUi( this );
             break;
         default:
             break;
     }
 }
 
+void wndSetup::clearAndHideProgressBars( void )
+{
+    _pUI->progExInstStatus->setValue( 0 );
+    _pUI->progExInstStatus->hide();
+    _pUI->lblExInstStatus->setText( QString::null );
+    _pUI->lblExInstStatus->hide();
+
+    _pUI->progNewInstStatus->setValue( 0 );
+    _pUI->progNewInstStatus->hide();
+    _pUI->lblNewInstStatus->setText( QString::null );
+    _pUI->lblNewInstStatus->hide();
+}
+
 void wndSetup::on_btnSetupContinue_clicked()
 {
-    if ( ui->radioExInst->isChecked() || ui->radioNewInst->isChecked() )
+    if ( _pUI->radioExInst->isChecked() || _pUI->radioNewInst->isChecked() )
     {
-        ui->tabWidget->setCurrentIndex( 1 );
+        _pUI->tabWidget->setCurrentIndex( 1 );
     }
     else
     {
@@ -71,24 +87,27 @@ void wndSetup::on_btnSetupContinue_clicked()
     }
 }
 
+/*
+    Using an existing instance
+*/
 void wndSetup::on_radioExInst_clicked()
 {
     // Clicking the radio button even if checked calls this function so see if we need to do anything
     if ( _iInstallType != EXISTING_INST )
     {
-        qDebug( "Install existing instance." );
+        qDebug( "Setup: User wants to install an existing instance." );
 
         // got to hide the tabs for existing installation
         if ( _iInstallType == NEW_INST )
         {
-            ui->tabWidget->removeTab( 3 ); // tabNewInstFinish
-            ui->tabWidget->removeTab( 2 ); // tabNewInstDBSettings
-            ui->tabWidget->removeTab( 1 ); // tabNewInstFDSettings
+            _pUI->tabWidget->removeTab( 3 ); // tabNewInstFinish
+            _pUI->tabWidget->removeTab( 2 ); // tabNewInstDBSettings
+            _pUI->tabWidget->removeTab( 1 ); // tabNewInstFDSettings
         }
 
         // add back the tabs for the new installation
-        ui->tabWidget->addTab( ui->tabExInstDBSettings, "Step 1: Database Settings" );
-        ui->tabWidget->addTab( ui->tabExInstFinish, "Finish" );
+        _pUI->tabWidget->addTab( _pUI->tabExInstDBSettings, "Step 1: Database Settings" );
+        _pUI->tabWidget->addTab( _pUI->tabExInstFinish, "Finish" );
 
         _iInstallType = EXISTING_INST;
     }
@@ -100,53 +119,99 @@ void wndSetup::on_btnExInstDBFile_clicked()
 
     if ( !sDBFile.isEmpty() )
     {
-        qDebug( "Database file is now %s", sDBFile.toStdString().c_str() );
-        ui->leExInstDBLocation->setText( sDBFile );
+        qDebug( "Setup: Database file: %s", sDBFile.toStdString().c_str() );
+        _pUI->leExInstDBLocation->setText( sDBFile );
     }
 }
 
 void wndSetup::on_btnExInstDBSettings_clicked()
 {
-    ui->tabWidget->setCurrentIndex( 2 ); // tabExInstFinish
+    _pUI->tabWidget->setCurrentIndex( 2 ); // tabExInstFinish
 }
 
 void wndSetup::on_btnExInstFinish_clicked()
 {
     QString sDBFile;
 
-    sDBFile = ui->leExInstDBLocation->text();
+    _pUI->progExInstStatus->show();
+    _pUI->lblExInstStatus->show();
+
+    // Check user input
+    _pUI->lblExInstStatus->setText( QString( "Checking user input." ) );
+
+    sDBFile = _pUI->leExInstDBLocation->text();
     if ( sDBFile == "" )
     {
-        ui->tabWidget->setCurrentIndex( 1 ); // tabExInstDBSettings
+        _pUI->tabWidget->setCurrentIndex( 1 ); // tabExInstDBSettings
         QMessageBox::warning( this, "Error", "Please select a database file.", QMessageBox::Ok );
+        clearAndHideProgressBars();
         return;
     }
+    _pUI->progExInstStatus->setValue( 15 );
 
-    if ( mw != NULL )
+    if ( !QFile::exists( sDBFile ) )
     {
-        mw->showMaximized();
+        _pUI->tabWidget->setCurrentIndex( 1 ); // tabExInstDBSettings
+        QMessageBox::warning( this, "Error", "Please select a file that exists.", QMessageBox::Ok );
+        clearAndHideProgressBars();
+        return;
+    }
+    _pUI->progExInstStatus->setValue( 30 );
+
+    // Try connecting to the database
+    _pUI->lblExInstStatus->setText( QString( "Accessing the database." ) );
+
+    _pDB->setDBFile( sDBFile );
+
+    if ( !_pDB->open() )
+    {
+        QMessageBox::critical( this, "Critical Error", "Database could not be opened.", QMessageBox::Ok );
+        qCritical( "Critical Error - Database: Could not be opened." );
+        clearAndHideProgressBars();
+        return;
+    }
+    _pUI->progExInstStatus->setValue( 70 );
+
+    if ( !_pDB->verify() )
+    {
+        QMessageBox::critical( this, "Critical Error", "Database has an invalid structure.", QMessageBox::Ok );
+        qCritical( "Critical Error - Database: Invalid structure." );
+        clearAndHideProgressBars();
+        return;
+    }
+    _pUI->progExInstStatus->setValue( 100 );
+
+    _pSM->setDBFile( sDBFile );
+    _pSM->save();
+
+    if ( _pMW != NULL )
+    {
+        _pMW->showMaximized();
         hide();
     }
 }
 
+/*
+    Installing a new instance
+*/
 void wndSetup::on_radioNewInst_clicked()
 {
     // Clicking the radio button even if checked calls this function so see if we need to do anything
     if ( _iInstallType != NEW_INST )
     {
-        qDebug( "Install new instance." );
+        qDebug( "Setup: User wants to install a new instance." );
 
         // got to hide the tabs for existing installation
         if ( _iInstallType == EXISTING_INST )
         {
-            ui->tabWidget->removeTab( 2 ); // tabExInstFinish
-            ui->tabWidget->removeTab( 1 ); // tabExInstDBSettings
+            _pUI->tabWidget->removeTab( 2 ); // tabExInstFinish
+            _pUI->tabWidget->removeTab( 1 ); // tabExInstDBSettings
         }
 
         // add back the tabs for the new installation
-        ui->tabWidget->addTab( ui->tabNewInstFDSettings, "Step 1: Fire Department Information" );
-        ui->tabWidget->addTab( ui->tabNewInstDBSettings, "Step 2: Database Settings" );
-        ui->tabWidget->addTab( ui->tabNewInstFinish, "Finish" );
+        _pUI->tabWidget->addTab( _pUI->tabNewInstFDSettings, "Step 1: Fire Department Information" );
+        _pUI->tabWidget->addTab( _pUI->tabNewInstDBSettings, "Step 2: Database Settings" );
+        _pUI->tabWidget->addTab( _pUI->tabNewInstFinish, "Finish" );
 
         _iInstallType = NEW_INST;
     }
@@ -158,36 +223,93 @@ void wndSetup::on_btnNewInstDBLocation_clicked()
 
     if ( !sDBLocation.isEmpty() )
     {
-        qDebug( "Database path is now %s", sDBLocation.toStdString().c_str() );
-        ui->leNewInstDBLocation->setText( sDBLocation );
+        qDebug( "Setup: Database path: %s", sDBLocation.toStdString().c_str() );
+        _pUI->leNewInstDBLocation->setText( sDBLocation );
     }
 }
 
 void wndSetup::on_btnNewInstFDSettings_clicked()
 {
-     ui->tabWidget->setCurrentIndex( 2 ); // tabNewInstDBSettings
+     _pUI->tabWidget->setCurrentIndex( 2 ); // tabNewInstDBSettings
 }
 
 void wndSetup::on_btnNewInstDBSettings_clicked()
 {
-     ui->tabWidget->setCurrentIndex( 3 ); // tabNewInstFinish
+     _pUI->tabWidget->setCurrentIndex( 3 ); // tabNewInstFinish
 }
 
 void wndSetup::on_btnNewInstFinish_clicked()
 {
     QString sDBLocation;
+    QString sDBFile;
 
-    sDBLocation = ui->leNewInstDBLocation->text();
+    _pUI->progNewInstStatus->show();
+    _pUI->lblNewInstStatus->show();
+
+    // Check user input
+    _pUI->lblNewInstStatus->setText( QString( "Checking user input." ) );
+
+    sDBLocation = _pUI->leNewInstDBLocation->text();
     if ( sDBLocation == "" )
     {
-        ui->tabWidget->setCurrentIndex( 2 ); // tabNewInstDBSettings
+        _pUI->tabWidget->setCurrentIndex( 2 ); // tabNewInstDBSettings
         QMessageBox::warning( this, "Error", "Please select a location to place the database file.", QMessageBox::Ok );
+        clearAndHideProgressBars();
         return;
     }
+    _pUI->progNewInstStatus->setValue( 15 );
 
-    if ( mw != NULL )
+    if ( !QFile::exists( sDBLocation ) )
     {
-        mw->showMaximized();
+        _pUI->tabWidget->setCurrentIndex( 2 ); // tabNewInstDBSettings
+        QMessageBox::warning( this, "Error", "Please select a location that exists.", QMessageBox::Ok );
+        clearAndHideProgressBars();
+        return;
+    }
+    _pUI->progNewInstStatus->setValue( 30 );
+
+    // Try setting up the database
+    _pUI->lblNewInstStatus->setText( QString( "Setting up the database." ) );
+
+    sDBFile = sDBLocation;
+    sDBFile.append( QDir::separator() ).append( "fdms.db" );
+    sDBFile = QDir::toNativeSeparators( sDBFile );
+
+    _pDB->setDBFile( sDBFile );
+
+    if ( !_pDB->open() )
+    {
+        QMessageBox::critical( this, "Critical Error", "Database could not be opened.", QMessageBox::Ok );
+        qCritical( "Critical Error - Database: Could not be opened." );
+        clearAndHideProgressBars();
+        return;
+    }
+    _pUI->progNewInstStatus->setValue( 45 );
+
+    if ( !_pDB->build() )
+    {
+        QMessageBox::critical( this, "Critical Error", "Database could not be built.", QMessageBox::Ok );
+        qCritical( "Critical Error - Database: Could not be built." );
+        clearAndHideProgressBars();
+        return;
+    }
+    _pUI->progNewInstStatus->setValue( 80 );
+
+    if ( !_pDB->verify() )
+    {
+        QMessageBox::critical( this, "Critical Error", "Database has an invalid structure.", QMessageBox::Ok );
+        qCritical( "Critical Error - Database: Invalid structure." );
+        clearAndHideProgressBars();
+        return;
+    }
+    _pUI->progNewInstStatus->setValue( 100 );
+
+    _pSM->setDBFile( sDBFile );
+    _pSM->save();
+
+    if ( _pMW != NULL )
+    {
+        _pMW->showMaximized();
         hide();
     }
 }

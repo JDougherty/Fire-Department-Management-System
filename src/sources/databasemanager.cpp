@@ -415,7 +415,7 @@ bool DatabaseManager::verifyStructure( void )
     // And compare to expected value
     if ( chksum != "9222c8dcad4670104628f6c6beec4761" )
     {
-        qDebug( "Database: Invalid structure. Expected chksum 9222c8dcad4670104628f6c6beec4761, but got %s", chksum.toStdString().c_str() );
+        qDebug( "Database: Invalid structure. Expected chksum 9222c8dcad4670104628f6c6beec4761, but got %s", qPrintable( chksum ) );
         return false;
     }
 

@@ -67,7 +67,7 @@ bool SettingsManager::exists( void )
 {
     if ( !QFile::exists( _sPath ) )
     {
-        qDebug( "%s does not exist.", qPrintable( _sPath ) );
+        qDebug( "Settings: %s does not exist.", qPrintable( _sPath ) );
         return false;
     }
 
@@ -101,11 +101,13 @@ QString SettingsManager::getDBFile( void )
 
 void SettingsManager::load( void )
 {
+    qDebug( "Settings: Loading values from %s", qPrintable( _sPath ) );
     _sDBFile = _pSettings->value( "database/file" ).toString();
 }
 
 void SettingsManager::save( void )
 {
+    qDebug( "Settings: Saving values to %s", qPrintable( _sPath ) );
     _pSettings->beginGroup( "database" );
     _pSettings->setValue( "file", _sDBFile );
     _pSettings->endGroup();

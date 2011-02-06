@@ -39,7 +39,7 @@ int main( int argc, char *argv[] )
 
     //setupDebugRedirection();
 
-    qDebug( "Initialized at %s", QDateTime::currentDateTime().toString().toStdString().c_str() );
+    qDebug( "Initialized at %s", qPrintable( QDateTime::currentDateTime().toString() ) );
 
     QFile res( ":/fonts/FRE3OF9X.TTF" );
     if ( res.open( QIODevice::ReadOnly ) )

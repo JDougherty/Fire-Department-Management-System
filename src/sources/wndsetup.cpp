@@ -21,9 +21,14 @@
 #include "../headers/wndsetup.h"
 #include "ui_wndsetup.h"
 
-wndSetup::wndSetup( QWidget *parent, DatabaseManager *pDB, SettingsManager *pSM, MainWindow *pMW ) :
-        QMainWindow( parent ),
-        _pUI( new Ui::wndSetup )
+/*!
+  \param pParent Pointer to the parent widget.
+  \param pDB Pointer to the database manager; for opening, building, and verifying the DB.
+  \param pSM Pointer to the settings manager; saves program configuration.
+  \param pMW Pointer to the main window; called when setup is complete.
+*/
+wndSetup::wndSetup( QWidget *pParent, DatabaseManager *pDB, SettingsManager *pSM, MainWindow *pMW ) :
+        QMainWindow( pParent ), _pUI( new Ui::wndSetup )
 {
     _pUI->setupUi( this );
     _pDB = pDB;
@@ -61,6 +66,10 @@ void wndSetup::changeEvent( QEvent *e )
     }
 }
 
+//! Hides and resets the progress bars and status labels.
+/*!
+  Called when setup fails for any reason.
+*/
 void wndSetup::clearAndHideProgressBars( void )
 {
     _pUI->progExInstStatus->setValue( 0 );
@@ -74,7 +83,8 @@ void wndSetup::clearAndHideProgressBars( void )
     _pUI->lblNewInstStatus->hide();
 }
 
-void wndSetup::on_btnSetupContinue_clicked()
+//! User clicked "Continue" on the main setup tab
+void wndSetup::on_btnSetupContinue_clicked( void )
 {
     if ( _pUI->radioExInst->isChecked() || _pUI->radioNewInst->isChecked() )
     {
@@ -89,7 +99,9 @@ void wndSetup::on_btnSetupContinue_clicked()
 /*
     Using an existing instance
 */
-void wndSetup::on_radioExInst_clicked()
+
+//! User chose to connect to an existing instance
+void wndSetup::on_radioExInst_clicked( void )
 {
     // Clicking the radio button even if checked calls this function so see if we need to do anything
     if ( _iInstallType != EXISTING_INST )
@@ -112,23 +124,30 @@ void wndSetup::on_radioExInst_clicked()
     }
 }
 
-void wndSetup::on_btnExInstDBFile_clicked()
+//! User clicked browse button to select DB file
+void wndSetup::on_btnExInstDBFile_clicked( void )
 {
     QString sDBFile = QFileDialog::getOpenFileName( this, "Select the database file.", QString::null, "*.db" );
 
     if ( !sDBFile.isEmpty() )
     {
-        qDebug( "Setup: Database file: %s", sDBFile.toStdString().c_str() );
+        qDebug( "Setup: Database file: %s", qPrintable( sDBFile ) );
         _pUI->leExInstDBLocation->setText( sDBFile );
     }
 }
 
-void wndSetup::on_btnExInstDBSettings_clicked()
+//! User clicked "Continue" on DB Settings tab
+void wndSetup::on_btnExInstDBSettings_clicked( void )
 {
     _pUI->tabWidget->setCurrentIndex( 2 ); // tabExInstFinish
 }
 
-void wndSetup::on_btnExInstFinish_clicked()
+//! User clicked "Finish"
+/*!
+  Checks user input, opens and validates the DB, saves the settings, and
+  launches the main menu.
+*/
+void wndSetup::on_btnExInstFinish_clicked( void )
 {
     QString sDBFile;
 
@@ -193,17 +212,16 @@ void wndSetup::on_btnExInstFinish_clicked()
     _pUI->lblExInstStatus->setText( QString( "Finished." ) );
     _pUI->progExInstStatus->setValue( 100 );
 
-    if ( _pMW != NULL )
-    {
-        _pMW->showMaximized();
-        hide();
-    }
+    _pMW->showMaximized();
+    hide();
 }
 
 /*
     Installing a new instance
 */
-void wndSetup::on_radioNewInst_clicked()
+
+//! User chose to setup a new FDMS instance
+void wndSetup::on_radioNewInst_clicked( void )
 {
     // Clicking the radio button even if checked calls this function so see if we need to do anything
     if ( _iInstallType != NEW_INST )
@@ -226,28 +244,36 @@ void wndSetup::on_radioNewInst_clicked()
     }
 }
 
-void wndSetup::on_btnNewInstDBLocation_clicked()
+//! User clicked browse button to select DB location
+void wndSetup::on_btnNewInstDBLocation_clicked( void )
 {
     QString sDBLocation =  QFileDialog::getExistingDirectory( this, "", QString::null, QFileDialog::ShowDirsOnly );
 
     if ( !sDBLocation.isEmpty() )
     {
-        qDebug( "Setup: Database path: %s", sDBLocation.toStdString().c_str() );
+        qDebug( "Setup: Database path: %s", qPrintable( sDBLocation ) );
         _pUI->leNewInstDBLocation->setText( sDBLocation );
     }
 }
 
-void wndSetup::on_btnNewInstFDSettings_clicked()
+//! User clicked "Continue" on FD Settings tab
+void wndSetup::on_btnNewInstFDSettings_clicked( void )
 {
      _pUI->tabWidget->setCurrentIndex( 2 ); // tabNewInstDBSettings
 }
 
-void wndSetup::on_btnNewInstDBSettings_clicked()
+//! User clicked "Continue" on DB Settings tab
+void wndSetup::on_btnNewInstDBSettings_clicked( void )
 {
      _pUI->tabWidget->setCurrentIndex( 3 ); // tabNewInstFinish
 }
 
-void wndSetup::on_btnNewInstFinish_clicked()
+//! User clicked "Finish"
+/*!
+  Checks user input, opens, builds, and validates the DB, saves the settings, and
+  launches the main menu.
+*/
+void wndSetup::on_btnNewInstFinish_clicked( void )
 {
     QString sDBLocation;
     QString sDBFile;
@@ -351,9 +377,6 @@ void wndSetup::on_btnNewInstFinish_clicked()
     _pUI->lblNewInstStatus->setText( QString( "Finished." ) );
     _pUI->progNewInstStatus->setValue( 100 );
 
-    if ( _pMW != NULL )
-    {
-        _pMW->showMaximized();
-        hide();
-    }
+    _pMW->showMaximized();
+    hide();
 }

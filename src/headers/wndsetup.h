@@ -21,6 +21,7 @@
 #define WNDSETUP_H
 
 #include <QMainWindow>
+#include <QMessageBox>
 #include "databasemanager.h"
 #include "settingsmanager.h"
 #include "mainwindow.h"
@@ -30,12 +31,22 @@ namespace Ui
     class wndSetup;
 }
 
+//! The interface and logic for setting up the FDMS.
+/*!
+  Users can either connect to an existing FDMS database or create
+  an enitrely new installation.
+*/
 class wndSetup : public QMainWindow
 {
     Q_OBJECT
 
     private:
-        enum { NOT_DEFINED, NEW_INST, EXISTING_INST };
+        //! Installation methods
+        enum {
+            NOT_DEFINED,    /*!< Method not selected. */
+            NEW_INST,       /*!< Configure a new DB. */
+            EXISTING_INST   /*!< Connect to an existing DB. */
+        };
 
         Ui::wndSetup            *_pUI;
         DatabaseManager         *_pDB;
@@ -62,8 +73,7 @@ class wndSetup : public QMainWindow
         void                    changeEvent( QEvent *e );
 
     public:
-                                wndSetup( QWidget *parent = NULL, DatabaseManager *newDb = NULL,
-                                          SettingsManager *sm = NULL, MainWindow *mw = NULL );
+                                wndSetup( QWidget *pParent, DatabaseManager *newDb, SettingsManager *sm, MainWindow *pMW );
                                 ~wndSetup();
 };
 

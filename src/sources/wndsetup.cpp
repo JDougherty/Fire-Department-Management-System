@@ -18,7 +18,6 @@
 */
 
 #include <QFileDialog>
-
 #include "../headers/wndsetup.h"
 #include "ui_wndsetup.h"
 
@@ -138,6 +137,7 @@ void wndSetup::on_btnExInstFinish_clicked()
 
     // Check user input
     _pUI->lblExInstStatus->setText( QString( "Checking user input." ) );
+    _pUI->progExInstStatus->setValue( 1 ); // forces the ui to update and show the text and progress bar
 
     sDBFile = _pUI->leExInstDBLocation->text();
     if ( sDBFile == "" )
@@ -147,6 +147,7 @@ void wndSetup::on_btnExInstFinish_clicked()
         clearAndHideProgressBars();
         return;
     }
+
     _pUI->progExInstStatus->setValue( 15 );
 
     if ( !QFile::exists( sDBFile ) )
@@ -156,33 +157,41 @@ void wndSetup::on_btnExInstFinish_clicked()
         clearAndHideProgressBars();
         return;
     }
-    _pUI->progExInstStatus->setValue( 30 );
 
     // Try connecting to the database
-    _pUI->lblExInstStatus->setText( QString( "Accessing the database." ) );
+    _pUI->lblExInstStatus->setText( QString( "Opening the database." ) );
+    _pUI->progExInstStatus->setValue( 30 );
 
     _pDB->setDBFile( sDBFile );
-
     if ( !_pDB->open() )
     {
         QMessageBox::critical( this, "Critical Error", "Database could not be opened.", QMessageBox::Ok );
-        qCritical( "Critical Error - Database: Could not be opened." );
+        qCritical( "Setup: Critical Error - Database: Could not be opened." );
         clearAndHideProgressBars();
         return;
     }
-    _pUI->progExInstStatus->setValue( 70 );
+
+    _pUI->lblExInstStatus->setText( QString( "Verifying the database." ) );
+    _pUI->progExInstStatus->setValue( 50 );
 
     if ( !_pDB->verify() )
     {
         QMessageBox::critical( this, "Critical Error", "Database has an invalid structure.", QMessageBox::Ok );
-        qCritical( "Critical Error - Database: Invalid structure." );
+        qCritical( "Setup: Critical Error - Database: Invalid structure." );
         clearAndHideProgressBars();
         return;
     }
-    _pUI->progExInstStatus->setValue( 100 );
+
+    // Save the configuration file
+    _pUI->lblExInstStatus->setText( QString( "Saving configuration file." ) );
+    _pUI->progExInstStatus->setValue( 80 );
 
     _pSM->setDBFile( sDBFile );
     _pSM->save();
+
+    // All done
+    _pUI->lblExInstStatus->setText( QString( "Finished." ) );
+    _pUI->progExInstStatus->setValue( 100 );
 
     if ( _pMW != NULL )
     {
@@ -248,6 +257,7 @@ void wndSetup::on_btnNewInstFinish_clicked()
 
     // Check user input
     _pUI->lblNewInstStatus->setText( QString( "Checking user input." ) );
+    _pUI->progNewInstStatus->setValue( 1 ); // forces the ui to update and show the text and progress bar
 
     sDBLocation = _pUI->leNewInstDBLocation->text();
     if ( sDBLocation == "" )
@@ -257,6 +267,7 @@ void wndSetup::on_btnNewInstFinish_clicked()
         clearAndHideProgressBars();
         return;
     }
+
     _pUI->progNewInstStatus->setValue( 15 );
 
     if ( !QFile::exists( sDBLocation ) )
@@ -266,46 +277,79 @@ void wndSetup::on_btnNewInstFinish_clicked()
         clearAndHideProgressBars();
         return;
     }
-    _pUI->progNewInstStatus->setValue( 30 );
 
     // Try setting up the database
-    _pUI->lblNewInstStatus->setText( QString( "Setting up the database." ) );
+    _pUI->lblNewInstStatus->setText( QString( "Opening the database." ) );
+    _pUI->progNewInstStatus->setValue( 30 );
 
     sDBFile = sDBLocation;
     sDBFile.append( QDir::separator() ).append( "fdms.db" );
     sDBFile = QDir::toNativeSeparators( sDBFile );
 
     _pDB->setDBFile( sDBFile );
+    if ( _pDB->exists() )
+    {
+        int iResult = QMessageBox::question( this, "Overwrite database?", "Database file already exists in this directory.\nOverwrite the file?",
+                                             QMessageBox::Yes | QMessageBox::No );
+
+        switch ( iResult )
+        {
+           case QMessageBox::Yes:
+               _pDB->remove();
+               break;
+           case QMessageBox::No:
+               _pUI->tabWidget->setCurrentIndex( 2 ); // tabNewInstDBSettings
+               QMessageBox::warning( this, "Select database location.", "Please select a new database location.", QMessageBox::Ok );
+               clearAndHideProgressBars();
+               return;
+           default:
+               QMessageBox::critical( this, "Critical Error", "Default case reached.", QMessageBox::Ok );
+               qCritical( "Setup: Critical Error - Default case reached." );
+               clearAndHideProgressBars();
+               return;
+         }
+    }
 
     if ( !_pDB->open() )
     {
         QMessageBox::critical( this, "Critical Error", "Database could not be opened.", QMessageBox::Ok );
-        qCritical( "Critical Error - Database: Could not be opened." );
+        qCritical( "Setup: Critical Error - Database: Could not be opened." );
         clearAndHideProgressBars();
         return;
     }
+
+    _pUI->lblNewInstStatus->setText( QString( "Building the database." ) );
     _pUI->progNewInstStatus->setValue( 45 );
 
     if ( !_pDB->build() )
     {
         QMessageBox::critical( this, "Critical Error", "Database could not be built.", QMessageBox::Ok );
-        qCritical( "Critical Error - Database: Could not be built." );
+        qCritical( "Setup: Critical Error - Database: Could not be built." );
         clearAndHideProgressBars();
         return;
     }
-    _pUI->progNewInstStatus->setValue( 80 );
+
+    _pUI->lblNewInstStatus->setText( QString( "Verifying the database." ) );
+    _pUI->progNewInstStatus->setValue( 60 );
 
     if ( !_pDB->verify() )
     {
         QMessageBox::critical( this, "Critical Error", "Database has an invalid structure.", QMessageBox::Ok );
-        qCritical( "Critical Error - Database: Invalid structure." );
+        qCritical( "Setup: Critical Error - Database: Invalid structure." );
         clearAndHideProgressBars();
         return;
     }
-    _pUI->progNewInstStatus->setValue( 100 );
+
+    //Save the configuration file
+    _pUI->progNewInstStatus->setValue( 80 );
+    _pUI->lblNewInstStatus->setText( QString( "Saving configuration file." ) );
 
     _pSM->setDBFile( sDBFile );
     _pSM->save();
+
+    // All done
+    _pUI->lblNewInstStatus->setText( QString( "Finished." ) );
+    _pUI->progNewInstStatus->setValue( 100 );
 
     if ( _pMW != NULL )
     {

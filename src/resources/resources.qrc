@@ -5,6 +5,8 @@
         <file>Drill_Base.png</file>
         <file>Firefighter_Base.png</file>
         <file>Icon.png</file>
+        <file>Inventory_Check.png</file>
+        <file>Inventory_Control.png</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>FRE3OF9X.TTF</file>

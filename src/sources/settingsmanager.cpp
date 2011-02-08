@@ -28,7 +28,7 @@ SettingsManager::SettingsManager( QString sConfigName )
     _sPath = buildPath( _sConfigName );
     _sDBFile = QString::null;
 
-    _pSettings = new QSettings( "config.ini", QSettings::IniFormat );
+    _pSettings = new QSettings( _sPath, QSettings::IniFormat );
 }
 
 SettingsManager::~SettingsManager( void )

@@ -131,6 +131,7 @@
    <addaction name="actFirefighterAdd"/>
    <addaction name="actNew_Drill"/>
    <addaction name="actNew_Call"/>
+   <addaction name="actInventory_Control"/>
   </widget>
   <action name="actQuit">
    <property name="text">
@@ -181,6 +182,10 @@
    </property>
   </action>
   <action name="actInventory_Control">
+   <property name="icon">
+    <iconset resource="../resources/resources.qrc">
+     <normaloff>:/icons/Inventory_Control.png</normaloff>:/icons/Inventory_Control.png</iconset>
+   </property>
    <property name="text">
     <string>Inventory Control</string>
    </property>
@@ -189,6 +194,10 @@
    </property>
   </action>
   <action name="actInventory_Check">
+   <property name="icon">
+    <iconset resource="../resources/resources.qrc">
+     <normaloff>:/icons/Inventory_Check.png</normaloff>:/icons/Inventory_Check.png</iconset>
+   </property>
    <property name="text">
     <string>Inventory Check</string>
    </property>

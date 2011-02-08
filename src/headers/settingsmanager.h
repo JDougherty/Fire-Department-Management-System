@@ -16,6 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+
 #ifndef SETTINGSMANAGER_H
 #define SETTINGSMANAGER_H
 
@@ -23,15 +24,19 @@
 #include <QFile>
 #include <QSettings>
 
+//! Loads and saves the configuration file.
+/*!
+  Basically a wrapper for QSettings.
+*/
 class SettingsManager
 {
 
     private:
         QSettings               *_pSettings;
 
-        QString                 _sPath,
-                                _sConfigName,
-                                _sDBFile;
+        QString                 _sPath,         //!< Config file path.
+                                _sConfigName,   //!< Config file name.
+                                _sDBFile;       //!< DB file path.
 
         QString                 buildPath( QString sFileName );
 

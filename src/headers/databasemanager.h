@@ -16,6 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+
 #ifndef DATABASEMANAGER_H
 #define DATABASEMANAGER_H
 
@@ -31,13 +32,16 @@
 #include <QCryptographicHash>
 #include <QDir>
 
-
+//! Handles a DB connection and verifies DB integrity.
+/*!
+  Basically a wrapper for QSqlDatabase.
+*/
 class DatabaseManager : public QObject
 {
     private:
         QSqlDatabase            _DB;
 
-        QString                 _sDBFile;
+        QString                 _sDBFile; //!< DB file path.
 
         bool                    buildStructure( void );
         bool                    verifyStructure( void );

@@ -55,26 +55,26 @@ class wndSetup : public QMainWindow
 
         int                     _iInstallType;
 
-        void                    clearAndHideProgressBars();
+        void                    clearAndHideProgressBars( void );
 
     private slots:
-        void                    on_btnExInstFinish_clicked();
-        void                    on_btnExInstDBSettings_clicked();
-        void                    on_btnNewInstFinish_clicked();
-        void                    on_btnNewInstDBSettings_clicked();
-        void                    on_btnNewInstFDSettings_clicked();
-        void                    on_btnExInstDBFile_clicked();
-        void                    on_radioExInst_clicked();
-        void                    on_radioNewInst_clicked();
-        void                    on_btnSetupContinue_clicked();
-        void                    on_btnNewInstDBLocation_clicked();
+        void                    on_btnExInstFinish_clicked( void );
+        void                    on_btnExInstDBSettings_clicked( void );
+        void                    on_btnNewInstFinish_clicked( void );
+        void                    on_btnNewInstDBSettings_clicked( void );
+        void                    on_btnNewInstFDSettings_clicked( void );
+        void                    on_btnExInstDBFile_clicked( void );
+        void                    on_radioExInst_clicked( void );
+        void                    on_radioNewInst_clicked( void );
+        void                    on_btnSetupContinue_clicked( void );
+        void                    on_btnNewInstDBLocation_clicked( void );
 
     protected:
         void                    changeEvent( QEvent *e );
 
     public:
                                 wndSetup( QWidget *pParent, DatabaseManager *newDb, SettingsManager *sm, MainWindow *pMW );
-                                ~wndSetup();
+                                ~wndSetup( void );
 };
 
 #endif // WNDSETUP_H

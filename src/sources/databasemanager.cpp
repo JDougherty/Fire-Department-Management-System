@@ -40,6 +40,10 @@ DatabaseManager::~DatabaseManager( void )
     QSqlDatabase::removeDatabase( "QSQLITE" );
 }
 
+//! Sets the DB file path.
+/*!
+  \param sDBFile DB file path.
+*/
 void DatabaseManager::setDBFile( QString sDBFile )
 {
     close();
@@ -47,12 +51,9 @@ void DatabaseManager::setDBFile( QString sDBFile )
     _DB.setDatabaseName( _sDBFile );
 }
 
-/*
-    Function:    DatabaseManager::exists
-    Purpose:     See if the SQL Lite file exists
-    Returns:     bool
-        true - DB file exists
-        false - DB file dne
+//! See if the SQL Lite file exists.
+/*!
+  \return bool - DB file exists.
 */
 bool DatabaseManager::exists( void )
 {
@@ -66,12 +67,9 @@ bool DatabaseManager::exists( void )
     return true;
 }
 
-/*
-    Function:    DatabaseManager::open
-    Purpose:     Attempts to open the database (and creates the file if DNE)
-    Returns:     bool
-        true - Successfully opened the database
-        false - Unable to open the database
+//! Attempts to open the database (and creates the file if DNE).
+/*!
+  \return bool - Successfully opened the database.
 */
 bool DatabaseManager::open( void )
 {
@@ -85,35 +83,24 @@ bool DatabaseManager::open( void )
     return true;
 }
 
-/*
-    Function:    DatabaseManager::close
-    Purpose:     Closes the database
-*/
+//! Closes the database.
 void DatabaseManager::close( void )
 {
     _DB.close();
 }
 
-/*
-    Function:    DatabaseManager::isOpen
-    Purpose:     Checks if the database is open or not
-    Returns:     bool
-        true - DB opened
-        false - DB not opened
+//! Checks if the database is open or not.
+/*!
+  \return bool - DB opened.
 */
 bool DatabaseManager::isOpen( void )
 {
     return _DB.isOpen();
 }
 
-/*
-    Function:    DatabaseManager::remove
-    Purpose:     Deletes the SQLite database file
-    Returns:     bool
-        true - Successfully deleted the db file
-        false - Failed to delete db file
-
-    See Also:    <Divide>
+//! Deletes the SQLite database file.
+/*!
+  \return bool - Successfully deleted the db file.
 */
 bool DatabaseManager::remove( void )
 {
@@ -121,28 +108,20 @@ bool DatabaseManager::remove( void )
     return QFile::remove( _sDBFile ); // Remove created database binary file
 }
 
-/*
-    Function:    DatabaseManager::build
-    Purpose:     Builds the SQLite database file
-    Returns:     bool
-        true - Successfully built the db file
-        false - Failed to build the db file
-
-    See Also:    DatabaseManager::verify
+//! Builds the SQLite database file.
+/*!
+  \return bool - Successfully built the db file.
+  \see verify()
 */
 bool DatabaseManager::build( void )
 {
     return buildStructure();
 }
 
-/*
-    Function:    DatabaseManager::buildStructure
-    Purpose:     Creates the tables in the SQLite database
-    Returns:     bool
-        true - Successfully created the tables
-        false - Failed to create the tables
-
-    See Also:    DatabaseManager::verifyStructure
+//! Creates the tables in the SQL Lite database.
+/*!
+  \return bool - Successfully created the tables.
+  \see verifyStructure()
 */
 bool DatabaseManager::buildStructure( void )
 {
@@ -355,28 +334,20 @@ bool DatabaseManager::buildStructure( void )
     return true;
 }
 
-/*
-    Function:    DatabaseManager::verify
-    Purpose:     Verifies the database's integrity
-    Returns:     bool
-        true - Database is fine
-        false - Database is messed up
-
-    See Also:    DatabaseManager::build
+//! Verifies the database's integrity.
+/*!
+  \return bool - Database is fine.
+  \see build()
 */
 bool DatabaseManager::verify( void )
 {
     return verifyStructure();
 }
 
-/*
-    Function:    DatabaseManager::verifyStructure
-    Purpose:     Verifies the database's table structure
-    Returns:     bool
-        true - Database tables are fine
-        false - Database tables are messed up
-
-    See Also:    DatabaseManager::buildStructure
+//! Verifies the database's table structure.
+/*!
+  \return bool - Database tables are fine.
+  \see buildStructure()
 */
 bool DatabaseManager::verifyStructure( void )
 {
@@ -423,24 +394,19 @@ bool DatabaseManager::verifyStructure( void )
     return true;
 }
 
-/*
-    Function:    DatabaseManager::verifyStructure
-    Purpose:     Wrapper to return the SQLite database last error
-    Returns:     QSqlError - Returned by the SQLite database
+//! Wrapper to return the SQLite database last error.
+/*!
+  \return QSqlError - Returned by the SQLite database.
 */
 QSqlError DatabaseManager::lastError( void )
 {
     return _DB.lastError();
 }
 
-/*
-    Function:    DatabaseManager::query
-    Purpose:     Executes a query through the database
-    Parameters:
-        query - QSqlQuery which has been prepared and bound upon
-    Returns:     bool
-        true - Query has successfully executed
-        false - Query failed to execute
+//! Executes a query through the database.
+/*!
+  \param query QSqlQuery which has been prepared and bound upon.
+  \return bool - Query executed successfully.
 */
 bool DatabaseManager::query( QSqlQuery &query )
 {

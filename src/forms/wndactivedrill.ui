@@ -59,7 +59,7 @@
       <rect>
        <x>230</x>
        <y>19</y>
-       <width>75</width>
+       <width>91</width>
        <height>23</height>
       </rect>
      </property>
@@ -130,7 +130,7 @@
       <rect>
        <x>10</x>
        <y>40</y>
-       <width>141</width>
+       <width>161</width>
        <height>20</height>
       </rect>
      </property>
@@ -146,7 +146,7 @@
       <rect>
        <x>10</x>
        <y>90</y>
-       <width>141</width>
+       <width>161</width>
        <height>20</height>
       </rect>
      </property>
@@ -221,7 +221,7 @@
       <rect>
        <x>10</x>
        <y>250</y>
-       <width>61</width>
+       <width>231</width>
        <height>16</height>
       </rect>
      </property>
@@ -242,9 +242,9 @@
     <widget class="QCheckBox" name="chkInHouse">
      <property name="geometry">
       <rect>
-       <x>170</x>
+       <x>160</x>
        <y>120</y>
-       <width>70</width>
+       <width>81</width>
        <height>17</height>
       </rect>
      </property>
@@ -257,7 +257,7 @@
       <rect>
        <x>10</x>
        <y>200</y>
-       <width>111</width>
+       <width>231</width>
        <height>16</height>
       </rect>
      </property>

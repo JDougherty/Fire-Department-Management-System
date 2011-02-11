@@ -23,6 +23,7 @@
 #include <QString>
 #include <QFile>
 #include <QSettings>
+#include <QDir>
 
 //! Loads and saves the configuration file.
 /*!

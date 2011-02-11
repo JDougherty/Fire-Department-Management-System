@@ -28,7 +28,7 @@ SettingsManager::SettingsManager( QString sConfigName )
     _sPath = buildPath( _sConfigName );
     _sDBFile = QString::null;
 
-    _pSettings = new QSettings( _sPath, QSettings::IniFormat );
+    _pSettings = new QSettings(QSettings::IniFormat, QSettings::UserScope, "FDMS", "FDMS");
 }
 
 SettingsManager::~SettingsManager( void )
@@ -46,8 +46,7 @@ QString SettingsManager::buildPath( QString sFileName )
     QString sFilePath;
 
     #ifdef Q_OS_LINUX
-    // Database file must be located in user home folder in Linux
-    sFilePath = QDir::home().sFilePath();
+    sFilePath = QDir::home().path();
     sFilePath.append( QDir::separator() ).append( sFileName );
     sFilePath = QDir::toNativeSeparators( sFilePath );
     #else

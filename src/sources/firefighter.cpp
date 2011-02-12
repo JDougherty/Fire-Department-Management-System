@@ -20,89 +20,83 @@
 #include "../headers/firefighter.h"
 #include <QMessageBox>
 
-
-Firefighter::Firefighter()
+Firefighter::Firefighter( void )
 {
-
+    _iID = -1;
 }
 
-Firefighter::Firefighter(QVector<QString> nattributes){
-    attributes=nattributes;
+Firefighter::Firefighter( QVector<QString> attributes )
+{
+    _attributes = attributes;
+    _iID = -1;
 }
 
-/*
-   Function: loadAttributes
-
-   Loads the attributes for firefighter with the given id
-   from the database.
-
-   Parameters:
-
-      QString localid - The department id of the firefighter.
-      DatabaseManager *newDb - The database from which to load
-
-   Returns:
-
-      Boolean true upon successful load, false on failure.
+//! Loads the attributes for firefighter with the given id from the database.
+/*!
+  \param iID Firefighter id.
+  \param pDB Pointer to the database manager.
+  \returns True upon successful load, false on failure.
 */
-bool Firefighter::loadAttributes(int id, DatabaseManager *newDb){
-    // Clear current attributes
-    attributes.clear();
+bool Firefighter::LoadAttributes( int iID, DatabaseManager *pDB )
+{
+    QSqlQuery infoQuery;
 
-    // Verify the database is open
-    if(!(newDb->isOpen())){
-        newDb->open();
+    // Ensure the database is open
+    if ( !( pDB->isOpen() ) )
+    {
+        pDB->open();
     }
 
+    _iID = iID;
+
+    // Clear current attributes
+    _attributes.clear();
+
     // Create the query with parameterization
-    QSqlQuery infoQuery;
-    infoQuery.prepare("SELECT id,fname,mname,lname,"
+    infoQuery.prepare( "SELECT id,fname,mname,lname,"
                       "dob,deptid,stateid,"
                       "address,city,state,"
                       "zip,joindate,status,"
                       "hphone,wphone,cphone,"
-                      "drvlic,cdl FROM firefighters WHERE id=?");
-    infoQuery.addBindValue(id);
+                      "drvlic,cdl FROM firefighters WHERE id=?" );
+    infoQuery.addBindValue( iID );
 
     // Execute the query
-    if(newDb->query(infoQuery)){
+    if ( pDB->query( infoQuery ) )
+    {
         infoQuery.next();
-        this->id=infoQuery.value(0).toInt();
-        for(int i=1;i<=18;i++){
-            attributes.push_back(infoQuery.value(i).toString());
+
+        for ( int i = 1; i <= 18; i++ )
+        {
+            _attributes.push_back( infoQuery.value( i ).toString() );
         }
-        qDebug("Firefighter Information (%d): Personal information retrieved successfully. ",ID());
+        qDebug( "Firefighter Information (%d): Personal information retrieved successfully.", ID() );
         return true;
     }
-    else{
-        qWarning("Firefighter Error (%d): Could not retrieve personal information from database. Database Error: %s",ID(),qPrintable(infoQuery.lastError().text()));
+    else
+    {
+        qWarning( "Firefighter Error (%d): Could not retrieve personal information from database. Database Error: %s", ID(), qPrintable( infoQuery.lastError().text() ) );
         return false;
     }
 }
 
-/*
-   Function: insertToDatabase
-
-   Creates the firefighter in the database with its
-   current attributes.
-
-   Parameters:
-
-      DatabaseManager *newDb - The database in which to save
-
-   Returns:
-
-      Boolean true upon successful save, false on failure.
+//! Creates the firefighter in the database with its current attributes.
+/*!
+  \param pDB Pointer to the database manager.
+  \returns True upon successful save, false on failure.
 */
-bool Firefighter::insertToDatabase(DatabaseManager *newDb){
+bool Firefighter::InsertToDatabase( DatabaseManager *pDB )
+{
+    QSqlQuery addQuery;
+
     // Ensure the database is open
-    if(!(newDb->isOpen())){
-        newDb->open();
+    if ( !( pDB->isOpen() ) )
+    {
+        pDB->open();
     }
 
     // Create the query with parameterization
-    QSqlQuery addQuery;
-    addQuery.prepare("INSERT INTO firefighters "
+    addQuery.prepare( "INSERT INTO firefighters "
                      "(fname,mname,lname,"
                      "dob,deptid,stateid,"
                      "address,city,state,"
@@ -114,140 +108,163 @@ bool Firefighter::insertToDatabase(DatabaseManager *newDb){
                      "?,?,?,"
                      "?,?,?,"
                      "?,?,?,"
-                     "?,?)");
-    for(int i=0; i<attributes.size();i++){
-        addQuery.addBindValue(attributes[i]);
+                     "?,?)" );
+
+    for ( int i = 0; i < _attributes.size(); i++ )
+    {
+        addQuery.addBindValue( _attributes[i] );
     }
 
     // Execute the query
-    if(newDb->query(addQuery)){
-        qDebug("Firefighter Information: New firefighter added successfully. ");
-        return true;}
-    else{
-        qWarning("Firefighter Error: Could not add firefighter to database. Database Error: %s",qPrintable(addQuery.lastError().text()));
-        return false;}
+    if ( pDB->query( addQuery ) )
+    {
+        qDebug( "Firefighter Information: New firefighter added successfully." );
+        return true;
+    }
+    else
+    {
+        qWarning( "Firefighter Error: Could not add firefighter to database. Database Error: %s", qPrintable( addQuery.lastError().text() ) );
+        return false;
+    }
 
 }
 
-/*
-   Function: updateAttributes
-
-   Set the firefighter's attributes and update in the
-   database.
-
-   Parameters:
-
-      QVector<QString> nattributes - List of new attributes
-      DatabaseManager *newDb - The database in which to update
-
-   Returns:
-
-      Boolean true upon successful save, false on failure.
+//!  Set the firefighter's attributes and update in the database.
+/*!
+  \param attributes List of new attributes
+  \param pDB Pointer to the database manager.
+  \returns True upon successful save, false on failure.
 */
-bool Firefighter::updateAttributes(QVector<QString> nattributes, DatabaseManager *newDb){
+bool Firefighter::UpdateAttributes( QVector<QString> attributes, DatabaseManager *pDB )
+{
+    QSqlQuery updateQuery;
+
     // Ensure the database is open
-    if(!(newDb->isOpen())){
-        newDb->open();
+    if ( !( pDB->isOpen() ) )
+    {
+        pDB->open();
     }
 
     // Set the attributes
-    attributes=nattributes;
+    _attributes = attributes;
 
     // Create the query with parameterization
-    QSqlQuery updateQuery;
-    updateQuery.prepare("UPDATE firefighters SET "
+    updateQuery.prepare( "UPDATE firefighters SET "
                      "fname=?,mname=?,lname=?,"
                      "dob=?,deptid=?,stateid=?,"
                      "address=?,city=?,state=?,"
                      "zip=?,joindate=?,status=?,"
                      "hphone=?,wphone=?,cphone=?,"
-                     "drvlic=?,cdl=? WHERE id=? ");
-    for(int i=0; i<attributes.size();i++){
-        updateQuery.addBindValue(attributes[i]);
+                     "drvlic=?,cdl=? WHERE id=? " );
+
+    for ( int i = 0; i < _attributes.size(); i++)
+    {
+        updateQuery.addBindValue( _attributes[i] );
     }
 
-    updateQuery.addBindValue(id);
+    updateQuery.addBindValue( _iID );
 
     // Execute the query
-    if(newDb->query(updateQuery)){
-        qDebug("Firefighter Information (%d): Firefighter successfully updated in database.",ID());
-        return true;}
-    else{
-        qWarning("Firefighter Error (%d): Could not update firefighter information in database. Database Error: %s",ID(),qPrintable(updateQuery.lastError().text()));
-        return false;}
+    if ( pDB->query( updateQuery ) )
+    {
+        qDebug( "Firefighter Information (%d): Firefighter successfully updated in database.", ID() );
+        return true;
+    }
+    else
+    {
+        qWarning( "Firefighter Error (%d): Could not update firefighter information in database. Database Error: %s", ID(), qPrintable( updateQuery.lastError().text() ) );
+        return false;
+    }
 }
-
 
 
 // ACCESSORS
-int Firefighter::ID(){
-    return id;
+int Firefighter::ID( void )
+{
+    return _iID;
 }
 
-QString Firefighter::FirstName(){
-    return attributes[0];
+QString Firefighter::FirstName( void )
+{
+    return _attributes[0];
 }
 
-QString Firefighter::MiddleName(){
-    return attributes[1];
+QString Firefighter::MiddleName( void )
+{
+    return _attributes[1];
 }
 
-QString Firefighter::LastName(){
-    return attributes[2];
+QString Firefighter::LastName( void )
+{
+    return _attributes[2];
 }
 
-QString Firefighter::Dob(){
-    return attributes[3];
+QString Firefighter::Dob( void )
+{
+    return _attributes[3];
 }
 
-QString Firefighter::LocalID(){
-    return attributes[4];
+QString Firefighter::LocalID( void )
+{
+    return _attributes[4];
 }
 
-QString Firefighter::StateID(){
-    return attributes[5];
+QString Firefighter::StateID( void )
+{
+    return _attributes[5];
 }
 
-QString Firefighter::Address(){
-    return attributes[6];
+QString Firefighter::Address( void )
+{
+    return _attributes[6];
 }
 
-QString Firefighter::City(){
-    return attributes[7];
+QString Firefighter::City( void )
+{
+    return _attributes[7];
 }
 
-QString Firefighter::State(){
-    return attributes[8];
+QString Firefighter::State( void )
+{
+    return _attributes[8];
 }
 
-QString Firefighter::ZipCode(){
-    return attributes[9];
+QString Firefighter::ZipCode( void )
+{
+    return _attributes[9];
 }
 
-QString Firefighter::dateJoin(){
-    return attributes[10];
+QString Firefighter::DateJoin( void )
+{
+    return _attributes[10];
 }
 
-QString Firefighter::Status(){
-    return attributes[11];
+QString Firefighter::Status( void )
+{
+    return _attributes[11];
 }
 
-QString Firefighter::Hphone(){
-    return attributes[12];
+QString Firefighter::Hphone( void )
+{
+    return _attributes[12];
 }
 
-QString Firefighter::Wphone(){
-    return attributes[13];
+QString Firefighter::Wphone( void )
+{
+    return _attributes[13];
 }
 
-QString Firefighter::Cphone(){
-    return attributes[14];
+QString Firefighter::Cphone( void )
+{
+    return _attributes[14];
 }
 
-QString Firefighter::DrvLic(){
-    return attributes[15];
+QString Firefighter::DrvLic( void )
+{
+    return _attributes[15];
 }
 
-QString Firefighter::CDL(){
-    return attributes[16];
+QString Firefighter::CDL( void )
+{
+    return _attributes[16];
 }

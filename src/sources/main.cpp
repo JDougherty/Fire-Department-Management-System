@@ -33,7 +33,7 @@
 int main( int argc, char *argv[] )
 {
     QApplication application( argc, argv );
-    SettingsManager sm( "fdms.ini" );
+    SettingsManager sm;
     DatabaseManager db;
     MainWindow mw( 0, &db );
 

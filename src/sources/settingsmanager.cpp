@@ -22,38 +22,16 @@
 /*!
   \param sConfigName Name of the configuration file.
 */
-SettingsManager::SettingsManager( QString sConfigName )
+SettingsManager::SettingsManager( void )
 {
-    _sConfigName = sConfigName;
-    _sPath = buildPath( _sConfigName );
-    _sDBFile = QString::null;
+    _pSettings = new QSettings( QSettings::IniFormat, QSettings::UserScope, "FDMS", "FDMS" );
 
-    _pSettings = new QSettings(QSettings::IniFormat, QSettings::UserScope, "FDMS", "FDMS");
+    _sDBFile = QString::null;
 }
 
 SettingsManager::~SettingsManager( void )
 {
     delete _pSettings;
-}
-
-//! Builds the path for the config file.
-/*!
-  \param sFileName Name of the configuration file.
-  \return QString - The file path + file name.
-*/
-QString SettingsManager::buildPath( QString sFileName )
-{
-    QString sFilePath;
-
-    #ifdef Q_OS_LINUX
-    sFilePath = QDir::home().path();
-    sFilePath.append( QDir::separator() ).append( sFileName );
-    sFilePath = QDir::toNativeSeparators( sFilePath );
-    #else
-    sFilePath = sFileName;
-    #endif
-
-    return sFilePath;
 }
 
 //! See if the config file exists.
@@ -62,13 +40,13 @@ QString SettingsManager::buildPath( QString sFileName )
 */
 bool SettingsManager::exists( void )
 {
-    if ( !QFile::exists( _sPath ) )
+    if ( !QFile::exists( _pSettings->fileName() ) )
     {
-        qDebug( "Settings: %s does not exist.", qPrintable( _sPath ) );
+        qDebug( "Settings: %s does not exist.", qPrintable( _pSettings->fileName() ) );
         return false;
     }
 
-    qDebug( "%s exists.", qPrintable( _sPath ) );
+    qDebug( "%s exists.", qPrintable( _pSettings->fileName() ) );
     return true;
 }
 
@@ -78,7 +56,7 @@ bool SettingsManager::exists( void )
 */
 bool SettingsManager::remove( void )
 {
-    return QFile::remove( _sPath ); // Remove created database binary file
+    return QFile::remove( _pSettings->fileName() );
 }
 
 //! Sets DB File string.
@@ -102,14 +80,14 @@ QString SettingsManager::getDBFile( void )
 //! Load the values from the config file.
 void SettingsManager::load( void )
 {
-    qDebug( "Settings: Loading values from %s", qPrintable( _sPath ) );
+    qDebug( "Settings: Loading values from %s", qPrintable( _pSettings->fileName() ) );
     _sDBFile = _pSettings->value( "database/file" ).toString();
 }
 
 //! Save values to the config file.
 void SettingsManager::save( void )
 {
-    qDebug( "Settings: Saving values to %s", qPrintable( _sPath ) );
+    qDebug( "Settings: Saving values to %s", qPrintable( _pSettings->fileName() ) );
     _pSettings->beginGroup( "database" );
     _pSettings->setValue( "file", _sDBFile );
     _pSettings->endGroup();

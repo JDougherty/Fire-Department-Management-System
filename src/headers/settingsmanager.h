@@ -35,14 +35,10 @@ class SettingsManager
     private:
         QSettings               *_pSettings;
 
-        QString                 _sPath,         //!< Config file path.
-                                _sConfigName,   //!< Config file name.
-                                _sDBFile;       //!< DB file path.
-
-        QString                 buildPath( QString sFileName );
+        QString                 _sDBFile;       //!< DB file path.
 
     public:
-                                SettingsManager( QString sConfigName );
+                                SettingsManager( void );
                                 ~SettingsManager( void );
 
         bool                    exists( void );

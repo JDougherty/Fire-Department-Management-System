@@ -39,7 +39,7 @@ wndEditFirefighter::wndEditFirefighter(QWidget *parent, DatabaseManager *newDb, 
 
         // Create a firefighter object and load its attributes
         edit = new Firefighter;
-        if(!edit->loadAttributes(id,db)){
+        if(!edit->LoadAttributes(id,db)){
             QMessageBox::warning(0,"Firefighter Error: Read","Could not retrieve firefighter information from database. See log for more information.");
         }
 
@@ -81,7 +81,7 @@ void wndEditFirefighter::updateFirefighterFields(){
     ui->txtCity->setText(edit->City());
     ui->txtState->setCurrentIndex(ui->txtState->findText(edit->State()));
     ui->txtZipCode->setText(edit->ZipCode());
-    ui->dateJoin->setDate(QVariant(edit->dateJoin()).toDate());
+    ui->dateJoin->setDate(QVariant(edit->DateJoin()).toDate());
     ui->txtStatus->setText(edit->Status());
     ui->txtHphone->setText(edit->Hphone());
     ui->txtWphone->setText(edit->Wphone());
@@ -224,7 +224,7 @@ void wndEditFirefighter::btnUpdatePersonalClicked(){
     ffattributes.append(ui->txtDrvLic->text());
     ffattributes.append(ui->txtCDL->text());
 
-    if(edit->updateAttributes(ffattributes,db)){
+    if(edit->UpdateAttributes(ffattributes,db)){
         QMessageBox::information(this,"Firefighter Information: Update","Firefighter was successfully updated in database!");
     }
     else{

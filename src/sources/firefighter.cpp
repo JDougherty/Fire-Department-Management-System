@@ -37,7 +37,7 @@ Firefighter::Firefighter( QVector<QString> attributes )
   \param pDB Pointer to the database manager.
   \returns True upon successful load, false on failure.
 */
-bool Firefighter::LoadAttributes( int iID, DatabaseManager *pDB )
+bool Firefighter::loadAttributes( int iID, DatabaseManager *pDB )
 {
     QSqlQuery infoQuery;
 
@@ -59,7 +59,7 @@ bool Firefighter::LoadAttributes( int iID, DatabaseManager *pDB )
                       "zip,joindate,status,"
                       "hphone,wphone,cphone,"
                       "drvlic,cdl FROM firefighters WHERE id=?" );
-    infoQuery.addBindValue( iID );
+    infoQuery.addBindValue( _iID );
 
     // Execute the query
     if ( pDB->query( infoQuery ) )
@@ -70,12 +70,12 @@ bool Firefighter::LoadAttributes( int iID, DatabaseManager *pDB )
         {
             _attributes.push_back( infoQuery.value( i ).toString() );
         }
-        qDebug( "Firefighter Information (%d): Personal information retrieved successfully.", ID() );
+        qDebug( "Firefighter Information (%d): Personal information retrieved successfully.", _iID );
         return true;
     }
     else
     {
-        qWarning( "Firefighter Error (%d): Could not retrieve personal information from database. Database Error: %s", ID(), qPrintable( infoQuery.lastError().text() ) );
+        qWarning( "Firefighter Error (%d): Could not retrieve personal information from database. Database Error: %s", _iID, qPrintable( infoQuery.lastError().text() ) );
         return false;
     }
 }
@@ -85,7 +85,7 @@ bool Firefighter::LoadAttributes( int iID, DatabaseManager *pDB )
   \param pDB Pointer to the database manager.
   \returns True upon successful save, false on failure.
 */
-bool Firefighter::InsertToDatabase( DatabaseManager *pDB )
+bool Firefighter::insertToDatabase( DatabaseManager *pDB )
 {
     QSqlQuery addQuery;
 
@@ -135,7 +135,7 @@ bool Firefighter::InsertToDatabase( DatabaseManager *pDB )
   \param pDB Pointer to the database manager.
   \returns True upon successful save, false on failure.
 */
-bool Firefighter::UpdateAttributes( QVector<QString> attributes, DatabaseManager *pDB )
+bool Firefighter::updateAttributes( QVector<QString> attributes, DatabaseManager *pDB )
 {
     QSqlQuery updateQuery;
 
@@ -167,104 +167,104 @@ bool Firefighter::UpdateAttributes( QVector<QString> attributes, DatabaseManager
     // Execute the query
     if ( pDB->query( updateQuery ) )
     {
-        qDebug( "Firefighter Information (%d): Firefighter successfully updated in database.", ID() );
+        qDebug( "Firefighter Information (%d): Firefighter successfully updated in database.", _iID );
         return true;
     }
     else
     {
-        qWarning( "Firefighter Error (%d): Could not update firefighter information in database. Database Error: %s", ID(), qPrintable( updateQuery.lastError().text() ) );
+        qWarning( "Firefighter Error (%d): Could not update firefighter information in database. Database Error: %s", _iID, qPrintable( updateQuery.lastError().text() ) );
         return false;
     }
 }
 
 
 // ACCESSORS
-int Firefighter::ID( void )
+int Firefighter::id( void )
 {
     return _iID;
 }
 
-QString Firefighter::FirstName( void )
+QString Firefighter::firstName( void )
 {
     return _attributes[0];
 }
 
-QString Firefighter::MiddleName( void )
+QString Firefighter::middleName( void )
 {
     return _attributes[1];
 }
 
-QString Firefighter::LastName( void )
+QString Firefighter::lastName( void )
 {
     return _attributes[2];
 }
 
-QString Firefighter::Dob( void )
+QString Firefighter::dob( void )
 {
     return _attributes[3];
 }
 
-QString Firefighter::LocalID( void )
+QString Firefighter::localID( void )
 {
     return _attributes[4];
 }
 
-QString Firefighter::StateID( void )
+QString Firefighter::stateID( void )
 {
     return _attributes[5];
 }
 
-QString Firefighter::Address( void )
+QString Firefighter::address( void )
 {
     return _attributes[6];
 }
 
-QString Firefighter::City( void )
+QString Firefighter::city( void )
 {
     return _attributes[7];
 }
 
-QString Firefighter::State( void )
+QString Firefighter::state( void )
 {
     return _attributes[8];
 }
 
-QString Firefighter::ZipCode( void )
+QString Firefighter::zipCode( void )
 {
     return _attributes[9];
 }
 
-QString Firefighter::DateJoin( void )
+QString Firefighter::dateJoin( void )
 {
     return _attributes[10];
 }
 
-QString Firefighter::Status( void )
+QString Firefighter::status( void )
 {
     return _attributes[11];
 }
 
-QString Firefighter::Hphone( void )
+QString Firefighter::hphone( void )
 {
     return _attributes[12];
 }
 
-QString Firefighter::Wphone( void )
+QString Firefighter::wphone( void )
 {
     return _attributes[13];
 }
 
-QString Firefighter::Cphone( void )
+QString Firefighter::cphone( void )
 {
     return _attributes[14];
 }
 
-QString Firefighter::DrvLic( void )
+QString Firefighter::drvLic( void )
 {
     return _attributes[15];
 }
 
-QString Firefighter::CDL( void )
+QString Firefighter::cdl( void )
 {
     return _attributes[16];
 }

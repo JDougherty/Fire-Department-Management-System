@@ -72,7 +72,7 @@ void wndNewFirefighter::btnAdd_Clicked(){
     // Construct new firefighter with attributes
     Firefighter newFF(ffattributes);
 
-    if(newFF.InsertToDatabase(this->db)){
+    if(newFF.insertToDatabase(this->db)){
         QMessageBox::information(0,"Firefighter Information","Firefighter successfully added to database!");
     }
     else{

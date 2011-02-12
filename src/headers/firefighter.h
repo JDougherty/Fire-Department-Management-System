@@ -35,29 +35,29 @@ class Firefighter
                                 Firefighter( void );
                                 Firefighter( QVector<QString> attributes );
 
-        bool                    InsertToDatabase( DatabaseManager *pDB );
-        bool                    LoadAttributes( int iID, DatabaseManager *pDB );
-        bool                    UpdateAttributes( QVector<QString> attributes, DatabaseManager *pDB );
+        bool                    insertToDatabase( DatabaseManager *pDB );
+        bool                    loadAttributes( int iID, DatabaseManager *pDB );
+        bool                    updateAttributes( QVector<QString> attributes, DatabaseManager *pDB );
 
         // accessors
-        int                     ID( void );
-        QString                 FirstName( void );
-        QString                 MiddleName( void );
-        QString                 LastName( void );
-        QString                 Dob( void );
-        QString                 LocalID( void );
-        QString                 StateID( void );
-        QString                 Address( void );
-        QString                 City( void );
-        QString                 State( void );
-        QString                 ZipCode( void );
-        QString                 DateJoin( void );
-        QString                 Status( void );
-        QString                 Hphone( void );
-        QString                 Wphone( void );
-        QString                 Cphone( void );
-        QString                 DrvLic( void );
-        QString                 CDL( void );
+        int                     id( void );
+        QString                 firstName( void );
+        QString                 middleName( void );
+        QString                 lastName( void );
+        QString                 dob( void );
+        QString                 localID( void );
+        QString                 stateID( void );
+        QString                 address( void );
+        QString                 city( void );
+        QString                 state( void );
+        QString                 zipCode( void );
+        QString                 dateJoin( void );
+        QString                 status( void );
+        QString                 hphone( void );
+        QString                 wphone( void );
+        QString                 cphone( void );
+        QString                 drvLic( void );
+        QString                 cdl( void );
 };
 
 #endif // FIREFIGHTER_H

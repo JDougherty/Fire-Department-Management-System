@@ -39,7 +39,7 @@ wndEditFirefighter::wndEditFirefighter(QWidget *parent, DatabaseManager *newDb, 
 
         // Create a firefighter object and load its attributes
         edit = new Firefighter;
-        if(!edit->LoadAttributes(id,db)){
+        if(!edit->loadAttributes(id,db)){
             QMessageBox::warning(0,"Firefighter Error: Read","Could not retrieve firefighter information from database. See log for more information.");
         }
 
@@ -71,23 +71,23 @@ wndEditFirefighter::~wndEditFirefighter()
 // private:
 
 void wndEditFirefighter::updateFirefighterFields(){
-    ui->txtFirstName->setText(edit->FirstName());
-    ui->txtMiddleName->setText(edit->MiddleName());
-    ui->txtLastName->setText(edit->LastName());
-    ui->dateDob->setDate(QVariant(edit->Dob()).toDate());
-    ui->txtLocalID->setText(edit->LocalID());
-    ui->txtStateID->setText(edit->StateID());
-    ui->txtAddress->setText(edit->Address());
-    ui->txtCity->setText(edit->City());
-    ui->txtState->setCurrentIndex(ui->txtState->findText(edit->State()));
-    ui->txtZipCode->setText(edit->ZipCode());
-    ui->dateJoin->setDate(QVariant(edit->DateJoin()).toDate());
-    ui->txtStatus->setText(edit->Status());
-    ui->txtHphone->setText(edit->Hphone());
-    ui->txtWphone->setText(edit->Wphone());
-    ui->txtCphone->setText(edit->Cphone());
-    ui->txtDrvLic->setText(edit->DrvLic());
-    ui->txtCDL->setText(edit->CDL());
+    ui->txtFirstName->setText(edit->firstName());
+    ui->txtMiddleName->setText(edit->middleName());
+    ui->txtLastName->setText(edit->lastName());
+    ui->dateDob->setDate(QVariant(edit->dob()).toDate());
+    ui->txtLocalID->setText(edit->localID());
+    ui->txtStateID->setText(edit->stateID());
+    ui->txtAddress->setText(edit->address());
+    ui->txtCity->setText(edit->city());
+    ui->txtState->setCurrentIndex(ui->txtState->findText(edit->state()));
+    ui->txtZipCode->setText(edit->zipCode());
+    ui->dateJoin->setDate(QVariant(edit->dateJoin()).toDate());
+    ui->txtStatus->setText(edit->status());
+    ui->txtHphone->setText(edit->hphone());
+    ui->txtWphone->setText(edit->wphone());
+    ui->txtCphone->setText(edit->cphone());
+    ui->txtDrvLic->setText(edit->drvLic());
+    ui->txtCDL->setText(edit->cdl());
 }
 
 
@@ -99,7 +99,7 @@ void wndEditFirefighter::updateTrainingList(){
                          "FROM training LEFT JOIN ("
                            "SELECT * FROM fftraining WHERE ffid=?) as fft ON "
                          "training.id=fft.tid");
-    traininglist.addBindValue(edit->ID());
+    traininglist.addBindValue(edit->id());
     if(db->query(traininglist)){
         while(traininglist.next()){
             QListWidgetItem *newitem = new QListWidgetItem(traininglist.value(0).toString());
@@ -115,7 +115,7 @@ void wndEditFirefighter::updateTrainingList(){
     }
     else{
         qWarning("Firefighter Error (%d): Could not get training exam information. Database Error: %s",
-                 edit->ID(),qPrintable(traininglist.lastError().text()));
+                 edit->id(),qPrintable(traininglist.lastError().text()));
     }
 }
 
@@ -145,7 +145,7 @@ void wndEditFirefighter::updateEquipmentList(){
                          "FROM equipment LEFT JOIN ("
                            "SELECT * FROM ffequipment WHERE ffid=?) as ffe ON "
                          "equipment.id=ffe.eqid");
-    equipmentlist.addBindValue(edit->ID());
+    equipmentlist.addBindValue(edit->id());
     if(db->query(equipmentlist)){
         while(equipmentlist.next()){
             QListWidgetItem *newitem = new QListWidgetItem(equipmentlist.value(0).toString());
@@ -161,7 +161,7 @@ void wndEditFirefighter::updateEquipmentList(){
     }
     else{
         qWarning("Firefighter Error (%d): Could not get equipment information. Database Error: %s",
-                 edit->ID(),qPrintable(equipmentlist.lastError().text()));
+                 edit->id(),qPrintable(equipmentlist.lastError().text()));
     }
 }
 
@@ -224,7 +224,7 @@ void wndEditFirefighter::btnUpdatePersonalClicked(){
     ffattributes.append(ui->txtDrvLic->text());
     ffattributes.append(ui->txtCDL->text());
 
-    if(edit->UpdateAttributes(ffattributes,db)){
+    if(edit->updateAttributes(ffattributes,db)){
         QMessageBox::information(this,"Firefighter Information: Update","Firefighter was successfully updated in database!");
     }
     else{
@@ -261,13 +261,13 @@ void wndEditFirefighter::trainingItemClicked(QListWidgetItem* item){
         QSqlQuery addFFTraining;
 
         addFFTraining.prepare("INSERT INTO fftraining (tid,ffid) SELECT id,? FROM training WHERE title=?");
-        addFFTraining.addBindValue(edit->ID());
+        addFFTraining.addBindValue(edit->id());
         addFFTraining.addBindValue(exam);
 
         // And execute the query, catching any problems
         if(!db->query(addFFTraining)){
             qWarning("Firefighter Error (%d): Could not link training exam `%s`. Database Error: %s",
-                     edit->ID(),qPrintable(exam),qPrintable(addFFTraining.lastError().text()));
+                     edit->id(),qPrintable(exam),qPrintable(addFFTraining.lastError().text()));
         }
 
         toggleTrainingInformationEnabled(item);
@@ -282,13 +282,13 @@ void wndEditFirefighter::trainingItemClicked(QListWidgetItem* item){
             // If so, build a query to remove the link from the database
             QSqlQuery removeFFTraining;
             removeFFTraining.prepare("DELETE FROM fftraining WHERE ffid=? AND tid=(SELECT id FROM training WHERE title=?)");
-            removeFFTraining.addBindValue(edit->ID());
+            removeFFTraining.addBindValue(edit->id());
             removeFFTraining.addBindValue(exam);
 
             // Attempt to execute the query, catching any problems
             if(!db->query(removeFFTraining)){
                 qWarning("Firefighter Error (%d): Could not unlink training exam `%s`. Database Error: %s",
-                        edit->ID(),qPrintable(exam),qPrintable(removeFFTraining.lastError().text()));
+                        edit->id(),qPrintable(exam),qPrintable(removeFFTraining.lastError().text()));
             }
 
             toggleTrainingInformationEnabled(item);
@@ -326,7 +326,7 @@ void wndEditFirefighter::btnUpdateTrainingClicked(){
         updateQuery.addBindValue(ui->txtFFSig->text());
         updateQuery.addBindValue(ui->txtSupSig->text());
         updateQuery.addBindValue(ui->dateTraining->date().toString("yyyy-MM-dd 00:00:00.000"));
-        updateQuery.addBindValue(edit->ID());
+        updateQuery.addBindValue(edit->id());
         updateQuery.addBindValue(exam);
 
         if(db->query(updateQuery)){
@@ -335,7 +335,7 @@ void wndEditFirefighter::btnUpdateTrainingClicked(){
         else{
             QMessageBox::warning(0,"Firefighter Error: Training Update","There was a problem updating the training exam information. See log for more information.");
             qWarning("Firefighter Error (%d): Could not update training exam `%s`. Database Error: %s",
-                     edit->ID(),qPrintable(exam),qPrintable(updateQuery.lastError().text()));
+                     edit->id(),qPrintable(exam),qPrintable(updateQuery.lastError().text()));
         }
     }
 }
@@ -346,7 +346,7 @@ void wndEditFirefighter::updateTrainingInfo(QListWidgetItem* item){
         QString exam(item->data(Qt::DisplayRole).toString());
         QSqlQuery selectQuery;
         selectQuery.prepare("SELECT ffesig,supesig,tdate FROM fftraining WHERE ffid=? AND tid=(SELECT id FROM training WHERE title=?)");
-        selectQuery.addBindValue(edit->ID());
+        selectQuery.addBindValue(edit->id());
         selectQuery.addBindValue(exam);
         if(db->query(selectQuery)){
             selectQuery.next();
@@ -356,7 +356,7 @@ void wndEditFirefighter::updateTrainingInfo(QListWidgetItem* item){
         }
         else{
             qWarning("Firefighter Error (%d): Could not retrieve information for training exam `%s`. Database Error: %s",
-                     edit->ID(),qPrintable(exam),qPrintable(selectQuery.lastError().text()));
+                     edit->id(),qPrintable(exam),qPrintable(selectQuery.lastError().text()));
         }
     }
 }
@@ -378,13 +378,13 @@ void wndEditFirefighter::equipmentItemClicked(QListWidgetItem* item){
         QSqlQuery addFFequip;
 
         addFFequip.prepare("INSERT INTO ffequipment (eqid,ffid) SELECT id,? FROM equipment WHERE title=?");
-        addFFequip.addBindValue(edit->ID());
+        addFFequip.addBindValue(edit->id());
         addFFequip.addBindValue(equip);
 
         // And execute the query, catching any problems
         if(!db->query(addFFequip)){
             qWarning("Firefighter Error (%d): Could not link equipment `%s`. Database Error: %s",
-                     edit->ID(),qPrintable(equip),qPrintable(addFFequip.lastError().text()));
+                     edit->id(),qPrintable(equip),qPrintable(addFFequip.lastError().text()));
         }
 
         toggleEquipmentInformationEnabled(item);
@@ -399,13 +399,13 @@ void wndEditFirefighter::equipmentItemClicked(QListWidgetItem* item){
             // If so, build a query to remove the link from the database
             QSqlQuery removeFFEquip;
             removeFFEquip.prepare("DELETE FROM ffequipment WHERE ffid=? AND eqid=(SELECT id FROM equipment WHERE title=?)");
-            removeFFEquip.addBindValue(edit->ID());
+            removeFFEquip.addBindValue(edit->id());
             removeFFEquip.addBindValue(equip);
 
             // Attempt to execute the query, catching any problems
             if(!db->query(removeFFEquip)){
                 qWarning("Firefighter Error (%d): Could not unlink equipment `%s`. Database Error: %s",
-                        edit->ID(),qPrintable(equip),qPrintable(removeFFEquip.lastError().text()));
+                        edit->id(),qPrintable(equip),qPrintable(removeFFEquip.lastError().text()));
             }
 
             toggleEquipmentInformationEnabled(item);
@@ -432,7 +432,7 @@ void wndEditFirefighter::btnUpdateEquipmentClicked(){
         updateQuery.addBindValue(ui->txtEquipType->text());
         updateQuery.addBindValue(ui->txtEquipSerial->text());
         updateQuery.addBindValue(ui->txtEquipYear->text());
-        updateQuery.addBindValue(edit->ID());
+        updateQuery.addBindValue(edit->id());
         updateQuery.addBindValue(equip);
         if(db->query(updateQuery)){
             QMessageBox::information(0,"Firefighter Information: Equipment Update","Equipment information successfully updated.");
@@ -440,7 +440,7 @@ void wndEditFirefighter::btnUpdateEquipmentClicked(){
         else{
             QMessageBox::warning(0,"Firefighter Error: Equipment Update","There was a problem updating the equipment information. See log for more information.");
             qWarning("Firefighter Error (%d): Could not update equipment `%s`. Database Error: %s",
-                     edit->ID(),qPrintable(equip),qPrintable(updateQuery.lastError().text()));
+                     edit->id(),qPrintable(equip),qPrintable(updateQuery.lastError().text()));
         }
     }
 }
@@ -450,7 +450,7 @@ void wndEditFirefighter::updateEquipmentInfo(QListWidgetItem* item){
         QString equip(item->data(Qt::DisplayRole).toString());
         QSqlQuery selectQuery;
         selectQuery.prepare("SELECT issued,size,type,serial,year FROM ffequipment WHERE ffid=? AND eqid=(SELECT id FROM equipment WHERE title=?)");
-        selectQuery.addBindValue(edit->ID());
+        selectQuery.addBindValue(edit->id());
         selectQuery.addBindValue(equip);
         if(db->query(selectQuery)){
             selectQuery.next();
@@ -465,6 +465,6 @@ void wndEditFirefighter::updateEquipmentInfo(QListWidgetItem* item){
         }
         else{
             qWarning("Firefighter Error (%d): Could not retrieve information for equipment `%s`. Database Error: %s",
-                     edit->ID(),qPrintable(equip),qPrintable(selectQuery.lastError().text()));
+                     edit->id(),qPrintable(equip),qPrintable(selectQuery.lastError().text()));
         }
 }

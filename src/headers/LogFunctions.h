@@ -26,6 +26,7 @@
 QFile debugLogFile;
 QTextStream debugErr;
 
+//! Prepend message type labels to textstream output
 void msgRedirection( QtMsgType type, const char *msg )
 {
     switch ( type )
@@ -45,6 +46,7 @@ void msgRedirection( QtMsgType type, const char *msg )
     }
 }
 
+//! Redirect all debug output to a log file
 void setupDebugRedirection()
 {
     debugLogFile.setFileName( "fdms.log" );

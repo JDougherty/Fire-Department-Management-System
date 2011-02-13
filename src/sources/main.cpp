@@ -51,35 +51,63 @@ int main( int argc, char *argv[] )
         qWarning( "Resource Error: Could not load Free 3 of 9 Extended barcode font." );
     }
 
+    // Settings file DNE
     if ( !sm.exists() )
     {
         wndSetup setup( 0, &db, &sm, &mw );
         setup.show();
-
         qDebug( "Running program setup." );
-
         return application.exec();
     }
-    else
+
+    sm.load();
+    db.setDBFile( sm.getDBFile() );
+
+    // DB file DNE
+    if ( !db.exists() )
     {
-        sm.load();
-        db.setDBFile( sm.getDBFile() );
-        mw.showMaximized();
+        int iResult = QMessageBox::question( 0, "Database not found.", "Database could not be found. Run setup?",
+                                             QMessageBox::Yes | QMessageBox::No );
 
-        if ( !db.open() )
+        switch ( iResult )
         {
-            QMessageBox::critical( &mw, "Critical Error", "Database could not be opened.", QMessageBox::Ok );
-            qCritical( "Critical Error - Database: Could not be opened." );
-            return 0;
+            case QMessageBox::Yes:
+            {
+                wndSetup setup( 0, &db, &sm, &mw );
+                setup.show();
+                qDebug( "Running program setup." );
+                return application.exec();
+            }
+            case QMessageBox::No:
+            {
+                QMessageBox::critical( 0, "Critical Error", "Startup cannnot continue. Closing program.", QMessageBox::Ok );
+                qCritical( "Critical Error - Startup cannot continue." );
+                return 0;
+            }
+            default:
+            {
+               QMessageBox::critical( 0, "Critical Error", "Default case reached.", QMessageBox::Ok );
+               qCritical( "Setup: Critical Error - Default case reached." );
+               return 0;
+            }
         }
-
-        if ( !db.verify() )
-        {
-            QMessageBox::critical( &mw, "Critical Error", "Database has an invalid structure.", QMessageBox::Ok );
-            qCritical( "Critical Error - Database: Invalid structure." );
-            return 0;
-        }
-
-        return application.exec();
     }
+
+    mw.showMaximized();
+
+    if ( !db.open() )
+    {
+        QMessageBox::critical( &mw, "Critical Error", "Database could not be opened.", QMessageBox::Ok );
+        qCritical( "Critical Error - Database: Could not be opened." );
+        return 0;
+    }
+
+    if ( !db.verify() )
+    {
+        QMessageBox::critical( &mw, "Critical Error", "Database has an invalid structure.", QMessageBox::Ok );
+        qCritical( "Critical Error - Database: Invalid structure." );
+        return 0;
+    }
+
+    return application.exec();
 }

@@ -17,127 +17,133 @@
 
 */
 
-
 #include "../headers/mainwindow.h"
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent, DatabaseManager *newDb) :
-    QMainWindow(parent),ui(new Ui::MainWindow)
+/*!
+  \param pParent Pointer to the parent window.
+  \param pDB Pointer to the database manager.
+*/
+MainWindow::MainWindow( QWidget *pParent, DatabaseManager *pDB ) :
+    QMainWindow( pParent ), _pUI( new Ui::MainWindow )
 {
-    ui->setupUi(this);
-    db=newDb;
+    QWidget *spacer;
+
+    _pUI->setupUi( this );
+    _pDB = pDB;
 
     mdiArea = new QMdiArea;
-    mdiArea->setBackground(QBrush::QBrush(QColor::QColor(128,0,0)));
-    mdiArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    setCentralWidget(mdiArea);
+    mdiArea->setBackground( QBrush::QBrush( QColor::QColor( 128, 0, 0 ) ) );
+    mdiArea->setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );
+    mdiArea->setVerticalScrollBarPolicy( Qt::ScrollBarAsNeeded );
+    setCentralWidget( mdiArea );
 
-    connect(ui->actFirefighterAdd, SIGNAL(triggered()), this, SLOT(mdiNewFirefighter()));
-    connect(ui->actNew_Drill, SIGNAL(triggered()), this, SLOT(mdiActiveDrill()));
-    connect(ui->actNew_Call,SIGNAL(triggered()),this,SLOT(mdiActiveCall()));
-    connect(ui->actInventory_Control, SIGNAL(triggered()), this, SLOT(mdiInventoryControl()));
-    connect(ui->actInventory_Check, SIGNAL(triggered()), this, SLOT(mdiInventoryCheck()));
-
-    connect(ui->actSearch, SIGNAL(triggered()), this, SLOT(menuSearchTriggered()));
-
-    QWidget *spacer=new QWidget(this);
-    spacer->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-    ui->toolBar->addWidget(spacer);
-    //ui->toolBar->addSeparator();
-    ui->toolBar->addWidget(ui->lblSearch);
-    ui->toolBar->addWidget(ui->txtSearch);
-    ui->toolBar->addWidget(ui->cmbSearch );
-
+    spacer = new QWidget( this );
+    spacer->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
+    _pUI->toolBar->addWidget( spacer );
+    _pUI->toolBar->addSeparator();
+    _pUI->toolBar->addWidget( _pUI->lblSearch );
+    _pUI->toolBar->addWidget( _pUI->txtSearch );
+    _pUI->toolBar->addWidget( _pUI->cmbSearch );
 }
 
-MainWindow::~MainWindow()
+MainWindow::~MainWindow( void )
 {
-    delete ui;
+    delete _pUI;
 }
 
-void MainWindow::changeEvent(QEvent *e)
+void MainWindow::changeEvent( QEvent *e )
 {
-    QMainWindow::changeEvent(e);
-    switch (e->type()) {
-    case QEvent::LanguageChange:
-        ui->retranslateUi(this);
-        break;
-    default:
-        break;
+    QMainWindow::changeEvent( e );
+
+    switch ( e->type() )
+    {
+        case QEvent::LanguageChange:
+            _pUI->retranslateUi( this );
+            break;
+        default:
+            break;
     }
 }
 
-void MainWindow::StatusUpdate(QString message, int timeout){
-    ui->statusBar->showMessage(message,timeout);
+//! Sets the status bar message.
+/*!
+  \param sMessage Message to be displayed.
+  \param iTimeout Amount of time to display the message.
+*/
+void MainWindow::statusUpdate( QString sMessage, int iTimeout )
+{
+    _pUI->statusBar->showMessage( sMessage, iTimeout );
 }
 
-
-void MainWindow::txtSearchReturnPressed(){
-    wndSearch *child= new wndSearch(this, this, db, ui->cmbSearch->currentText(), ui->txtSearch->text());
-    mdiArea->addSubWindow(child);
+//! User pressed enter in the search bar.
+void MainWindow::mdiSearch( void )
+{
+    wndSearch *child = new wndSearch( this, this, _pDB, _pUI->cmbSearch->currentText(), _pUI->txtSearch->text() );
+    mdiArea->addSubWindow( child );
     child->show();
 }
 
-void MainWindow::menuSearchTriggered()
+//! User clicked a button to add a drill.
+void MainWindow::mdiAddDrill( void )
 {
-    ui->txtSearch->setFocus();
-}
-
-// THESE FUNCTIONS SHOW CHILD MDI WINDOWS
-void MainWindow::mdiNewFirefighter()
-{
-    wndNewFirefighter *child = new wndNewFirefighter(this,db);
-    mdiArea->addSubWindow(child);
+    wndActiveDrill *child = new wndActiveDrill(this,_pDB);
+    mdiArea->addSubWindow( child );
     child->show();
 }
 
-
-void MainWindow::mdiActiveDrill()
+//! User clicked a button to edit a drill.
+void MainWindow::mdiEditDrill( int iID )
 {
-    wndActiveDrill *child = new wndActiveDrill(this,db);
-    mdiArea->addSubWindow(child);
+    wndActiveDrill *child = new wndActiveDrill( this, _pDB, iID );
+    mdiArea->addSubWindow( child );
     child->show();
 }
 
-void MainWindow::mdiActiveDrill(int id)
+//! User clicked a button to add a call.
+void MainWindow::mdiAddCall( void )
 {
-    wndActiveDrill *child = new wndActiveDrill(this,db,id);
-    mdiArea->addSubWindow(child);
+    wndActiveCall *child = new wndActiveCall( this, _pDB );
+    mdiArea->addSubWindow( child );
     child->show();
 }
 
-void MainWindow::mdiActiveCall()
+//! User clicked a button to edit a call.
+void MainWindow::mdiEditCall( int iID )
 {
-    wndActiveCall *child = new wndActiveCall(this,db);
-    mdiArea->addSubWindow(child);
+    wndActiveCall *child = new wndActiveCall( this, _pDB, iID );
+    mdiArea->addSubWindow( child );
     child->show();
 }
 
-void MainWindow::mdiActiveCall(int id)
-{
-    wndActiveCall *child = new wndActiveCall(this,db,id);
-    mdiArea->addSubWindow(child);
-    child->show();
-}
-
-void MainWindow::mdiInventoryControl()
+//! User clicked a button to modify the inventory.
+void MainWindow::mdiInventoryControl( void )
 {
     wndinventorycontrol *child = new wndinventorycontrol;
-    mdiArea->addSubWindow(child);
+    mdiArea->addSubWindow( child );
     child->show();
 }
 
-void MainWindow::mdiInventoryCheck()
+//! User clicked a button to check the inventory.
+void MainWindow::mdiInventoryCheck( void )
 {
     wndInventoryCheck *child = new wndInventoryCheck;
-    mdiArea->addSubWindow(child);
+    mdiArea->addSubWindow( child );
     child->show();
 }
 
+//! User clicked a button to add a firefighter.
+void MainWindow::mdiAddFirefighter( void )
+{
+    wndNewFirefighter *child = new wndNewFirefighter( this, _pDB );
+    mdiArea->addSubWindow( child );
+    child->show();
+}
 
-void MainWindow::mdiEditFirefighter(int id){
-    wndEditFirefighter *child = new wndEditFirefighter(this,db,id);
-    mdiArea->addSubWindow(child);
+//! User clicked a button to edit a firefighter.
+void MainWindow::mdiEditFirefighter( int iID )
+{
+    wndEditFirefighter *child = new wndEditFirefighter( this, _pDB, iID );
+    mdiArea->addSubWindow( child );
     child->show();
 }

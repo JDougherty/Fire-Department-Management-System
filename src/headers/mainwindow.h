@@ -36,46 +36,41 @@
 
 QT_END_NAMESPACE
 
-namespace Ui {
+namespace Ui
+{
     class MainWindow;
 }
 
-
-
-class MainWindow : public QMainWindow {
+//! The program's main window.
+class MainWindow : public QMainWindow
+{
     Q_OBJECT
-public:
-    MainWindow(QWidget *parent = 0);
-    MainWindow(QWidget *parent2 = 0, DatabaseManager *newDb=0);
-    ~MainWindow();
-    QMdiArea *mdiArea;
-    void StatusUpdate(QString message,int timeout=0);
-    void mdiEditFirefighter(int id);
-    void mdiActiveDrill(int id);
-    void mdiActiveCall(int id);
 
-protected:
-    void changeEvent(QEvent *e);
+    private:
+        Ui::MainWindow          *_pUI;
+        DatabaseManager         *_pDB;
 
-private slots:
-    void mdiNewFirefighter();
-    void mdiActiveDrill();
-    void mdiActiveCall();
-    void mdiInventoryControl();
-    void mdiInventoryCheck();
+    public:
+        QMdiArea                *mdiArea;
 
+                                MainWindow( QWidget *pParent, DatabaseManager *pDB );
+                                ~MainWindow( void );
 
-    void menuSearchTriggered();
+        void                    statusUpdate( QString message,int iTimeout = 0 );
+        void                    mdiEditFirefighter( int iID );
+        void                    mdiEditDrill( int iID );
+        void                    mdiEditCall( int iID );
 
-    void txtSearchReturnPressed();
+    protected:
+        void                    changeEvent( QEvent *e );
 
-
-private:
-
-    QSignalMapper *windowMapper;
-    Ui::MainWindow *ui;
-
-    DatabaseManager *db;
+    private slots:
+        void                    mdiSearch( void );
+        void                    mdiAddFirefighter( void );
+        void                    mdiAddDrill( void );
+        void                    mdiAddCall( void );
+        void                    mdiInventoryControl( void );
+        void                    mdiInventoryCheck( void );
 };
 
 #endif // MAINWINDOW_H

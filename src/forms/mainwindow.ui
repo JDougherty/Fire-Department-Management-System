@@ -95,12 +95,12 @@
     </property>
     <addaction name="actSearch"/>
     <addaction name="separator"/>
-    <addaction name="actFirefighterAdd"/>
-    <addaction name="actNew_Drill"/>
-    <addaction name="actNew_Call"/>
+    <addaction name="actAddFirefighter"/>
+    <addaction name="actAddDrill"/>
+    <addaction name="actAddCall"/>
     <addaction name="separator"/>
-    <addaction name="actInventory_Control"/>
-    <addaction name="actInventory_Check"/>
+    <addaction name="actInventoryControl"/>
+    <addaction name="actInventoryCheck"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -128,10 +128,10 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="actFirefighterAdd"/>
-   <addaction name="actNew_Drill"/>
-   <addaction name="actNew_Call"/>
-   <addaction name="actInventory_Control"/>
+   <addaction name="actAddFirefighter"/>
+   <addaction name="actAddDrill"/>
+   <addaction name="actAddCall"/>
+   <addaction name="actInventoryControl"/>
   </widget>
   <action name="actQuit">
    <property name="text">
@@ -143,16 +143,16 @@
     <string>Search</string>
    </property>
   </action>
-  <action name="actFirefighterAdd">
+  <action name="actAddFirefighter">
    <property name="icon">
     <iconset resource="../resources/resources.qrc">
-     <normaloff>:/icons/Firefighter_Add.png</normaloff>:/icons/Firefighter_Add.png</iconset>
+     <normaloff>:/icons/AddFirefighter.png</normaloff>:/icons/AddFirefighter.png</iconset>
    </property>
    <property name="text">
     <string>Add Firefighter</string>
    </property>
    <property name="toolTip">
-    <string>Firefighter Add</string>
+    <string>Add Firefighter</string>
    </property>
   </action>
   <action name="actAbout">
@@ -160,31 +160,31 @@
     <string>About</string>
    </property>
   </action>
-  <action name="actNew_Drill">
+  <action name="actAddDrill">
    <property name="icon">
     <iconset resource="../resources/resources.qrc">
-     <normaloff>:/icons/Drill_New.png</normaloff>:/icons/Drill_New.png</iconset>
+     <normaloff>:/icons/AddDrill.png</normaloff>:/icons/AddDrill.png</iconset>
    </property>
    <property name="text">
-    <string>New Drill</string>
+    <string>Add Drill</string>
    </property>
    <property name="toolTip">
-    <string>New Drill</string>
+    <string>Add Drill</string>
    </property>
   </action>
-  <action name="actNew_Call">
+  <action name="actAddCall">
    <property name="icon">
     <iconset resource="../resources/resources.qrc">
-     <normaloff>:/icons/Call_New.png</normaloff>:/icons/Call_New.png</iconset>
+     <normaloff>:/icons/AddCall.png</normaloff>:/icons/AddCall.png</iconset>
    </property>
    <property name="text">
-    <string>New Call</string>
+    <string>Add Call</string>
    </property>
   </action>
-  <action name="actInventory_Control">
+  <action name="actInventoryControl">
    <property name="icon">
     <iconset resource="../resources/resources.qrc">
-     <normaloff>:/icons/Inventory_Control.png</normaloff>:/icons/Inventory_Control.png</iconset>
+     <normaloff>:/icons/InventoryControl.png</normaloff>:/icons/InventoryControl.png</iconset>
    </property>
    <property name="text">
     <string>Inventory Control</string>
@@ -193,10 +193,10 @@
     <string>Inventory Control</string>
    </property>
   </action>
-  <action name="actInventory_Check">
+  <action name="actInventoryCheck">
    <property name="icon">
     <iconset resource="../resources/resources.qrc">
-     <normaloff>:/icons/Inventory_Check.png</normaloff>:/icons/Inventory_Check.png</iconset>
+     <normaloff>:/icons/InventoryCheck.png</normaloff>:/icons/InventoryCheck.png</iconset>
    </property>
    <property name="text">
     <string>Inventory Check</string>
@@ -228,7 +228,7 @@
    <sender>txtSearch</sender>
    <signal>returnPressed()</signal>
    <receiver>MainWindow</receiver>
-   <slot>txtSearchReturnPressed()</slot>
+   <slot>mdiSearch()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>409</x>
@@ -237,6 +237,86 @@
     <hint type="destinationlabel">
      <x>409</x>
      <y>134</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actAddCall</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>mdiAddCall()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>305</x>
+     <y>207</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actAddDrill</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>mdiAddDrill()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>305</x>
+     <y>207</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actAddFirefighter</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>mdiAddFirefighter()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>305</x>
+     <y>207</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actInventoryCheck</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>mdiInventoryCheck()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>305</x>
+     <y>207</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actInventoryControl</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>mdiInventoryControl()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>305</x>
+     <y>207</y>
     </hint>
    </hints>
   </connection>

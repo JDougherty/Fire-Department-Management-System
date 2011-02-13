@@ -1,11 +1,11 @@
 <RCC>
     <qresource prefix="/icons">
-        <file>Firefighter_Add.png</file>
         <file>Icon.png</file>
-        <file>Inventory_Check.png</file>
-        <file>Inventory_Control.png</file>
-        <file>Call_New.png</file>
-        <file>Drill_New.png</file>
+        <file>AddCall.png</file>
+        <file>AddDrill.png</file>
+        <file>AddFirefighter.png</file>
+        <file>InventoryCheck.png</file>
+        <file>InventoryControl.png</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>FRE3OF9X.TTF</file>

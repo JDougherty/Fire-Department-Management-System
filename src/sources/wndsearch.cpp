@@ -149,10 +149,10 @@ void wndSearch::tableDoubleClicked(QModelIndex tmp){
         mdiparent->mdiEditFirefighter(id.toInt());
     }
     if(dtype=="Drills"){
-        mdiparent->mdiActiveDrill(id.toInt());
+        mdiparent->mdiEditDrill(id.toInt());
     }
     if(dtype=="Calls"){
-        mdiparent->mdiActiveCall(id.toInt());
+        mdiparent->mdiEditCall(id.toInt());
     }
 }
 

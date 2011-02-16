@@ -67,7 +67,72 @@
   </widget>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>btnShowAll</sender>
+   <signal>clicked()</signal>
+   <receiver>wndSearch</receiver>
+   <slot>showAllClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>245</x>
+     <y>311</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>165</x>
+     <y>165</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnRefresh</sender>
+   <signal>clicked()</signal>
+   <receiver>wndSearch</receiver>
+   <slot>refreshClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>245</x>
+     <y>311</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>165</x>
+     <y>165</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tblResults</sender>
+   <signal>doubleClicked(QModelIndex)</signal>
+   <receiver>wndSearch</receiver>
+   <slot>tableDoubleClicked(QModelIndex)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>165</x>
+     <y>151</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>165</x>
+     <y>165</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tblResults</sender>
+   <signal>customContextMenuRequested(QPoint)</signal>
+   <receiver>wndSearch</receiver>
+   <slot>resultsContextMenu(QPoint)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>165</x>
+     <y>151</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>165</x>
+     <y>165</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
  <slots>
   <slot>tblDoubleClicked()</slot>
  </slots>

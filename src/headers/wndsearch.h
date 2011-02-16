@@ -30,38 +30,40 @@
 
 class MainWindow;
 
-namespace Ui {
+namespace Ui
+{
     class wndSearch;
 }
 
+//! Show search results in an interactable table.
 class wndSearch : public QMainWindow
 {
     Q_OBJECT
 
-public:
-    explicit wndSearch(QWidget *parent = 0);
-    explicit wndSearch(QWidget *parent = 0,
-                       MainWindow *nmdiparent=0,
-                       DatabaseManager *newDb=0, QString newdtype="", QString query="");
-    ~wndSearch();
+    private:
+        Ui::wndSearch           *_pUI;
+        MainWindow              *_pMW;
+        DatabaseManager         *_pDB;
 
-private:
-    Ui::wndSearch *ui;
-    DatabaseManager *db;
-    QString dtype;
-    QString query;
-    QStringList headers;
-    QModelIndex lastCellRightClicked;
-    MainWindow *mdiparent;
+        QString                 _sSearchType,
+                                _sSearch;
 
-    void Search(QString dtype, QString query);
+        QStringList             _slTableHeaders;
 
-private slots:
-    void tableDoubleClicked(QModelIndex);
-    void refreshClicked();
-    void showAllClicked();
-    void resultsContextMenu(const QPoint &);
-    void resultsDeleteDatum();
+        QModelIndex             _lastCellRightClicked;
+
+        void                    Search( QString sSearchType, QString sSearch );
+
+    private slots:
+        void                    tableDoubleClicked( QModelIndex cell );
+        void                    refreshClicked( void );
+        void                    showAllClicked( void );
+        void                    resultsContextMenu( const QPoint &point );
+        void                    resultsDeleteDatum( void );
+
+    public:
+                                wndSearch( QWidget *pParent, MainWindow *pMW, DatabaseManager *pDB, QString sSearchType, QString sQuery );
+                                ~wndSearch( void );
 };
 
 #endif // WNDSEARCH_H

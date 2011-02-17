@@ -24,7 +24,9 @@
 #include <QListWidgetItem>
 #include "databasemanager.h"
 #include "firefighter.h"
-namespace Ui {
+
+namespace Ui
+{
     class wndEditFirefighter;
 }
 
@@ -32,37 +34,34 @@ class wndEditFirefighter : public QMainWindow
 {
     Q_OBJECT
 
-public:
-    explicit wndEditFirefighter(QWidget *parent = 0);
-    wndEditFirefighter(QWidget *parent2 = 0, DatabaseManager *newDb=0, int id=0);
-    ~wndEditFirefighter();
+    private:
+        Ui::wndEditFirefighter  *_pUI;
+        DatabaseManager         *_pDB;
+        Firefighter             _FF;
 
-private:
-    Ui::wndEditFirefighter *ui;
-    DatabaseManager *db;
-    Firefighter *edit;
+        void                    updateFirefighterFields( void );
 
+        void                    updateTrainingList( void );
+        void                    toggleTrainingInformationEnabled( QListWidgetItem *item );
 
-    void updateFirefighterFields();
+        void                    updateEquipmentList( void );
+        void                    toggleEquipmentInformationEnabled( QListWidgetItem *item );
 
-    void updateTrainingList();
-    void toggleTrainingInformationEnabled(QListWidgetItem* item);
+    private slots:
+        void                    btnUpdatePersonalClicked( void );
 
-    void updateEquipmentList();
-    void toggleEquipmentInformationEnabled(QListWidgetItem* item);
+        void                    trainingItemClicked( QListWidgetItem *item );
+        void                    btnUpdateTrainingClicked( void );
+        void                    updateTrainingInfo( QListWidgetItem *item );
 
-private slots:
-    void btnUpdatePersonalClicked();
+        void                    equipmentItemClicked( QListWidgetItem *item );
+        void                    btnUpdateEquipmentClicked( void );
+        void                    updateEquipmentInfo( QListWidgetItem *item );
 
-    void trainingItemClicked(QListWidgetItem*);
-    void btnUpdateTrainingClicked();
-    void updateTrainingInfo(QListWidgetItem*);
-
-    void equipmentItemClicked(QListWidgetItem*);
-    void btnUpdateEquipmentClicked();
-    void updateEquipmentInfo(QListWidgetItem*);
-
-
+    public:
+                                wndEditFirefighter( QWidget *pParent, DatabaseManager *pDB );
+                                wndEditFirefighter( QWidget *pParent, DatabaseManager *pDB, int id );
+                                ~wndEditFirefighter( void );
 };
 
 #endif // WNDEDITFIREFIGHTER_H

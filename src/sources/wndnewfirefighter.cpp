@@ -17,65 +17,52 @@
 
 */
 
-
 #include "../headers/wndnewfirefighter.h"
 #include "ui_wndnewfirefighter.h"
 
-
-wndNewFirefighter::wndNewFirefighter(QWidget *parent, DatabaseManager *newDb) :
-    QMainWindow(parent),
-    ui(new Ui::wndNewFirefighter)
+wndNewFirefighter::wndNewFirefighter( QWidget *pParent, DatabaseManager *pDB ) :
+    QMainWindow( pParent ), _pUI( new Ui::wndNewFirefighter )
 {
-    ui->setupUi(this);
-    db=newDb;
+    _pUI->setupUi( this );
+    _pDB = pDB;
 }
 
-wndNewFirefighter::~wndNewFirefighter()
+wndNewFirefighter::~wndNewFirefighter( void )
 {
-    delete ui;
+    delete _pUI;
 }
 
-void wndNewFirefighter::changeEvent(QEvent *e)
+void wndNewFirefighter::btnAddClicked( void )
 {
-    QMainWindow::changeEvent(e);
-    switch (e->type()) {
-    case QEvent::LanguageChange:
-        ui->retranslateUi(this);
-        break;
-    default:
-        break;
-    }
-}
-
-void wndNewFirefighter::btnAdd_Clicked(){
     QVector<QString> ffattributes;
 
     // Build attribute list for firefighter based on forms
-    ffattributes.append(ui->txtFirstName->text());
-    ffattributes.append(ui->txtMiddleName->text());
-    ffattributes.append(ui->txtLastName->text());
-    ffattributes.append(ui->dateDob->date().toString("yyyy-MM-dd 00:00:00.000"));
-    ffattributes.append(ui->txtLocalID->text());
-    ffattributes.append(ui->txtStateID->text());
-    ffattributes.append(ui->txtAddress->text());
-    ffattributes.append(ui->txtCity->text());
-    ffattributes.append(ui->txtState->itemText(ui->txtState->currentIndex()));
-    ffattributes.append(ui->txtZipCode->text());
-    ffattributes.append(ui->dateJoin->date().toString("yyyy-MM-dd 00:00:00.000"));
-    ffattributes.append(ui->txtStatus->text());
-    ffattributes.append(ui->txtHphone->text());
-    ffattributes.append(ui->txtWphone->text());
-    ffattributes.append(ui->txtCphone->text());
-    ffattributes.append(ui->txtDrvLic->text());
-    ffattributes.append(ui->txtCDL->text());
+    ffattributes.append( _pUI->txtFirstName->text() );
+    ffattributes.append( _pUI->txtMiddleName->text() );
+    ffattributes.append( _pUI->txtLastName->text() );
+    ffattributes.append( _pUI->dateDob->date().toString( "yyyy-MM-dd 00:00:00.000" ) );
+    ffattributes.append( _pUI->txtLocalID->text() );
+    ffattributes.append( _pUI->txtStateID->text() );
+    ffattributes.append( _pUI->txtAddress->text() );
+    ffattributes.append( _pUI->txtCity->text() );
+    ffattributes.append( _pUI->txtState->itemText( _pUI->txtState->currentIndex() ) );
+    ffattributes.append( _pUI->txtZipCode->text() );
+    ffattributes.append( _pUI->dateJoin->date().toString( "yyyy-MM-dd 00:00:00.000" ) );
+    ffattributes.append( _pUI->txtStatus->text() );
+    ffattributes.append( _pUI->txtHphone->text() );
+    ffattributes.append( _pUI->txtWphone->text() );
+    ffattributes.append( _pUI->txtCphone->text() );
+    ffattributes.append( _pUI->txtDrvLic->text() );
+    ffattributes.append( _pUI->txtCDL->text() );
 
-    // Construct new firefighter with attributes
-    Firefighter newFF(ffattributes);
+    Firefighter newFF;
 
-    if(newFF.insertToDatabase(this->db)){
-        QMessageBox::information(0,"Firefighter Information","Firefighter successfully added to database!");
+    if ( newFF.insertToDatabase( ffattributes, _pDB ) )
+    {
+        QMessageBox::information( 0, "Firefighter Information","Firefighter successfully added to database!" );
     }
-    else{
-        QMessageBox::warning(0,"Firefighter Error","Firefighter could not be added to database! See log file for details.");
+    else
+    {
+        QMessageBox::warning( 0, "Firefighter Error", "Firefighter could not be added to database! See log file for details." );
     }
 }

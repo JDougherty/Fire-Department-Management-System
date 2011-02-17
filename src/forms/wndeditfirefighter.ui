@@ -1074,5 +1074,22 @@
   <tabstop>lstTraining</tabstop>
  </tabstops>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>btnUpdatePersonal</sender>
+   <signal>clicked()</signal>
+   <receiver>wndEditFirefighter</receiver>
+   <slot>btnUpdatePersonalClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>359</x>
+     <y>303</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>214</x>
+     <y>169</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

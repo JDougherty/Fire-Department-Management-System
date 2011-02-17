@@ -17,7 +17,6 @@
 
 */
 
-
 #ifndef WNDNEWFIREFIGHTER_H
 #define WNDNEWFIREFIGHTER_H
 
@@ -27,25 +26,25 @@
 #include "databasemanager.h"
 #include "firefighter.h"
 
-namespace Ui {
+namespace Ui
+{
     class wndNewFirefighter;
 }
 
-class wndNewFirefighter : public QMainWindow {
+class wndNewFirefighter : public QMainWindow
+{
     Q_OBJECT
-public:
-    wndNewFirefighter(QWidget *parent = 0, DatabaseManager *newDb=0);
-    ~wndNewFirefighter();
 
-private slots:
-    void btnAdd_Clicked();
+    private:
+        Ui::wndNewFirefighter   *_pUI;
+        DatabaseManager         *_pDB;
 
-protected:
-    void changeEvent(QEvent *e);
+    private slots:
+        void                    btnAddClicked( void );
 
-private:
-    Ui::wndNewFirefighter *ui;
-    DatabaseManager *db;
+    public:
+                                wndNewFirefighter( QWidget *parent, DatabaseManager *pDB );
+                                ~wndNewFirefighter( void );
 };
 
 #endif // WNDNEWFIREFIGHTER_H

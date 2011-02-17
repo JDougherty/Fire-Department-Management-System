@@ -25,12 +25,6 @@ Firefighter::Firefighter( void )
     _iID = -1;
 }
 
-Firefighter::Firefighter( QVector<QString> attributes )
-{
-    _attributes = attributes;
-    _iID = -1;
-}
-
 //! Loads the attributes for firefighter with the given id from the database.
 /*!
   \param iID Firefighter id.
@@ -40,12 +34,6 @@ Firefighter::Firefighter( QVector<QString> attributes )
 bool Firefighter::loadAttributes( int iID, DatabaseManager *pDB )
 {
     QSqlQuery infoQuery;
-
-    // Ensure the database is open
-    if ( !( pDB->isOpen() ) )
-    {
-        pDB->open();
-    }
 
     _iID = iID;
 
@@ -85,17 +73,11 @@ bool Firefighter::loadAttributes( int iID, DatabaseManager *pDB )
   \param pDB Pointer to the database manager.
   \returns True upon successful save, false on failure.
 */
-bool Firefighter::insertToDatabase( DatabaseManager *pDB )
+bool Firefighter::insertToDatabase( QVector<QString> attributes, DatabaseManager *pDB )
 {
+    _attributes = attributes;
+
     QSqlQuery addQuery;
-
-    // Ensure the database is open
-    if ( !( pDB->isOpen() ) )
-    {
-        pDB->open();
-    }
-
-    // Create the query with parameterization
     addQuery.prepare( "INSERT INTO firefighters "
                      "(fname,mname,lname,"
                      "dob,deptid,stateid,"
@@ -126,7 +108,6 @@ bool Firefighter::insertToDatabase( DatabaseManager *pDB )
         qWarning( "Firefighter Error: Could not add firefighter to database. Database Error: %s", qPrintable( addQuery.lastError().text() ) );
         return false;
     }
-
 }
 
 //!  Set the firefighter's attributes and update in the database.
@@ -138,12 +119,6 @@ bool Firefighter::insertToDatabase( DatabaseManager *pDB )
 bool Firefighter::updateAttributes( QVector<QString> attributes, DatabaseManager *pDB )
 {
     QSqlQuery updateQuery;
-
-    // Ensure the database is open
-    if ( !( pDB->isOpen() ) )
-    {
-        pDB->open();
-    }
 
     // Set the attributes
     _attributes = attributes;

@@ -33,9 +33,8 @@ class Firefighter
 
     public:
                                 Firefighter( void );
-                                Firefighter( QVector<QString> attributes );
 
-        bool                    insertToDatabase( DatabaseManager *pDB );
+        bool                    insertToDatabase( QVector<QString> attributes, DatabaseManager *pDB );
         bool                    loadAttributes( int iID, DatabaseManager *pDB );
         bool                    updateAttributes( QVector<QString> attributes, DatabaseManager *pDB );
 

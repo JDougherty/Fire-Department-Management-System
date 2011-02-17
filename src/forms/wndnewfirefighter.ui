@@ -780,7 +780,7 @@
    <sender>btnAdd</sender>
    <signal>clicked()</signal>
    <receiver>wndNewFirefighter</receiver>
-   <slot>btnAdd_Clicked()</slot>
+   <slot>btnAddClicked()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>366</x>

@@ -34,32 +34,29 @@ wndNewFirefighter::~wndNewFirefighter( void )
 
 void wndNewFirefighter::btnAddClicked( void )
 {
-    QVector<QString> ffattributes;
-
-    // Build attribute list for firefighter based on forms
-    ffattributes.append( _pUI->txtFirstName->text() );
-    ffattributes.append( _pUI->txtMiddleName->text() );
-    ffattributes.append( _pUI->txtLastName->text() );
-    ffattributes.append( _pUI->dateDob->date().toString( "yyyy-MM-dd 00:00:00.000" ) );
-    ffattributes.append( _pUI->txtLocalID->text() );
-    ffattributes.append( _pUI->txtStateID->text() );
-    ffattributes.append( _pUI->txtAddress->text() );
-    ffattributes.append( _pUI->txtCity->text() );
-    ffattributes.append( _pUI->txtState->itemText( _pUI->txtState->currentIndex() ) );
-    ffattributes.append( _pUI->txtZipCode->text() );
-    ffattributes.append( _pUI->dateJoin->date().toString( "yyyy-MM-dd 00:00:00.000" ) );
-    ffattributes.append( _pUI->txtStatus->text() );
-    ffattributes.append( _pUI->txtHphone->text() );
-    ffattributes.append( _pUI->txtWphone->text() );
-    ffattributes.append( _pUI->txtCphone->text() );
-    ffattributes.append( _pUI->txtDrvLic->text() );
-    ffattributes.append( _pUI->txtCDL->text() );
-
     Firefighter newFF;
 
-    if ( newFF.insertToDatabase( ffattributes, _pDB ) )
+    newFF.firstName( _pUI->txtFirstName->text() );
+    newFF.middleName( _pUI->txtMiddleName->text() );
+    newFF.lastName( _pUI->txtLastName->text() );
+    newFF.dob( _pUI->dateDob->date().toString( "yyyy-MM-dd 00:00:00.000" ) );
+    newFF.localID( _pUI->txtLocalID->text() );
+    newFF.stateID( _pUI->txtStateID->text() );
+    newFF.address( _pUI->txtAddress->text() );
+    newFF.city( _pUI->txtCity->text() );
+    newFF.state( _pUI->txtState->itemText( _pUI->txtState->currentIndex() ) );
+    newFF.zipCode( _pUI->txtZipCode->text() );
+    newFF.dateJoin( _pUI->dateJoin->date().toString( "yyyy-MM-dd 00:00:00.000" ) );
+    newFF.status( _pUI->txtStatus->text() );
+    newFF.hphone( _pUI->txtHphone->text() );
+    newFF.wphone( _pUI->txtWphone->text() );
+    newFF.cphone( _pUI->txtCphone->text() );
+    newFF.drvLic( _pUI->txtDrvLic->text() );
+    newFF.cdl( _pUI->txtCDL->text() );
+
+    if ( newFF.save( _pDB ) )
     {
-        QMessageBox::information( 0, "Firefighter Information","Firefighter successfully added to database!" );
+        QMessageBox::information( 0, "Firefighter Information", "Firefighter successfully added to database!" );
     }
     else
     {

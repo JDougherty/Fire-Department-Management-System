@@ -36,9 +36,9 @@ wndEditFirefighter::wndEditFirefighter( QWidget *pParent, DatabaseManager *pDB, 
     _pUI->setupUi(this);
     _pDB = pDB;
 
-    if ( !_FF.loadAttributes( id, _pDB ) )
+    if ( !_FF.load( id, _pDB ) )
     {
-        QMessageBox::warning(0,"Firefighter Error: Read","Could not retrieve firefighter information from database. See log for more information.");
+        QMessageBox::warning( 0 ,"Firefighter Error: Read", "Could not retrieve firefighter information from database. See log for more information." );
     }
 
     // Update the personal information fields, training list, and equipment list
@@ -215,28 +215,25 @@ void wndEditFirefighter::toggleEquipmentInformationEnabled( QListWidgetItem* ite
 */
 void wndEditFirefighter::btnUpdatePersonalClicked( void )
 {
-    QVector<QString> ffattributes;
+    _FF.firstName( _pUI->txtFirstName->text() );
+    _FF.middleName( _pUI->txtMiddleName->text() );
+    _FF.lastName( _pUI->txtLastName->text() );
+    _FF.dob( _pUI->dateDob->date().toString( "yyyy-MM-dd 00:00:00.000" ) );
+    _FF.localID( _pUI->txtLocalID->text() );
+    _FF.stateID( _pUI->txtStateID->text() );
+    _FF.address( _pUI->txtAddress->text() );
+    _FF.city( _pUI->txtCity->text() );
+    _FF.state( _pUI->txtState->itemText( _pUI->txtState->currentIndex() ) );
+    _FF.zipCode( _pUI->txtZipCode->text() );
+    _FF.dateJoin( _pUI->dateJoin->date().toString( "yyyy-MM-dd 00:00:00.000" ) );
+    _FF.status( _pUI->txtStatus->text() );
+    _FF.hphone( _pUI->txtHphone->text() );
+    _FF.wphone( _pUI->txtWphone->text() );
+    _FF.cphone( _pUI->txtCphone->text() );
+    _FF.drvLic( _pUI->txtDrvLic->text() );
+    _FF.cdl( _pUI->txtCDL->text() );
 
-    // Build attribute list for firefighter based on forms
-    ffattributes.append( _pUI->txtFirstName->text() );
-    ffattributes.append( _pUI->txtMiddleName->text() );
-    ffattributes.append( _pUI->txtLastName->text() );
-    ffattributes.append( _pUI->dateDob->date().toString( "yyyy-MM-dd 00:00:00.000" ) );
-    ffattributes.append( _pUI->txtLocalID->text() );
-    ffattributes.append( _pUI->txtStateID->text() );
-    ffattributes.append( _pUI->txtAddress->text() );
-    ffattributes.append( _pUI->txtCity->text() );
-    ffattributes.append( _pUI->txtState->itemText( _pUI->txtState->currentIndex() ) );
-    ffattributes.append( _pUI->txtZipCode->text() );
-    ffattributes.append( _pUI->dateJoin->date().toString( "yyyy-MM-dd 00:00:00.000" ) );
-    ffattributes.append( _pUI->txtStatus->text() );
-    ffattributes.append( _pUI->txtHphone->text() );
-    ffattributes.append( _pUI->txtWphone->text() );
-    ffattributes.append( _pUI->txtCphone->text() );
-    ffattributes.append( _pUI->txtDrvLic->text() );
-    ffattributes.append( _pUI->txtCDL->text() );
-
-    if ( _FF.updateAttributes( ffattributes, _pDB ) )
+    if ( _FF.save( _pDB ) )
     {
         QMessageBox::information( this, "Firefighter Information: Update",
                                   "Firefighter was successfully updated in database!" );

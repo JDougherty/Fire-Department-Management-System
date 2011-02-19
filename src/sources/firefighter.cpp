@@ -22,50 +22,28 @@
 
 Firefighter::Firefighter( void )
 {
+    for ( int i = 0; i < 17; i++ )
+    {
+        _attributes.append( "" );
+    }
+
     _iID = -1;
 }
 
-//! Loads the attributes for firefighter with the given id from the database.
+//! Saves the attributes for the firefighter to the database.
 /*!
-  \param iID Firefighter id.
+  If the firefighter does not exist then insert otherwise update.
   \param pDB Pointer to the database manager.
-  \returns True upon successful load, false on failure.
+  \returns True upon successful save, false on failure.
 */
-bool Firefighter::loadAttributes( int iID, DatabaseManager *pDB )
+bool Firefighter::save( DatabaseManager *pDB )
 {
-    QSqlQuery infoQuery;
-
-    _iID = iID;
-
-    // Clear current attributes
-    _attributes.clear();
-
-    // Create the query with parameterization
-    infoQuery.prepare( "SELECT id,fname,mname,lname,"
-                      "dob,deptid,stateid,"
-                      "address,city,state,"
-                      "zip,joindate,status,"
-                      "hphone,wphone,cphone,"
-                      "drvlic,cdl FROM firefighters WHERE id=?" );
-    infoQuery.addBindValue( _iID );
-
-    // Execute the query
-    if ( pDB->query( infoQuery ) )
+    if ( _iID == -1 )
     {
-        infoQuery.next();
+        return insert( pDB );
+    }
 
-        for ( int i = 1; i <= 18; i++ )
-        {
-            _attributes.push_back( infoQuery.value( i ).toString() );
-        }
-        qDebug( "Firefighter Information (%d): Personal information retrieved successfully.", _iID );
-        return true;
-    }
-    else
-    {
-        qWarning( "Firefighter Error (%d): Could not retrieve personal information from database. Database Error: %s", _iID, qPrintable( infoQuery.lastError().text() ) );
-        return false;
-    }
+    return update( pDB );
 }
 
 //! Creates the firefighter in the database with its current attributes.
@@ -73,12 +51,11 @@ bool Firefighter::loadAttributes( int iID, DatabaseManager *pDB )
   \param pDB Pointer to the database manager.
   \returns True upon successful save, false on failure.
 */
-bool Firefighter::insertToDatabase( QVector<QString> attributes, DatabaseManager *pDB )
+bool Firefighter::insert( DatabaseManager *pDB )
 {
-    _attributes = attributes;
+    QSqlQuery insertQuery;
 
-    QSqlQuery addQuery;
-    addQuery.prepare( "INSERT INTO firefighters "
+    insertQuery.prepare( "INSERT INTO firefighters "
                      "(fname,mname,lname,"
                      "dob,deptid,stateid,"
                      "address,city,state,"
@@ -94,18 +71,18 @@ bool Firefighter::insertToDatabase( QVector<QString> attributes, DatabaseManager
 
     for ( int i = 0; i < _attributes.size(); i++ )
     {
-        addQuery.addBindValue( _attributes[i] );
+        insertQuery.addBindValue( _attributes[i] );
     }
 
     // Execute the query
-    if ( pDB->query( addQuery ) )
+    if ( pDB->query( insertQuery ) )
     {
         qDebug( "Firefighter Information: New firefighter added successfully." );
         return true;
     }
     else
     {
-        qWarning( "Firefighter Error: Could not add firefighter to database. Database Error: %s", qPrintable( addQuery.lastError().text() ) );
+        qWarning( "Firefighter Error: Could not add firefighter to database. Database Error: %s", qPrintable( insertQuery.lastError().text() ) );
         return false;
     }
 }
@@ -116,14 +93,10 @@ bool Firefighter::insertToDatabase( QVector<QString> attributes, DatabaseManager
   \param pDB Pointer to the database manager.
   \returns True upon successful save, false on failure.
 */
-bool Firefighter::updateAttributes( QVector<QString> attributes, DatabaseManager *pDB )
+bool Firefighter::update( DatabaseManager *pDB )
 {
     QSqlQuery updateQuery;
 
-    // Set the attributes
-    _attributes = attributes;
-
-    // Create the query with parameterization
     updateQuery.prepare( "UPDATE firefighters SET "
                      "fname=?,mname=?,lname=?,"
                      "dob=?,deptid=?,stateid=?,"
@@ -132,7 +105,7 @@ bool Firefighter::updateAttributes( QVector<QString> attributes, DatabaseManager
                      "hphone=?,wphone=?,cphone=?,"
                      "drvlic=?,cdl=? WHERE id=? " );
 
-    for ( int i = 0; i < _attributes.size(); i++)
+    for ( int i = 0; i < _attributes.size(); i++ )
     {
         updateQuery.addBindValue( _attributes[i] );
     }
@@ -147,11 +120,52 @@ bool Firefighter::updateAttributes( QVector<QString> attributes, DatabaseManager
     }
     else
     {
-        qWarning( "Firefighter Error (%d): Could not update firefighter information in database. Database Error: %s", _iID, qPrintable( updateQuery.lastError().text() ) );
+        qWarning( "Firefighter Error (%d): Could not update firefighter information in database. Database Error: %s",
+                  _iID, qPrintable( updateQuery.lastError().text() ) );
         return false;
     }
 }
 
+//! Loads the attributes for firefighter with the given id from the database.
+/*!
+  \param iID Firefighter id.
+  \param pDB Pointer to the database manager.
+  \returns True upon successful load, false on failure.
+*/
+bool Firefighter::load( int iID, DatabaseManager *pDB )
+{
+    QSqlQuery selectQuery;
+
+    _iID = iID;
+
+    // Create the query with parameterization
+    selectQuery.prepare( "SELECT fname,mname,lname,"
+                      "dob,deptid,stateid,"
+                      "address,city,state,"
+                      "zip,joindate,status,"
+                      "hphone,wphone,cphone,"
+                      "drvlic,cdl FROM firefighters WHERE id=?" );
+    selectQuery.addBindValue( _iID );
+
+    // Execute the query
+    if ( pDB->query( selectQuery ) )
+    {
+        selectQuery.next();
+
+        for ( int i = 0; i < _attributes.size(); i++ )
+        {
+            _attributes[i] =  selectQuery.value( i ).toString();
+        }
+        qDebug( "Firefighter Information (%d): Personal information retrieved successfully.", _iID );
+        return true;
+    }
+    else
+    {
+        qWarning( "Firefighter Error (%d): Could not retrieve personal information from database. Database Error: %s",
+                  _iID, qPrintable( selectQuery.lastError().text() ) );
+        return false;
+    }
+}
 
 // ACCESSORS
 int Firefighter::id( void )
@@ -243,3 +257,95 @@ QString Firefighter::cdl( void )
 {
     return _attributes[16];
 }
+
+// SETTERS
+void Firefighter::id( int iID )
+{
+    _iID = iID;
+}
+
+void Firefighter::firstName( QString s )
+{
+    _attributes[0] = s;
+}
+
+void Firefighter::middleName( QString s )
+{
+    _attributes[1] = s;
+}
+
+void Firefighter::lastName( QString s )
+{
+    _attributes[2] = s;
+}
+
+void Firefighter::dob( QString s )
+{
+    _attributes[3] = s;
+}
+
+void Firefighter::localID( QString s )
+{
+    _attributes[4] = s;
+}
+
+void Firefighter::stateID( QString s )
+{
+    _attributes[5] = s;
+}
+
+void Firefighter::address( QString s )
+{
+    _attributes[6] = s;
+}
+
+void Firefighter::city( QString s )
+{
+    _attributes[7] = s;
+}
+
+void Firefighter::state( QString s )
+{
+    _attributes[8] = s;
+}
+
+void Firefighter::zipCode( QString s )
+{
+    _attributes[9] = s;
+}
+
+void Firefighter::dateJoin( QString s )
+{
+    _attributes[10] = s;
+}
+
+void Firefighter::status( QString s )
+{
+    _attributes[11] = s;
+}
+
+void Firefighter::hphone( QString s )
+{
+    _attributes[12] = s;
+}
+
+void Firefighter::wphone( QString s )
+{
+    _attributes[13] = s;
+}
+
+void Firefighter::cphone( QString s )
+{
+    _attributes[14] = s;
+}
+
+void Firefighter::drvLic( QString s )
+{
+    _attributes[15] = s;
+}
+
+void Firefighter::cdl( QString s )
+{
+    _attributes[16] = s;
+}
+

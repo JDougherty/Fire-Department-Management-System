@@ -31,12 +31,14 @@ class Firefighter
 
         int                     _iID;
 
+        bool                    insert( DatabaseManager *pDB );
+        bool                    update( DatabaseManager *pDB );
+
     public:
                                 Firefighter( void );
 
-        bool                    insertToDatabase( QVector<QString> attributes, DatabaseManager *pDB );
-        bool                    loadAttributes( int iID, DatabaseManager *pDB );
-        bool                    updateAttributes( QVector<QString> attributes, DatabaseManager *pDB );
+        bool                    save( DatabaseManager *pDB );
+        bool                    load( int iID, DatabaseManager *pDB );
 
         // accessors
         int                     id( void );
@@ -57,6 +59,26 @@ class Firefighter
         QString                 cphone( void );
         QString                 drvLic( void );
         QString                 cdl( void );
+
+        // setters
+        void                     id( int iID );
+        void                    firstName( QString s );
+        void                    middleName( QString s );
+        void                    lastName( QString s );
+        void                    dob( QString s );
+        void                    localID( QString s );
+        void                    stateID( QString s );
+        void                    address( QString s );
+        void                    city( QString s );
+        void                    state( QString s );
+        void                    zipCode( QString s );
+        void                    dateJoin( QString s );
+        void                    status( QString s );
+        void                    hphone( QString s );
+        void                    wphone( QString s );
+        void                    cphone( QString s );
+        void                    drvLic( QString s );
+        void                    cdl( QString s );
 };
 
 #endif // FIREFIGHTER_H

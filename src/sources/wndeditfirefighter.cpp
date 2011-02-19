@@ -36,7 +36,7 @@ wndEditFirefighter::wndEditFirefighter( QWidget *pParent, DatabaseManager *pDB, 
     _pUI->setupUi(this);
     _pDB = pDB;
 
-    if ( !_FF.load( id, _pDB ) )
+    if ( !_FF.load( _pDB, id ) )
     {
         QMessageBox::warning( 0 ,"Firefighter Error: Read", "Could not retrieve firefighter information from database. See log for more information." );
     }

@@ -75,16 +75,15 @@ bool Firefighter::insert( DatabaseManager *pDB )
     }
 
     // Execute the query
-    if ( pDB->query( insertQuery ) )
-    {
-        qDebug( "Firefighter Information: New firefighter added successfully." );
-        return true;
-    }
-    else
+    if ( !pDB->query( insertQuery ) )
     {
         qWarning( "Firefighter Error: Could not add firefighter to database. Database Error: %s", qPrintable( insertQuery.lastError().text() ) );
         return false;
     }
+
+    _iID = insertQuery.lastInsertId().toInt();
+    qDebug( "Firefighter Information (%d): New firefighter added successfully.", _iID );
+    return true;
 }
 
 //!  Set the firefighter's attributes and update in the database.
@@ -113,26 +112,25 @@ bool Firefighter::update( DatabaseManager *pDB )
     updateQuery.addBindValue( _iID );
 
     // Execute the query
-    if ( pDB->query( updateQuery ) )
-    {
-        qDebug( "Firefighter Information (%d): Firefighter successfully updated in database.", _iID );
-        return true;
-    }
-    else
+    if ( !pDB->query( updateQuery ) )
     {
         qWarning( "Firefighter Error (%d): Could not update firefighter information in database. Database Error: %s",
                   _iID, qPrintable( updateQuery.lastError().text() ) );
         return false;
+
     }
+
+    qDebug( "Firefighter Information (%d): Firefighter successfully updated in database.", _iID );
+    return true;
 }
 
 //! Loads the attributes for firefighter with the given id from the database.
 /*!
-  \param iID Firefighter id.
   \param pDB Pointer to the database manager.
+  \param iID Firefighter id.
   \returns True upon successful load, false on failure.
 */
-bool Firefighter::load( int iID, DatabaseManager *pDB )
+bool Firefighter::load( DatabaseManager *pDB, int iID )
 {
     QSqlQuery selectQuery;
 
@@ -148,23 +146,22 @@ bool Firefighter::load( int iID, DatabaseManager *pDB )
     selectQuery.addBindValue( _iID );
 
     // Execute the query
-    if ( pDB->query( selectQuery ) )
-    {
-        selectQuery.next();
-
-        for ( int i = 0; i < _attributes.size(); i++ )
-        {
-            _attributes[i] =  selectQuery.value( i ).toString();
-        }
-        qDebug( "Firefighter Information (%d): Personal information retrieved successfully.", _iID );
-        return true;
-    }
-    else
+    if ( !pDB->query( selectQuery ) )
     {
         qWarning( "Firefighter Error (%d): Could not retrieve personal information from database. Database Error: %s",
                   _iID, qPrintable( selectQuery.lastError().text() ) );
         return false;
+
     }
+
+    selectQuery.next();
+
+    for ( int i = 0; i < _attributes.size(); i++ )
+    {
+        _attributes[i] =  selectQuery.value( i ).toString();
+    }
+    qDebug( "Firefighter Information (%d): Personal information retrieved successfully.", _iID );
+    return true;
 }
 
 // ACCESSORS

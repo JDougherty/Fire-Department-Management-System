@@ -27,7 +27,7 @@
 #include <QSpacerItem>
 #include "databasemanager.h"
 // Children Forms
-#include "wndnewfirefighter.h"
+#include "wndfirefighter.h"
 #include "wndactivedrill.h"
 #include "wndactivecall.h"
 #include "wndsearch.h"

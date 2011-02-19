@@ -17,8 +17,8 @@
 
 */
 
-#ifndef WNDNEWFIREFIGHTER_H
-#define WNDNEWFIREFIGHTER_H
+#ifndef WNDFIREFIGHTER_H
+#define WNDFIREFIGHTER_H
 
 #include <QMainWindow>
 #include <QMessageBox>
@@ -28,23 +28,28 @@
 
 namespace Ui
 {
-    class wndNewFirefighter;
+    class wndFirefighter;
 }
 
-class wndNewFirefighter : public QMainWindow
+class wndFirefighter : public QMainWindow
 {
     Q_OBJECT
 
     private:
-        Ui::wndNewFirefighter   *_pUI;
+        Ui::wndFirefighter      *_pUI;
         DatabaseManager         *_pDB;
 
+        Firefighter             _FF;
+
+        bool                    _bAddFirefighter;
+
     private slots:
-        void                    btnAddClicked( void );
+        void                    btnSaveFirefighterClicked( void );
 
     public:
-                                wndNewFirefighter( QWidget *parent, DatabaseManager *pDB );
-                                ~wndNewFirefighter( void );
+                                wndFirefighter( QWidget *parent, DatabaseManager *pDB );
+                                wndFirefighter( QWidget *parent, DatabaseManager *pDB, int iID );
+                                ~wndFirefighter( void );
 };
 
-#endif // WNDNEWFIREFIGHTER_H
+#endif // WNDFIREFIGHTER_H

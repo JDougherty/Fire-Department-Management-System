@@ -1,0 +1,1095 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>wndFirefighter</class>
+ <widget class="QMainWindow" name="wndFirefighter">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>430</width>
+    <height>340</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>430</width>
+    <height>340</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>430</width>
+    <height>340</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Add Firefighter</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QTabWidget" name="tabWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>410</width>
+      <height>321</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="tabPersonalInfo">
+     <attribute name="title">
+      <string>Personal Information</string>
+     </attribute>
+     <widget class="QComboBox" name="txtState">
+      <property name="geometry">
+       <rect>
+        <x>250</x>
+        <y>130</y>
+        <width>51</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="editable">
+       <bool>false</bool>
+      </property>
+      <property name="currentIndex">
+       <number>32</number>
+      </property>
+      <item>
+       <property name="text">
+        <string>AL</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>AK</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>AZ</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>AR</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>CA</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>CO</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>CT</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>DE</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>DC</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>FL</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>GA</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>HI</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>ID</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>IL</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>IN</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>IA</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>KS</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>KY</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>LA</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>ME</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>MD</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>MA</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>MI</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>MN</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>MS</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>MO</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>MT</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>NE</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>NV</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>NH</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>NJ</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>NM</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>NY</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>NC</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>ND</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>OH</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>OK</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>OR</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>PA</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>RI</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>SC</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>SD</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>TN</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>TX</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>UT</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>VT</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>VA</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>WA</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>WV</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>WI</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>WY</string>
+       </property>
+      </item>
+     </widget>
+     <widget class="QLineEdit" name="txtStatus">
+      <property name="geometry">
+       <rect>
+        <x>90</x>
+        <y>180</y>
+        <width>71</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QDateEdit" name="dateJoin">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>180</y>
+        <width>71</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="dateTime">
+       <datetime>
+        <hour>0</hour>
+        <minute>0</minute>
+        <second>0</second>
+        <year>2010</year>
+        <month>8</month>
+        <day>20</day>
+       </datetime>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_7">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>110</y>
+        <width>131</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Address:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_11">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>160</y>
+        <width>71</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Join Date:</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtCphone">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>230</y>
+        <width>91</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_4">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>60</y>
+        <width>111</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Date of Birth:</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtAddress">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>130</y>
+        <width>131</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_15">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>210</y>
+        <width>91</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Cell Phone:</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtFirstName">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>111</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtMiddleName">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>30</y>
+        <width>111</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_17">
+      <property name="geometry">
+       <rect>
+        <x>260</x>
+        <y>210</y>
+        <width>121</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>CDL:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_10">
+      <property name="geometry">
+       <rect>
+        <x>310</x>
+        <y>110</y>
+        <width>71</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Zip Code:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_14">
+      <property name="geometry">
+       <rect>
+        <x>290</x>
+        <y>160</y>
+        <width>91</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Work Phone:</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtCDL">
+      <property name="geometry">
+       <rect>
+        <x>260</x>
+        <y>230</y>
+        <width>121</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtLocalID">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>80</y>
+        <width>111</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtHphone">
+      <property name="geometry">
+       <rect>
+        <x>180</x>
+        <y>180</y>
+        <width>91</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_3">
+      <property name="geometry">
+       <rect>
+        <x>270</x>
+        <y>10</y>
+        <width>111</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Last Name:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_16">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>210</y>
+        <width>121</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Driver's License:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>111</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>First Name:</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtZipCode">
+      <property name="geometry">
+       <rect>
+        <x>310</x>
+        <y>130</y>
+        <width>71</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_9">
+      <property name="geometry">
+       <rect>
+        <x>250</x>
+        <y>110</y>
+        <width>41</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>State:</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtCity">
+      <property name="geometry">
+       <rect>
+        <x>150</x>
+        <y>130</y>
+        <width>81</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_6">
+      <property name="geometry">
+       <rect>
+        <x>270</x>
+        <y>60</y>
+        <width>111</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>State ID:</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtStateID">
+      <property name="geometry">
+       <rect>
+        <x>270</x>
+        <y>80</y>
+        <width>111</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtWphone">
+      <property name="geometry">
+       <rect>
+        <x>290</x>
+        <y>180</y>
+        <width>91</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtLastName">
+      <property name="geometry">
+       <rect>
+        <x>270</x>
+        <y>30</y>
+        <width>111</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_13">
+      <property name="geometry">
+       <rect>
+        <x>180</x>
+        <y>160</y>
+        <width>91</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Home Phone:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_2">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>10</y>
+        <width>111</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Middle Name:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_8">
+      <property name="geometry">
+       <rect>
+        <x>150</x>
+        <y>110</y>
+        <width>71</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>City:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_12">
+      <property name="geometry">
+       <rect>
+        <x>90</x>
+        <y>160</y>
+        <width>71</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Status:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_5">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>60</y>
+        <width>111</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Local ID:</string>
+      </property>
+     </widget>
+     <widget class="QDateEdit" name="dateDob">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>80</y>
+        <width>110</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="dateTime">
+       <datetime>
+        <hour>0</hour>
+        <minute>0</minute>
+        <second>0</second>
+        <year>2010</year>
+        <month>8</month>
+        <day>20</day>
+       </datetime>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtDrvLic">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>230</y>
+        <width>121</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btnSaveFirefighter">
+      <property name="geometry">
+       <rect>
+        <x>264</x>
+        <y>260</y>
+        <width>121</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>btnSaveFirefighter</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tabTraining">
+     <attribute name="title">
+      <string>Training</string>
+     </attribute>
+     <widget class="QListWidget" name="lstTraining">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>261</width>
+        <height>251</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_18">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>141</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Training and Exams:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_19">
+      <property name="geometry">
+       <rect>
+        <x>280</x>
+        <y>30</y>
+        <width>111</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Firefighter Signature:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_20">
+      <property name="geometry">
+       <rect>
+        <x>280</x>
+        <y>80</y>
+        <width>111</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Supervisor Signature:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_21">
+      <property name="geometry">
+       <rect>
+        <x>280</x>
+        <y>130</y>
+        <width>111</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Date Completed:</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtFFSig">
+      <property name="geometry">
+       <rect>
+        <x>280</x>
+        <y>50</y>
+        <width>51</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtSupSig">
+      <property name="geometry">
+       <rect>
+        <x>280</x>
+        <y>100</y>
+        <width>51</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QDateEdit" name="dateTraining">
+      <property name="geometry">
+       <rect>
+        <x>280</x>
+        <y>150</y>
+        <width>85</width>
+        <height>22</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btnUpdateTraining">
+      <property name="geometry">
+       <rect>
+        <x>280</x>
+        <y>260</y>
+        <width>85</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Update</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tabEquipment">
+     <attribute name="title">
+      <string>Equipment</string>
+     </attribute>
+     <widget class="QLabel" name="label_22">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>101</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Equipment:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_23">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>80</y>
+        <width>111</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Type:</string>
+      </property>
+     </widget>
+     <widget class="QListWidget" name="lstEquipment">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>191</width>
+        <height>251</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtEquipType">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>100</y>
+        <width>181</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtEquipSize">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>50</y>
+        <width>181</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_25">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>30</y>
+        <width>111</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Size:</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtEquipSerial">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>150</y>
+        <width>181</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_26">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>130</y>
+        <width>111</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Serial:</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="txtEquipYear">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>250</y>
+        <width>111</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_27">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>230</y>
+        <width>111</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Year:</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btnUpdateEquipment">
+      <property name="geometry">
+       <rect>
+        <x>330</x>
+        <y>250</y>
+        <width>71</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Update</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_24">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>180</y>
+        <width>111</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Issued:</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="radEquipmentUsed">
+      <property name="geometry">
+       <rect>
+        <x>260</x>
+        <y>200</y>
+        <width>51</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Used</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="radEquipmentNew">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>200</y>
+        <width>41</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>New</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tabReports">
+     <attribute name="title">
+      <string>Reports</string>
+     </attribute>
+    </widget>
+   </widget>
+  </widget>
+ </widget>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>txtFirstName</tabstop>
+  <tabstop>txtMiddleName</tabstop>
+  <tabstop>txtLastName</tabstop>
+  <tabstop>dateDob</tabstop>
+  <tabstop>txtLocalID</tabstop>
+  <tabstop>txtStateID</tabstop>
+  <tabstop>txtAddress</tabstop>
+  <tabstop>txtCity</tabstop>
+  <tabstop>txtState</tabstop>
+  <tabstop>txtZipCode</tabstop>
+  <tabstop>dateJoin</tabstop>
+  <tabstop>txtStatus</tabstop>
+  <tabstop>txtHphone</tabstop>
+  <tabstop>txtWphone</tabstop>
+  <tabstop>txtCphone</tabstop>
+  <tabstop>txtDrvLic</tabstop>
+  <tabstop>txtCDL</tabstop>
+  <tabstop>btnSaveFirefighter</tabstop>
+  <tabstop>txtFFSig</tabstop>
+  <tabstop>txtSupSig</tabstop>
+  <tabstop>dateTraining</tabstop>
+  <tabstop>btnUpdateTraining</tabstop>
+  <tabstop>txtEquipSize</tabstop>
+  <tabstop>txtEquipType</tabstop>
+  <tabstop>txtEquipSerial</tabstop>
+  <tabstop>radEquipmentNew</tabstop>
+  <tabstop>radEquipmentUsed</tabstop>
+  <tabstop>txtEquipYear</tabstop>
+  <tabstop>btnUpdateEquipment</tabstop>
+  <tabstop>lstEquipment</tabstop>
+  <tabstop>lstTraining</tabstop>
+ </tabstops>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>btnSaveFirefighter</sender>
+   <signal>clicked()</signal>
+   <receiver>wndFirefighter</receiver>
+   <slot>btnSaveFirefighterClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>359</x>
+     <y>303</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>214</x>
+     <y>169</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

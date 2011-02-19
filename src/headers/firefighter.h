@@ -38,7 +38,7 @@ class Firefighter
                                 Firefighter( void );
 
         bool                    save( DatabaseManager *pDB );
-        bool                    load( int iID, DatabaseManager *pDB );
+        bool                    load( DatabaseManager *pDB, int iID );
 
         // accessors
         int                     id( void );

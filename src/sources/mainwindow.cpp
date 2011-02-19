@@ -135,7 +135,7 @@ void MainWindow::mdiInventoryCheck( void )
 //! User clicked a button to add a firefighter.
 void MainWindow::mdiAddFirefighter( void )
 {
-    wndNewFirefighter *child = new wndNewFirefighter( this, _pDB );
+    wndFirefighter *child = new wndFirefighter( this, _pDB );
     mdiArea->addSubWindow( child );
     child->show();
 }

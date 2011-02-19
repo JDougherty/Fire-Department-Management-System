@@ -7,7 +7,7 @@ TEMPLATE = app
 UI_DIR = ../src/
 SOURCES += sources/main.cpp \
     sources/databasemanager.cpp \
-    sources/wndnewfirefighter.cpp \
+    sources/wndfirefighter.cpp \
     sources/mainwindow.cpp \
     sources/wndsetup.cpp \
     sources/firefighter.cpp \
@@ -19,7 +19,7 @@ SOURCES += sources/main.cpp \
     sources/wndactivecall.cpp \
     sources/settingsmanager.cpp
 HEADERS += headers/databasemanager.h \
-    headers/wndnewfirefighter.h \
+    headers/wndfirefighter.h \
     headers/mainwindow.h \
     headers/wndsetup.h \
     headers/LogFunctions.h \
@@ -31,7 +31,7 @@ HEADERS += headers/databasemanager.h \
     headers/wndactivedrill.h \
     headers/wndactivecall.h \
     headers/settingsmanager.h
-FORMS += forms/wndnewfirefighter.ui \
+FORMS += forms/wndfirefighter.ui \
 	forms/mainwindow.ui \
     forms/wndsetup.ui \
     forms/wndsearch.ui \

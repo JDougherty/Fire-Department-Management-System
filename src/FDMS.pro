@@ -12,7 +12,6 @@ SOURCES += sources/main.cpp \
     sources/wndsetup.cpp \
     sources/firefighter.cpp \
     sources/wndsearch.cpp \
-    sources/wndeditfirefighter.cpp \
     sources/wndinventorycontrol.cpp \
     sources/wndinventorycheck.cpp \
     sources/wndactivedrill.cpp \
@@ -25,7 +24,6 @@ HEADERS += headers/databasemanager.h \
     headers/LogFunctions.h \
     headers/firefighter.h \
     headers/wndsearch.h \
-    headers/wndeditfirefighter.h \
     headers/wndinventorycontrol.h \
     headers/wndinventorycheck.h \
     headers/wndactivedrill.h \
@@ -35,7 +33,6 @@ FORMS += forms/wndfirefighter.ui \
 	forms/mainwindow.ui \
     forms/wndsetup.ui \
     forms/wndsearch.ui \
-    forms/wndeditfirefighter.ui \
     forms/wndinventorycontrol.ui \
     forms/wndinventorycheck.ui \
     forms/wndactivedrill.ui \

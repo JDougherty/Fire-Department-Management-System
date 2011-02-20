@@ -735,7 +735,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QPushButton" name="btnSaveFirefighter">
+     <widget class="QPushButton" name="btnSavePersonalInfo">
       <property name="geometry">
        <rect>
         <x>264</x>
@@ -845,7 +845,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QPushButton" name="btnUpdateTraining">
+     <widget class="QPushButton" name="btnSaveTrainingItem">
       <property name="geometry">
        <rect>
         <x>280</x>
@@ -978,7 +978,7 @@
        <string>Year:</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="btnUpdateEquipment">
+     <widget class="QPushButton" name="btnSaveEquipmentItem">
       <property name="geometry">
        <rect>
         <x>330</x>
@@ -1058,32 +1058,128 @@
   <tabstop>txtCphone</tabstop>
   <tabstop>txtDrvLic</tabstop>
   <tabstop>txtCDL</tabstop>
-  <tabstop>btnSaveFirefighter</tabstop>
+  <tabstop>btnSavePersonalInfo</tabstop>
   <tabstop>txtFFSig</tabstop>
   <tabstop>txtSupSig</tabstop>
   <tabstop>dateTraining</tabstop>
-  <tabstop>btnUpdateTraining</tabstop>
+  <tabstop>btnSaveTrainingItem</tabstop>
   <tabstop>txtEquipSize</tabstop>
   <tabstop>txtEquipType</tabstop>
   <tabstop>txtEquipSerial</tabstop>
   <tabstop>radEquipmentNew</tabstop>
   <tabstop>radEquipmentUsed</tabstop>
   <tabstop>txtEquipYear</tabstop>
-  <tabstop>btnUpdateEquipment</tabstop>
+  <tabstop>btnSaveEquipmentItem</tabstop>
   <tabstop>lstEquipment</tabstop>
   <tabstop>lstTraining</tabstop>
  </tabstops>
  <resources/>
  <connections>
   <connection>
-   <sender>btnSaveFirefighter</sender>
+   <sender>btnSavePersonalInfo</sender>
    <signal>clicked()</signal>
    <receiver>wndFirefighter</receiver>
-   <slot>btnSaveFirefighterClicked()</slot>
+   <slot>btnSavePersonalInfoClicked()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>359</x>
      <y>303</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>214</x>
+     <y>169</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnSaveTrainingItem</sender>
+   <signal>clicked()</signal>
+   <receiver>wndFirefighter</receiver>
+   <slot>btnSaveTrainingItemClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>334</x>
+     <y>303</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>214</x>
+     <y>169</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnSaveEquipmentItem</sender>
+   <signal>clicked()</signal>
+   <receiver>wndFirefighter</receiver>
+   <slot>btnSaveEquipmentItemClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>610</x>
+     <y>548</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>214</x>
+     <y>169</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lstTraining</sender>
+   <signal>itemChanged(QListWidgetItem*)</signal>
+   <receiver>wndFirefighter</receiver>
+   <slot>trainingItemClicked(QListWidgetItem*)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>185</x>
+     <y>242</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>214</x>
+     <y>169</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lstTraining</sender>
+   <signal>currentItemChanged(QListWidgetItem*,QListWidgetItem*)</signal>
+   <receiver>wndFirefighter</receiver>
+   <slot>loadTrainingItem(QListWidgetItem*)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>360</x>
+     <y>417</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>214</x>
+     <y>169</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lstEquipment</sender>
+   <signal>itemChanged(QListWidgetItem*)</signal>
+   <receiver>wndFirefighter</receiver>
+   <slot>equipmentItemClicked(QListWidgetItem*)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>350</x>
+     <y>442</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>214</x>
+     <y>169</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lstEquipment</sender>
+   <signal>currentItemChanged(QListWidgetItem*,QListWidgetItem*)</signal>
+   <receiver>wndFirefighter</receiver>
+   <slot>loadEquipmentItem(QListWidgetItem*)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>350</x>
+     <y>442</y>
     </hint>
     <hint type="destinationlabel">
      <x>214</x>

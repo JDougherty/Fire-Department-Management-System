@@ -25,7 +25,7 @@
 #include <QSqlQueryModel>
 #include <QStringList>
 #include "databasemanager.h"
-#include "wndeditfirefighter.h"
+#include "wndfirefighter.h"
 #include "mainwindow.h"
 
 class MainWindow;

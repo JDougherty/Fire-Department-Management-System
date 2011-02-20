@@ -23,6 +23,7 @@
 #include <QMainWindow>
 #include <QMessageBox>
 #include <QSqlQuery>
+#include <QListWidgetItem>
 #include "databasemanager.h"
 #include "firefighter.h"
 
@@ -43,8 +44,26 @@ class wndFirefighter : public QMainWindow
 
         bool                    _bAddFirefighter;
 
+        void                    loadPersonalInfo( void );
+
+        void                    loadTrainingList( void );
+        void                    toggleTrainingFields( QListWidgetItem *item );
+        void                    enableTrainingFields( bool bEnabled );
+
+        void                    loadEquipmentList( void );
+        void                    toggleEquipmentFields( QListWidgetItem *item );
+        void                    enableEquipmentFields( bool bEnabled );
+
     private slots:
-        void                    btnSaveFirefighterClicked( void );
+        void                    btnSavePersonalInfoClicked( void );
+
+        void                    trainingItemClicked( QListWidgetItem *item );
+        void                    btnSaveTrainingItemClicked( void );
+        void                    loadTrainingItem( QListWidgetItem *item );
+
+        void                    equipmentItemClicked( QListWidgetItem *item );
+        void                    btnSaveEquipmentItemClicked( void );
+        void                    loadEquipmentItem( QListWidgetItem *item );
 
     public:
                                 wndFirefighter( QWidget *parent, DatabaseManager *pDB );

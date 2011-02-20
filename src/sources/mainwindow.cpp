@@ -143,7 +143,7 @@ void MainWindow::mdiAddFirefighter( void )
 //! User clicked a button to edit a firefighter.
 void MainWindow::mdiEditFirefighter( int iID )
 {
-    wndEditFirefighter *child = new wndEditFirefighter( this, _pDB, iID );
+    wndFirefighter *child = new wndFirefighter( this, _pDB, iID );
     mdiArea->addSubWindow( child );
     child->show();
 }

@@ -311,10 +311,12 @@ void wndFirefighter::loadTrainingItem( QListWidgetItem *item )
 
         if ( _pDB->query( selectQuery ) )
         {
-            selectQuery.next();
-            _pUI->txtFFSig->setText( selectQuery.value( 0 ).toString() );
-            _pUI->txtSupSig->setText( selectQuery.value( 1 ).toString() );
-            _pUI->dateTraining->setDate( selectQuery.value( 2 ).toDate() );
+            if ( selectQuery.next() )
+            {
+                _pUI->txtFFSig->setText( selectQuery.value( 0 ).toString() );
+                _pUI->txtSupSig->setText( selectQuery.value( 1 ).toString() );
+                _pUI->dateTraining->setDate( selectQuery.value( 2 ).toDate() );
+            }
         }
         else
         {
@@ -510,14 +512,15 @@ void wndFirefighter::loadEquipmentItem( QListWidgetItem *item )
 
     if ( _pDB->query( selectQuery ) )
     {
-        selectQuery.next();
-
-        _pUI->radEquipmentNew->setChecked( selectQuery.value( 0 ).toBool() ? 1 : 0);
-        _pUI->radEquipmentUsed->setChecked( selectQuery.value( 0 ).toBool() ? 0 : 1 );
-        _pUI->txtEquipSize->setText( selectQuery.value( 1 ).toString() );
-        _pUI->txtEquipType->setText( selectQuery.value( 2 ).toString() );
-        _pUI->txtEquipSerial->setText( selectQuery.value( 3 ).toString() );
-        _pUI->txtEquipYear->setText( selectQuery.value( 4 ).toString() );
+        if ( selectQuery.next() )
+        {
+            _pUI->radEquipmentNew->setChecked( selectQuery.value( 0 ).toBool() ? 1 : 0);
+            _pUI->radEquipmentUsed->setChecked( selectQuery.value( 0 ).toBool() ? 0 : 1 );
+            _pUI->txtEquipSize->setText( selectQuery.value( 1 ).toString() );
+            _pUI->txtEquipType->setText( selectQuery.value( 2 ).toString() );
+            _pUI->txtEquipSerial->setText( selectQuery.value( 3 ).toString() );
+            _pUI->txtEquipYear->setText( selectQuery.value( 4 ).toString() );
+        }
     }
     else
     {

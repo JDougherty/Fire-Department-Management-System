@@ -45,7 +45,7 @@
      <enum>QTabWidget::Rounded</enum>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -147,19 +147,6 @@
         </rect>
        </property>
       </widget>
-      <widget class="QPushButton" name="btnSaveDrill">
-       <property name="geometry">
-        <rect>
-         <x>170</x>
-         <y>340</y>
-         <width>75</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Save</string>
-       </property>
-      </widget>
       <widget class="QLineEdit" name="txtFDID">
        <property name="geometry">
         <rect>
@@ -184,7 +171,7 @@
        </property>
       </widget>
      </widget>
-     <widget class="QPushButton" name="btnSave">
+     <widget class="QPushButton" name="btnSaveCall">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -3684,11 +3671,27 @@
   <tabstop>txtarraySF_NumSprinklerHeadsOper</tabstop>
   <tabstop>txtarraySF_AESFailureReason</tabstop>
   <tabstop>tabWidget</tabstop>
-  <tabstop>btnSaveDrill</tabstop>
-  <tabstop>btnSave</tabstop>
+  <tabstop>btnSaveCall</tabstop>
   <tabstop>tblTimesheet</tabstop>
   <tabstop>btnSignIn</tabstop>
  </tabstops>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>btnSaveCall</sender>
+   <signal>clicked()</signal>
+   <receiver>wndActiveCall</receiver>
+   <slot>btnSaveCallClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>59</x>
+     <y>133</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>306</x>
+     <y>199</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

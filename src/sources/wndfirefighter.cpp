@@ -205,7 +205,7 @@ void wndFirefighter::loadTrainingList( void )
   It is invoked by checking or unchecking the checkbox on a training exam in the training exam list.
   \param item The exam being linked or unlinked.
   \see loadTrainingItem
-  \see btnUpdateTrainingItemClicked
+  \see btnSaveTrainingItemClicked
 */
 void wndFirefighter::trainingItemClicked( QListWidgetItem *item )
 {

@@ -6,26 +6,33 @@
 #include <QList>
 #include "databasemanager.h"
 
-namespace Ui {
+namespace Ui
+{
     class wndActiveCall;
 }
 
+//! GUI for adding a call and editing call data.
 class wndActiveCall : public QMainWindow
 {
     Q_OBJECT
 
-public:
-    explicit wndActiveCall(QWidget *parent = 0,DatabaseManager *newDb=0, int nid=0);
-    ~wndActiveCall();
+    private:
+        Ui::wndActiveCall       *_pUI;
+        DatabaseManager         *_pDB;
 
-private:
-    Ui::wndActiveCall *ui;
-    DatabaseManager *db;
-    int callid;
-    bool insert();
+        int                     _iCallID;
 
-private slots:
-    void updateInformation();
+        bool                    _bAddCall;
+
+        bool                    insert( void );
+
+    private slots:
+        void                    btnSaveCallClicked( void );
+
+    public:
+                                wndActiveCall( QWidget *pParent, DatabaseManager *pDB );
+                                wndActiveCall( QWidget *pParent, DatabaseManager *pDB, int iID );
+                                ~wndActiveCall( void );
 };
 
 #endif // WNDACTIVECALL_H

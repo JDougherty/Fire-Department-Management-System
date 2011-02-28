@@ -32,6 +32,7 @@ namespace Ui
     class wndFirefighter;
 }
 
+//! GUI for adding a firefighter and editing firefighter data.
 class wndFirefighter : public QMainWindow
 {
     Q_OBJECT

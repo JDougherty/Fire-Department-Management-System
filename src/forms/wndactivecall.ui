@@ -137,7 +137,7 @@
         <string>Call Number:</string>
        </property>
       </widget>
-      <widget class="QLineEdit" name="txtCallNum">
+      <widget class="QLineEdit" name="DB_INT_TS_CallNum">
        <property name="geometry">
         <rect>
          <x>120</x>
@@ -292,7 +292,7 @@
         <string>Suffix:</string>
        </property>
       </widget>
-      <widget class="QLineEdit" name="txtarrayAC1_Location">
+      <widget class="QLineEdit" name="DB_TEXT_AC1_Location">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -302,7 +302,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QLineEdit" name="txtarrayAC1_TravelDirections">
+      <widget class="QLineEdit" name="DB_TEXT_AC1_TravelDirections">
        <property name="geometry">
         <rect>
          <x>180</x>
@@ -312,7 +312,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QLineEdit" name="txtarrayAC1_NumMile">
+      <widget class="QLineEdit" name="DB_TEXT_AC1_NumMile">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -322,7 +322,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QLineEdit" name="txtarrayAC1_StreetPrefix">
+      <widget class="QLineEdit" name="DB_TEXT_AC1_StreetPrefix">
        <property name="geometry">
         <rect>
          <x>90</x>
@@ -332,7 +332,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QLineEdit" name="txtarrayAC1_Street">
+      <widget class="QLineEdit" name="DB_TEXT_AC1_Street">
        <property name="geometry">
         <rect>
          <x>180</x>
@@ -342,7 +342,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QLineEdit" name="txtarrayAC1_StreetType">
+      <widget class="QLineEdit" name="DB_TEXT_AC1_StreetType">
        <property name="geometry">
         <rect>
          <x>430</x>
@@ -352,7 +352,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QLineEdit" name="txtarrayAC1_StreetSuffix">
+      <widget class="QLineEdit" name="DB_TEXT_AC1_StreetSuffix">
        <property name="geometry">
         <rect>
          <x>510</x>
@@ -427,7 +427,7 @@
         <string>Incident Type:</string>
        </property>
       </widget>
-      <widget class="QLineEdit" name="txtarrayAC1_AptSuiteRm">
+      <widget class="QLineEdit" name="DB_TEXT_AC1_AptSuiteRm">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -437,7 +437,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QLineEdit" name="txtarrayAC1_CityTown">
+      <widget class="QLineEdit" name="DB_TEXT_AC1_CityTown">
        <property name="geometry">
         <rect>
          <x>90</x>
@@ -447,7 +447,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QLineEdit" name="txtarrayAC1_ZipCode">
+      <widget class="QLineEdit" name="DB_TEXT_AC1_ZipCode">
        <property name="geometry">
         <rect>
          <x>360</x>
@@ -457,7 +457,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QLineEdit" name="txtarrayAC1_IncidentType">
+      <widget class="QLineEdit" name="DB_TEXT_AC1_IncidentType">
        <property name="geometry">
         <rect>
          <x>430</x>
@@ -519,7 +519,7 @@
         <string>MA FDID:</string>
        </property>
       </widget>
-      <widget class="QLineEdit" name="txtarrayAC1_MutualAidFDID">
+      <widget class="QLineEdit" name="DB_TEXT_AC1_MutualAidFDID">
        <property name="geometry">
         <rect>
          <x>110</x>
@@ -529,7 +529,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QLineEdit" name="txtarrayAC1_MutualAid">
+      <widget class="QLineEdit" name="DB_TEXT_AC1_MutualAid">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -539,7 +539,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QLineEdit" name="txtarrayAC1_MutualAidState">
+      <widget class="QLineEdit" name="DB_TEXT_AC1_MutualAidState">
        <property name="geometry">
         <rect>
          <x>300</x>
@@ -549,7 +549,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QLineEdit" name="txtarrayAC1_MutualAidIncidentNumber">
+      <widget class="QLineEdit" name="DB_TEXT_AC1_MutualAidIncidentNumber">
        <property name="geometry">
         <rect>
          <x>360</x>
@@ -624,7 +624,7 @@
         <string>Time (24hr):</string>
        </property>
       </widget>
-      <widget class="QLineEdit" name="txtarrayAC1_PrimaryAction">
+      <widget class="QLineEdit" name="DB_TEXT_AC1_PrimaryAction">
        <property name="geometry">
         <rect>
          <x>300</x>
@@ -634,7 +634,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QLineEdit" name="txtarrayAC1_SecondaryAction">
+      <widget class="QLineEdit" name="DB_TEXT_AC1_SecondaryAction">
        <property name="geometry">
         <rect>
          <x>442</x>
@@ -670,7 +670,7 @@
         <string>Secondary Action:</string>
        </property>
       </widget>
-      <widget class="QDateTimeEdit" name="txtarrayAC1_Alarm">
+      <widget class="QDateTimeEdit" name="DB_TEXT_AC1_Alarm">
        <property name="geometry">
         <rect>
          <x>70</x>
@@ -680,7 +680,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QDateTimeEdit" name="txtarrayAC1_Arrival">
+      <widget class="QDateTimeEdit" name="DB_TEXT_AC1_Arrival">
        <property name="geometry">
         <rect>
          <x>70</x>
@@ -690,7 +690,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QDateTimeEdit" name="txtarrayAC1_Clear">
+      <widget class="QDateTimeEdit" name="DB_TEXT_AC1_Clear">
        <property name="geometry">
         <rect>
          <x>70</x>
@@ -700,7 +700,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QComboBox" name="txtarrayAC1_State">
+      <widget class="QComboBox" name="DB_TEXT_AC1_State">
        <property name="geometry">
         <rect>
          <x>300</x>
@@ -1027,7 +1027,7 @@
          <string>Personnel:</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAC2_Apparatus">
+       <widget class="QLineEdit" name="DB_TEXT_AC2_Apparatus">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -1037,7 +1037,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAC2_Personnel">
+       <widget class="QLineEdit" name="DB_TEXT_AC2_Personnel">
         <property name="geometry">
          <rect>
           <x>120</x>
@@ -1086,7 +1086,7 @@
          <string>Total Loss:</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAC2_ValueOfProperty">
+       <widget class="QLineEdit" name="DB_TEXT_AC2_ValueOfProperty">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -1096,7 +1096,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAC2_TotalLoss">
+       <widget class="QLineEdit" name="DB_TEXT_AC2_TotalLoss">
         <property name="geometry">
          <rect>
           <x>120</x>
@@ -1119,7 +1119,7 @@
        <property name="title">
         <string>Property Detector:</string>
        </property>
-       <widget class="QLineEdit" name="txtarrayAC2_MixedUseProperty">
+       <widget class="QLineEdit" name="DB_TEXT_AC2_MixedUseProperty">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -1129,7 +1129,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAC2_NumUnits">
+       <widget class="QLineEdit" name="DB_TEXT_AC2_NumUnits">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -1165,7 +1165,7 @@
          <string>Number Units:</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAC2_PropertyUse">
+       <widget class="QLineEdit" name="DB_TEXT_AC2_PropertyUse">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -1180,7 +1180,7 @@
          <rect>
           <x>10</x>
           <y>70</y>
-          <width>71</width>
+          <width>111</width>
           <height>16</height>
          </rect>
         </property>
@@ -1188,7 +1188,7 @@
          <string>Mixed Use Property:</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAC2_PropertyDetector">
+       <widget class="QLineEdit" name="DB_TEXT_AC2_PropertyDetector">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -1250,7 +1250,7 @@
          <string>Other:</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAC2_InjuriesFireService">
+       <widget class="QLineEdit" name="DB_TEXT_AC2_InjuriesFireService">
         <property name="geometry">
          <rect>
           <x>60</x>
@@ -1260,7 +1260,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAC2_InjuriesOther">
+       <widget class="QLineEdit" name="DB_TEXT_AC2_InjuriesOther">
         <property name="geometry">
          <rect>
           <x>140</x>
@@ -1270,7 +1270,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAC2_DeathsOther">
+       <widget class="QLineEdit" name="DB_TEXT_AC2_DeathsOther">
         <property name="geometry">
          <rect>
           <x>140</x>
@@ -1280,7 +1280,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAC2_DeathsFireService">
+       <widget class="QLineEdit" name="DB_TEXT_AC2_DeathsFireService">
         <property name="geometry">
          <rect>
           <x>60</x>
@@ -1355,7 +1355,7 @@
          <string>Class:</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAC2_HazMatType">
+       <widget class="QLineEdit" name="DB_TEXT_AC2_HazMatType">
         <property name="geometry">
          <rect>
           <x>20</x>
@@ -1365,7 +1365,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAC2_HazMatClass">
+       <widget class="QLineEdit" name="DB_TEXT_AC2_HazMatClass">
         <property name="geometry">
          <rect>
           <x>110</x>
@@ -1375,7 +1375,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAC2_HazMatUnit">
+       <widget class="QLineEdit" name="DB_TEXT_AC2_HazMatUnit">
         <property name="geometry">
          <rect>
           <x>110</x>
@@ -1385,7 +1385,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAC2_HazMatAmount">
+       <widget class="QLineEdit" name="DB_TEXT_AC2_HazMatAmount">
         <property name="geometry">
          <rect>
           <x>20</x>
@@ -1422,7 +1422,7 @@
         </property>
        </widget>
       </widget>
-      <widget class="QCheckBox" name="txtarrayAC2_JuvenileInvolvement">
+      <widget class="QCheckBox" name="DB_TEXT_AC2_JuvenileInvolvement">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -1543,7 +1543,7 @@
          <string>Suffix:</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF1_InvolvedBusinessName1">
+       <widget class="QLineEdit" name="DB_TEXT_AF1_InvolvedBusinessName1">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -1553,7 +1553,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF1_InvolvedTitle1">
+       <widget class="QLineEdit" name="DB_TEXT_AF1_InvolvedTitle1">
         <property name="geometry">
          <rect>
           <x>170</x>
@@ -1563,7 +1563,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF1_InvolvedFirstName1">
+       <widget class="QLineEdit" name="DB_TEXT_AF1_InvolvedFirstName1">
         <property name="geometry">
          <rect>
           <x>230</x>
@@ -1573,7 +1573,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF1_InvolvedMiddleInitial1">
+       <widget class="QLineEdit" name="DB_TEXT_AF1_InvolvedMiddleInitial1">
         <property name="geometry">
          <rect>
           <x>340</x>
@@ -1583,7 +1583,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF1_InvolvedLastName1">
+       <widget class="QLineEdit" name="DB_TEXT_AF1_InvolvedLastName1">
         <property name="geometry">
          <rect>
           <x>390</x>
@@ -1593,7 +1593,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF1_InvolvedSuffix1">
+       <widget class="QLineEdit" name="DB_TEXT_AF1_InvolvedSuffix1">
         <property name="geometry">
          <rect>
           <x>510</x>
@@ -1642,7 +1642,7 @@
          <string>Prefix:</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF1_InvolvedStreetSuffix1">
+       <widget class="QLineEdit" name="DB_TEXT_AF1_InvolvedStreetSuffix1">
         <property name="geometry">
          <rect>
           <x>510</x>
@@ -1652,7 +1652,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF1_InvolvedNumMile1">
+       <widget class="QLineEdit" name="DB_TEXT_AF1_InvolvedNumMile1">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -1662,7 +1662,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF1_InvolvedStreetPrefix1">
+       <widget class="QLineEdit" name="DB_TEXT_AF1_InvolvedStreetPrefix1">
         <property name="geometry">
          <rect>
           <x>90</x>
@@ -1672,7 +1672,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF1_InvolvedStreet1">
+       <widget class="QLineEdit" name="DB_TEXT_AF1_InvolvedStreet1">
         <property name="geometry">
          <rect>
           <x>180</x>
@@ -1682,7 +1682,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF1_InvolvedStreetType1">
+       <widget class="QLineEdit" name="DB_TEXT_AF1_InvolvedStreetType1">
         <property name="geometry">
          <rect>
           <x>430</x>
@@ -1718,7 +1718,7 @@
          <string>Street Type:</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF1_InvolvedZipCode1">
+       <widget class="QLineEdit" name="DB_TEXT_AF1_InvolvedZipCode1">
         <property name="geometry">
          <rect>
           <x>490</x>
@@ -1728,7 +1728,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QComboBox" name="txtarrayAF1_InvolvedState1">
+       <widget class="QComboBox" name="DB_TEXT_AF1_InvolvedState1">
         <property name="geometry">
          <rect>
           <x>430</x>
@@ -1999,7 +1999,7 @@
          </property>
         </item>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF1_InvolvedCityTown1">
+       <widget class="QLineEdit" name="DB_TEXT_AF1_InvolvedCityTown1">
         <property name="geometry">
          <rect>
           <x>180</x>
@@ -2009,7 +2009,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF1_InvolvedAptSuiteRm1">
+       <widget class="QLineEdit" name="DB_TEXT_AF1_InvolvedAptSuiteRm1">
         <property name="geometry">
          <rect>
           <x>90</x>
@@ -2084,7 +2084,7 @@
          <string>PO Box:</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF1_InvolvedPOBox1">
+       <widget class="QLineEdit" name="DB_TEXT_AF1_InvolvedPOBox1">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -2185,7 +2185,7 @@
          <string>Suffix:</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF1_InvolvedBusinessName2">
+       <widget class="QLineEdit" name="DB_TEXT_AF1_InvolvedBusinessName2">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -2195,7 +2195,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF1_InvolvedTitle2">
+       <widget class="QLineEdit" name="DB_TEXT_AF1_InvolvedTitle2">
         <property name="geometry">
          <rect>
           <x>170</x>
@@ -2205,7 +2205,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF1_InvolvedFirstName2">
+       <widget class="QLineEdit" name="DB_TEXT_AF1_InvolvedFirstName2">
         <property name="geometry">
          <rect>
           <x>230</x>
@@ -2215,7 +2215,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF1_InvolvedMiddleInitial2">
+       <widget class="QLineEdit" name="DB_TEXT_AF1_InvolvedMiddleInitial2">
         <property name="geometry">
          <rect>
           <x>340</x>
@@ -2225,7 +2225,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF1_InvolvedLastName2">
+       <widget class="QLineEdit" name="DB_TEXT_AF1_InvolvedLastName2">
         <property name="geometry">
          <rect>
           <x>390</x>
@@ -2235,7 +2235,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF1_InvolvedSuffix2">
+       <widget class="QLineEdit" name="DB_TEXT_AF1_InvolvedSuffix2">
         <property name="geometry">
          <rect>
           <x>510</x>
@@ -2284,7 +2284,7 @@
          <string>Prefix:</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF1_InvolvedStreetSuffix2">
+       <widget class="QLineEdit" name="DB_TEXT_AF1_InvolvedStreetSuffix2">
         <property name="geometry">
          <rect>
           <x>510</x>
@@ -2294,7 +2294,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF1_InvolvedNumMile2">
+       <widget class="QLineEdit" name="DB_TEXT_AF1_InvolvedNumMile2">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -2304,7 +2304,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF1_InvolvedStreetPrefix2">
+       <widget class="QLineEdit" name="DB_TEXT_AF1_InvolvedStreetPrefix2">
         <property name="geometry">
          <rect>
           <x>90</x>
@@ -2314,7 +2314,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF1_InvolvedStreet2">
+       <widget class="QLineEdit" name="DB_TEXT_AF1_InvolvedStreet2">
         <property name="geometry">
          <rect>
           <x>180</x>
@@ -2324,7 +2324,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF1_InvolvedStreetType2">
+       <widget class="QLineEdit" name="DB_TEXT_AF1_InvolvedStreetType2">
         <property name="geometry">
          <rect>
           <x>430</x>
@@ -2360,7 +2360,7 @@
          <string>Street Type:</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF1_InvolvedZipCode2">
+       <widget class="QLineEdit" name="DB_TEXT_AF1_InvolvedZipCode2">
         <property name="geometry">
          <rect>
           <x>490</x>
@@ -2370,7 +2370,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QComboBox" name="txtarrayAF1_InvolvedState2">
+       <widget class="QComboBox" name="DB_TEXT_AF1_InvolvedState2">
         <property name="geometry">
          <rect>
           <x>430</x>
@@ -2641,7 +2641,7 @@
          </property>
         </item>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF1_InvolvedCityTown2">
+       <widget class="QLineEdit" name="DB_TEXT_AF1_InvolvedCityTown2">
         <property name="geometry">
          <rect>
           <x>180</x>
@@ -2651,7 +2651,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF1_InvolvedAptSuiteRm2">
+       <widget class="QLineEdit" name="DB_TEXT_AF1_InvolvedAptSuiteRm2">
         <property name="geometry">
          <rect>
           <x>90</x>
@@ -2726,7 +2726,7 @@
          <string>PO Box:</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF1_InvolvedPOBox2">
+       <widget class="QLineEdit" name="DB_TEXT_AF1_InvolvedPOBox2">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -2819,7 +2819,7 @@
          <string>Type of Material First Ignited:</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF2_AreaOfIgnition">
+       <widget class="QLineEdit" name="DB_TEXT_AF2_AreaOfIgnition">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -2829,7 +2829,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF2_HeatSource">
+       <widget class="QLineEdit" name="DB_TEXT_AF2_HeatSource">
         <property name="geometry">
          <rect>
           <x>110</x>
@@ -2839,7 +2839,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF2_ItemFirstIgnited">
+       <widget class="QLineEdit" name="DB_TEXT_AF2_ItemFirstIgnited">
         <property name="geometry">
          <rect>
           <x>210</x>
@@ -2849,7 +2849,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF2_TypeMaterialFirstIgnited">
+       <widget class="QLineEdit" name="DB_TEXT_AF2_TypeMaterialFirstIgnited">
         <property name="geometry">
          <rect>
           <x>360</x>
@@ -2872,7 +2872,7 @@
          <string>Contributing Factor:</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF2_ContributingFactor">
+       <widget class="QLineEdit" name="DB_TEXT_AF2_ContributingFactor">
         <property name="geometry">
          <rect>
           <x>210</x>
@@ -2882,7 +2882,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF2_CauseOfIgnition">
+       <widget class="QLineEdit" name="DB_TEXT_AF2_CauseOfIgnition">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -2918,7 +2918,7 @@
          <string>Spread confied to object of origin?</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF2_SpreadConfined">
+       <widget class="QLineEdit" name="DB_TEXT_AF2_SpreadConfined">
         <property name="geometry">
          <rect>
           <x>360</x>
@@ -2980,7 +2980,7 @@
          <string>Sex:</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF2_HumanFactors">
+       <widget class="QLineEdit" name="DB_TEXT_AF2_HumanFactors">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -2990,7 +2990,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF2_HumanFactorsAge">
+       <widget class="QLineEdit" name="DB_TEXT_AF2_HumanFactorsAge">
         <property name="geometry">
          <rect>
           <x>360</x>
@@ -3000,7 +3000,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF2_HumanFactorsSex">
+       <widget class="QLineEdit" name="DB_TEXT_AF2_HumanFactorsSex">
         <property name="geometry">
          <rect>
           <x>440</x>
@@ -3062,7 +3062,7 @@
          <string>Portability:</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF2_EquipmentFactors">
+       <widget class="QLineEdit" name="DB_TEXT_AF2_EquipmentFactors">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -3072,7 +3072,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF2_EquipmentFactorsPower">
+       <widget class="QLineEdit" name="DB_TEXT_AF2_EquipmentFactorsPower">
         <property name="geometry">
          <rect>
           <x>160</x>
@@ -3082,7 +3082,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF2_EquipmentFactorsPortability">
+       <widget class="QLineEdit" name="DB_TEXT_AF2_EquipmentFactorsPortability">
         <property name="geometry">
          <rect>
           <x>230</x>
@@ -3105,7 +3105,7 @@
          <string>Mobile Property Type:</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF2_MobilePropertyMake">
+       <widget class="QLineEdit" name="DB_TEXT_AF2_MobilePropertyMake">
         <property name="geometry">
          <rect>
           <x>430</x>
@@ -3128,7 +3128,7 @@
          <string>Mobile Property Make:</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="txtarrayAF2_MobilePropertyType">
+       <widget class="QLineEdit" name="DB_TEXT_AF2_MobilePropertyType">
         <property name="geometry">
          <rect>
           <x>310</x>
@@ -3209,7 +3209,7 @@
         <string>Main Floor Size (Ft)</string>
        </property>
       </widget>
-      <widget class="QLineEdit" name="txtarraySF_BuildingType">
+      <widget class="QLineEdit" name="DB_TEXT_SF_BuildingType">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -3219,7 +3219,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QLineEdit" name="txtarraySF_BuildingStatus">
+      <widget class="QLineEdit" name="DB_TEXT_SF_BuildingStatus">
        <property name="geometry">
         <rect>
          <x>140</x>
@@ -3229,7 +3229,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QLineEdit" name="txtarraySF_BuildingHeightStories">
+      <widget class="QLineEdit" name="DB_INT_SF_BuildingHeightStories">
        <property name="geometry">
         <rect>
          <x>270</x>
@@ -3239,7 +3239,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QLineEdit" name="txtarraySF_MainFloorSizeFtW">
+      <widget class="QLineEdit" name="DB_INT_SF_MainFloorSizeFtW">
        <property name="geometry">
         <rect>
          <x>420</x>
@@ -3249,7 +3249,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QLineEdit" name="txtarraySF_MainFloorSizeFtH">
+      <widget class="QLineEdit" name="DB_INT_SF_MainFloorSizeFtH">
        <property name="geometry">
         <rect>
          <x>490</x>
@@ -3259,7 +3259,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QLineEdit" name="txtarraySF_StoryFireOrigin">
+      <widget class="QLineEdit" name="DB_INT_SF_StoryFireOrigin">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -3295,7 +3295,7 @@
         <string>Story Fire Origin:</string>
        </property>
       </widget>
-      <widget class="QLineEdit" name="txtarraySF_FireSpread">
+      <widget class="QLineEdit" name="DB_TEXT_SF_FireSpread">
        <property name="geometry">
         <rect>
          <x>140</x>
@@ -3318,7 +3318,7 @@
         <string>Detector Presence:</string>
        </property>
       </widget>
-      <widget class="QLineEdit" name="txtarraySF_DetectorPresence">
+      <widget class="QLineEdit" name="DB_INT_SF_DetectorPresence">
        <property name="geometry">
         <rect>
          <x>270</x>
@@ -3328,7 +3328,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QLineEdit" name="txtarraySF_DetectorType">
+      <widget class="QLineEdit" name="DB_TEXT_SF_DetectorType">
        <property name="geometry">
         <rect>
          <x>420</x>
@@ -3364,7 +3364,7 @@
         <string>Detector Power:</string>
        </property>
       </widget>
-      <widget class="QLineEdit" name="txtarraySF_DetectorPower">
+      <widget class="QLineEdit" name="DB_TEXT_SF_DetectorPower">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -3374,7 +3374,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QLineEdit" name="txtarraySF_DetectorOperation">
+      <widget class="QLineEdit" name="DB_TEXT_SF_DetectorOperation">
        <property name="geometry">
         <rect>
          <x>140</x>
@@ -3384,7 +3384,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QLineEdit" name="txtarraySF_DetectorFailureReason">
+      <widget class="QLineEdit" name="DB_TEXT_SF_DetectorFailureReason">
        <property name="geometry">
         <rect>
          <x>420</x>
@@ -3433,7 +3433,7 @@
         <string>Detector Operation:</string>
        </property>
       </widget>
-      <widget class="QLineEdit" name="txtarraySF_DetectorEffectiveness">
+      <widget class="QLineEdit" name="DB_TEXT_SF_DetectorEffectiveness">
        <property name="geometry">
         <rect>
          <x>270</x>
@@ -3456,7 +3456,7 @@
         <string>AES Presence:</string>
        </property>
       </widget>
-      <widget class="QLineEdit" name="txtarraySF_AESPresence">
+      <widget class="QLineEdit" name="DB_TEXT_SF_AESPresence">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -3466,7 +3466,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QLineEdit" name="txtarraySF_AESType">
+      <widget class="QLineEdit" name="DB_TEXT_SF_AESType">
        <property name="geometry">
         <rect>
          <x>140</x>
@@ -3476,7 +3476,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QLineEdit" name="txtarraySF_NumSprinklerHeadsOper">
+      <widget class="QLineEdit" name="DB_INT_SF_NumSprinklerHeadsOper">
        <property name="geometry">
         <rect>
          <x>420</x>
@@ -3486,7 +3486,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QLineEdit" name="txtarraySF_AESFailureReason">
+      <widget class="QLineEdit" name="DB_TEXT_SF_AESFailureReason">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -3548,7 +3548,7 @@
         <string>AES Type:</string>
        </property>
       </widget>
-      <widget class="QLineEdit" name="txtarraySF_AESOperation">
+      <widget class="QLineEdit" name="DB_TEXT_SF_AESOperation">
        <property name="geometry">
         <rect>
          <x>270</x>
@@ -3566,110 +3566,110 @@
  <tabstops>
   <tabstop>txtIDScan</tabstop>
   <tabstop>txtFDID</tabstop>
-  <tabstop>txtCallNum</tabstop>
-  <tabstop>txtarrayAC1_Location</tabstop>
-  <tabstop>txtarrayAC1_TravelDirections</tabstop>
-  <tabstop>txtarrayAC1_NumMile</tabstop>
-  <tabstop>txtarrayAC1_StreetPrefix</tabstop>
-  <tabstop>txtarrayAC1_Street</tabstop>
-  <tabstop>txtarrayAC1_StreetType</tabstop>
-  <tabstop>txtarrayAC1_StreetSuffix</tabstop>
-  <tabstop>txtarrayAC1_AptSuiteRm</tabstop>
-  <tabstop>txtarrayAC1_CityTown</tabstop>
-  <tabstop>txtarrayAC1_State</tabstop>
-  <tabstop>txtarrayAC1_ZipCode</tabstop>
-  <tabstop>txtarrayAC1_IncidentType</tabstop>
-  <tabstop>txtarrayAC1_MutualAid</tabstop>
-  <tabstop>txtarrayAC1_MutualAidFDID</tabstop>
-  <tabstop>txtarrayAC1_MutualAidState</tabstop>
-  <tabstop>txtarrayAC1_MutualAidIncidentNumber</tabstop>
-  <tabstop>txtarrayAC1_Alarm</tabstop>
-  <tabstop>txtarrayAC1_Arrival</tabstop>
-  <tabstop>txtarrayAC1_Clear</tabstop>
-  <tabstop>txtarrayAC1_PrimaryAction</tabstop>
-  <tabstop>txtarrayAC1_SecondaryAction</tabstop>
-  <tabstop>txtarrayAC2_Apparatus</tabstop>
-  <tabstop>txtarrayAC2_Personnel</tabstop>
-  <tabstop>txtarrayAC2_ValueOfProperty</tabstop>
-  <tabstop>txtarrayAC2_TotalLoss</tabstop>
-  <tabstop>txtarrayAC2_InjuriesFireService</tabstop>
-  <tabstop>txtarrayAC2_InjuriesOther</tabstop>
-  <tabstop>txtarrayAC2_DeathsFireService</tabstop>
-  <tabstop>txtarrayAC2_DeathsOther</tabstop>
-  <tabstop>txtarrayAC2_HazMatType</tabstop>
-  <tabstop>txtarrayAC2_HazMatClass</tabstop>
-  <tabstop>txtarrayAC2_HazMatAmount</tabstop>
-  <tabstop>txtarrayAC2_HazMatUnit</tabstop>
-  <tabstop>txtarrayAC2_PropertyDetector</tabstop>
-  <tabstop>txtarrayAC2_MixedUseProperty</tabstop>
-  <tabstop>txtarrayAC2_PropertyUse</tabstop>
-  <tabstop>txtarrayAC2_NumUnits</tabstop>
-  <tabstop>txtarrayAC2_JuvenileInvolvement</tabstop>
-  <tabstop>txtarrayAF1_InvolvedBusinessName1</tabstop>
-  <tabstop>txtarrayAF1_InvolvedTitle1</tabstop>
-  <tabstop>txtarrayAF1_InvolvedFirstName1</tabstop>
-  <tabstop>txtarrayAF1_InvolvedMiddleInitial1</tabstop>
-  <tabstop>txtarrayAF1_InvolvedLastName1</tabstop>
-  <tabstop>txtarrayAF1_InvolvedSuffix1</tabstop>
-  <tabstop>txtarrayAF1_InvolvedNumMile1</tabstop>
-  <tabstop>txtarrayAF1_InvolvedStreetPrefix1</tabstop>
-  <tabstop>txtarrayAF1_InvolvedStreet1</tabstop>
-  <tabstop>txtarrayAF1_InvolvedStreetType1</tabstop>
-  <tabstop>txtarrayAF1_InvolvedStreetSuffix1</tabstop>
-  <tabstop>txtarrayAF1_InvolvedPOBox1</tabstop>
-  <tabstop>txtarrayAF1_InvolvedAptSuiteRm1</tabstop>
-  <tabstop>txtarrayAF1_InvolvedCityTown1</tabstop>
-  <tabstop>txtarrayAF1_InvolvedState1</tabstop>
-  <tabstop>txtarrayAF1_InvolvedZipCode1</tabstop>
-  <tabstop>txtarrayAF1_InvolvedBusinessName2</tabstop>
-  <tabstop>txtarrayAF1_InvolvedTitle2</tabstop>
-  <tabstop>txtarrayAF1_InvolvedFirstName2</tabstop>
-  <tabstop>txtarrayAF1_InvolvedMiddleInitial2</tabstop>
-  <tabstop>txtarrayAF1_InvolvedLastName2</tabstop>
-  <tabstop>txtarrayAF1_InvolvedSuffix2</tabstop>
-  <tabstop>txtarrayAF1_InvolvedNumMile2</tabstop>
-  <tabstop>txtarrayAF1_InvolvedStreetPrefix2</tabstop>
-  <tabstop>txtarrayAF1_InvolvedStreet2</tabstop>
-  <tabstop>txtarrayAF1_InvolvedStreetType2</tabstop>
-  <tabstop>txtarrayAF1_InvolvedStreetSuffix2</tabstop>
-  <tabstop>txtarrayAF1_InvolvedPOBox2</tabstop>
-  <tabstop>txtarrayAF1_InvolvedAptSuiteRm2</tabstop>
-  <tabstop>txtarrayAF1_InvolvedCityTown2</tabstop>
-  <tabstop>txtarrayAF1_InvolvedState2</tabstop>
-  <tabstop>txtarrayAF1_InvolvedZipCode2</tabstop>
-  <tabstop>txtarrayAF2_AreaOfIgnition</tabstop>
-  <tabstop>txtarrayAF2_HeatSource</tabstop>
-  <tabstop>txtarrayAF2_ItemFirstIgnited</tabstop>
-  <tabstop>txtarrayAF2_TypeMaterialFirstIgnited</tabstop>
-  <tabstop>txtarrayAF2_CauseOfIgnition</tabstop>
-  <tabstop>txtarrayAF2_ContributingFactor</tabstop>
-  <tabstop>txtarrayAF2_SpreadConfined</tabstop>
-  <tabstop>txtarrayAF2_HumanFactors</tabstop>
-  <tabstop>txtarrayAF2_HumanFactorsAge</tabstop>
-  <tabstop>txtarrayAF2_HumanFactorsSex</tabstop>
-  <tabstop>txtarrayAF2_EquipmentFactors</tabstop>
-  <tabstop>txtarrayAF2_EquipmentFactorsPower</tabstop>
-  <tabstop>txtarrayAF2_EquipmentFactorsPortability</tabstop>
-  <tabstop>txtarrayAF2_MobilePropertyType</tabstop>
-  <tabstop>txtarrayAF2_MobilePropertyMake</tabstop>
-  <tabstop>txtarraySF_BuildingType</tabstop>
-  <tabstop>txtarraySF_BuildingStatus</tabstop>
-  <tabstop>txtarraySF_BuildingHeightStories</tabstop>
-  <tabstop>txtarraySF_MainFloorSizeFtW</tabstop>
-  <tabstop>txtarraySF_MainFloorSizeFtH</tabstop>
-  <tabstop>txtarraySF_StoryFireOrigin</tabstop>
-  <tabstop>txtarraySF_FireSpread</tabstop>
-  <tabstop>txtarraySF_DetectorPresence</tabstop>
-  <tabstop>txtarraySF_DetectorType</tabstop>
-  <tabstop>txtarraySF_DetectorPower</tabstop>
-  <tabstop>txtarraySF_DetectorOperation</tabstop>
-  <tabstop>txtarraySF_DetectorEffectiveness</tabstop>
-  <tabstop>txtarraySF_DetectorFailureReason</tabstop>
-  <tabstop>txtarraySF_AESPresence</tabstop>
-  <tabstop>txtarraySF_AESType</tabstop>
-  <tabstop>txtarraySF_AESOperation</tabstop>
-  <tabstop>txtarraySF_NumSprinklerHeadsOper</tabstop>
-  <tabstop>txtarraySF_AESFailureReason</tabstop>
+  <tabstop>DB_INT_TS_CallNum</tabstop>
+  <tabstop>DB_TEXT_AC1_Location</tabstop>
+  <tabstop>DB_TEXT_AC1_TravelDirections</tabstop>
+  <tabstop>DB_TEXT_AC1_NumMile</tabstop>
+  <tabstop>DB_TEXT_AC1_StreetPrefix</tabstop>
+  <tabstop>DB_TEXT_AC1_Street</tabstop>
+  <tabstop>DB_TEXT_AC1_StreetType</tabstop>
+  <tabstop>DB_TEXT_AC1_StreetSuffix</tabstop>
+  <tabstop>DB_TEXT_AC1_AptSuiteRm</tabstop>
+  <tabstop>DB_TEXT_AC1_CityTown</tabstop>
+  <tabstop>DB_TEXT_AC1_State</tabstop>
+  <tabstop>DB_TEXT_AC1_ZipCode</tabstop>
+  <tabstop>DB_TEXT_AC1_IncidentType</tabstop>
+  <tabstop>DB_TEXT_AC1_MutualAid</tabstop>
+  <tabstop>DB_TEXT_AC1_MutualAidFDID</tabstop>
+  <tabstop>DB_TEXT_AC1_MutualAidState</tabstop>
+  <tabstop>DB_TEXT_AC1_MutualAidIncidentNumber</tabstop>
+  <tabstop>DB_TEXT_AC1_Alarm</tabstop>
+  <tabstop>DB_TEXT_AC1_Arrival</tabstop>
+  <tabstop>DB_TEXT_AC1_Clear</tabstop>
+  <tabstop>DB_TEXT_AC1_PrimaryAction</tabstop>
+  <tabstop>DB_TEXT_AC1_SecondaryAction</tabstop>
+  <tabstop>DB_TEXT_AC2_Apparatus</tabstop>
+  <tabstop>DB_TEXT_AC2_Personnel</tabstop>
+  <tabstop>DB_TEXT_AC2_ValueOfProperty</tabstop>
+  <tabstop>DB_TEXT_AC2_TotalLoss</tabstop>
+  <tabstop>DB_TEXT_AC2_InjuriesFireService</tabstop>
+  <tabstop>DB_TEXT_AC2_InjuriesOther</tabstop>
+  <tabstop>DB_TEXT_AC2_DeathsFireService</tabstop>
+  <tabstop>DB_TEXT_AC2_DeathsOther</tabstop>
+  <tabstop>DB_TEXT_AC2_HazMatType</tabstop>
+  <tabstop>DB_TEXT_AC2_HazMatClass</tabstop>
+  <tabstop>DB_TEXT_AC2_HazMatAmount</tabstop>
+  <tabstop>DB_TEXT_AC2_HazMatUnit</tabstop>
+  <tabstop>DB_TEXT_AC2_PropertyDetector</tabstop>
+  <tabstop>DB_TEXT_AC2_MixedUseProperty</tabstop>
+  <tabstop>DB_TEXT_AC2_PropertyUse</tabstop>
+  <tabstop>DB_TEXT_AC2_NumUnits</tabstop>
+  <tabstop>DB_TEXT_AC2_JuvenileInvolvement</tabstop>
+  <tabstop>DB_TEXT_AF1_InvolvedBusinessName1</tabstop>
+  <tabstop>DB_TEXT_AF1_InvolvedTitle1</tabstop>
+  <tabstop>DB_TEXT_AF1_InvolvedFirstName1</tabstop>
+  <tabstop>DB_TEXT_AF1_InvolvedMiddleInitial1</tabstop>
+  <tabstop>DB_TEXT_AF1_InvolvedLastName1</tabstop>
+  <tabstop>DB_TEXT_AF1_InvolvedSuffix1</tabstop>
+  <tabstop>DB_TEXT_AF1_InvolvedNumMile1</tabstop>
+  <tabstop>DB_TEXT_AF1_InvolvedStreetPrefix1</tabstop>
+  <tabstop>DB_TEXT_AF1_InvolvedStreet1</tabstop>
+  <tabstop>DB_TEXT_AF1_InvolvedStreetType1</tabstop>
+  <tabstop>DB_TEXT_AF1_InvolvedStreetSuffix1</tabstop>
+  <tabstop>DB_TEXT_AF1_InvolvedPOBox1</tabstop>
+  <tabstop>DB_TEXT_AF1_InvolvedAptSuiteRm1</tabstop>
+  <tabstop>DB_TEXT_AF1_InvolvedCityTown1</tabstop>
+  <tabstop>DB_TEXT_AF1_InvolvedState1</tabstop>
+  <tabstop>DB_TEXT_AF1_InvolvedZipCode1</tabstop>
+  <tabstop>DB_TEXT_AF1_InvolvedBusinessName2</tabstop>
+  <tabstop>DB_TEXT_AF1_InvolvedTitle2</tabstop>
+  <tabstop>DB_TEXT_AF1_InvolvedFirstName2</tabstop>
+  <tabstop>DB_TEXT_AF1_InvolvedMiddleInitial2</tabstop>
+  <tabstop>DB_TEXT_AF1_InvolvedLastName2</tabstop>
+  <tabstop>DB_TEXT_AF1_InvolvedSuffix2</tabstop>
+  <tabstop>DB_TEXT_AF1_InvolvedNumMile2</tabstop>
+  <tabstop>DB_TEXT_AF1_InvolvedStreetPrefix2</tabstop>
+  <tabstop>DB_TEXT_AF1_InvolvedStreet2</tabstop>
+  <tabstop>DB_TEXT_AF1_InvolvedStreetType2</tabstop>
+  <tabstop>DB_TEXT_AF1_InvolvedStreetSuffix2</tabstop>
+  <tabstop>DB_TEXT_AF1_InvolvedPOBox2</tabstop>
+  <tabstop>DB_TEXT_AF1_InvolvedAptSuiteRm2</tabstop>
+  <tabstop>DB_TEXT_AF1_InvolvedCityTown2</tabstop>
+  <tabstop>DB_TEXT_AF1_InvolvedState2</tabstop>
+  <tabstop>DB_TEXT_AF1_InvolvedZipCode2</tabstop>
+  <tabstop>DB_TEXT_AF2_AreaOfIgnition</tabstop>
+  <tabstop>DB_TEXT_AF2_HeatSource</tabstop>
+  <tabstop>DB_TEXT_AF2_ItemFirstIgnited</tabstop>
+  <tabstop>DB_TEXT_AF2_TypeMaterialFirstIgnited</tabstop>
+  <tabstop>DB_TEXT_AF2_CauseOfIgnition</tabstop>
+  <tabstop>DB_TEXT_AF2_ContributingFactor</tabstop>
+  <tabstop>DB_TEXT_AF2_SpreadConfined</tabstop>
+  <tabstop>DB_TEXT_AF2_HumanFactors</tabstop>
+  <tabstop>DB_TEXT_AF2_HumanFactorsAge</tabstop>
+  <tabstop>DB_TEXT_AF2_HumanFactorsSex</tabstop>
+  <tabstop>DB_TEXT_AF2_EquipmentFactors</tabstop>
+  <tabstop>DB_TEXT_AF2_EquipmentFactorsPower</tabstop>
+  <tabstop>DB_TEXT_AF2_EquipmentFactorsPortability</tabstop>
+  <tabstop>DB_TEXT_AF2_MobilePropertyType</tabstop>
+  <tabstop>DB_TEXT_AF2_MobilePropertyMake</tabstop>
+  <tabstop>DB_TEXT_SF_BuildingType</tabstop>
+  <tabstop>DB_TEXT_SF_BuildingStatus</tabstop>
+  <tabstop>DB_INT_SF_BuildingHeightStories</tabstop>
+  <tabstop>DB_INT_SF_MainFloorSizeFtW</tabstop>
+  <tabstop>DB_INT_SF_MainFloorSizeFtH</tabstop>
+  <tabstop>DB_INT_SF_StoryFireOrigin</tabstop>
+  <tabstop>DB_TEXT_SF_FireSpread</tabstop>
+  <tabstop>DB_INT_SF_DetectorPresence</tabstop>
+  <tabstop>DB_TEXT_SF_DetectorType</tabstop>
+  <tabstop>DB_TEXT_SF_DetectorPower</tabstop>
+  <tabstop>DB_TEXT_SF_DetectorOperation</tabstop>
+  <tabstop>DB_TEXT_SF_DetectorEffectiveness</tabstop>
+  <tabstop>DB_TEXT_SF_DetectorFailureReason</tabstop>
+  <tabstop>DB_TEXT_SF_AESPresence</tabstop>
+  <tabstop>DB_TEXT_SF_AESType</tabstop>
+  <tabstop>DB_TEXT_SF_AESOperation</tabstop>
+  <tabstop>DB_INT_SF_NumSprinklerHeadsOper</tabstop>
+  <tabstop>DB_TEXT_SF_AESFailureReason</tabstop>
   <tabstop>tabWidget</tabstop>
   <tabstop>btnSaveCall</tabstop>
   <tabstop>tblTimesheet</tabstop>

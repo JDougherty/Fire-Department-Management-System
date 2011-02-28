@@ -31,6 +31,7 @@
 #include <QtDebug>
 #include <QCryptographicHash>
 #include <QDir>
+#include <QWidget>
 
 //! Handles a DB connection and verifies DB integrity.
 /*!
@@ -59,6 +60,7 @@ class DatabaseManager : public QObject
         void                    close( void );
 
         bool                    build( void );
+        void                    buildQueries( QString sTableName, QWidget *pTmpWidget );
         bool                    verify( void );
         bool                    remove( void );
 

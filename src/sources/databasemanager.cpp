@@ -414,3 +414,70 @@ bool DatabaseManager::query( QSqlQuery &query )
    qDebug( "Database: Executing Query: %s", qPrintable( query.executedQuery() ) );
    return ret;
 }
+
+//! Builds the queries for all of the widgets in the focus chain.
+/*!
+  \param sTableName Name of the DB table.
+  \param pWidget First widget in the chain.
+*/
+void DatabaseManager::buildQueries( QString sTableName, QWidget *pWidget )
+{
+    QList<QWidget*> edits;
+    QWidget *pTmpWidget = pWidget->nextInFocusChain();
+    QString sCreateQuery, sSelectQuery, sInsertQuery, sInsertQueryValues, sUpdateQuery, sDBObjName, sObjName;
+
+    while ( pTmpWidget != pWidget )
+    {
+        if ( pTmpWidget->objectName().startsWith( "DB_" ) )
+        {
+            edits += pTmpWidget;
+        }
+        pTmpWidget = pTmpWidget->nextInFocusChain();
+    }
+
+    sCreateQuery = "CREATE TABLE " + sTableName + "(id INTEGER PRIMARY KEY,";
+    sSelectQuery = "SELECT ";
+    sInsertQuery = "INSERT INTO " + sTableName + " ( ";
+    sInsertQueryValues = " VALUES ( ";
+    sUpdateQuery = "UPDATE " + sTableName + " a SET ";
+
+    foreach ( pTmpWidget, edits )
+    {
+        sDBObjName = pTmpWidget->objectName();
+
+        if ( sDBObjName.startsWith( "DB_TEXT" ) )
+        {
+            sObjName = sDBObjName.right(sDBObjName.size() - 8);
+            sCreateQuery += sObjName + " TEXT,";
+        }
+        else if ( sDBObjName.startsWith( "DB_INT" ) )
+        {
+            sObjName = sDBObjName.right(sDBObjName.size() - 7);
+            sCreateQuery += sObjName + " INTEGER,";
+        }
+        else
+        {
+            qDebug( qPrintable( "Unrecognized DB field type" + sDBObjName + "." ) );
+            continue;
+        }
+
+        sSelectQuery += sObjName + ",";
+
+        sInsertQuery += sObjName + ",";
+        sInsertQueryValues += ":" + sDBObjName + ",";
+
+        sUpdateQuery += "a." + sObjName + " = :" + sDBObjName + ",";
+    }
+
+    sCreateQuery.replace( sCreateQuery.size() - 1, 1, QChar( ')' ) ); // replace the last char with ')'
+
+    sSelectQuery.replace( sSelectQuery.size() - 1, 1, QChar( ' ' ) ); // replace the last char with ' '
+    sSelectQuery += "FROM " + sTableName + " WHERE id = :id";
+
+    sInsertQuery.replace( sInsertQuery.size() - 1, 1, QChar( ')' ) ); // replace the last char with ')'
+    sInsertQueryValues.replace( sInsertQueryValues.size() - 1, 1, QChar( ')' ) ); // replace the last char with ')'
+    sInsertQuery += sInsertQueryValues;
+
+    sUpdateQuery.replace( sUpdateQuery.size() - 1, 1, QChar( ' ' ) ); // replace the last char with ' '
+    sUpdateQuery += "WHERE a.id = :id)";
+}

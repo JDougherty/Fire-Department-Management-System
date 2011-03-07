@@ -32,6 +32,11 @@
 #include <QCryptographicHash>
 #include <QDir>
 #include <QWidget>
+#include <QMap>
+#include <QLineEdit>
+#include <QDateTimeEdit>
+#include <QComboBox>
+#include <QCheckBox>
 
 //! Handles a DB connection and verifies DB integrity.
 /*!
@@ -43,6 +48,8 @@ class DatabaseManager : public QObject
         QSqlDatabase            _DB;
 
         QString                 _sDBFile; //!< DB file path.
+
+        QMap<QString, QMap<QString, QString> > _queryMap; //!< Dictionary containing UI queries
 
         bool                    buildStructure( void );
         bool                    verifyStructure( void );
@@ -60,9 +67,11 @@ class DatabaseManager : public QObject
         void                    close( void );
 
         bool                    build( void );
-        void                    buildQueries( QString sTableName, QWidget *pTmpWidget );
+        void                    buildQueries( QString sTableName, QString sTabName, QWidget *pWidget );
         bool                    verify( void );
         bool                    remove( void );
+
+        bool                    updateUI( int iID, QString sTableName, QString sTabName, QWidget *pWidget );
 
         bool                    query( QSqlQuery &qry );
 

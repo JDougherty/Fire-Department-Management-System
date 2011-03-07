@@ -117,7 +117,6 @@ bool Firefighter::update( DatabaseManager *pDB )
         qWarning( "Firefighter Error (%d): Could not update firefighter information in database. Database Error: %s",
                   _iID, qPrintable( updateQuery.lastError().text() ) );
         return false;
-
     }
 
     qDebug( "Firefighter Information (%d): Firefighter successfully updated in database.", _iID );

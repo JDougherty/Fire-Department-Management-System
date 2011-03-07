@@ -420,7 +420,7 @@ bool DatabaseManager::query( QSqlQuery &query )
   \param sTableName Name of the DB table.
   \param pWidget First widget in the chain.
 */
-void DatabaseManager::buildQueries( QString sTableName, QWidget *pWidget )
+void DatabaseManager::buildQueries( QString sTableName, QString sTabName, QWidget *pWidget )
 {
     QList<QWidget*> edits;
     QWidget *pTmpWidget = pWidget->nextInFocusChain();
@@ -428,7 +428,7 @@ void DatabaseManager::buildQueries( QString sTableName, QWidget *pWidget )
 
     while ( pTmpWidget != pWidget )
     {
-        if ( pTmpWidget->objectName().startsWith( "DB_" ) )
+        if ( pTmpWidget->objectName().startsWith( "DB_" ) && (sTabName == " " ||  pTmpWidget->objectName().contains( sTabName ) ) )
         {
             edits += pTmpWidget;
         }
@@ -447,12 +447,12 @@ void DatabaseManager::buildQueries( QString sTableName, QWidget *pWidget )
 
         if ( sDBObjName.startsWith( "DB_TEXT" ) )
         {
-            sObjName = sDBObjName.right(sDBObjName.size() - 8);
+            sObjName = sDBObjName.right( sDBObjName.size() - 8 );
             sCreateQuery += sObjName + " TEXT,";
         }
         else if ( sDBObjName.startsWith( "DB_INT" ) )
         {
-            sObjName = sDBObjName.right(sDBObjName.size() - 7);
+            sObjName = sDBObjName.right( sDBObjName.size() - 7 );
             sCreateQuery += sObjName + " INTEGER,";
         }
         else
@@ -480,4 +480,80 @@ void DatabaseManager::buildQueries( QString sTableName, QWidget *pWidget )
 
     sUpdateQuery.replace( sUpdateQuery.size() - 1, 1, QChar( ' ' ) ); // replace the last char with ' '
     sUpdateQuery += "WHERE a.id = :id)";
+
+    QMap<QString, QString> uiQueries;
+    uiQueries.insert( "create", sCreateQuery );
+    uiQueries.insert( "select", sSelectQuery );
+    uiQueries.insert( "insert", sInsertQuery );
+    uiQueries.insert( "update", sUpdateQuery );
+    _queryMap.insert( sTableName, uiQueries );
+
+    qDebug( qPrintable( "Generating queries for the " + sTableName + " table." ) );
+    qDebug( qPrintable( sCreateQuery ) );
+    qDebug( qPrintable( sSelectQuery ) );
+    qDebug( qPrintable( sInsertQuery ) );
+    qDebug( qPrintable( sUpdateQuery ) );
+}
+
+bool DatabaseManager::updateUI( int iID, QString sTableName, QString sTabName, QWidget *pWidget )
+{
+    QList<QWidget*> edits;
+    QWidget *pTmpWidget = pWidget->nextInFocusChain();
+
+    while ( pTmpWidget != pWidget )
+    {
+        if ( pTmpWidget->objectName().startsWith( "DB_" ) && (sTabName == " " ||  pTmpWidget->objectName().contains( sTabName ) ) )
+        {
+            edits += pTmpWidget;
+        }
+        pTmpWidget = pTmpWidget->nextInFocusChain();
+    }
+
+    QSqlQuery updateQuery;
+    updateQuery.prepare(_queryMap[sTableName]["update"]);
+
+    foreach ( pTmpWidget, edits )
+    {
+        QLineEdit *tmplineedit = qobject_cast<QLineEdit *>( pTmpWidget );
+        QDateTimeEdit *tmpdatetime = qobject_cast<QDateTimeEdit *>( pTmpWidget );
+        QComboBox *tmpcombo = qobject_cast<QComboBox *>( pTmpWidget );
+        QCheckBox *tmpcheck = qobject_cast<QCheckBox *>( pTmpWidget );
+
+        if ( tmplineedit )
+        {
+            updateQuery.bindValue( ":" + tmplineedit->objectName(), tmplineedit->text() );
+        }
+        else if ( tmpdatetime )
+        {
+            updateQuery.bindValue( ":" + tmpdatetime->objectName(), tmpdatetime->dateTime().toString( "yyyy-MM-dd hh:mm:00.000" ) );
+        }
+        else if ( tmpcombo )
+        {
+            updateQuery.bindValue( ":" + tmpcombo->objectName(), tmpcombo->currentText() );
+        }
+        else if ( tmpcheck )
+        {
+            updateQuery.bindValue( ":" + tmpcheck->objectName(),tmpcheck->objectName() );
+        }
+    }
+
+    updateQuery.bindValue( ":id", iID );
+
+    QMapIterator<QString, QVariant> i( updateQuery.boundValues() );
+    while ( i.hasNext() )
+    {
+        i.next();
+        qDebug( qPrintable( i.key() + " " + qPrintable( i.value().toString() ) ) );
+    }
+
+    if ( !query( updateQuery ) )
+    {
+        qWarning( "Database Error: Could not update table '%s' entry #%d: %s",
+                  qPrintable( sTableName ), iID, qPrintable( updateQuery.lastError().text() ) );
+        return false;
+    }
+
+    qDebug( "Database: Updated table '%s' entry #%d.", qPrintable( sTableName), iID );
+
+    return true;
 }

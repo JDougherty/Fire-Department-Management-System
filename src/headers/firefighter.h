@@ -29,7 +29,7 @@ class Firefighter
     private:
         QVector<QString>        _attributes;
 
-        int                     _iID;
+
 
         bool                    insert( DatabaseManager *pDB );
         bool                    update( DatabaseManager *pDB );
@@ -39,6 +39,8 @@ class Firefighter
 
         bool                    save( DatabaseManager *pDB );
         bool                    load( DatabaseManager *pDB, int iID );
+
+        int                     _iID;
 
         // accessors
         int                     id( void );
@@ -61,7 +63,7 @@ class Firefighter
         QString                 cdl( void );
 
         // setters
-        void                     id( int iID );
+        void                    id( int iID );
         void                    firstName( QString s );
         void                    middleName( QString s );
         void                    lastName( QString s );

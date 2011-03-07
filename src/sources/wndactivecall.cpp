@@ -13,6 +13,7 @@ wndActiveCall::wndActiveCall( QWidget *pParent, DatabaseManager *pDB ) :
     _pDB = pDB;
     _iCallID = -1;
     _bAddCall = true;
+    //pDB->buildQueries( "Test", _pUI->tabWidget->nextInFocusChain() );
 }
 
 //! Constructor for editing a call.
@@ -88,7 +89,7 @@ void wndActiveCall::btnSaveCallClicked( void )
 
     while ( tmpw != _pUI->tabWidget )
     {
-        if ( tmpw->objectName().startsWith( "txtarray" ) )
+        if ( tmpw->objectName().startsWith( "DB" ) )
         {
             edits += tmpw;
         }
@@ -133,7 +134,7 @@ void wndActiveCall::btnSaveCallClicked( void )
           "AESOperation=?, NumSprinklerHeadsOper=?, AESFailureReason=?"
           " WHERE id = ?");
 
-    updateQuery.addBindValue( _pUI->txtCallNum->text() );
+    updateQuery.addBindValue( _pUI->DB_INT_TS_CallNum->text() );
 
     for ( int i = 0; i < edits.size(); i++ )
     {

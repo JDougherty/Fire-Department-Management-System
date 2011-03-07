@@ -43,6 +43,8 @@ wndFirefighter::wndFirefighter( QWidget *pParent, DatabaseManager *pDB ) :
     // Disable the training and equipment fields
     enableTrainingFields( false );
     enableEquipmentFields( false );
+
+     pDB->buildQueries( "firefighters", "_PI_", _pUI->tabWidget->nextInFocusChain() );
 }
 
 //! Constructor for editing a firefighter.
@@ -69,6 +71,8 @@ wndFirefighter::wndFirefighter( QWidget *pParent, DatabaseManager *pDB, int iID 
     // Disable the training and equipment fields
     enableTrainingFields( false );
     enableEquipmentFields( false );
+
+    pDB->buildQueries( "firefighters", "_PI_", _pUI->tabWidget->nextInFocusChain() );
 }
 
 wndFirefighter::~wndFirefighter( void )
@@ -83,45 +87,45 @@ wndFirefighter::~wndFirefighter( void )
 //! Populate the personal info tab with the firefighter's data.
 void wndFirefighter::loadPersonalInfo( void )
 {
-    _pUI->txtFirstName->setText( _FF.firstName() );
-    _pUI->txtMiddleName->setText( _FF.middleName() );
-    _pUI->txtLastName->setText( _FF.lastName() );
-    _pUI->dateDob->setDate( QVariant( _FF.dob() ).toDate() );
-    _pUI->txtLocalID->setText( _FF.localID() );
-    _pUI->txtStateID->setText( _FF.stateID() );
-    _pUI->txtAddress->setText( _FF.address() );
-    _pUI->txtCity->setText( _FF.city() );
-    _pUI->txtState->setCurrentIndex( _pUI->txtState->findText( _FF.state() ) );
-    _pUI->txtZipCode->setText( _FF.zipCode());
-    _pUI->dateJoin->setDate( QVariant( _FF.dateJoin() ).toDate() );
-    _pUI->txtStatus->setText( _FF.status() );
-    _pUI->txtHphone->setText( _FF.hphone() );
-    _pUI->txtWphone->setText( _FF.wphone() );
-    _pUI->txtCphone->setText( _FF.cphone() );
-    _pUI->txtDrvLic->setText( _FF.drvLic() );
-    _pUI->txtCDL->setText( _FF.cdl() );
+    _pUI->DB_TEXT_PI_FirstName->setText( _FF.firstName() );
+    _pUI->DB_TEXT_PI_MiddleName->setText( _FF.middleName() );
+    _pUI->DB_TEXT_PI_LastName->setText( _FF.lastName() );
+    _pUI->PI_dateDob->setDate( QVariant( _FF.dob() ).toDate() );
+    _pUI->DB_TEXT_PI_LocalID->setText( _FF.localID() );
+    _pUI->DB_TEXT_PI_StateID->setText( _FF.stateID() );
+    _pUI->DB_TEXT_PI_Address->setText( _FF.address() );
+    _pUI->DB_TEXT_PI_City->setText( _FF.city() );
+    _pUI->DB_TEXT_PI_State->setCurrentIndex( _pUI->DB_TEXT_PI_State->findText( _FF.state() ) );
+    _pUI->DB_TEXT_PI_ZipCode->setText( _FF.zipCode());
+    _pUI->PI_dateJoin->setDate( QVariant( _FF.dateJoin() ).toDate() );
+    _pUI->DB_TEXT_PI_Status->setText( _FF.status() );
+    _pUI->DB_TEXT_PI_Hphone->setText( _FF.hphone() );
+    _pUI->DB_TEXT_PI_Wphone->setText( _FF.wphone() );
+    _pUI->DB_TEXT_PI_Cphone->setText( _FF.cphone() );
+    _pUI->DB_TEXT_PI_DrvLic->setText( _FF.drvLic() );
+    _pUI->DB_TEXT_PI_CDL->setText( _FF.cdl() );
 }
 
 //! Updates the firefighter's personal information in the database when the Update button is clicked.
 void wndFirefighter::btnSavePersonalInfoClicked( void )
 {
-    _FF.firstName( _pUI->txtFirstName->text() );
-    _FF.middleName( _pUI->txtMiddleName->text() );
-    _FF.lastName( _pUI->txtLastName->text() );
-    _FF.dob( _pUI->dateDob->date().toString( "yyyy-MM-dd 00:00:00.000" ) );
-    _FF.localID( _pUI->txtLocalID->text() );
-    _FF.stateID( _pUI->txtStateID->text() );
-    _FF.address( _pUI->txtAddress->text() );
-    _FF.city( _pUI->txtCity->text() );
-    _FF.state( _pUI->txtState->itemText( _pUI->txtState->currentIndex() ) );
-    _FF.zipCode( _pUI->txtZipCode->text() );
-    _FF.dateJoin( _pUI->dateJoin->date().toString( "yyyy-MM-dd 00:00:00.000" ) );
-    _FF.status( _pUI->txtStatus->text() );
-    _FF.hphone( _pUI->txtHphone->text() );
-    _FF.wphone( _pUI->txtWphone->text() );
-    _FF.cphone( _pUI->txtCphone->text() );
-    _FF.drvLic( _pUI->txtDrvLic->text() );
-    _FF.cdl( _pUI->txtCDL->text() );
+    _FF.firstName( _pUI->DB_TEXT_PI_FirstName->text() );
+    _FF.middleName( _pUI->DB_TEXT_PI_MiddleName->text() );
+    _FF.lastName( _pUI->DB_TEXT_PI_LastName->text() );
+    _FF.dob( _pUI->PI_dateDob->date().toString( "yyyy-MM-dd 00:00:00.000" ) );
+    _FF.localID( _pUI->DB_TEXT_PI_LocalID->text() );
+    _FF.stateID( _pUI->DB_TEXT_PI_StateID->text() );
+    _FF.address( _pUI->DB_TEXT_PI_Address->text() );
+    _FF.city( _pUI->DB_TEXT_PI_City->text() );
+    _FF.state( _pUI->DB_TEXT_PI_State->itemText( _pUI->DB_TEXT_PI_State->currentIndex() ) );
+    _FF.zipCode( _pUI->DB_TEXT_PI_ZipCode->text() );
+    _FF.dateJoin( _pUI->PI_dateJoin->date().toString( "yyyy-MM-dd 00:00:00.000" ) );
+    _FF.status( _pUI->DB_TEXT_PI_Status->text() );
+    _FF.hphone( _pUI->DB_TEXT_PI_Hphone->text() );
+    _FF.wphone( _pUI->DB_TEXT_PI_Wphone->text() );
+    _FF.cphone( _pUI->DB_TEXT_PI_Cphone->text() );
+    _FF.drvLic( _pUI->DB_TEXT_PI_DrvLic->text() );
+    _FF.cdl( _pUI->DB_TEXT_PI_CDL->text() );
 
     if ( _bAddFirefighter )
     {
@@ -149,7 +153,7 @@ void wndFirefighter::btnSavePersonalInfoClicked( void )
     }
     else
     {
-        if ( _FF.save( _pDB ) )
+        if ( _FF.save( _pDB ) /*_pDB->updateUI( _FF._iID, "firefighters", "_PI_", _pUI->tabPersonalInfo->nextInFocusChain() )*/ )
         {
             QMessageBox::information( this, "Firefighter Information: Update", "Firefighter was successfully updated in database!" );
         }
@@ -275,8 +279,8 @@ void wndFirefighter::toggleTrainingFields( QListWidgetItem *item )
     else
     {
         enableTrainingFields( false );
-        _pUI->txtFFSig->clear();
-        _pUI->txtSupSig->clear();
+        _pUI->DB_TEXT_FFSig->clear();
+        _pUI->DB_TEXT_SupSig->clear();
         _pUI->dateTraining->setDate( QDate( 2000,1,1 ) );
     }
 }
@@ -287,8 +291,8 @@ void wndFirefighter::toggleTrainingFields( QListWidgetItem *item )
 */
 void wndFirefighter::enableTrainingFields( bool bEnabled )
 {
-    _pUI->txtFFSig->setEnabled( bEnabled );
-    _pUI->txtSupSig->setEnabled( bEnabled );
+    _pUI->DB_TEXT_FFSig->setEnabled( bEnabled );
+    _pUI->DB_TEXT_SupSig->setEnabled( bEnabled );
     _pUI->dateTraining->setEnabled( bEnabled );
     _pUI->btnSaveTrainingItem->setEnabled( bEnabled );
 }
@@ -313,8 +317,8 @@ void wndFirefighter::loadTrainingItem( QListWidgetItem *item )
         {
             if ( selectQuery.next() )
             {
-                _pUI->txtFFSig->setText( selectQuery.value( 0 ).toString() );
-                _pUI->txtSupSig->setText( selectQuery.value( 1 ).toString() );
+                _pUI->DB_TEXT_FFSig->setText( selectQuery.value( 0 ).toString() );
+                _pUI->DB_TEXT_SupSig->setText( selectQuery.value( 1 ).toString() );
                 _pUI->dateTraining->setDate( selectQuery.value( 2 ).toDate() );
             }
         }
@@ -339,8 +343,8 @@ void wndFirefighter::btnSaveTrainingItemClicked( void )
         QSqlQuery updateQuery;
 
         updateQuery.prepare( "UPDATE fftraining SET ffesig=?, supesig=?, tdate=? WHERE ffid=? AND tid=(SELECT id FROM training WHERE title=?)" );
-        updateQuery.addBindValue( _pUI->txtFFSig->text() );
-        updateQuery.addBindValue( _pUI->txtSupSig->text() );
+        updateQuery.addBindValue( _pUI->DB_TEXT_FFSig->text() );
+        updateQuery.addBindValue( _pUI->DB_TEXT_SupSig->text() );
         updateQuery.addBindValue( _pUI->dateTraining->date().toString( "yyyy-MM-dd 00:00:00.000" ) );
         updateQuery.addBindValue( _FF.id() );
         updateQuery.addBindValue( exam );
@@ -474,10 +478,10 @@ void wndFirefighter::toggleEquipmentFields( QListWidgetItem *item )
     else
     {
         enableEquipmentFields( false );
-        _pUI->txtEquipSerial->clear();
-        _pUI->txtEquipType->clear();
-        _pUI->txtEquipSize->clear();
-        _pUI->txtEquipYear->clear();
+        _pUI->DB_TEXT_EquipSerial->clear();
+        _pUI->DB_TEXT_EquipType->clear();
+        _pUI->DB_TEXT_EquipSize->clear();
+        _pUI->DB_TEXT_EquipYear->clear();
     }
 }
 
@@ -487,10 +491,10 @@ void wndFirefighter::toggleEquipmentFields( QListWidgetItem *item )
 */
 void wndFirefighter::enableEquipmentFields( bool bEnabled )
 {
-    _pUI->txtEquipSerial->setEnabled( bEnabled );
-    _pUI->txtEquipType->setEnabled( bEnabled );
-    _pUI->txtEquipSize->setEnabled( bEnabled );
-    _pUI->txtEquipYear->setEnabled( bEnabled );
+    _pUI->DB_TEXT_EquipSerial->setEnabled( bEnabled );
+    _pUI->DB_TEXT_EquipType->setEnabled( bEnabled );
+    _pUI->DB_TEXT_EquipSize->setEnabled( bEnabled );
+    _pUI->DB_TEXT_EquipYear->setEnabled( bEnabled );
     _pUI->radEquipmentNew->setEnabled( bEnabled );
     _pUI->radEquipmentUsed->setEnabled( bEnabled );
     _pUI->btnSaveEquipmentItem->setEnabled( bEnabled );
@@ -516,10 +520,10 @@ void wndFirefighter::loadEquipmentItem( QListWidgetItem *item )
         {
             _pUI->radEquipmentNew->setChecked( selectQuery.value( 0 ).toBool() ? 1 : 0);
             _pUI->radEquipmentUsed->setChecked( selectQuery.value( 0 ).toBool() ? 0 : 1 );
-            _pUI->txtEquipSize->setText( selectQuery.value( 1 ).toString() );
-            _pUI->txtEquipType->setText( selectQuery.value( 2 ).toString() );
-            _pUI->txtEquipSerial->setText( selectQuery.value( 3 ).toString() );
-            _pUI->txtEquipYear->setText( selectQuery.value( 4 ).toString() );
+            _pUI->DB_TEXT_EquipSize->setText( selectQuery.value( 1 ).toString() );
+            _pUI->DB_TEXT_EquipType->setText( selectQuery.value( 2 ).toString() );
+            _pUI->DB_TEXT_EquipSerial->setText( selectQuery.value( 3 ).toString() );
+            _pUI->DB_TEXT_EquipYear->setText( selectQuery.value( 4 ).toString() );
         }
     }
     else
@@ -542,10 +546,10 @@ void wndFirefighter::btnSaveEquipmentItemClicked( void )
         QSqlQuery updateQuery;
         updateQuery.prepare( "UPDATE ffequipment SET issued=?, size=?, type=?, serial=?, year=? WHERE ffid=? AND eqid=(SELECT id FROM equipment WHERE title=?)" );
         updateQuery.addBindValue( _pUI->radEquipmentNew->isChecked() ? 1 : 0 );
-        updateQuery.addBindValue( _pUI->txtEquipSize->text() );
-        updateQuery.addBindValue( _pUI->txtEquipType->text() );
-        updateQuery.addBindValue( _pUI->txtEquipSerial->text() );
-        updateQuery.addBindValue( _pUI->txtEquipYear->text() );
+        updateQuery.addBindValue( _pUI->DB_TEXT_EquipSize->text() );
+        updateQuery.addBindValue( _pUI->DB_TEXT_EquipType->text() );
+        updateQuery.addBindValue( _pUI->DB_TEXT_EquipSerial->text() );
+        updateQuery.addBindValue( _pUI->DB_TEXT_EquipYear->text() );
         updateQuery.addBindValue(_FF.id() );
         updateQuery.addBindValue( equip );
 

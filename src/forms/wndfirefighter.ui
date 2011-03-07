@@ -42,7 +42,7 @@
      <attribute name="title">
       <string>Personal Information</string>
      </attribute>
-     <widget class="QComboBox" name="txtState">
+     <widget class="QComboBox" name="DB_TEXT_PI_State">
       <property name="geometry">
        <rect>
         <x>240</x>
@@ -313,7 +313,7 @@
        </property>
       </item>
      </widget>
-     <widget class="QLineEdit" name="txtStatus">
+     <widget class="QLineEdit" name="DB_TEXT_PI_Status">
       <property name="geometry">
        <rect>
         <x>150</x>
@@ -326,7 +326,7 @@
        <string/>
       </property>
      </widget>
-     <widget class="QDateEdit" name="dateJoin">
+     <widget class="QDateEdit" name="PI_dateJoin">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -372,7 +372,7 @@
        <string>Join Date:</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="txtCphone">
+     <widget class="QLineEdit" name="DB_TEXT_PI_Cphone">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -398,7 +398,7 @@
        <string>Date of Birth:</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="txtAddress">
+     <widget class="QLineEdit" name="DB_TEXT_PI_Address">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -424,7 +424,7 @@
        <string>Cell Phone:</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="txtFirstName">
+     <widget class="QLineEdit" name="DB_TEXT_PI_FirstName">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -434,7 +434,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QLineEdit" name="txtMiddleName">
+     <widget class="QLineEdit" name="DB_TEXT_PI_MiddleName">
       <property name="geometry">
        <rect>
         <x>150</x>
@@ -483,7 +483,7 @@
        <string>Work Phone:</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="txtCDL">
+     <widget class="QLineEdit" name="DB_TEXT_PI_CDL">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -493,7 +493,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QLineEdit" name="txtLocalID">
+     <widget class="QLineEdit" name="DB_TEXT_PI_LocalID">
       <property name="geometry">
        <rect>
         <x>150</x>
@@ -503,7 +503,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QLineEdit" name="txtHphone">
+     <widget class="QLineEdit" name="DB_TEXT_PI_Hphone">
       <property name="geometry">
        <rect>
         <x>150</x>
@@ -555,7 +555,7 @@
        <string>First Name:</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="txtZipCode">
+     <widget class="QLineEdit" name="DB_TEXT_PI_ZipCode">
       <property name="geometry">
        <rect>
         <x>320</x>
@@ -581,7 +581,7 @@
        <string>State:</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="txtCity">
+     <widget class="QLineEdit" name="DB_TEXT_PI_City">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -607,7 +607,7 @@
        <string>State ID:</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="txtStateID">
+     <widget class="QLineEdit" name="DB_TEXT_PI_StateID">
       <property name="geometry">
        <rect>
         <x>290</x>
@@ -617,7 +617,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QLineEdit" name="txtWphone">
+     <widget class="QLineEdit" name="DB_TEXT_PI_Wphone">
       <property name="geometry">
        <rect>
         <x>290</x>
@@ -630,7 +630,7 @@
        <string/>
       </property>
      </widget>
-     <widget class="QLineEdit" name="txtLastName">
+     <widget class="QLineEdit" name="DB_TEXT_PI_LastName">
       <property name="geometry">
        <rect>
         <x>290</x>
@@ -705,7 +705,7 @@
        <string>Local ID:</string>
       </property>
      </widget>
-     <widget class="QDateEdit" name="dateDob">
+     <widget class="QDateEdit" name="PI_dateDob">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -725,7 +725,7 @@
        </datetime>
       </property>
      </widget>
-     <widget class="QLineEdit" name="txtDrvLic">
+     <widget class="QLineEdit" name="DB_TEXT_PI_DrvLic">
       <property name="geometry">
        <rect>
         <x>220</x>
@@ -815,7 +815,7 @@
        <string>Date Completed:</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="txtFFSig">
+     <widget class="QLineEdit" name="DB_TEXT_FFSig">
       <property name="geometry">
        <rect>
         <x>260</x>
@@ -825,7 +825,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QLineEdit" name="txtSupSig">
+     <widget class="QLineEdit" name="DB_TEXT_SupSig">
       <property name="geometry">
        <rect>
         <x>260</x>
@@ -899,7 +899,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QLineEdit" name="txtEquipType">
+     <widget class="QLineEdit" name="DB_TEXT_EquipType">
       <property name="geometry">
        <rect>
         <x>260</x>
@@ -909,7 +909,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QLineEdit" name="txtEquipSize">
+     <widget class="QLineEdit" name="DB_TEXT_EquipSize">
       <property name="geometry">
        <rect>
         <x>260</x>
@@ -932,7 +932,7 @@
        <string>Size:</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="txtEquipSerial">
+     <widget class="QLineEdit" name="DB_TEXT_EquipSerial">
       <property name="geometry">
        <rect>
         <x>260</x>
@@ -955,7 +955,7 @@
        <string>Serial:</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="txtEquipYear">
+     <widget class="QLineEdit" name="DB_TEXT_EquipYear">
       <property name="geometry">
        <rect>
         <x>260</x>
@@ -1041,34 +1041,34 @@
  </widget>
  <tabstops>
   <tabstop>tabWidget</tabstop>
-  <tabstop>txtFirstName</tabstop>
-  <tabstop>txtMiddleName</tabstop>
-  <tabstop>txtLastName</tabstop>
-  <tabstop>dateDob</tabstop>
-  <tabstop>txtLocalID</tabstop>
-  <tabstop>txtStateID</tabstop>
-  <tabstop>txtAddress</tabstop>
-  <tabstop>txtCity</tabstop>
-  <tabstop>txtState</tabstop>
-  <tabstop>txtZipCode</tabstop>
-  <tabstop>dateJoin</tabstop>
-  <tabstop>txtStatus</tabstop>
-  <tabstop>txtHphone</tabstop>
-  <tabstop>txtWphone</tabstop>
-  <tabstop>txtCphone</tabstop>
-  <tabstop>txtDrvLic</tabstop>
-  <tabstop>txtCDL</tabstop>
+  <tabstop>DB_TEXT_PI_FirstName</tabstop>
+  <tabstop>DB_TEXT_PI_MiddleName</tabstop>
+  <tabstop>DB_TEXT_PI_LastName</tabstop>
+  <tabstop>PI_dateDob</tabstop>
+  <tabstop>DB_TEXT_PI_LocalID</tabstop>
+  <tabstop>DB_TEXT_PI_StateID</tabstop>
+  <tabstop>DB_TEXT_PI_Address</tabstop>
+  <tabstop>DB_TEXT_PI_City</tabstop>
+  <tabstop>DB_TEXT_PI_State</tabstop>
+  <tabstop>DB_TEXT_PI_ZipCode</tabstop>
+  <tabstop>PI_dateJoin</tabstop>
+  <tabstop>DB_TEXT_PI_Status</tabstop>
+  <tabstop>DB_TEXT_PI_Hphone</tabstop>
+  <tabstop>DB_TEXT_PI_Wphone</tabstop>
+  <tabstop>DB_TEXT_PI_Cphone</tabstop>
+  <tabstop>DB_TEXT_PI_DrvLic</tabstop>
+  <tabstop>DB_TEXT_PI_CDL</tabstop>
   <tabstop>btnSavePersonalInfo</tabstop>
-  <tabstop>txtFFSig</tabstop>
-  <tabstop>txtSupSig</tabstop>
+  <tabstop>DB_TEXT_FFSig</tabstop>
+  <tabstop>DB_TEXT_SupSig</tabstop>
   <tabstop>dateTraining</tabstop>
   <tabstop>btnSaveTrainingItem</tabstop>
-  <tabstop>txtEquipSize</tabstop>
-  <tabstop>txtEquipType</tabstop>
-  <tabstop>txtEquipSerial</tabstop>
+  <tabstop>DB_TEXT_EquipSize</tabstop>
+  <tabstop>DB_TEXT_EquipType</tabstop>
+  <tabstop>DB_TEXT_EquipSerial</tabstop>
   <tabstop>radEquipmentNew</tabstop>
   <tabstop>radEquipmentUsed</tabstop>
-  <tabstop>txtEquipYear</tabstop>
+  <tabstop>DB_TEXT_EquipYear</tabstop>
   <tabstop>btnSaveEquipmentItem</tabstop>
   <tabstop>lstEquipment</tabstop>
   <tabstop>lstTraining</tabstop>

@@ -135,23 +135,21 @@ bool DatabaseManager::buildStructure( void )
                  "address TEXT);"
              "CREATE TABLE firefighters"
                  "(id INTEGER PRIMARY KEY,"
-                 "fname TEXT,"
-                 "mname TEXT,"
-                 "lname TEXT,"
-                 "dob TEXT,"
-                 "deptid TEXT,"
-                 "stateid TEXT,"
-                 "address TEXT,"
-                 "city TEXT,"
-                 "state TEXT,"
-                 "zip TEXT,"
-                 "joindate TEXT,"
-                 "status TEXT,"
-                 "hphone TEXT,"
-                 "wphone TEXT,"
-                 "cphone TEXT,"
-                 "drvlic TEXT,"
-                 "cdl TEXT);"
+                 "PI_FirstName TEXT,"
+                 "PI_MiddleName TEXT,"
+                 "PI_LastName TEXT,"
+                 "PI_LocalID TEXT,"
+                 "PI_StateID TEXT,"
+                 "PI_Address TEXT,"
+                 "PI_City TEXT,"
+                 "PI_State TEXT,"
+                 "PI_ZipCode TEXT,"
+                 "PI_Status TEXT,"
+                 "PI_Hphone TEXT,"
+                 "PI_Wphone TEXT,"
+                 "PI_Cphone TEXT,"
+                 "PI_DrvLic TEXT,"
+                 "PI_CDL TEXT);"
              "CREATE TABLE training"
                  "(id INTEGER PRIMARY KEY,"
                  "title TEXT);"
@@ -384,9 +382,9 @@ bool DatabaseManager::verifyStructure( void )
     QString chksum = md5bytearray.toHex().constData();
 
     // And compare to expected value
-    if ( chksum != "9222c8dcad4670104628f6c6beec4761" )
+    if ( chksum != "bda3aa5fdf094625428bc6c2d574c310" )
     {
-        qDebug( "Database: Invalid structure. Expected chksum 9222c8dcad4670104628f6c6beec4761, but got %s", qPrintable( chksum ) );
+        qDebug( "Database: Invalid structure. Expected chksum bda3aa5fdf094625428bc6c2d574c310, but got %s", qPrintable( chksum ) );
         return false;
     }
 
@@ -439,7 +437,7 @@ void DatabaseManager::buildQueries( QString sTableName, QString sTabName, QWidge
     sSelectQuery = "SELECT ";
     sInsertQuery = "INSERT INTO " + sTableName + " ( ";
     sInsertQueryValues = " VALUES ( ";
-    sUpdateQuery = "UPDATE " + sTableName + " a SET ";
+    sUpdateQuery = "UPDATE " + sTableName + " SET ";
 
     foreach ( pTmpWidget, edits )
     {
@@ -466,7 +464,7 @@ void DatabaseManager::buildQueries( QString sTableName, QString sTabName, QWidge
         sInsertQuery += sObjName + ",";
         sInsertQueryValues += ":" + sDBObjName + ",";
 
-        sUpdateQuery += "a." + sObjName + " = :" + sDBObjName + ",";
+        sUpdateQuery += sObjName + " = :" + sDBObjName + ",";
     }
 
     sCreateQuery.replace( sCreateQuery.size() - 1, 1, QChar( ')' ) ); // replace the last char with ')'
@@ -479,7 +477,7 @@ void DatabaseManager::buildQueries( QString sTableName, QString sTabName, QWidge
     sInsertQuery += sInsertQueryValues;
 
     sUpdateQuery.replace( sUpdateQuery.size() - 1, 1, QChar( ' ' ) ); // replace the last char with ' '
-    sUpdateQuery += "WHERE a.id = :id)";
+    sUpdateQuery += "WHERE id = :id";
 
     QMap<QString, QString> uiQueries;
     uiQueries.insert( "create", sCreateQuery );
@@ -493,6 +491,128 @@ void DatabaseManager::buildQueries( QString sTableName, QString sTabName, QWidge
     qDebug( qPrintable( sSelectQuery ) );
     qDebug( qPrintable( sInsertQuery ) );
     qDebug( qPrintable( sUpdateQuery ) );
+}
+
+bool DatabaseManager::selectUI( int iID, QString sTableName, QString sTabName, QWidget *pWidget )
+{
+    QList<QWidget*> edits;
+    QWidget *pTmpWidget = pWidget->nextInFocusChain();
+
+    while ( pTmpWidget != pWidget )
+    {
+        if ( pTmpWidget->objectName().startsWith( "DB_" ) && (sTabName == " " ||  pTmpWidget->objectName().contains( sTabName ) ) )
+        {
+            edits += pTmpWidget;
+        }
+        pTmpWidget = pTmpWidget->nextInFocusChain();
+    }
+
+    QSqlQuery selectQuery;
+    selectQuery.prepare(_queryMap[sTableName]["select"]);
+    selectQuery.bindValue( ":id", iID );
+
+    if ( !query( selectQuery ) )
+    {
+        qWarning( "Database Error: Could not select from table '%s' entry #%d: %s",
+                  qPrintable( sTableName ), iID, qPrintable( selectQuery.lastError().text() ) );
+        return false;
+    }
+
+    selectQuery.next();
+
+    QVariant result;
+    int i = 0;
+    foreach ( pTmpWidget, edits )
+    {
+        QLineEdit *tmplineedit = qobject_cast<QLineEdit *>( pTmpWidget );
+        QDateTimeEdit *tmpdatetime = qobject_cast<QDateTimeEdit *>( pTmpWidget );
+        QComboBox *tmpcombo = qobject_cast<QComboBox *>( pTmpWidget );
+        QCheckBox *tmpcheck = qobject_cast<QCheckBox *>( pTmpWidget );
+
+        result = selectQuery.value( i );
+        if ( !result.isValid() )
+            break;
+
+        qDebug( qPrintable( result.toString() ) );
+
+        if ( tmplineedit )
+        {
+            tmplineedit->setText( result.toString() );
+        }
+        else if ( tmpdatetime )
+        {
+            tmpdatetime->setDate( result.toDate() );
+        }
+
+        i++;
+    }
+
+    qDebug( "Database: Selected from table '%s' entry #%d.", qPrintable( sTableName), iID );
+
+    return true;
+}
+
+int DatabaseManager::insertUI( QString sTableName, QString sTabName, QWidget *pWidget )
+{
+    QList<QWidget*> edits;
+    QWidget *pTmpWidget = pWidget->nextInFocusChain();
+
+    while ( pTmpWidget != pWidget )
+    {
+        if ( pTmpWidget->objectName().startsWith( "DB_" ) && (sTabName == " " ||  pTmpWidget->objectName().contains( sTabName ) ) )
+        {
+            edits += pTmpWidget;
+        }
+        pTmpWidget = pTmpWidget->nextInFocusChain();
+    }
+
+    QSqlQuery insertQuery;
+    insertQuery.prepare(_queryMap[sTableName]["insert"]);
+
+    foreach ( pTmpWidget, edits )
+    {
+        QLineEdit *tmplineedit = qobject_cast<QLineEdit *>( pTmpWidget );
+        QDateTimeEdit *tmpdatetime = qobject_cast<QDateTimeEdit *>( pTmpWidget );
+        QComboBox *tmpcombo = qobject_cast<QComboBox *>( pTmpWidget );
+        QCheckBox *tmpcheck = qobject_cast<QCheckBox *>( pTmpWidget );
+
+        if ( tmplineedit )
+        {
+            insertQuery.bindValue( ":" + tmplineedit->objectName(), tmplineedit->text() );
+        }
+        else if ( tmpdatetime )
+        {
+            insertQuery.bindValue( ":" + tmpdatetime->objectName(), tmpdatetime->dateTime().toString( "yyyy-MM-dd hh:mm:00.000" ) );
+        }
+        else if ( tmpcombo )
+        {
+            insertQuery.bindValue( ":" + tmpcombo->objectName(), tmpcombo->currentText() );
+        }
+        else if ( tmpcheck )
+        {
+            insertQuery.bindValue( ":" + tmpcheck->objectName(), tmpcheck->objectName() );
+        }
+    }
+
+    QMapIterator<QString, QVariant> i( insertQuery.boundValues() );
+    while ( i.hasNext() )
+    {
+        i.next();
+        qDebug( qPrintable( i.key() + " " + qPrintable( i.value().toString() ) ) );
+    }
+
+    if ( !query( insertQuery ) )
+    {
+        qWarning( "Database Error: Could not insert table '%s': %s",
+                  qPrintable( sTableName ), qPrintable( insertQuery.lastError().text() ) );
+        return -1;
+    }
+
+    int iID = insertQuery.lastInsertId().toInt();
+
+    qDebug( "Database: Inserted into table '%s' entry #%d.", qPrintable( sTableName), iID );
+
+    return iID;
 }
 
 bool DatabaseManager::updateUI( int iID, QString sTableName, QString sTabName, QWidget *pWidget )
@@ -533,7 +653,7 @@ bool DatabaseManager::updateUI( int iID, QString sTableName, QString sTabName, Q
         }
         else if ( tmpcheck )
         {
-            updateQuery.bindValue( ":" + tmpcheck->objectName(),tmpcheck->objectName() );
+            updateQuery.bindValue( ":" + tmpcheck->objectName(), tmpcheck->objectName() );
         }
     }
 

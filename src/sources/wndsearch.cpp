@@ -72,10 +72,10 @@ void wndSearch::Search( QString sSearchType, QString sSearch )
 
     if ( sSearchType == "Firefighters" )
     {
-        QString sSelection = "SELECT id,deptid,lname,fname FROM firefighters";
+        QString sSelection = "SELECT id,PI_LocalID,PI_LastName,PI_FirstName FROM firefighters";
         if ( sSearch != "" )
         {
-            sSelection += " WHERE deptid LIKE ? OR lname LIKE ? or fname LIKE ?";
+            sSelection += " WHERE PI_LocalID LIKE ? PI_LastName LIKE ? or PI_FirstName LIKE ?";
             qrySelection.prepare( sSelection );
             qrySelection.addBindValue( "%" + sSearch + "%" );
             qrySelection.addBindValue( "%" + sSearch + "%" );

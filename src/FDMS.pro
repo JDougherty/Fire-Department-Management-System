@@ -10,7 +10,6 @@ SOURCES += sources/main.cpp \
     sources/wndfirefighter.cpp \
     sources/mainwindow.cpp \
     sources/wndsetup.cpp \
-    sources/firefighter.cpp \
     sources/wndsearch.cpp \
     sources/wndinventorycontrol.cpp \
     sources/wndinventorycheck.cpp \
@@ -22,7 +21,6 @@ HEADERS += headers/databasemanager.h \
     headers/mainwindow.h \
     headers/wndsetup.h \
     headers/LogFunctions.h \
-    headers/firefighter.h \
     headers/wndsearch.h \
     headers/wndinventorycontrol.h \
     headers/wndinventorycheck.h \

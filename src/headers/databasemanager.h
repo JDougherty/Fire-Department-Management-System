@@ -71,6 +71,8 @@ class DatabaseManager : public QObject
         bool                    verify( void );
         bool                    remove( void );
 
+        bool                    selectUI( int iID, QString sTableName, QString sTabName, QWidget *pWidget );
+        int                     insertUI( QString sTableName, QString sTabName, QWidget *pWidget );
         bool                    updateUI( int iID, QString sTableName, QString sTabName, QWidget *pWidget );
 
         bool                    query( QSqlQuery &qry );

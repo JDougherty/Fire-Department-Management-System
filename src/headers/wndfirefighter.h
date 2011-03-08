@@ -25,7 +25,6 @@
 #include <QSqlQuery>
 #include <QListWidgetItem>
 #include "databasemanager.h"
-#include "firefighter.h"
 
 namespace Ui
 {
@@ -41,11 +40,9 @@ class wndFirefighter : public QMainWindow
         Ui::wndFirefighter      *_pUI;
         DatabaseManager         *_pDB;
 
-        Firefighter             _FF;
+        int                     _iID;
 
         bool                    _bAddFirefighter;
-
-        void                    loadPersonalInfo( void );
 
         void                    loadTrainingList( void );
         void                    toggleTrainingFields( QListWidgetItem *item );

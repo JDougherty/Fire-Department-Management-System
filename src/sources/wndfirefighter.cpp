@@ -31,7 +31,6 @@ wndFirefighter::wndFirefighter( QWidget *pParent, DatabaseManager *pDB ) :
     _pUI->setupUi( this );
     _pDB = pDB;
     _iID = -1;
-    _bAddFirefighter = true;
 
     // Hide these tabs since we want to just enter basic info first
     _pUI->tabWidget->removeTab( 3 ); // tabReports
@@ -45,7 +44,7 @@ wndFirefighter::wndFirefighter( QWidget *pParent, DatabaseManager *pDB ) :
     enableTrainingFields( false );
     enableEquipmentFields( false );
 
-     pDB->buildQueries( "firefighters", "_PI_", _pUI->tabWidget->nextInFocusChain() );
+     pDB->buildQueries( "Firefighters", "_PI_", _pUI->tabWidget->nextInFocusChain() );
 }
 
 //! Constructor for editing a firefighter.
@@ -60,7 +59,6 @@ wndFirefighter::wndFirefighter( QWidget *pParent, DatabaseManager *pDB, int iID 
     _pUI->setupUi( this );
     _pDB = pDB;
     _iID = iID;
-    _bAddFirefighter = false;
 
     this->setWindowTitle( "Edit Firefighter" );
     _pUI->btnSavePersonalInfo->setText( "Save Firefighter" );
@@ -72,8 +70,8 @@ wndFirefighter::wndFirefighter( QWidget *pParent, DatabaseManager *pDB, int iID 
     enableTrainingFields( false );
     enableEquipmentFields( false );
 
-    pDB->buildQueries( "firefighters", "_PI_", _pUI->tabWidget->nextInFocusChain() );
-    pDB->selectUI( _iID, "firefighters", "_PI_", _pUI->tabWidget->nextInFocusChain() );
+    pDB->buildQueries( "Firefighters", "_PI_", _pUI->tabWidget->nextInFocusChain() );
+    pDB->selectUI( _iID, "Firefighters", "_PI_", _pUI->tabWidget->nextInFocusChain() );
 }
 
 wndFirefighter::~wndFirefighter( void )
@@ -88,14 +86,12 @@ wndFirefighter::~wndFirefighter( void )
 //! Updates the firefighter's personal information in the database when the Update button is clicked.
 void wndFirefighter::btnSavePersonalInfoClicked( void )
 {
-    if ( _bAddFirefighter )
+    if ( _iID <= 0 )
     {
-        _iID = _pDB->insertUI( "firefighters", "_PI_", _pUI->tabPersonalInfo->nextInFocusChain() );
+        _iID = _pDB->insertUI( "Firefighters", "_PI_", _pUI->tabPersonalInfo->nextInFocusChain() );
         if ( _iID > 0 )
         {
             QMessageBox::information( 0, "Firefighter Information", "Firefighter successfully added to database!" );
-
-            _bAddFirefighter = false;
 
             // show the additional tabs
             _pUI->tabWidget->addTab( _pUI->tabTraining, "Training" );
@@ -115,7 +111,7 @@ void wndFirefighter::btnSavePersonalInfoClicked( void )
     }
     else
     {
-        if ( _pDB->updateUI( _iID, "firefighters", "_PI_", _pUI->tabPersonalInfo->nextInFocusChain() ) )
+        if ( _pDB->updateUI( _iID, "Firefighters", "_PI_", _pUI->tabPersonalInfo->nextInFocusChain() ) )
         {
             QMessageBox::information( this, "Firefighter Information: Update", "Firefighter was successfully updated in database!" );
         }

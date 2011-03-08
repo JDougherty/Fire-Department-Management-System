@@ -42,8 +42,6 @@ class wndFirefighter : public QMainWindow
 
         int                     _iID;
 
-        bool                    _bAddFirefighter;
-
         void                    loadTrainingList( void );
         void                    toggleTrainingFields( QListWidgetItem *item );
         void                    enableTrainingFields( bool bEnabled );

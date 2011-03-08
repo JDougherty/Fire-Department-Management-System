@@ -20,11 +20,7 @@ class wndActiveCall : public QMainWindow
         Ui::wndActiveCall       *_pUI;
         DatabaseManager         *_pDB;
 
-        int                     _iCallID;
-
-        bool                    _bAddCall;
-
-        bool                    insert( void );
+        int                     _iID;
 
     private slots:
         void                    btnSaveCallClicked( void );

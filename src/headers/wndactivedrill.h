@@ -17,8 +17,8 @@
 
 */
 
-#ifndef wndActiveDrill_H
-#define wndActiveDrill_H
+#ifndef WNDACTIVEDRILL_H
+#define WNDACTIVEDRILL_H
 
 #include <QMainWindow>
 #include <QMessageBox>
@@ -32,26 +32,29 @@ namespace Ui {
 
 class wndActiveDrill : public QMainWindow {
     Q_OBJECT
-public:
-    wndActiveDrill(QWidget *parent = 0, DatabaseManager *db=0, int id=0);
-    ~wndActiveDrill();
 
-private:
-    Ui::wndActiveDrill *ui;
-    DatabaseManager *db;
-    int drillid;
-    QModelIndex lastCellRightClicked;
+    private:
+        Ui::wndActiveDrill      *_pUI;
+        DatabaseManager         *_pDB;
 
-    bool insert();
-    bool read();
-    void updateSheet();
+        int                     _iID;
 
-private slots:
-    void updateInformation();
-    void scanId();
-    void sheetContextMenu(const QPoint &pos);
-    void sheetRemoveFirefighter();
+        QModelIndex             lastCellRightClicked;
 
+        bool                    insert( void );
+        bool                    read( void );
+        void                    updateSheet( void );
+
+    private slots:
+        void                    updateInformation( void );
+        void                    scanId( void );
+        void                    sheetContextMenu( const QPoint &pos );
+        void                    sheetRemoveFirefighter( void );
+
+    public:
+                                wndActiveDrill( QWidget *pParent, DatabaseManager *pDB );
+                                wndActiveDrill( QWidget *pParent, DatabaseManager *pDB, int iID );
+                                ~wndActiveDrill( void );
 };
 
-#endif // wndActiveDrill_H
+#endif // WNDACTIVEDRILL_H

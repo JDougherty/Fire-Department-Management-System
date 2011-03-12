@@ -52,7 +52,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="tabSetup">
      <attribute name="title">
@@ -148,13 +148,14 @@
        <rect>
         <x>20</x>
         <y>210</y>
-        <width>511</width>
+        <width>571</width>
         <height>21</height>
        </rect>
       </property>
       <property name="font">
        <font>
-        <pointsize>12</pointsize>
+        <family>Sans Serif</family>
+        <pointsize>10</pointsize>
        </font>
       </property>
       <property name="text">
@@ -167,12 +168,13 @@
         <x>20</x>
         <y>250</y>
         <width>571</width>
-        <height>17</height>
+        <height>16</height>
        </rect>
       </property>
       <property name="font">
        <font>
-        <pointsize>12</pointsize>
+        <family>Sans Serif</family>
+        <pointsize>10</pointsize>
        </font>
       </property>
       <property name="text">
@@ -189,7 +191,7 @@
        <rect>
         <x>10</x>
         <y>0</y>
-        <width>331</width>
+        <width>351</width>
         <height>41</height>
        </rect>
       </property>
@@ -207,7 +209,7 @@
        <rect>
         <x>10</x>
         <y>50</y>
-        <width>121</width>
+        <width>131</width>
         <height>20</height>
        </rect>
       </property>
@@ -217,18 +219,18 @@
        </font>
       </property>
       <property name="text">
-       <string>Departmemnt Name:</string>
+       <string>Department Name:</string>
       </property>
       <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
       </property>
      </widget>
      <widget class="QLineEdit" name="lineEdit">
       <property name="geometry">
        <rect>
-        <x>160</x>
+        <x>140</x>
         <y>50</y>
-        <width>441</width>
+        <width>461</width>
         <height>20</height>
        </rect>
       </property>
@@ -259,7 +261,7 @@
        <rect>
         <x>10</x>
         <y>0</y>
-        <width>211</width>
+        <width>231</width>
         <height>41</height>
        </rect>
       </property>
@@ -504,7 +506,7 @@
        <rect>
         <x>10</x>
         <y>0</y>
-        <width>201</width>
+        <width>221</width>
         <height>41</height>
        </rect>
       </property>

@@ -118,7 +118,6 @@ void wndSetup::on_radioExInst_clicked( void )
 
         // add back the tabs for the new installation
         _pUI->tabWidget->addTab( _pUI->tabExInstDBSettings, "Step 1: Database Settings" );
-        _pUI->tabWidget->addTab( _pUI->tabExInstFinish, "Finish" );
 
         _iInstallType = EXISTING_INST;
     }
@@ -139,7 +138,13 @@ void wndSetup::on_btnExInstDBFile_clicked( void )
 //! User clicked "Continue" on DB Settings tab
 void wndSetup::on_btnExInstDBSettings_clicked( void )
 {
-    _pUI->tabWidget->setCurrentIndex( 2 ); // tabExInstFinish
+    if(_pUI->leExInstDBLocation->text().isEmpty()){
+        QMessageBox::warning( this, "Error", "Please select a database file.", QMessageBox::Ok );
+    }
+    else{
+        _pUI->tabWidget->addTab( _pUI->tabExInstFinish, "Finish" );
+        _pUI->tabWidget->setCurrentIndex( 2 ); // tabExInstFinish
+    }
 }
 
 //! User clicked "Finish"
@@ -238,7 +243,6 @@ void wndSetup::on_radioNewInst_clicked( void )
         // add back the tabs for the new installation
         _pUI->tabWidget->addTab( _pUI->tabNewInstFDSettings, "Step 1: Fire Department Information" );
         _pUI->tabWidget->addTab( _pUI->tabNewInstDBSettings, "Step 2: Database Settings" );
-        _pUI->tabWidget->addTab( _pUI->tabNewInstFinish, "Finish" );
 
         _iInstallType = NEW_INST;
     }
@@ -265,7 +269,13 @@ void wndSetup::on_btnNewInstFDSettings_clicked( void )
 //! User clicked "Continue" on DB Settings tab
 void wndSetup::on_btnNewInstDBSettings_clicked( void )
 {
-     _pUI->tabWidget->setCurrentIndex( 3 ); // tabNewInstFinish
+    if(_pUI->leNewInstDBLocation->text().isEmpty()){
+        QMessageBox::warning( this, "Error", "Please select a location to place the database file.", QMessageBox::Ok );
+    }
+    else{
+         _pUI->tabWidget->addTab( _pUI->tabNewInstFinish, "Finish" );
+        _pUI->tabWidget->setCurrentIndex( 3 ); // tabNewInstFinish
+    }
 }
 
 //! User clicked "Finish"

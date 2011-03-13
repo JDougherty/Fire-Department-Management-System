@@ -43,7 +43,7 @@ wndSearch::wndSearch( QWidget *pParent, MainWindow *pMW, DatabaseManager *pDB, Q
 
     if ( _sSearchType == "Firefighters" )
     {
-       _slTableHeaders = QStringList() << "ID" << "Last Name" << "First Name";
+       _slTableHeaders = QStringList() << "Local ID" << "Last Name" << "First Name";
     }
     else if ( _sSearchType == "Drills" || _sSearchType == "Calls" )
     {
@@ -72,14 +72,46 @@ void wndSearch::Search( QString sSearchType, QString sSearch )
 
     if ( sSearchType == "Firefighters" )
     {
+        // split on (0 or more commas and one or more spaces) or (1 or more commas and 0 or more spaces)
+        QStringList searchList = sSearch.split(QRegExp(",*\\s+|,+\\s*"));
         QString sSelection = "SELECT id,PI_LocalID,PI_LastName,PI_FirstName FROM Firefighters";
+
         if ( sSearch != "" )
         {
             sSelection += " WHERE PI_LocalID LIKE ? OR PI_LastName LIKE ? OR PI_FirstName LIKE ?";
-            qrySelection.prepare( sSelection );
-            qrySelection.addBindValue( "%" + sSearch + "%" );
-            qrySelection.addBindValue( "%" + sSearch + "%" );
-            qrySelection.addBindValue( "%" + sSearch + "%" );
+
+            if ( searchList.size() > 1 ) // more than one search term
+            {
+                QString sQuestionMarks;
+                for ( int i = 0; i < searchList.size(); i++ ) // need i question marks for i search terms
+                {
+                    sQuestionMarks += "?, ";
+                }
+                sQuestionMarks = sQuestionMarks.left( sQuestionMarks.size() - 2 );
+
+                sSelection += " OR PI_LocalID COLLATE NOCASE IN (" + sQuestionMarks + ") OR ( PI_LastName COLLATE NOCASE IN (" +
+                              sQuestionMarks + ") AND PI_FirstName COLLATE NOCASE IN (" + sQuestionMarks + ") )";
+
+                qrySelection.prepare( sSelection );
+                qrySelection.addBindValue( "%" + sSearch + "%" );
+                qrySelection.addBindValue( "%" + sSearch + "%" );
+                qrySelection.addBindValue( "%" + sSearch + "%" );
+
+                for ( int i = 0; i < 3; i++ )
+                {
+                    for ( int j = 0; j < searchList.size(); j++ )
+                    {
+                        qrySelection.addBindValue( searchList[j] );
+                    }
+                }
+            }
+            else
+            {
+                qrySelection.prepare( sSelection );
+                qrySelection.addBindValue( "%" + sSearch + "%" );
+                qrySelection.addBindValue( "%" + sSearch + "%" );
+                qrySelection.addBindValue( "%" + sSearch + "%" );
+            }
         }
         else
         {

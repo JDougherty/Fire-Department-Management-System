@@ -86,6 +86,27 @@ wndFirefighter::~wndFirefighter( void )
 //! Updates the firefighter's personal information in the database when the Update button is clicked.
 void wndFirefighter::btnSavePersonalInfoClicked( void )
 {
+    if ( _pUI->DB_TEXT_PI_FirstName->text() == "" )
+    {
+        QMessageBox::warning( 0, "Firefighter Error", "Save failed. Please enter a first name for this firefighter." );
+        _pUI->DB_TEXT_PI_FirstName->setFocus();
+        return;
+    }
+
+    if ( _pUI->DB_TEXT_PI_LastName->text() == "" )
+    {
+        QMessageBox::warning( 0, "Firefighter Error", "Save failed. Please enter a last name for this firefighter." );
+        _pUI->DB_TEXT_PI_LastName->setFocus();
+        return;
+    }
+
+    if ( _pUI->DB_TEXT_PI_LocalID->text() == "" )
+    {
+        QMessageBox::warning( 0, "Firefighter Error", "Save failed. Please enter a local id for this firefighter." );
+        _pUI->DB_TEXT_PI_LocalID->setFocus();
+        return;
+    }
+
     if ( _iID <= 0 )
     {
         _iID = _pDB->insertUI( "Firefighters", "_PI_", _pUI->tabPersonalInfo->nextInFocusChain() );

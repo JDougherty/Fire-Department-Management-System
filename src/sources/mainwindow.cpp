@@ -87,7 +87,7 @@ void MainWindow::mdiSearch( void )
 //! User clicked a button to add a drill.
 void MainWindow::mdiAddDrill( void )
 {
-    wndActiveDrill *child = new wndActiveDrill(this,_pDB);
+    wndActiveDrill *child = new wndActiveDrill( this, _pDB );
     mdiArea->addSubWindow( child );
     child->show();
 }

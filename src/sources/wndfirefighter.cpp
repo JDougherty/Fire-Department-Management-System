@@ -44,7 +44,7 @@ wndFirefighter::wndFirefighter( QWidget *pParent, DatabaseManager *pDB ) :
     enableTrainingFields( false );
     enableEquipmentFields( false );
 
-     pDB->buildQueries( "Firefighters", "_PI_", _pUI->tabWidget->nextInFocusChain() );
+    _pDB->buildQueries( "Firefighters", _pUI->tabWidget->nextInFocusChain(), "_PI_" );
 }
 
 //! Constructor for editing a firefighter.
@@ -70,8 +70,8 @@ wndFirefighter::wndFirefighter( QWidget *pParent, DatabaseManager *pDB, int iID 
     enableTrainingFields( false );
     enableEquipmentFields( false );
 
-    pDB->buildQueries( "Firefighters", "_PI_", _pUI->tabWidget->nextInFocusChain() );
-    pDB->selectUI( _iID, "Firefighters", "_PI_", _pUI->tabWidget->nextInFocusChain() );
+    _pDB->buildQueries( "Firefighters", _pUI->tabWidget->nextInFocusChain(), "_PI_" );
+    _pDB->selectUI( _iID, "Firefighters", _pUI->tabWidget->nextInFocusChain(), "_PI_" );
 }
 
 wndFirefighter::~wndFirefighter( void )
@@ -88,31 +88,31 @@ void wndFirefighter::btnSavePersonalInfoClicked( void )
 {
     if ( _pUI->DB_TEXT_PI_FirstName->text() == "" )
     {
-        QMessageBox::warning( 0, "Firefighter Error", "Save failed. Please enter a first name for this firefighter." );
+        QMessageBox::warning( this, "Firefighter Error", "Save failed. Please enter a first name for this firefighter." );
         _pUI->DB_TEXT_PI_FirstName->setFocus();
         return;
     }
 
     if ( _pUI->DB_TEXT_PI_LastName->text() == "" )
     {
-        QMessageBox::warning( 0, "Firefighter Error", "Save failed. Please enter a last name for this firefighter." );
+        QMessageBox::warning( this, "Firefighter Error", "Save failed. Please enter a last name for this firefighter." );
         _pUI->DB_TEXT_PI_LastName->setFocus();
         return;
     }
 
     if ( _pUI->DB_TEXT_PI_LocalID->text() == "" )
     {
-        QMessageBox::warning( 0, "Firefighter Error", "Save failed. Please enter a local id for this firefighter." );
+        QMessageBox::warning( this, "Firefighter Error", "Save failed. Please enter a local id for this firefighter." );
         _pUI->DB_TEXT_PI_LocalID->setFocus();
         return;
     }
 
     if ( _iID <= 0 )
     {
-        _iID = _pDB->insertUI( "Firefighters", "_PI_", _pUI->tabPersonalInfo->nextInFocusChain() );
+        _iID = _pDB->insertUI( "Firefighters", _pUI->tabPersonalInfo->nextInFocusChain(), "_PI_" );
         if ( _iID > 0 )
         {
-            QMessageBox::information( 0, "Firefighter Information", "Firefighter successfully added to database!" );
+            QMessageBox::information( this, "Firefighter Information", "Firefighter successfully added to database!" );
 
             // show the additional tabs
             _pUI->tabWidget->addTab( _pUI->tabTraining, "Training" );
@@ -127,12 +127,12 @@ void wndFirefighter::btnSavePersonalInfoClicked( void )
         }
         else
         {
-            QMessageBox::warning( 0, "Firefighter Error", "Firefighter could not be added to database! See log file for details." );
+            QMessageBox::warning( this, "Firefighter Error", "Firefighter could not be added to database! See log file for details." );
         }
     }
     else
     {
-        if ( _pDB->updateUI( _iID, "Firefighters", "_PI_", _pUI->tabPersonalInfo->nextInFocusChain() ) )
+        if ( _pDB->updateUI( _iID, "Firefighters", _pUI->tabPersonalInfo->nextInFocusChain(), "_PI_" ) )
         {
             QMessageBox::information( this, "Firefighter Information: Update", "Firefighter was successfully updated in database!" );
         }
@@ -216,7 +216,7 @@ void wndFirefighter::trainingItemClicked( QListWidgetItem *item )
     else // If the item is being unchecked, i.e. removed
     {
         // First verify they intend to destruct information
-        if ( QMessageBox::question( 0, "Training: Confirm Removal", "Are you sure you would like to remove this exam information?",
+        if ( QMessageBox::question( this, "Training: Confirm Removal", "Are you sure you would like to remove this exam information?",
                                     QMessageBox::Yes, QMessageBox::No ) == QMessageBox::Yes )
         {
 
@@ -330,11 +330,11 @@ void wndFirefighter::btnSaveTrainingItemClicked( void )
 
         if ( _pDB->query( updateQuery ) )
         {
-            QMessageBox::information( 0, "Firefighter Information: Training Update", "Training exam information successfully updated." );
+            QMessageBox::information( this, "Firefighter Information: Training Update", "Training exam information successfully updated." );
         }
         else
         {
-            QMessageBox::warning( 0, "Firefighter Error: Training Update",
+            QMessageBox::warning( this, "Firefighter Error: Training Update",
                                   "There was a problem updating the training exam information. See log for more information." );
             qWarning( "Firefighter Error (%d): Could not update training exam '%s'. Database Error: %s",
                      _iID, qPrintable( exam ), qPrintable( updateQuery.lastError().text() ) );
@@ -415,7 +415,7 @@ void wndFirefighter::equipmentItemClicked( QListWidgetItem *item )
     else // If the item is being unchecked, i.e. removed
     {
         // First verify they intend to destruct information
-        if ( QMessageBox::question( 0, "Equipment: Confirm Removal", "Are you sure you would like to remove this piece of equipment?",
+        if ( QMessageBox::question( this, "Equipment: Confirm Removal", "Are you sure you would like to remove this piece of equipment?",
                                    QMessageBox::Yes, QMessageBox::No ) == QMessageBox::Yes )
         {
 
@@ -534,11 +534,11 @@ void wndFirefighter::btnSaveEquipmentItemClicked( void )
 
         if ( _pDB->query( updateQuery ) )
         {
-            QMessageBox::information( 0, "Firefighter Information: Equipment Update","Equipment information successfully updated." );
+            QMessageBox::information( this, "Firefighter Information: Equipment Update","Equipment information successfully updated." );
         }
         else
         {
-            QMessageBox::warning( 0, "Firefighter Error: Equipment Update",
+            QMessageBox::warning( this, "Firefighter Error: Equipment Update",
                                   "There was a problem updating the equipment information. See log for more information." );
             qWarning( "Firefighter Error (%d): Could not update equipment '%s'. Database Error: %s",
                      _iID, qPrintable( equip ), qPrintable( updateQuery.lastError().text() ) );

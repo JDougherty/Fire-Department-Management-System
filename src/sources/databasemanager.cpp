@@ -412,25 +412,36 @@ bool DatabaseManager::query( QSqlQuery &query )
    return ret;
 }
 
+//! Gets a list of all of the matching DB widgets.
+/*!
+  \param pWidget First widget in the chain.
+  \param sTabName Name of the UI tab (optional).
+*/
+QList<QWidget *> DatabaseManager::getWidgets( QWidget *pWidget, QString sTabName )
+{
+    QList<QWidget *> lWidgets;
+
+    for ( QWidget *pTmpWidget = pWidget->nextInFocusChain(); pTmpWidget != pWidget; pTmpWidget = pTmpWidget->nextInFocusChain() )
+    {
+        if ( pTmpWidget->objectName().startsWith( "DB_" ) && (sTabName == "" ||  pTmpWidget->objectName().contains( sTabName ) ) )
+        {
+            lWidgets += pTmpWidget;
+        }
+    }
+    return lWidgets;
+}
+
 //! Builds the queries for all of the widgets in the focus chain.
 /*!
   \param sTableName Name of the DB table.
   \param pWidget First widget in the chain.
+  \param sTabName Name of the UI tab (optional).
 */
-void DatabaseManager::buildQueries( QString sTableName, QString sTabName, QWidget *pWidget )
+void DatabaseManager::buildQueries( QString sTableName, QWidget *pWidget, QString sTabName )
 {
-    QList<QWidget*> edits;
-    QWidget *pTmpWidget = pWidget->nextInFocusChain();
     QString sCreateQuery, sSelectQuery, sInsertQuery, sInsertQueryValues, sUpdateQuery, sDBObjName, sObjName;
-
-    while ( pTmpWidget != pWidget )
-    {
-        if ( pTmpWidget->objectName().startsWith( "DB_" ) && (sTabName == " " ||  pTmpWidget->objectName().contains( sTabName ) ) )
-        {
-            edits += pTmpWidget;
-        }
-        pTmpWidget = pTmpWidget->nextInFocusChain();
-    }
+    QList<QWidget *> lWidgets = getWidgets( pWidget, sTabName );
+    QWidget *pTmpWidget;
 
     sCreateQuery = "CREATE TABLE " + sTableName + "(id INTEGER PRIMARY KEY,";
     sSelectQuery = "SELECT ";
@@ -438,7 +449,7 @@ void DatabaseManager::buildQueries( QString sTableName, QString sTabName, QWidge
     sInsertQueryValues = " VALUES ( ";
     sUpdateQuery = "UPDATE " + sTableName + " SET ";
 
-    foreach ( pTmpWidget, edits )
+    foreach ( pTmpWidget, lWidgets )
     {
         sDBObjName = pTmpWidget->objectName();
 
@@ -492,22 +503,13 @@ void DatabaseManager::buildQueries( QString sTableName, QString sTabName, QWidge
     qDebug( qPrintable( sUpdateQuery ) );
 }
 
-bool DatabaseManager::selectUI( int iID, QString sTableName, QString sTabName, QWidget *pWidget )
+bool DatabaseManager::selectUI( int iID, QString sTableName, QWidget *pWidget, QString sTabName )
 {
-    QList<QWidget*> edits;
-    QWidget *pTmpWidget = pWidget->nextInFocusChain();
-
-    while ( pTmpWidget != pWidget )
-    {
-        if ( pTmpWidget->objectName().startsWith( "DB_" ) && (sTabName == " " ||  pTmpWidget->objectName().contains( sTabName ) ) )
-        {
-            edits += pTmpWidget;
-        }
-        pTmpWidget = pTmpWidget->nextInFocusChain();
-    }
+    QList<QWidget *> lWidgets = getWidgets( pWidget, sTabName );
+    QWidget *pTmpWidget;
 
     QSqlQuery selectQuery;
-    selectQuery.prepare(_queryMap[sTableName]["select"]);
+    selectQuery.prepare( _queryMap[sTableName]["select"] );
     selectQuery.bindValue( ":id", iID );
 
     if ( !query( selectQuery ) )
@@ -521,7 +523,7 @@ bool DatabaseManager::selectUI( int iID, QString sTableName, QString sTabName, Q
 
     QVariant result;
     int i = 0;
-    foreach ( pTmpWidget, edits )
+    foreach ( pTmpWidget, lWidgets )
     {
         QLineEdit *tmplineedit = qobject_cast<QLineEdit *>( pTmpWidget );
         QDateTimeEdit *tmpdatetime = qobject_cast<QDateTimeEdit *>( pTmpWidget );
@@ -551,24 +553,15 @@ bool DatabaseManager::selectUI( int iID, QString sTableName, QString sTabName, Q
     return true;
 }
 
-int DatabaseManager::insertUI( QString sTableName, QString sTabName, QWidget *pWidget )
+int DatabaseManager::insertUI( QString sTableName, QWidget *pWidget, QString sTabName )
 {
-    QList<QWidget*> edits;
-    QWidget *pTmpWidget = pWidget->nextInFocusChain();
-
-    while ( pTmpWidget != pWidget )
-    {
-        if ( pTmpWidget->objectName().startsWith( "DB_" ) && (sTabName == " " ||  pTmpWidget->objectName().contains( sTabName ) ) )
-        {
-            edits += pTmpWidget;
-        }
-        pTmpWidget = pTmpWidget->nextInFocusChain();
-    }
+    QList<QWidget *> lWidgets = getWidgets( pWidget, sTabName );
+    QWidget *pTmpWidget;
 
     QSqlQuery insertQuery;
-    insertQuery.prepare(_queryMap[sTableName]["insert"]);
+    insertQuery.prepare( _queryMap[sTableName]["insert"] );
 
-    foreach ( pTmpWidget, edits )
+    foreach ( pTmpWidget, lWidgets )
     {
         QLineEdit *tmplineedit = qobject_cast<QLineEdit *>( pTmpWidget );
         QDateTimeEdit *tmpdatetime = qobject_cast<QDateTimeEdit *>( pTmpWidget );
@@ -614,24 +607,15 @@ int DatabaseManager::insertUI( QString sTableName, QString sTabName, QWidget *pW
     return iID;
 }
 
-bool DatabaseManager::updateUI( int iID, QString sTableName, QString sTabName, QWidget *pWidget )
+bool DatabaseManager::updateUI( int iID, QString sTableName, QWidget *pWidget, QString sTabName )
 {
-    QList<QWidget*> edits;
-    QWidget *pTmpWidget = pWidget->nextInFocusChain();
-
-    while ( pTmpWidget != pWidget )
-    {
-        if ( pTmpWidget->objectName().startsWith( "DB_" ) && (sTabName == " " ||  pTmpWidget->objectName().contains( sTabName ) ) )
-        {
-            edits += pTmpWidget;
-        }
-        pTmpWidget = pTmpWidget->nextInFocusChain();
-    }
+    QList<QWidget *> lWidgets = getWidgets( pWidget, sTabName );
+    QWidget *pTmpWidget;
 
     QSqlQuery updateQuery;
-    updateQuery.prepare(_queryMap[sTableName]["update"]);
+    updateQuery.prepare( _queryMap[sTableName]["update"] );
 
-    foreach ( pTmpWidget, edits )
+    foreach ( pTmpWidget, lWidgets )
     {
         QLineEdit *tmplineedit = qobject_cast<QLineEdit *>( pTmpWidget );
         QDateTimeEdit *tmpdatetime = qobject_cast<QDateTimeEdit *>( pTmpWidget );

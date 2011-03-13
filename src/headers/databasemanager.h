@@ -54,6 +54,8 @@ class DatabaseManager : public QObject
         bool                    buildStructure( void );
         bool                    verifyStructure( void );
 
+        QList<QWidget *>        getWidgets( QWidget *pWidget, QString sTabName );
+
     public:
                                 DatabaseManager( void );
                                 DatabaseManager( QString sDBFile );
@@ -67,13 +69,13 @@ class DatabaseManager : public QObject
         void                    close( void );
 
         bool                    build( void );
-        void                    buildQueries( QString sTableName, QString sTabName, QWidget *pWidget );
+        void                    buildQueries( QString sTableName, QWidget *pWidget, QString sTabName = "" );
         bool                    verify( void );
         bool                    remove( void );
 
-        bool                    selectUI( int iID, QString sTableName, QString sTabName, QWidget *pWidget );
-        int                     insertUI( QString sTableName, QString sTabName, QWidget *pWidget );
-        bool                    updateUI( int iID, QString sTableName, QString sTabName, QWidget *pWidget );
+        bool                    selectUI( int iID, QString sTableName, QWidget *pWidget, QString sTabName = "" );
+        int                     insertUI( QString sTableName, QWidget *pWidget, QString sTabName = "" );
+        bool                    updateUI( int iID, QString sTableName, QWidget *pWidget, QString sTabName = "" );
 
         bool                    query( QSqlQuery &qry );
 

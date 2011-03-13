@@ -239,7 +239,7 @@ void wndSearch::resultsDeleteDatum( void )
 
     if ( _sSearchType == "Firefighters" )
     {
-        if ( QMessageBox::question( 0, "Delete firefighter?", "Are you sure you wish to delete this firefighter?", QMessageBox::Yes, QMessageBox::No ) == QMessageBox::Yes )
+        if ( QMessageBox::question( this, "Delete firefighter?", "Are you sure you wish to delete this firefighter?", QMessageBox::Yes, QMessageBox::No ) == QMessageBox::Yes )
         {
             QSqlQuery qryDeleteFirefighter;
 
@@ -255,12 +255,12 @@ void wndSearch::resultsDeleteDatum( void )
             {
                 qWarning( "Firefighter Information: Firefighter with department id %s could not be deleted. Error: %s",
                           qPrintable( sID ), qPrintable( qryDeleteFirefighter.lastError().text() ) );
-                QMessageBox::warning( 0, "Error", "Could not delete firefighter with department id " + sID + ". See log for more information." );
+                QMessageBox::warning( this, "Error", "Could not delete firefighter with department id " + sID + ". See log for more information." );
             }
         }
     }
     else if ( _sSearchType == "Drills" || _sSearchType == "Calls" )
     {
-        QMessageBox::warning( 0, "Error", "Sorry, but this is not yet implemented." );
+        QMessageBox::warning( this, "Error", "Sorry, but this is not yet implemented." );
     }
 }

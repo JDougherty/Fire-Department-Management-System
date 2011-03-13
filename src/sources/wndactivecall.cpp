@@ -12,7 +12,7 @@ wndActiveCall::wndActiveCall( QWidget *pParent, DatabaseManager *pDB ) :
     _pUI->setupUi( this );
     _pDB = pDB;
     _iID = -1;
-    pDB->buildQueries( "Calls", "", _pUI->tabWidget->nextInFocusChain() );
+    pDB->buildQueries( "Calls", _pUI->tabWidget->nextInFocusChain() );
 }
 
 //! Constructor for editing a call.
@@ -27,8 +27,8 @@ wndActiveCall::wndActiveCall( QWidget *pParent, DatabaseManager *pDB, int iID ) 
     _pUI->setupUi( this );
     _pDB = pDB;
     _iID = iID;
-    pDB->buildQueries( "Calls", "", _pUI->tabWidget->nextInFocusChain() );
-    pDB->selectUI( _iID, "Calls", "", _pUI->tabWidget->nextInFocusChain() );
+    pDB->buildQueries( "Calls", _pUI->tabWidget->nextInFocusChain() );
+    pDB->selectUI( _iID, "Calls", _pUI->tabWidget->nextInFocusChain() );
 }
 
 wndActiveCall::~wndActiveCall( void )
@@ -41,19 +41,19 @@ void wndActiveCall::btnSaveCallClicked( void )
 {
     if ( _iID <= 0 )
     {
-        _iID = _pDB->insertUI( "Calls", "", _pUI->tabWidget->nextInFocusChain() );
+        _iID = _pDB->insertUI( "Calls", _pUI->tabWidget->nextInFocusChain() );
         if ( _iID > 0 )
         {
-            QMessageBox::information( 0, "Call Information", "Call successfully added to database!" );
+            QMessageBox::information( this, "Call Information", "Call successfully added to database!" );
         }
         else
         {
-            QMessageBox::warning( 0, "Call Error", "Call could not be added to database! See log file for details." );
+            QMessageBox::warning( this, "Call Error", "Call could not be added to database! See log file for details." );
         }
     }
     else
     {
-        if ( _pDB->updateUI( _iID, "Calls", "", _pUI->tabWidget->nextInFocusChain() ) )
+        if ( _pDB->updateUI( _iID, "Calls", _pUI->tabWidget->nextInFocusChain() ) )
         {
             QMessageBox::information( this, "Call Information: Update", "Call was successfully updated in database!" );
         }

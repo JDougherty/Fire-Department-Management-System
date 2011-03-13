@@ -94,14 +94,14 @@ bool wndActiveDrill::insert( void )
         }
         else
         {
-            QMessageBox::warning( 0, "Drill Error", "Could not insert new drill to database. See log for more information." );
+            QMessageBox::warning( this, "Drill Error", "Could not insert new drill to database. See log for more information." );
             qWarning( "Drill Error (%d): Could not insert new drill to database. Database Error: %s", _iID, qPrintable( insertQuery.lastError().text() ) );
             return false;
         }
     }
     else
     {
-        QMessageBox::warning( 0, "Drill Error", "Could not insert new drill to database. See log for more information." );
+        QMessageBox::warning( this, "Drill Error", "Could not insert new drill to database. See log for more information." );
         qWarning( "Drill Error: Could not retrieve new drill ID. Database Error: %s", qPrintable( selectQuery.lastError().text() ) );
         return false;
     }
@@ -177,12 +177,12 @@ void wndActiveDrill::updateInformation( void )
     if ( _pDB->query( updateQuery ) )
     {
         qDebug( "Drill Information (%d): Drill information successfully updated in database.", _iID );
-        QMessageBox::information( 0, "Drill Information", "Drill information successfully updated in database." );
+        QMessageBox::information( this, "Drill Information", "Drill information successfully updated in database." );
     }
     else
     {
         qWarning( "Drill Error (%d): Drill information could not be updated in database. Database Error: %s", _iID, qPrintable( updateQuery.lastError().text() ) );
-        QMessageBox::warning( 0, "Drill Error", "Drill information could not be updated in database. See log for more information." );
+        QMessageBox::warning( this, "Drill Error", "Drill information could not be updated in database. See log for more information." );
     }
 }
 
@@ -202,7 +202,7 @@ void wndActiveDrill::scanId( void )
     {
         qWarning( "Drill Error (%d): Could not retrieve id for firefighter with department id %s. Error: %s",
                   _iID, qPrintable( ffdeptid ), qPrintable( selectFirefighter.lastError().text() ) );
-        QMessageBox::warning( 0, "Drill Error", "Could not retrieve id for firefighter with department id '" + ffdeptid + "'. See log for more information." );
+        QMessageBox::warning( this, "Drill Error", "Could not retrieve id for firefighter with department id '" + ffdeptid + "'. See log for more information." );
         return;
     }
     else
@@ -210,7 +210,7 @@ void wndActiveDrill::scanId( void )
         // Check if a firefighter was found with the given department id
         if ( !(selectFirefighter.first() ) )
         {
-            QMessageBox::information( 0, "Drill Information", "Firefighter with department id " + ffdeptid + " does not exist." );
+            QMessageBox::information( this, "Drill Information", "Firefighter with department id " + ffdeptid + " does not exist." );
             return;
         }
         else
@@ -230,7 +230,7 @@ void wndActiveDrill::scanId( void )
     if ( !( _pDB->query( ffCheck ) ) )
     {
         qWarning( "Drill Error (%d): Could not check sign in status of firefighter with id %d. Error: %s", _iID, ffid, qPrintable( ffCheck.lastError().text() ) );
-        QMessageBox::warning( 0, "Drill Error:", "Could not check the sign in status of firefighter with department id '" + ffdeptid + "'. See log for more information." );
+        QMessageBox::warning( this, "Drill Error:", "Could not check the sign in status of firefighter with department id '" + ffdeptid + "'. See log for more information." );
         return;
     }
     else
@@ -249,7 +249,7 @@ void wndActiveDrill::scanId( void )
             if ( !( _pDB->query( insertFirefighterToSheet ) ) )
             {
                 qWarning( "Drill Error (%d): Could not sign in firefighter with id %d. Error: %s", _iID, ffid, qPrintable( ffCheck.lastError().text() ) );
-                QMessageBox::warning( 0, "Drill Error:", "Could not sign in firefighter with department id '" + ffdeptid + "'. See log for more information." );
+                QMessageBox::warning( this, "Drill Error:", "Could not sign in firefighter with department id '" + ffdeptid + "'. See log for more information." );
                 return;
             }
 
@@ -268,7 +268,7 @@ void wndActiveDrill::scanId( void )
             if ( !( _pDB->query( updateFirefighterInSheet ) ) )
             {
                 qWarning( "Drill Error (%d): Could not sign out firefighter with id %d. Error: %s", _iID, ffid, qPrintable( ffCheck.lastError().text() ) );
-                QMessageBox::warning( 0, "Drill Error:", "Could not sign out firefighter with department id '" + ffdeptid + "'. See log for more information." );
+                QMessageBox::warning( this, "Drill Error:", "Could not sign out firefighter with department id '" + ffdeptid + "'. See log for more information." );
                 return;
             }
 
@@ -297,7 +297,7 @@ void wndActiveDrill::sheetRemoveFirefighter( void )
 {
     QString deptid = lastCellRightClicked.sibling( lastCellRightClicked.row(), 0 ).data().toString();
 
-    if ( QMessageBox::question( 0, "Drill Confirmation", "Are you sure you would like to remove firefighter " + deptid + "?",
+    if ( QMessageBox::question( this, "Drill Confirmation", "Are you sure you would like to remove firefighter " + deptid + "?",
                                 QMessageBox::Yes, QMessageBox::No ) == QMessageBox::Yes )
     {
         deptid = deptid.mid( deptid.lastIndexOf( "(" ) + 1, deptid.lastIndexOf( ")" ) - deptid.lastIndexOf( "(" ) - 1 );
@@ -311,7 +311,7 @@ void wndActiveDrill::sheetRemoveFirefighter( void )
         {
             qWarning( "Drill Error (%d): Could not retrive id for firefighter with department id %s. Error: %s",
                       _iID, qPrintable( deptid ), qPrintable( selectFirefighter.lastError().text() ) );
-            QMessageBox::warning( 0, "Drill Error:", "Could not retrive id for firefighter with department id " + deptid + ". See log for more information." );
+            QMessageBox::warning( this, "Drill Error:", "Could not retrive id for firefighter with department id " + deptid + ". See log for more information." );
             return;
         }
 
@@ -327,7 +327,7 @@ void wndActiveDrill::sheetRemoveFirefighter( void )
         {
             qWarning( "Drill Error (%d): Could not delete firefighter with id %d from drillsheet. Error: %s",
                       _iID, ffid, qPrintable( selectFirefighter.lastError().text() ) );
-            QMessageBox::warning( 0, "Drill Error:", "Could not remove firefighter with department id " + deptid + ". See log for more information." );
+            QMessageBox::warning( this, "Drill Error:", "Could not remove firefighter with department id " + deptid + ". See log for more information." );
             return;
         }
 

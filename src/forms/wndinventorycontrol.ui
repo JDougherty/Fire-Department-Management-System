@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>wndinventorycontrol</class>
- <widget class="QMainWindow" name="wndinventorycontrol">
+ <class>wndInventoryControl</class>
+ <widget class="QMainWindow" name="wndInventoryControl">
   <property name="geometry">
    <rect>
     <x>0</x>

@@ -231,5 +231,70 @@
   </widget>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>btnReset</sender>
+   <signal>clicked()</signal>
+   <receiver>wndInventoryCheck</receiver>
+   <slot>resetInventoryCheck()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>517</x>
+     <y>41</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>285</x>
+     <y>250</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnScan</sender>
+   <signal>clicked()</signal>
+   <receiver>wndInventoryCheck</receiver>
+   <slot>itemScanned()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>237</x>
+     <y>96</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>285</x>
+     <y>250</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnReport</sender>
+   <signal>clicked()</signal>
+   <receiver>wndInventoryCheck</receiver>
+   <slot>printReport()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>525</x>
+     <y>101</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>285</x>
+     <y>250</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>txtScanID</sender>
+   <signal>returnPressed()</signal>
+   <receiver>wndInventoryCheck</receiver>
+   <slot>itemScanned()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>136</x>
+     <y>96</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>285</x>
+     <y>250</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

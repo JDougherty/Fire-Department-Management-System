@@ -119,7 +119,7 @@ void MainWindow::mdiEditCall( int iID )
 //! User clicked a button to modify the inventory.
 void MainWindow::mdiInventoryControl( void )
 {
-    wndinventorycontrol *child = new wndinventorycontrol;
+    wndInventoryControl *child = new wndInventoryControl( this, _pDB );
     mdiArea->addSubWindow( child );
     child->show();
 }
@@ -127,7 +127,7 @@ void MainWindow::mdiInventoryControl( void )
 //! User clicked a button to check the inventory.
 void MainWindow::mdiInventoryCheck( void )
 {
-    wndInventoryCheck *child = new wndInventoryCheck;
+    wndInventoryCheck *child = new wndInventoryCheck( this, _pDB );
     mdiArea->addSubWindow( child );
     child->show();
 }

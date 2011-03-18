@@ -138,10 +138,12 @@ void wndSetup::on_btnExInstDBFile_clicked( void )
 //! User clicked "Continue" on DB Settings tab
 void wndSetup::on_btnExInstDBSettings_clicked( void )
 {
-    if(_pUI->leExInstDBLocation->text().isEmpty()){
+    if ( _pUI->leExInstDBLocation->text().isEmpty() )
+    {
         QMessageBox::warning( this, "Error", "Please select a database file.", QMessageBox::Ok );
     }
-    else{
+    else
+    {
         _pUI->tabWidget->addTab( _pUI->tabExInstFinish, "Finish" );
         _pUI->tabWidget->setCurrentIndex( 2 ); // tabExInstFinish
     }
@@ -269,10 +271,12 @@ void wndSetup::on_btnNewInstFDSettings_clicked( void )
 //! User clicked "Continue" on DB Settings tab
 void wndSetup::on_btnNewInstDBSettings_clicked( void )
 {
-    if(_pUI->leNewInstDBLocation->text().isEmpty()){
+    if ( _pUI->leNewInstDBLocation->text().isEmpty() )
+    {
         QMessageBox::warning( this, "Error", "Please select a location to place the database file.", QMessageBox::Ok );
     }
-    else{
+    else
+    {
          _pUI->tabWidget->addTab( _pUI->tabNewInstFinish, "Finish" );
         _pUI->tabWidget->setCurrentIndex( 3 ); // tabNewInstFinish
     }

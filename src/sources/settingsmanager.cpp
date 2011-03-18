@@ -42,11 +42,11 @@ bool SettingsManager::exists( void )
 {
     if ( !QFile::exists( _pSettings->fileName() ) )
     {
-        qDebug( "Settings: %s does not exist.", qPrintable( _pSettings->fileName() ) );
+        qDebug( "Settings Manager: %s does not exist.", qPrintable( _pSettings->fileName() ) );
         return false;
     }
 
-    qDebug( "%s exists.", qPrintable( _pSettings->fileName() ) );
+    qDebug( "Settings Manager: %s exists.", qPrintable( _pSettings->fileName() ) );
     return true;
 }
 
@@ -80,14 +80,14 @@ QString SettingsManager::getDBFile( void )
 //! Load the values from the config file.
 void SettingsManager::load( void )
 {
-    qDebug( "Settings: Loading values from %s", qPrintable( _pSettings->fileName() ) );
+    qDebug( "Settings Manager: Loading values from %s", qPrintable( _pSettings->fileName() ) );
     _sDBFile = _pSettings->value( "database/file" ).toString();
 }
 
 //! Save values to the config file.
 void SettingsManager::save( void )
 {
-    qDebug( "Settings: Saving values to %s", qPrintable( _pSettings->fileName() ) );
+    qDebug( "Settings Manager: Saving values to %s", qPrintable( _pSettings->fileName() ) );
     _pSettings->beginGroup( "database" );
     _pSettings->setValue( "file", _sDBFile );
     _pSettings->endGroup();

@@ -88,21 +88,21 @@ void wndFirefighter::btnSavePersonalInfoClicked( void )
 {
     if ( _pUI->DB_TEXT_PI_FirstName->text() == "" )
     {
-        QMessageBox::warning( this, "Firefighter Error", "Save failed. Please enter a first name for this firefighter." );
+        QMessageBox::warning( this, "Firefighter Error", "Save failed! Please enter a first name for this firefighter." );
         _pUI->DB_TEXT_PI_FirstName->setFocus();
         return;
     }
 
     if ( _pUI->DB_TEXT_PI_LastName->text() == "" )
     {
-        QMessageBox::warning( this, "Firefighter Error", "Save failed. Please enter a last name for this firefighter." );
+        QMessageBox::warning( this, "Firefighter Error", "Save failed! Please enter a last name for this firefighter." );
         _pUI->DB_TEXT_PI_LastName->setFocus();
         return;
     }
 
     if ( _pUI->DB_TEXT_PI_LocalID->text() == "" )
     {
-        QMessageBox::warning( this, "Firefighter Error", "Save failed. Please enter a local id for this firefighter." );
+        QMessageBox::warning( this, "Firefighter Error", "Save failed! Please enter a local id for this firefighter." );
         _pUI->DB_TEXT_PI_LocalID->setFocus();
         return;
     }
@@ -112,7 +112,7 @@ void wndFirefighter::btnSavePersonalInfoClicked( void )
         _iID = _pDB->insertUI( "Firefighters", _pUI->tabPersonalInfo->nextInFocusChain(), "_PI_" );
         if ( _iID > 0 )
         {
-            QMessageBox::information( this, "Firefighter Information", "Firefighter successfully added to database!" );
+            QMessageBox::information( this, "Firefighter Added", "Firefighter has been added." );
 
             // show the additional tabs
             _pUI->tabWidget->addTab( _pUI->tabTraining, "Training" );
@@ -127,18 +127,18 @@ void wndFirefighter::btnSavePersonalInfoClicked( void )
         }
         else
         {
-            QMessageBox::warning( this, "Firefighter Error", "Firefighter could not be added to database! See log file for details." );
+            QMessageBox::warning( this, "Firefighter Error", "Firefighter could not be added! See log file for more information." );
         }
     }
     else
     {
         if ( _pDB->updateUI( _iID, "Firefighters", _pUI->tabPersonalInfo->nextInFocusChain(), "_PI_" ) )
         {
-            QMessageBox::information( this, "Firefighter Information: Update", "Firefighter was successfully updated in database!" );
+            QMessageBox::information( this, "Firefighter Updated", "Firefighter has been updated." );
         }
         else
         {
-            QMessageBox::warning( this, "Firefighter Error: Update", "Firefighter information failed to update! See log for more information." );
+            QMessageBox::warning( this, "Firefighter Error", "Firefighter could not be updated! See log for more information." );
         }
     }
 }

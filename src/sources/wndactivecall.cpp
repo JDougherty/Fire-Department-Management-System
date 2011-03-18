@@ -44,22 +44,22 @@ void wndActiveCall::btnSaveCallClicked( void )
         _iID = _pDB->insertUI( "Calls", _pUI->tabWidget->nextInFocusChain() );
         if ( _iID > 0 )
         {
-            QMessageBox::information( this, "Call Information", "Call successfully added to database!" );
+            QMessageBox::information( this, "Call Added", "Call has been added." );
         }
         else
         {
-            QMessageBox::warning( this, "Call Error", "Call could not be added to database! See log file for details." );
+            QMessageBox::warning( this, "Call Error", "Call could not be added! See log file more information." );
         }
     }
     else
     {
         if ( _pDB->updateUI( _iID, "Calls", _pUI->tabWidget->nextInFocusChain() ) )
         {
-            QMessageBox::information( this, "Call Information: Update", "Call was successfully updated in database!" );
+            QMessageBox::information( this, "Call Updated", "Call has been updated." );
         }
         else
         {
-            QMessageBox::warning( this, "Call Error: Update", "Call information failed to update! See log for more information." );
+            QMessageBox::warning( this, "Call Error", "Call could not be updated! See log for more information." );
         }
     }
 }

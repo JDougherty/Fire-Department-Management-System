@@ -59,11 +59,11 @@ bool DatabaseManager::exists( void )
 {
     if ( !QFile::exists( _sDBFile ) )
     {
-        qDebug( "Database: %s does not exist.", qPrintable( _sDBFile ) );
+        qDebug( "Database Manager: %s does not exist.", qPrintable( _sDBFile ) );
         return false;
     }
 
-    qDebug( "Database: %s exists.", qPrintable( _sDBFile ) );
+    qDebug( "Database Manager: %s exists.", qPrintable( _sDBFile ) );
     return true;
 }
 
@@ -75,17 +75,18 @@ bool DatabaseManager::open( void )
 {
     if ( !_DB.open() ) // If database name (file) DNE it creates it then tries to open it
     {
-        qDebug( "Database: Error opening %s: %s", qPrintable( _sDBFile ), qPrintable( _DB.lastError().databaseText() ) );
+        qDebug( "Database Manager: Error opening %s: %s", qPrintable( _sDBFile ), qPrintable( _DB.lastError().databaseText() ) );
         return false;
     }
 
-    qDebug( "Database: Opened %s", qPrintable( _sDBFile ) );
+    qDebug( "Database Manager: Opened %s", qPrintable( _sDBFile ) );
     return true;
 }
 
 //! Closes the database.
 void DatabaseManager::close( void )
 {
+    qDebug( "Database Manager: Closed %s", qPrintable( _sDBFile ) );
     _DB.close();
 }
 
@@ -105,7 +106,14 @@ bool DatabaseManager::isOpen( void )
 bool DatabaseManager::remove( void )
 {
     close(); // Close the database if it is already open
-    return QFile::remove( _sDBFile ); // Remove created database binary file
+    bool bRemoved = QFile::remove( _sDBFile ); // Remove created database binary file
+
+    if ( bRemoved )
+        qDebug( "Database Manager: Removed %s", qPrintable( _sDBFile ) );
+    else
+        qDebug( "Database Manager: Failed to remove %s", qPrintable( _sDBFile ) );
+
+    return bRemoved;
 }
 
 //! Builds the SQLite database file.
@@ -128,6 +136,9 @@ bool DatabaseManager::buildStructure( void )
     QSqlQuery query;
     QString sSchema;
     QStringList slSplitSchema;
+
+
+    qDebug( "Database Manager: Creating the tables." );
 
     sSchema = ""
              "CREATE TABLE department"
@@ -319,11 +330,11 @@ bool DatabaseManager::buildStructure( void )
     {
         if ( query.exec( slSplitSchema[i] ) )
         {
-            //qDebug( "Database: Structure Initialization: %s", qPrintable( query.lastQuery() ) );
+            qDebug( "Database Manager: Structure Initialization: %s", qPrintable( query.lastQuery() ) );
         }
         else
         {
-            //qDebug( "Database: Structure Initialization: %s", qPrintable( query.lastError().databaseText() ) );
+            qDebug( "Database Manager: Structure Initialization: %s", qPrintable( query.lastError().databaseText() ) );
             return false;
         }
     }
@@ -351,6 +362,8 @@ bool DatabaseManager::verifyStructure( void )
     QSqlQuery qryTableNames;
     QSqlQuery qryTableInfo;
     QString sTableSchema;
+
+    qDebug( "Database Manager: Verifying the database." );
 
     // While we're here, let's turn on foreign key support
     qryTableNames.exec( "PRAGMA foreign_keys = ON;" );
@@ -383,11 +396,11 @@ bool DatabaseManager::verifyStructure( void )
     // And compare to expected value
     if ( chksum != "dc428fb0271c21464ff285665eb279b3" )
     {
-        qDebug( "Database: Invalid structure. Expected chksum dc428fb0271c21464ff285665eb279b3, but got %s", qPrintable( chksum ) );
+        qDebug( "Database Manager: Invalid structure. Expected chksum dc428fb0271c21464ff285665eb279b3, but got %s", qPrintable( chksum ) );
         return false;
     }
 
-    qDebug( "Database: Valid structure." );
+    qDebug( "Database Manager: Valid structure." );
     return true;
 }
 
@@ -408,7 +421,7 @@ QSqlError DatabaseManager::lastError( void )
 bool DatabaseManager::query( QSqlQuery &query )
 {
    bool ret = query.exec();
-   qDebug( "Database: Executing Query: %s", qPrintable( query.executedQuery() ) );
+   qDebug( "Database Manager: Executing Query: %s", qPrintable( query.executedQuery() ) );
    return ret;
 }
 
@@ -443,6 +456,8 @@ void DatabaseManager::buildQueries( QString sTableName, QWidget *pWidget, QStrin
     QList<QWidget *> lWidgets = getWidgets( pWidget, sTabName );
     QWidget *pTmpWidget;
 
+    qDebug( "Database Manager: Generating queries for the '%s' table.", qPrintable( sTableName ) );
+
     sCreateQuery = "CREATE TABLE " + sTableName + "(id INTEGER PRIMARY KEY,";
     sSelectQuery = "SELECT ";
     sInsertQuery = "INSERT INTO " + sTableName + " ( ";
@@ -465,7 +480,7 @@ void DatabaseManager::buildQueries( QString sTableName, QWidget *pWidget, QStrin
         }
         else
         {
-            qDebug( qPrintable( "Unrecognized DB field type" + sDBObjName + "." ) );
+            qWarning( "Database Manager: Unrecognized DB field type '%s'.", qPrintable( sDBObjName ) );
             continue;
         }
 
@@ -496,11 +511,10 @@ void DatabaseManager::buildQueries( QString sTableName, QWidget *pWidget, QStrin
     uiQueries.insert( "update", sUpdateQuery );
     _queryMap.insert( sTableName, uiQueries );
 
-    qDebug( qPrintable( "Generating queries for the " + sTableName + " table." ) );
-    qDebug( qPrintable( sCreateQuery ) );
-    qDebug( qPrintable( sSelectQuery ) );
-    qDebug( qPrintable( sInsertQuery ) );
-    qDebug( qPrintable( sUpdateQuery ) );
+    qDebug( "Database Manager: '%s' create query: %s", qPrintable( sTableName ), qPrintable( sCreateQuery ) );
+    qDebug( "Database Manager: '%s' select query: %s", qPrintable( sTableName ), qPrintable( sSelectQuery ) );
+    qDebug( "Database Manager: '%s' insert query: %s", qPrintable( sTableName ), qPrintable( sInsertQuery ) );
+    qDebug( "Database Manager: '%s' update query: %s", qPrintable( sTableName ), qPrintable( sUpdateQuery ) );
 }
 
 bool DatabaseManager::selectUI( int iID, QString sTableName, QWidget *pWidget, QString sTabName )
@@ -514,7 +528,7 @@ bool DatabaseManager::selectUI( int iID, QString sTableName, QWidget *pWidget, Q
 
     if ( !query( selectQuery ) )
     {
-        qWarning( "Database Error: Could not select from table '%s' entry #%d: %s",
+        qWarning( "Database Manager: Could not select from table '%s' entry #%d: %s",
                   qPrintable( sTableName ), iID, qPrintable( selectQuery.lastError().text() ) );
         return false;
     }
@@ -548,7 +562,7 @@ bool DatabaseManager::selectUI( int iID, QString sTableName, QWidget *pWidget, Q
         i++;
     }
 
-    qDebug( "Database: Selected from table '%s' entry #%d.", qPrintable( sTableName), iID );
+    qDebug( "Database Manager: Selected from table '%s' entry #%d.", qPrintable( sTableName), iID );
 
     return true;
 }
@@ -586,23 +600,16 @@ int DatabaseManager::insertUI( QString sTableName, QWidget *pWidget, QString sTa
         }
     }
 
-    QMapIterator<QString, QVariant> i( insertQuery.boundValues() );
-    while ( i.hasNext() )
-    {
-        i.next();
-        qDebug( qPrintable( i.key() + " " + qPrintable( i.value().toString() ) ) );
-    }
-
     if ( !query( insertQuery ) )
     {
-        qWarning( "Database Error: Could not insert table '%s': %s",
+        qWarning( "Database Manager: Could not insert table '%s': %s",
                   qPrintable( sTableName ), qPrintable( insertQuery.lastError().text() ) );
         return -1;
     }
 
     int iID = insertQuery.lastInsertId().toInt();
 
-    qDebug( "Database: Inserted into table '%s' entry #%d.", qPrintable( sTableName), iID );
+    qDebug( "Database Manager: Inserted into table '%s' entry #%d.", qPrintable( sTableName), iID );
 
     return iID;
 }
@@ -642,21 +649,14 @@ bool DatabaseManager::updateUI( int iID, QString sTableName, QWidget *pWidget, Q
 
     updateQuery.bindValue( ":id", iID );
 
-    QMapIterator<QString, QVariant> i( updateQuery.boundValues() );
-    while ( i.hasNext() )
-    {
-        i.next();
-        qDebug( qPrintable( i.key() + " " + qPrintable( i.value().toString() ) ) );
-    }
-
     if ( !query( updateQuery ) )
     {
-        qWarning( "Database Error: Could not update table '%s' entry #%d: %s",
+        qWarning( "Database Manager: Could not update table '%s' entry #%d: %s",
                   qPrintable( sTableName ), iID, qPrintable( updateQuery.lastError().text() ) );
         return false;
     }
 
-    qDebug( "Database: Updated table '%s' entry #%d.", qPrintable( sTableName), iID );
+    qDebug( "Database Manager: Updated table '%s' entry #%d.", qPrintable( sTableName), iID );
 
     return true;
 }

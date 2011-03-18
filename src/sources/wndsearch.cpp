@@ -239,7 +239,7 @@ void wndSearch::resultsDeleteDatum( void )
 
     if ( _sSearchType == "Firefighters" )
     {
-        if ( QMessageBox::question( this, "Delete firefighter?", "Are you sure you wish to delete this firefighter?", QMessageBox::Yes, QMessageBox::No ) == QMessageBox::Yes )
+        if ( QMessageBox::question( this, "Delete Firefighter?", "Are you sure you wish to delete this firefighter?", QMessageBox::Yes, QMessageBox::No ) == QMessageBox::Yes )
         {
             QSqlQuery qryDeleteFirefighter;
 
@@ -248,7 +248,7 @@ void wndSearch::resultsDeleteDatum( void )
 
             if ( _pDB->query( qryDeleteFirefighter ) )
             {
-                qDebug( "Firefighter Information: Firefighter with department id %s successfully deleted.", qPrintable( sID ) );
+                qDebug( "Search: Firefighter with local id %s successfully deleted.", qPrintable( sID ) );
                 Search( _sSearchType, _sSearch );
             }
             else

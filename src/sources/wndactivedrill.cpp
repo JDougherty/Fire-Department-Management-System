@@ -39,11 +39,6 @@ wndActiveDrill::wndActiveDrill( QWidget *pParent, DatabaseManager *pDB) :
     _pUI->txtIDScan->setFocus();
 
     _pUI->tblTimesheet->setContextMenuPolicy( Qt::CustomContextMenu );
-
-    connect( _pUI->btnSaveDrill, SIGNAL( clicked() ), this, SLOT( updateInformation() ) );
-    connect( _pUI->txtIDScan, SIGNAL( returnPressed() ), this, SLOT( scanId() ) );
-    connect( _pUI->btnSignIn, SIGNAL( clicked() ), this, SLOT( scanId() ) );
-    connect( _pUI->tblTimesheet, SIGNAL( customContextMenuRequested( QPoint ) ), this, SLOT( sheetContextMenu( const QPoint & ) ) );
 }
 
 wndActiveDrill::wndActiveDrill( QWidget *pParent, DatabaseManager *pDB, int iID ) :
@@ -59,11 +54,6 @@ wndActiveDrill::wndActiveDrill( QWidget *pParent, DatabaseManager *pDB, int iID 
     }
 
     _pUI->tblTimesheet->setContextMenuPolicy( Qt::CustomContextMenu );
-
-    connect( _pUI->btnSaveDrill, SIGNAL( clicked() ), this, SLOT( updateInformation() ) );
-    connect( _pUI->txtIDScan, SIGNAL( returnPressed() ), this, SLOT( scanId() ) );
-    connect( _pUI->btnSignIn, SIGNAL( clicked() ), this, SLOT( scanId() ) );
-    connect( _pUI->tblTimesheet, SIGNAL( customContextMenuRequested( QPoint ) ), this, SLOT( sheetContextMenu( const QPoint & ) ) );
 }
 
 wndActiveDrill::~wndActiveDrill( void )
@@ -137,9 +127,9 @@ bool wndActiveDrill::read( void )
 void wndActiveDrill::updateSheet( void )
 {
     QSqlQuery selectSheet;
-    selectSheet.prepare( "SELECT firefighters.fname||' '||firefighters.lname||' ('||firefighters.deptid||')',"
+    selectSheet.prepare( "SELECT Firefighters.PI_FirstName||' '||Firefighters.PI_LastName||' ('||Firefighters.PI_LocalID||')',"
                          "strftime('%H:%M',drillsheet.timein),strftime('%H:%M',drillsheet.timeout) FROM drillsheet "
-                         "JOIN firefighters ON drillsheet.ffid=firefighters.id WHERE did=?" );
+                         "JOIN Firefighters ON drillsheet.ffid=Firefighters.id WHERE did=?" );
     selectSheet.addBindValue( _iID );
 
     _pDB->query( selectSheet );
@@ -194,7 +184,7 @@ void wndActiveDrill::scanId( void )
     QString ffdeptid = _pUI->txtIDScan->text();
     int ffid = 0;
 
-    selectFirefighter.prepare( "SELECT id FROM firefighters WHERE deptid=?" );
+    selectFirefighter.prepare( "SELECT id FROM Firefighters WHERE PI_LocalID=?" );
     selectFirefighter.addBindValue( ffdeptid );
 
     // Execute query and check for errors
@@ -304,7 +294,7 @@ void wndActiveDrill::sheetRemoveFirefighter( void )
         int ffid = 0;
 
         QSqlQuery selectFirefighter;
-        selectFirefighter.prepare( "SELECT id FROM firefighters WHERE deptid=?" );
+        selectFirefighter.prepare( "SELECT id FROM Firefighters WHERE PI_LocalID=?" );
         selectFirefighter.addBindValue( deptid );
 
         if ( !selectFirefighter.exec() )

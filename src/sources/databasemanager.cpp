@@ -370,11 +370,11 @@ bool DatabaseManager::verifyStructure( void )
 
     // Get list of tables in database, loop through each
     qryTableNames.exec( "select tbl_name from sqlite_master;" );
-    while( qryTableNames.next() )
+    while ( qryTableNames.next() )
     {
         // Append the table name, column names and datatypes to TableSchema string
-        qryTableInfo.exec( "pragma table_info(" + qryTableNames.value(0).toString() + ")" );
-        sTableSchema.append( qryTableNames.value(0).toString() );
+        qryTableInfo.exec( "pragma table_info(" + qryTableNames.value( 0 ).toString() + ")" );
+        sTableSchema.append( qryTableNames.value( 0 ).toString() );
 
         while ( qryTableInfo.next() )
         {

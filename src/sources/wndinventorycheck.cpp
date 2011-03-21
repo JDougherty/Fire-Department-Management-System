@@ -93,7 +93,7 @@ void wndInventoryCheck::refreshTables( void )
 //! Removes all items from the checked in table.
 void wndInventoryCheck::resetInventoryCheck( void )
 {
-    if ( QMessageBox::question( 0, "Inventory Information: Confirm Reset", "Are you sure you would like to reset the inventory check?",
+    if ( QMessageBox::question( this, "Inventory Information: Confirm Reset", "Are you sure you would like to reset the inventory check?",
                                 QMessageBox::Yes, QMessageBox::No ) == QMessageBox::Yes )
     {
 
@@ -116,7 +116,7 @@ void wndInventoryCheck::resetInventoryCheck( void )
 
         if ( !_pDB->query( copyQuery ) )
         {
-            QMessageBox::warning( 0, "Inventory Error", "Could not copy inventory into check table. See log for more information." );
+            QMessageBox::warning( this, "Inventory Error", "Could not copy inventory into check table. See log for more information." );
             qWarning( "Inventory Error: Could not copy inventory into check table. Database Error: %s", qPrintable( copyQuery.lastError().text() ) );
         }
         refreshTables();
@@ -137,12 +137,12 @@ void wndInventoryCheck::itemScanned( void )
         }
         else
         {
-            QMessageBox::information( 0, "Inventory Information", "Item with ID " + _pUI->txtScanID->text() + " not found in not-checked list." );
+            QMessageBox::information( this, "Inventory Information", "Item with ID " + _pUI->txtScanID->text() + " not found in not-checked list." );
         }
     }
     else
     {
-        QMessageBox::warning( 0, "Inventory Error", "There was a problem checking this item into inventory. See log for more information." );
+        QMessageBox::warning( this, "Inventory Error", "There was a problem checking this item into inventory. See log for more information." );
     }
     _pUI->txtScanID->clear();
     _pUI->txtScanID->setFocus();

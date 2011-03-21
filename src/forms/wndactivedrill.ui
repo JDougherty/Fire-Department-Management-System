@@ -291,7 +291,72 @@
   <tabstop>btnSaveDrill</tabstop>
  </tabstops>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>btnSaveDrill</sender>
+   <signal>clicked()</signal>
+   <receiver>wndActiveDrill</receiver>
+   <slot>updateInformation()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>217</x>
+     <y>361</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>330</x>
+     <y>195</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnSignIn</sender>
+   <signal>clicked()</signal>
+   <receiver>wndActiveDrill</receiver>
+   <slot>scanId()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>545</x>
+     <y>40</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>330</x>
+     <y>195</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>txtIDScan</sender>
+   <signal>returnPressed()</signal>
+   <receiver>wndActiveDrill</receiver>
+   <slot>scanId()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>385</x>
+     <y>41</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>330</x>
+     <y>195</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tblTimesheet</sender>
+   <signal>customContextMenuRequested(QPoint)</signal>
+   <receiver>wndActiveDrill</receiver>
+   <slot>sheetContextMenu(QPoint)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>460</x>
+     <y>215</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>330</x>
+     <y>195</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
  <slots>
   <slot>txtSignIn_textEdited()</slot>
  </slots>

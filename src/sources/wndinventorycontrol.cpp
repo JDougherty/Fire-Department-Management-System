@@ -65,7 +65,7 @@ void wndInventoryControl::createItem( void )
     if ( _pDB->query( insertItem ) )
     {
         qDebug( "Inventory Information: Inventory item added successfully." );
-        QMessageBox::information( 0, "Inventory Information", "Item successfully added to database!" );
+        QMessageBox::information( this, "Inventory Information", "Item successfully added to database!" );
         _pUI->txtNewName->clear();
         _pUI->txtNewDescription->clear();
         _pUI->txtNewCategory->clear();
@@ -75,7 +75,7 @@ void wndInventoryControl::createItem( void )
     {
         qWarning( "Inventory Error: Inventory item could not be added. Database Error: %s",
                   qPrintable(insertItem.lastError().text() ) );
-        QMessageBox::warning( 0, "Inventory Error", "Item could not be added to database! See log file for details." );
+        QMessageBox::warning( this, "Inventory Error", "Item could not be added to database! See log file for details." );
     }
     refreshMasterList();
 }
@@ -89,7 +89,7 @@ void wndInventoryControl::deleteItem( QModelIndex item )
 {
     QString itemname = _pUI->tblInventory->model()->data( _pUI->tblInventory->model()->index( item.row(), 1 ) ).toString();
 
-    if ( QMessageBox::question( 0, "Confirm Delete", "Are you sure you would like to remove item " + itemname + " from the master inventory?",
+    if ( QMessageBox::question( this, "Confirm Delete", "Are you sure you would like to remove item " + itemname + " from the master inventory?",
                              QMessageBox::Yes, QMessageBox::No ) == QMessageBox::Yes )
     {
             QString id = _pUI->tblInventory->model()->data( _pUI->tblInventory->model()->index( item.row(), 0 ) ).toString();

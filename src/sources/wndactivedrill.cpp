@@ -25,20 +25,17 @@ wndActiveDrill::wndActiveDrill( QWidget *pParent, DatabaseManager *pDB) :
 {
     _pDB = pDB;
     _iID = -1;
-
-    if ( !insert() )
-    {
-        delete this;
-    }
-
     _pUI->setupUi( this );
 
-    _pUI->dateDrillStart->setDateTime( QDateTime::currentDateTime() );
-    _pUI->dateDrillEnd->setDateTime( QDateTime::currentDateTime().addSecs( 60 * 60 * 2 ) ) ;
+    _pUI->DB_DATE_DI_StartTime->setDateTime( QDateTime::currentDateTime() );
+    _pUI->DB_DATE_DI_EndTime->setDateTime( QDateTime::currentDateTime().addSecs( 60 * 60 * 2 ) ) ;
 
-    _pUI->txtIDScan->setFocus();
+    _pUI->DB_TEXT_IDScan->setFocus();
 
     _pUI->tblTimesheet->setContextMenuPolicy( Qt::CustomContextMenu );
+
+    _pDB->buildQueries( "Drills", _pUI->centralWidget->nextInFocusChain(), "_DI_" );
+    _iID = _pDB->insertUI( "Drills", _pUI->centralWidget->nextInFocusChain(), "_DI_" );
 }
 
 wndActiveDrill::wndActiveDrill( QWidget *pParent, DatabaseManager *pDB, int iID ) :
@@ -46,14 +43,13 @@ wndActiveDrill::wndActiveDrill( QWidget *pParent, DatabaseManager *pDB, int iID 
 {
     _pDB = pDB;
     _iID = iID;
-
     _pUI->setupUi( this );
-    if ( !read() )
-    {
-        delete this;
-    }
 
     _pUI->tblTimesheet->setContextMenuPolicy( Qt::CustomContextMenu );
+
+    _pDB->buildQueries( "Drills", _pUI->centralWidget->nextInFocusChain(), "_DI_" );
+    _pDB->selectUI( _iID, "Drills", _pUI->centralWidget->nextInFocusChain(), "_DI_" );
+    updateSheet();
 }
 
 wndActiveDrill::~wndActiveDrill( void )
@@ -62,67 +58,6 @@ wndActiveDrill::~wndActiveDrill( void )
 }
 
 // PRIVATE MEMBERS:
-
-bool wndActiveDrill::insert( void )
-{
-    QSqlQuery selectQuery;
-    selectQuery.prepare( "SELECT max(id)+1 FROM drills" );
-
-    if ( _pDB->query( selectQuery ) )
-    {
-        selectQuery.first();
-        _iID = selectQuery.value( 0 ).toInt();
-
-        QSqlQuery insertQuery;
-        insertQuery.prepare( "INSERT INTO drills (id) VALUES (?)" );
-        insertQuery.addBindValue( selectQuery.value( _iID ) );
-
-        if ( _pDB->query( insertQuery ) )
-        {
-            qDebug( "Drill Information: Inserted new drill to database." );
-            return true;
-        }
-        else
-        {
-            QMessageBox::warning( this, "Drill Error", "Could not insert new drill to database. See log for more information." );
-            qWarning( "Drill Error (%d): Could not insert new drill to database. Database Error: %s", _iID, qPrintable( insertQuery.lastError().text() ) );
-            return false;
-        }
-    }
-    else
-    {
-        QMessageBox::warning( this, "Drill Error", "Could not insert new drill to database. See log for more information." );
-        qWarning( "Drill Error: Could not retrieve new drill ID. Database Error: %s", qPrintable( selectQuery.lastError().text() ) );
-        return false;
-    }
-}
-
-bool wndActiveDrill::read( void )
-{
-    QSqlQuery selectInformation;
-    selectInformation.prepare( "SELECT location,inhouse,description,starttime,endtime,incidentcommander,drillnum FROM drills WHERE id=?" );
-    selectInformation.addBindValue( _iID );
-
-    if ( _pDB->query( selectInformation ) )
-    {
-        if ( selectInformation.first() )
-        {
-            _pUI->txtLocation->setText( selectInformation.value( 0 ).toString() );
-            _pUI->chkInHouse->setCheckState( selectInformation.value( 1 ).toBool() ? Qt::Checked : Qt::Unchecked );
-            _pUI->txtDescription->setText( selectInformation.value( 2 ).toString() );
-            _pUI->dateDrillStart->setDateTime( selectInformation.value( 3 ).toDateTime() );
-            _pUI->dateDrillEnd->setDateTime( selectInformation.value( 4 ).toDateTime() );
-            _pUI->txtIncidentCommander->setText( selectInformation.value( 5 ).toString() );
-            _pUI->txtDrillNum->setText( selectInformation.value( 6 ).toString() );
-            updateSheet();
-        }
-        else
-        {
-            return false;
-        }
-    }
-    return true;
-}
 
 void wndActiveDrill::updateSheet( void )
 {
@@ -153,26 +88,13 @@ void wndActiveDrill::updateSheet( void )
 
 void wndActiveDrill::updateInformation( void )
 {
-    QSqlQuery updateQuery;
-    updateQuery.prepare( "UPDATE drills SET drillnum=?,location=?,description=?,starttime=?,endtime=?,inhouse=?,incidentcommander=? WHERE id=?" );
-    updateQuery.addBindValue( _pUI->txtDrillNum->text() );
-    updateQuery.addBindValue( _pUI->txtLocation->toPlainText() );
-    updateQuery.addBindValue( _pUI->txtDescription->toPlainText() );
-    updateQuery.addBindValue( _pUI->dateDrillStart->dateTime().toString( "yyyy-MM-dd hh:mm:00.000" ) );
-    updateQuery.addBindValue( _pUI->dateDrillEnd->dateTime().toString( "yyyy-MM-dd hh:mm:00.000" ) );
-    updateQuery.addBindValue( _pUI->chkInHouse->isChecked() );
-    updateQuery.addBindValue( _pUI->txtIncidentCommander->text() );
-    updateQuery.addBindValue( _iID );
-
-    if ( _pDB->query( updateQuery ) )
+    if ( _pDB->updateUI( _iID, "Drills", _pUI->centralWidget->nextInFocusChain(), "_DI_" ) )
     {
-        qDebug( "Drill Information (%d): Drill information successfully updated in database.", _iID );
-        QMessageBox::information( this, "Drill Information", "Drill information successfully updated in database." );
+        QMessageBox::information( this, "Drill Updated", "Drill has been updated." );
     }
     else
     {
-        qWarning( "Drill Error (%d): Drill information could not be updated in database. Database Error: %s", _iID, qPrintable( updateQuery.lastError().text() ) );
-        QMessageBox::warning( this, "Drill Error", "Drill information could not be updated in database. See log for more information." );
+        QMessageBox::warning( this, "Drill Error", "Drill could not be updated! See log for more information." );
     }
 }
 
@@ -181,7 +103,7 @@ void wndActiveDrill::scanId( void )
 {
     // Get the primary key of the firefighter based on department id
     QSqlQuery selectFirefighter;
-    QString ffdeptid = _pUI->txtIDScan->text();
+    QString ffdeptid = _pUI->DB_TEXT_IDScan->text();
     int ffid = 0;
 
     selectFirefighter.prepare( "SELECT id FROM Firefighters WHERE PI_LocalID=?" );

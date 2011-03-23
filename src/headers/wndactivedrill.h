@@ -41,8 +41,6 @@ class wndActiveDrill : public QMainWindow {
 
         QModelIndex             lastCellRightClicked;
 
-        bool                    insert( void );
-        bool                    read( void );
         void                    updateSheet( void );
 
     private slots:

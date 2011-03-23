@@ -34,6 +34,7 @@
 #include <QWidget>
 #include <QMap>
 #include <QLineEdit>
+#include <QTextEdit>
 #include <QDateTimeEdit>
 #include <QComboBox>
 #include <QCheckBox>

@@ -12,6 +12,7 @@ wndActiveCall::wndActiveCall( QWidget *pParent, DatabaseManager *pDB ) :
     _pUI->setupUi( this );
     _pDB = pDB;
     _iID = -1;
+
     pDB->buildQueries( "Calls", _pUI->tabWidget->nextInFocusChain() );
 }
 
@@ -27,6 +28,7 @@ wndActiveCall::wndActiveCall( QWidget *pParent, DatabaseManager *pDB, int iID ) 
     _pUI->setupUi( this );
     _pDB = pDB;
     _iID = iID;
+
     pDB->buildQueries( "Calls", _pUI->tabWidget->nextInFocusChain() );
     pDB->selectUI( _iID, "Calls", _pUI->tabWidget->nextInFocusChain() );
 }

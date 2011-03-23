@@ -186,16 +186,16 @@ bool DatabaseManager::buildStructure( void )
                  "serial TEXT,"
                  "year TEXT,"
                  "FOREIGN KEY(eqid) REFERENCES equipment(id),"
-                 "FOREIGN KEY(ffid) REFERENCES firefighters(id));"
-             "CREATE TABLE drills"
-                 "(id INTEGER PRIMARY KEY, "
-                 "location TEXT,"
-                 "inhouse INTEGER,"
-                 "description TEXT,"
-                 "starttime INTEGER,"
-                 "endtime INTEGER,"
-                 "incidentcommander TEXT,"
-                 "drillnum TEXT);"
+                 "FOREIGN KEY(ffid) REFERENCES firefighters(id));"     
+             "CREATE TABLE Drills"
+                 "(id INTEGER PRIMARY KEY,"
+                 "DI_StartTime INTEGER,"
+                 "DI_DrillNumber TEXT,"
+                 "DI_EndTime INTEGER,"
+                 "DI_Location TEXT,"
+                 "DI_InHouse INTEGER,"
+                 "DI_IncidentCommander TEXT,"
+                 "DI_Description TEXT);"
              "CREATE TABLE drillsheet"
                  "(id INTEGER PRIMARY KEY, "
                  "did INTEGER,"
@@ -394,9 +394,9 @@ bool DatabaseManager::verifyStructure( void )
     QString chksum = md5bytearray.toHex().constData();
 
     // And compare to expected value
-    if ( chksum != "dc428fb0271c21464ff285665eb279b3" )
+    if ( chksum != "bf3ff44dca466e437936daa42c85cc49" )
     {
-        qDebug( "Database Manager: Invalid structure. Expected chksum dc428fb0271c21464ff285665eb279b3, but got %s", qPrintable( chksum ) );
+        qDebug( "Database Manager: Invalid structure. Expected chksum bf3ff44dca466e437936daa42c85cc49, but got %s", qPrintable( chksum ) );
         return false;
     }
 
@@ -478,6 +478,16 @@ void DatabaseManager::buildQueries( QString sTableName, QWidget *pWidget, QStrin
             sObjName = sDBObjName.right( sDBObjName.size() - 7 );
             sCreateQuery += sObjName + " INTEGER,";
         }
+        else if ( sDBObjName.startsWith( "DB_DATE" ) )
+        {
+            sObjName = sDBObjName.right( sDBObjName.size() - 8 );
+            sCreateQuery += sObjName + " INTEGER,";
+        }
+        else if ( sDBObjName.startsWith( "DB_CHECK" ) )
+        {
+            sObjName = sDBObjName.right( sDBObjName.size() - 9 );
+            sCreateQuery += sObjName + " INTEGER,";
+        }
         else
         {
             qWarning( "Database Manager: Unrecognized DB field type '%s'.", qPrintable( sDBObjName ) );
@@ -548,8 +558,6 @@ bool DatabaseManager::selectUI( int iID, QString sTableName, QWidget *pWidget, Q
         if ( !result.isValid() )
             break;
 
-        qDebug( qPrintable( result.toString() ) );
-
         if ( tmplineedit )
         {
             tmplineedit->setText( result.toString() );
@@ -557,6 +565,10 @@ bool DatabaseManager::selectUI( int iID, QString sTableName, QWidget *pWidget, Q
         else if ( tmpdatetime )
         {
             tmpdatetime->setDate( result.toDate() );
+        }
+        else if ( tmpcheck )
+        {
+            tmpcheck->setCheckState( result.toBool() ? Qt::Checked : Qt::Unchecked );
         }
 
         i++;
@@ -578,25 +590,35 @@ int DatabaseManager::insertUI( QString sTableName, QWidget *pWidget, QString sTa
     foreach ( pTmpWidget, lWidgets )
     {
         QLineEdit *tmplineedit = qobject_cast<QLineEdit *>( pTmpWidget );
+        QTextEdit *tmptextedit = qobject_cast<QTextEdit *>( pTmpWidget );
         QDateTimeEdit *tmpdatetime = qobject_cast<QDateTimeEdit *>( pTmpWidget );
         QComboBox *tmpcombo = qobject_cast<QComboBox *>( pTmpWidget );
         QCheckBox *tmpcheck = qobject_cast<QCheckBox *>( pTmpWidget );
 
         if ( tmplineedit )
         {
+            qDebug( qPrintable( tmplineedit->objectName() + " " + tmplineedit->text() ) );
             insertQuery.bindValue( ":" + tmplineedit->objectName(), tmplineedit->text() );
+        }
+        else if ( tmptextedit )
+        {
+            qDebug( qPrintable( tmptextedit->objectName() + " " + tmptextedit->toPlainText() ) );
+            insertQuery.bindValue( ":" + tmptextedit->objectName(), tmptextedit->toPlainText() );
         }
         else if ( tmpdatetime )
         {
+            qDebug( qPrintable( tmpdatetime->objectName() + " " + tmpdatetime->dateTime().toString( "yyyy-MM-dd hh:mm:00.000" ) ) );
             insertQuery.bindValue( ":" + tmpdatetime->objectName(), tmpdatetime->dateTime().toString( "yyyy-MM-dd hh:mm:00.000" ) );
         }
         else if ( tmpcombo )
         {
+            qDebug( qPrintable( tmpcombo->objectName() + " " + tmpcombo->currentText() ) );
             insertQuery.bindValue( ":" + tmpcombo->objectName(), tmpcombo->currentText() );
         }
         else if ( tmpcheck )
         {
-            insertQuery.bindValue( ":" + tmpcheck->objectName(), tmpcheck->objectName() );
+            qDebug( qPrintable( tmpcheck->objectName() + " " + tmpcheck->isChecked() ) );
+            insertQuery.bindValue( ":" + tmpcheck->objectName(), tmpcheck->isChecked() );
         }
     }
 
@@ -625,6 +647,7 @@ bool DatabaseManager::updateUI( int iID, QString sTableName, QWidget *pWidget, Q
     foreach ( pTmpWidget, lWidgets )
     {
         QLineEdit *tmplineedit = qobject_cast<QLineEdit *>( pTmpWidget );
+        QTextEdit *tmptextedit = qobject_cast<QTextEdit *>( pTmpWidget );
         QDateTimeEdit *tmpdatetime = qobject_cast<QDateTimeEdit *>( pTmpWidget );
         QComboBox *tmpcombo = qobject_cast<QComboBox *>( pTmpWidget );
         QCheckBox *tmpcheck = qobject_cast<QCheckBox *>( pTmpWidget );
@@ -632,6 +655,10 @@ bool DatabaseManager::updateUI( int iID, QString sTableName, QWidget *pWidget, Q
         if ( tmplineedit )
         {
             updateQuery.bindValue( ":" + tmplineedit->objectName(), tmplineedit->text() );
+        }
+        else if ( tmptextedit )
+        {
+            updateQuery.bindValue( ":" + tmptextedit->objectName(), tmptextedit->toPlainText() );
         }
         else if ( tmpdatetime )
         {
@@ -643,7 +670,7 @@ bool DatabaseManager::updateUI( int iID, QString sTableName, QWidget *pWidget, Q
         }
         else if ( tmpcheck )
         {
-            updateQuery.bindValue( ":" + tmpcheck->objectName(), tmpcheck->objectName() );
+            updateQuery.bindValue( ":" + tmpcheck->objectName(), tmpcheck->isChecked() );
         }
     }
 

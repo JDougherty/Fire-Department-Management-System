@@ -120,15 +120,16 @@ void wndSearch::Search( QString sSearchType, QString sSearch )
     }
     else if ( sSearchType == "Drills" )
     {
-        QString sSelection = "SELECT id,drillnum,strftime('%m/%d/%Y',starttime),location FROM drills";
+        QString sSelection = "SELECT id,DI_DrillNumber,strftime('%m/%d/%Y',DI_StartTime),DI_Location FROM Drills";
         if ( sSearch != "" )
         {
-            sSelection += " WHERE drillnum LIKE ? OR location LIKE ?";
+            sSelection += " WHERE DI_DrillNumber LIKE ? OR DI_Location LIKE ?";
             qrySelection.prepare( sSelection );
             qrySelection.addBindValue( "%" + sSearch + "%" );
             qrySelection.addBindValue( "%" + sSearch + "%" );
         }
-        else{
+        else
+        {
             qrySelection.prepare( sSelection );
         }
     }

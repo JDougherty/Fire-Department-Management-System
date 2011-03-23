@@ -25,7 +25,7 @@
   <property name="windowTitle">
    <string>Active Drill</string>
   </property>
-  <widget class="QWidget" name="centralwidget">
+  <widget class="QWidget" name="centralWidget">
    <widget class="QGroupBox" name="groupBox_2">
     <property name="geometry">
      <rect>
@@ -38,7 +38,7 @@
     <property name="title">
      <string>Timesheet</string>
     </property>
-    <widget class="QLineEdit" name="txtIDScan">
+    <widget class="QLineEdit" name="DB_TEXT_IDScan">
      <property name="enabled">
       <bool>true</bool>
      </property>
@@ -125,7 +125,7 @@
       <string>End:</string>
      </property>
     </widget>
-    <widget class="QDateTimeEdit" name="dateDrillStart">
+    <widget class="QDateTimeEdit" name="DB_DATE_DI_StartTime">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -141,7 +141,7 @@
       <bool>true</bool>
      </property>
     </widget>
-    <widget class="QDateTimeEdit" name="dateDrillEnd">
+    <widget class="QDateTimeEdit" name="DB_DATE_DI_EndTime">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -170,7 +170,7 @@
       <string>Drill Number:</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="txtDrillNum">
+    <widget class="QLineEdit" name="DB_TEXT_DI_DrillNumber">
      <property name="geometry">
       <rect>
        <x>180</x>
@@ -193,7 +193,7 @@
       <string>Location:</string>
      </property>
     </widget>
-    <widget class="QTextEdit" name="txtLocation">
+    <widget class="QTextEdit" name="DB_TEXT_DI_Location">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -229,7 +229,7 @@
       <string>Description:</string>
      </property>
     </widget>
-    <widget class="QTextEdit" name="txtDescription">
+    <widget class="QTextEdit" name="DB_TEXT_DI_Description">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -239,7 +239,7 @@
       </rect>
      </property>
     </widget>
-    <widget class="QCheckBox" name="chkInHouse">
+    <widget class="QCheckBox" name="DB_CHECK_DI_InHouse">
      <property name="geometry">
       <rect>
        <x>160</x>
@@ -265,7 +265,7 @@
       <string>Incident Commander:</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="txtIncidentCommander">
+    <widget class="QLineEdit" name="DB_TEXT_DI_IncidentCommander">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -279,15 +279,15 @@
   </widget>
  </widget>
  <tabstops>
-  <tabstop>txtIDScan</tabstop>
+  <tabstop>DB_TEXT_IDScan</tabstop>
   <tabstop>btnSignIn</tabstop>
-  <tabstop>dateDrillStart</tabstop>
-  <tabstop>txtDrillNum</tabstop>
-  <tabstop>dateDrillEnd</tabstop>
-  <tabstop>txtLocation</tabstop>
-  <tabstop>chkInHouse</tabstop>
-  <tabstop>txtIncidentCommander</tabstop>
-  <tabstop>txtDescription</tabstop>
+  <tabstop>DB_DATE_DI_StartTime</tabstop>
+  <tabstop>DB_TEXT_DI_DrillNumber</tabstop>
+  <tabstop>DB_DATE_DI_EndTime</tabstop>
+  <tabstop>DB_TEXT_DI_Location</tabstop>
+  <tabstop>DB_CHECK_DI_InHouse</tabstop>
+  <tabstop>DB_TEXT_DI_IncidentCommander</tabstop>
+  <tabstop>DB_TEXT_DI_Description</tabstop>
   <tabstop>btnSaveDrill</tabstop>
  </tabstops>
  <resources/>
@@ -325,7 +325,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>txtIDScan</sender>
+   <sender>DB_TEXT_IDScan</sender>
    <signal>returnPressed()</signal>
    <receiver>wndActiveDrill</receiver>
    <slot>scanId()</slot>

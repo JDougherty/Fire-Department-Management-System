@@ -87,7 +87,7 @@ int main( int argc, char *argv[] )
             default:
             {
                QMessageBox::critical( 0, "Critical Error", "Default case reached.", QMessageBox::Ok );
-               qCritical( "Setup: Critical Error - Default case reached." );
+               qCritical( "Critical Error - Default case reached." );
                return 0;
             }
         }

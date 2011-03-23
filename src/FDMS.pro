@@ -26,7 +26,8 @@ HEADERS += headers/databasemanager.h \
     headers/wndinventorycheck.h \
     headers/wndactivedrill.h \
     headers/wndactivecall.h \
-    headers/settingsmanager.h
+    headers/settingsmanager.h \
+    headers/databaseitem.h
 FORMS += forms/wndfirefighter.ui \
 	forms/mainwindow.ui \
     forms/wndsetup.ui \

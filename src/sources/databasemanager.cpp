@@ -444,6 +444,55 @@ QList<QWidget *> DatabaseManager::getWidgets( QWidget *pWidget, QString sTabName
     return lWidgets;
 }
 
+//! Binds UI values to the query.
+/*!
+  Used for insert and update.
+  \param pWidget First widget in the chain.
+  \param sAction Name of the action (insert, update).
+  \param sTableName Name of the DB table.
+  \param sTabName Name of the UI tab (optional).
+*/
+QSqlQuery DatabaseManager::bindValues( QWidget *pWidget, QString sAction, QString sTableName, QString sTabName )
+{
+    QList<QWidget *> lWidgets = getWidgets( pWidget, sTabName );
+    QWidget *pTmpWidget;
+
+    QSqlQuery query;
+    query.prepare( _queryMap[sTableName][sAction] );
+
+    foreach ( pTmpWidget, lWidgets )
+    {
+        QLineEdit *tmplineedit = qobject_cast<QLineEdit *>( pTmpWidget );
+        QTextEdit *tmptextedit = qobject_cast<QTextEdit *>( pTmpWidget );
+        QDateTimeEdit *tmpdatetime = qobject_cast<QDateTimeEdit *>( pTmpWidget );
+        QComboBox *tmpcombo = qobject_cast<QComboBox *>( pTmpWidget );
+        QCheckBox *tmpcheck = qobject_cast<QCheckBox *>( pTmpWidget );
+
+        if ( tmplineedit )
+        {
+            query.bindValue( ":" + tmplineedit->objectName(), tmplineedit->text() );
+        }
+        else if ( tmptextedit )
+        {
+            query.bindValue( ":" + tmptextedit->objectName(), tmptextedit->toPlainText() );
+        }
+        else if ( tmpdatetime )
+        {
+            query.bindValue( ":" + tmpdatetime->objectName(), tmpdatetime->dateTime().toString( "yyyy-MM-dd hh:mm:00.000" ) );
+        }
+        else if ( tmpcombo )
+        {
+            query.bindValue( ":" + tmpcombo->objectName(), tmpcombo->currentText() );
+        }
+        else if ( tmpcheck )
+        {
+            query.bindValue( ":" + tmpcheck->objectName(), tmpcheck->isChecked() );
+        }
+    }
+
+    return query;
+}
+
 //! Builds the queries for all of the widgets in the focus chain.
 /*!
   \param sTableName Name of the DB table.
@@ -452,7 +501,7 @@ QList<QWidget *> DatabaseManager::getWidgets( QWidget *pWidget, QString sTabName
 */
 void DatabaseManager::buildQueries( QString sTableName, QWidget *pWidget, QString sTabName )
 {
-    QString sCreateQuery, sSelectQuery, sInsertQuery, sInsertQueryValues, sUpdateQuery, sDBObjName, sObjName;
+    QString sCreateQuery, sSelectQuery, sInsertQuery, sInsertQueryValues, sUpdateQuery, sDeleteQuery, sDBObjName, sObjName;
     QList<QWidget *> lWidgets = getWidgets( pWidget, sTabName );
     QWidget *pTmpWidget;
 
@@ -514,17 +563,21 @@ void DatabaseManager::buildQueries( QString sTableName, QWidget *pWidget, QStrin
     sUpdateQuery.replace( sUpdateQuery.size() - 1, 1, QChar( ' ' ) ); // replace the last char with ' '
     sUpdateQuery += "WHERE id = :id";
 
+    sDeleteQuery = "DELETE FROM " + sTableName + " WHERE id = :id";
+
     QMap<QString, QString> uiQueries;
     uiQueries.insert( "create", sCreateQuery );
     uiQueries.insert( "select", sSelectQuery );
     uiQueries.insert( "insert", sInsertQuery );
     uiQueries.insert( "update", sUpdateQuery );
+    uiQueries.insert( "delete", sDeleteQuery );
     _queryMap.insert( sTableName, uiQueries );
 
     qDebug( "Database Manager: '%s' create query: %s", qPrintable( sTableName ), qPrintable( sCreateQuery ) );
     qDebug( "Database Manager: '%s' select query: %s", qPrintable( sTableName ), qPrintable( sSelectQuery ) );
     qDebug( "Database Manager: '%s' insert query: %s", qPrintable( sTableName ), qPrintable( sInsertQuery ) );
     qDebug( "Database Manager: '%s' update query: %s", qPrintable( sTableName ), qPrintable( sUpdateQuery ) );
+    qDebug( "Database Manager: '%s' delete query: %s", qPrintable( sTableName ), qPrintable( sDeleteQuery ) );
 }
 
 bool DatabaseManager::selectUI( int iID, QString sTableName, QWidget *pWidget, QString sTabName )
@@ -574,116 +627,63 @@ bool DatabaseManager::selectUI( int iID, QString sTableName, QWidget *pWidget, Q
         i++;
     }
 
-    qDebug( "Database Manager: Selected from table '%s' entry #%d.", qPrintable( sTableName), iID );
+    qDebug( "Database Manager: Selected entry #%d from table '%s'.", iID, qPrintable( sTableName ) );
 
     return true;
 }
 
 int DatabaseManager::insertUI( QString sTableName, QWidget *pWidget, QString sTabName )
 {
-    QList<QWidget *> lWidgets = getWidgets( pWidget, sTabName );
-    QWidget *pTmpWidget;
-
-    QSqlQuery insertQuery;
-    insertQuery.prepare( _queryMap[sTableName]["insert"] );
-
-    foreach ( pTmpWidget, lWidgets )
-    {
-        QLineEdit *tmplineedit = qobject_cast<QLineEdit *>( pTmpWidget );
-        QTextEdit *tmptextedit = qobject_cast<QTextEdit *>( pTmpWidget );
-        QDateTimeEdit *tmpdatetime = qobject_cast<QDateTimeEdit *>( pTmpWidget );
-        QComboBox *tmpcombo = qobject_cast<QComboBox *>( pTmpWidget );
-        QCheckBox *tmpcheck = qobject_cast<QCheckBox *>( pTmpWidget );
-
-        if ( tmplineedit )
-        {
-            qDebug( qPrintable( tmplineedit->objectName() + " " + tmplineedit->text() ) );
-            insertQuery.bindValue( ":" + tmplineedit->objectName(), tmplineedit->text() );
-        }
-        else if ( tmptextedit )
-        {
-            qDebug( qPrintable( tmptextedit->objectName() + " " + tmptextedit->toPlainText() ) );
-            insertQuery.bindValue( ":" + tmptextedit->objectName(), tmptextedit->toPlainText() );
-        }
-        else if ( tmpdatetime )
-        {
-            qDebug( qPrintable( tmpdatetime->objectName() + " " + tmpdatetime->dateTime().toString( "yyyy-MM-dd hh:mm:00.000" ) ) );
-            insertQuery.bindValue( ":" + tmpdatetime->objectName(), tmpdatetime->dateTime().toString( "yyyy-MM-dd hh:mm:00.000" ) );
-        }
-        else if ( tmpcombo )
-        {
-            qDebug( qPrintable( tmpcombo->objectName() + " " + tmpcombo->currentText() ) );
-            insertQuery.bindValue( ":" + tmpcombo->objectName(), tmpcombo->currentText() );
-        }
-        else if ( tmpcheck )
-        {
-            qDebug( qPrintable( tmpcheck->objectName() + " " + tmpcheck->isChecked() ) );
-            insertQuery.bindValue( ":" + tmpcheck->objectName(), tmpcheck->isChecked() );
-        }
-    }
+    QSqlQuery insertQuery = bindValues( pWidget, "insert", sTableName, sTabName );
 
     if ( !query( insertQuery ) )
     {
-        qWarning( "Database Manager: Could not insert table '%s': %s",
+        qWarning( "Database Manager: Could not insert new entry in table '%s': %s",
                   qPrintable( sTableName ), qPrintable( insertQuery.lastError().text() ) );
         return -1;
     }
 
     int iID = insertQuery.lastInsertId().toInt();
 
-    qDebug( "Database Manager: Inserted into table '%s' entry #%d.", qPrintable( sTableName), iID );
+    qDebug( "Database Manager: Inserted entry #%d in table '%s'.", iID, qPrintable( sTableName ) );
 
     return iID;
 }
 
 bool DatabaseManager::updateUI( int iID, QString sTableName, QWidget *pWidget, QString sTabName )
 {
-    QList<QWidget *> lWidgets = getWidgets( pWidget, sTabName );
-    QWidget *pTmpWidget;
-
-    QSqlQuery updateQuery;
-    updateQuery.prepare( _queryMap[sTableName]["update"] );
-
-    foreach ( pTmpWidget, lWidgets )
-    {
-        QLineEdit *tmplineedit = qobject_cast<QLineEdit *>( pTmpWidget );
-        QTextEdit *tmptextedit = qobject_cast<QTextEdit *>( pTmpWidget );
-        QDateTimeEdit *tmpdatetime = qobject_cast<QDateTimeEdit *>( pTmpWidget );
-        QComboBox *tmpcombo = qobject_cast<QComboBox *>( pTmpWidget );
-        QCheckBox *tmpcheck = qobject_cast<QCheckBox *>( pTmpWidget );
-
-        if ( tmplineedit )
-        {
-            updateQuery.bindValue( ":" + tmplineedit->objectName(), tmplineedit->text() );
-        }
-        else if ( tmptextedit )
-        {
-            updateQuery.bindValue( ":" + tmptextedit->objectName(), tmptextedit->toPlainText() );
-        }
-        else if ( tmpdatetime )
-        {
-            updateQuery.bindValue( ":" + tmpdatetime->objectName(), tmpdatetime->dateTime().toString( "yyyy-MM-dd hh:mm:00.000" ) );
-        }
-        else if ( tmpcombo )
-        {
-            updateQuery.bindValue( ":" + tmpcombo->objectName(), tmpcombo->currentText() );
-        }
-        else if ( tmpcheck )
-        {
-            updateQuery.bindValue( ":" + tmpcheck->objectName(), tmpcheck->isChecked() );
-        }
-    }
+    QSqlQuery updateQuery = bindValues( pWidget, "update", sTableName, sTabName );
 
     updateQuery.bindValue( ":id", iID );
 
     if ( !query( updateQuery ) )
     {
-        qWarning( "Database Manager: Could not update table '%s' entry #%d: %s",
-                  qPrintable( sTableName ), iID, qPrintable( updateQuery.lastError().text() ) );
+        qWarning( "Database Manager: Could not update entry #%d in table '%s': %s",
+                  iID, qPrintable( sTableName ), qPrintable( updateQuery.lastError().text() ) );
         return false;
     }
 
-    qDebug( "Database Manager: Updated table '%s' entry #%d.", qPrintable( sTableName), iID );
+    qDebug( "Database Manager: Updated entry #%d in table '%s'.", iID, qPrintable( sTableName ) );
+
+    return true;
+}
+
+bool DatabaseManager::deleteUI( int iID, QString sTableName )
+{
+    QSqlQuery removeQuery;
+
+    removeQuery.prepare( _queryMap[sTableName]["delete"] );
+
+    removeQuery.bindValue( ":id", iID );
+
+    if ( !query( removeQuery ) )
+    {
+        qWarning( "Database Manager: Could not delete entry #%d table '%s': %s",
+                  iID, qPrintable( sTableName ), qPrintable( removeQuery.lastError().text() ) );
+        return false;
+    }
+
+    qDebug( "Database Manager: Deleted entry #%d from table '%s'.", iID, qPrintable( sTableName ) );
 
     return true;
 }

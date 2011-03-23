@@ -254,13 +254,30 @@ void wndSearch::resultsDeleteDatum( void )
             }
             else
             {
-                qWarning( "Firefighter Information: Firefighter with department id %s could not be deleted. Error: %s",
+                qWarning( "Search: Call with department id %s could not be deleted. Error: %s",
                           qPrintable( sID ), qPrintable( qryDeleteFirefighter.lastError().text() ) );
                 QMessageBox::warning( this, "Error", "Could not delete firefighter with department id " + sID + ". See log for more information." );
             }
         }
     }
-    else if ( _sSearchType == "Drills" || _sSearchType == "Calls" )
+    else if ( _sSearchType == "Calls" )
+    {
+        if ( QMessageBox::question( this, "Delete Call?", "Are you sure you wish to delete this call?", QMessageBox::Yes, QMessageBox::No ) == QMessageBox::Yes )
+        {
+            if ( wndActiveCall::Delete( _pDB, sID.toInt() ) )
+            {
+                qDebug( "Search: Call with id %s successfully deleted.", qPrintable( sID ) );
+                Search( _sSearchType, _sSearch );
+            }
+            else
+            {
+                qWarning( "Search: Call with id %s could not be deleted. Error: %s",
+                          qPrintable( sID ), qPrintable( _pDB->lastError().text() ) );
+                QMessageBox::warning( this, "Error", "Could not delete call with id " + sID + ". See log for more information." );
+            }
+        }
+    }
+    else if ( _sSearchType == "Drills" )
     {
         QMessageBox::warning( this, "Error", "Sorry, but this is not yet implemented." );
     }

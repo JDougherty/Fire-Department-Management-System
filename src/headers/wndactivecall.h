@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <QMessageBox>
 #include <QList>
-#include "databasemanager.h"
+#include "databaseitem.h"
 
 namespace Ui
 {
@@ -12,15 +12,12 @@ namespace Ui
 }
 
 //! GUI for adding a call and editing call data.
-class wndActiveCall : public QMainWindow
+class wndActiveCall : public QMainWindow, public DatabaseItem
 {
     Q_OBJECT
 
     private:
         Ui::wndActiveCall       *_pUI;
-        DatabaseManager         *_pDB;
-
-        int                     _iID;
 
     private slots:
         void                    btnSaveCallClicked( void );
@@ -28,7 +25,16 @@ class wndActiveCall : public QMainWindow
     public:
                                 wndActiveCall( QWidget *pParent, DatabaseManager *pDB );
                                 wndActiveCall( QWidget *pParent, DatabaseManager *pDB, int iID );
+
                                 ~wndActiveCall( void );
+
+        bool                    Create( void );
+        bool                    Insert( void );
+        bool                    Update( void );
+        bool                    Select( void );
+        bool                    Delete( void );
+
+        static bool             Delete( DatabaseManager *pDB, int iID );
 };
 
 #endif // WNDACTIVECALL_H

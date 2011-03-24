@@ -24,7 +24,7 @@
 #include <QMessageBox>
 #include <QSqlQuery>
 #include <QListWidgetItem>
-#include "databasemanager.h"
+#include "databaseitem.h"
 
 namespace Ui
 {
@@ -32,15 +32,12 @@ namespace Ui
 }
 
 //! GUI for adding a firefighter and editing firefighter data.
-class wndFirefighter : public QMainWindow
+class wndFirefighter : public QMainWindow, public DatabaseItem
 {
     Q_OBJECT
 
     private:
         Ui::wndFirefighter      *_pUI;
-        DatabaseManager         *_pDB;
-
-        int                     _iID;
 
         void                    loadTrainingList( void );
         void                    toggleTrainingFields( QListWidgetItem *item );
@@ -64,7 +61,16 @@ class wndFirefighter : public QMainWindow
     public:
                                 wndFirefighter( QWidget *parent, DatabaseManager *pDB );
                                 wndFirefighter( QWidget *parent, DatabaseManager *pDB, int iID );
+
                                 ~wndFirefighter( void );
+
+        bool                    Insert( void );
+        bool                    Update( void );
+        bool                    Select( void );
+
+        bool                    BuildQueries( void );
+        static bool             Create( DatabaseManager *pDB );
+        static bool             Delete( DatabaseManager *pDB, int iID );
 };
 
 #endif // WNDFIREFIGHTER_H

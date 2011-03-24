@@ -24,20 +24,18 @@
 #include <QMessageBox>
 #include <QSqlQueryModel>
 #include <QMenu>
-#include "databasemanager.h"
+#include "databaseitem.h"
 
 namespace Ui {
     class wndActiveDrill;
 }
 
-class wndActiveDrill : public QMainWindow {
+class wndActiveDrill : public QMainWindow, public DatabaseItem
+{
     Q_OBJECT
 
     private:
         Ui::wndActiveDrill      *_pUI;
-        DatabaseManager         *_pDB;
-
-        int                     _iID;
 
         QModelIndex             lastCellRightClicked;
 
@@ -52,7 +50,16 @@ class wndActiveDrill : public QMainWindow {
     public:
                                 wndActiveDrill( QWidget *pParent, DatabaseManager *pDB );
                                 wndActiveDrill( QWidget *pParent, DatabaseManager *pDB, int iID );
+
                                 ~wndActiveDrill( void );
+
+        bool                    Insert( void );
+        bool                    Update( void );
+        bool                    Select( void );
+
+        bool                    BuildQueries( void );
+        static bool             Create( DatabaseManager *pDB );
+        static bool             Delete( DatabaseManager *pDB, int iID );
 };
 
 #endif // WNDACTIVEDRILL_H

@@ -361,10 +361,10 @@ void wndSetup::on_btnNewInstFinish_clicked( void )
     _pUI->lblNewInstStatus->setText( QString( "Building the database." ) );
     _pUI->progNewInstStatus->setValue( 45 );
 
-    if ( !_pDB->build() )
+    if ( !_pDB->create() )
     {
-        QMessageBox::critical( this, "Critical Error", "Database could not be built.", QMessageBox::Ok );
-        qCritical( "Setup: Critical Error - Database: Could not be built." );
+        QMessageBox::critical( this, "Critical Error", "Database could not be created.", QMessageBox::Ok );
+        qCritical( "Setup: Critical Error - Database: Could not be created." );
         clearAndHideProgressBars();
         return;
     }

@@ -33,9 +33,9 @@
 int main( int argc, char *argv[] )
 {
     QApplication application( argc, argv );
-    SettingsManager sm;
-    DatabaseManager db;
-    MainWindow mw( 0, &db );
+    SettingsManager *pSM = SettingsInstance();
+    DatabaseManager *pDB = DatabaseInstance();
+    MainWindow mw( 0, pDB );
 
     //setupDebugRedirection();
 
@@ -52,19 +52,20 @@ int main( int argc, char *argv[] )
     }
 
     // Settings file DNE
-    if ( !sm.exists() )
+    if ( !pSM->exists() )
     {
-        wndSetup setup( 0, &db, &sm, &mw );
+        wndSetup setup( 0, pDB, pSM, &mw );
         setup.show();
         qDebug( "Running program setup." );
         return application.exec();
     }
 
-    sm.load();
-    db.setDBFile( sm.getDBFile() );
+    pSM->load();
+    pDB->setDBFile( pSM->getDBFile() );
+    pDB->buildQueries();
 
     // DB file DNE
-    if ( !db.exists() )
+    if ( !pDB->exists() )
     {
         int iResult = QMessageBox::question( 0, "Database not found.", "Database could not be found. Run setup?",
                                              QMessageBox::Yes | QMessageBox::No );
@@ -73,7 +74,7 @@ int main( int argc, char *argv[] )
         {
             case QMessageBox::Yes:
             {
-                wndSetup setup( 0, &db, &sm, &mw );
+                wndSetup setup( 0, pDB, pSM, &mw );
                 setup.show();
                 qDebug( "Running program setup." );
                 return application.exec();
@@ -95,14 +96,14 @@ int main( int argc, char *argv[] )
 
     mw.showMaximized();
 
-    if ( !db.open() )
+    if ( !pDB->open() )
     {
         QMessageBox::critical( &mw, "Critical Error", "Database could not be opened.", QMessageBox::Ok );
         qCritical( "Critical Error - Database: Could not be opened." );
         return 0;
     }
 
-    if ( !db.verify() )
+    if ( !pDB->verify() )
     {
         QMessageBox::critical( &mw, "Critical Error", "Database has an invalid structure.", QMessageBox::Ok );
         qCritical( "Critical Error - Database: Invalid structure." );

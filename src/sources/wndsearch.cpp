@@ -242,21 +242,33 @@ void wndSearch::resultsDeleteDatum( void )
     {
         if ( QMessageBox::question( this, "Delete Firefighter?", "Are you sure you wish to delete this firefighter?", QMessageBox::Yes, QMessageBox::No ) == QMessageBox::Yes )
         {
-            QSqlQuery qryDeleteFirefighter;
-
-            qryDeleteFirefighter.prepare( "DELETE FROM firefighters WHERE id=?" );
-            qryDeleteFirefighter.addBindValue( sID );
-
-            if ( _pDB->query( qryDeleteFirefighter ) )
+            if ( wndFirefighter::Delete( _pDB, sID.toInt() ) )
             {
                 qDebug( "Search: Firefighter with local id %s successfully deleted.", qPrintable( sID ) );
                 Search( _sSearchType, _sSearch );
             }
             else
             {
-                qWarning( "Search: Call with department id %s could not be deleted. Error: %s",
-                          qPrintable( sID ), qPrintable( qryDeleteFirefighter.lastError().text() ) );
-                QMessageBox::warning( this, "Error", "Could not delete firefighter with department id " + sID + ". See log for more information." );
+                qWarning( "Search: Firefighter with local id %s could not be deleted. Error: %s",
+                          qPrintable( sID ), qPrintable( _pDB->lastError().text() ) );
+                QMessageBox::warning( this, "Error", "Could not delete firefighter with local id " + sID + ". See log for more information." );
+            }
+        }
+    }
+    else if ( _sSearchType == "Drills" )
+    {
+        if ( QMessageBox::question( this, "Delete Drill?", "Are you sure you wish to delete this drill?", QMessageBox::Yes, QMessageBox::No ) == QMessageBox::Yes )
+        {
+            if ( wndActiveDrill::Delete( _pDB, sID.toInt() ) )
+            {
+                qDebug( "Search: Drill with id %s successfully deleted.", qPrintable( sID ) );
+                Search( _sSearchType, _sSearch );
+            }
+            else
+            {
+                qWarning( "Search: Drill with id %s could not be deleted. Error: %s",
+                          qPrintable( sID ), qPrintable( _pDB->lastError().text() ) );
+                QMessageBox::warning( this, "Error", "Could not delete drill with id " + sID + ". See log for more information." );
             }
         }
     }
@@ -277,7 +289,7 @@ void wndSearch::resultsDeleteDatum( void )
             }
         }
     }
-    else if ( _sSearchType == "Drills" )
+    else
     {
         QMessageBox::warning( this, "Error", "Sorry, but this is not yet implemented." );
     }

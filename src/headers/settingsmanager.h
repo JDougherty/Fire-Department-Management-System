@@ -37,9 +37,12 @@ class SettingsManager
 
         QString                 _sDBFile;       //!< DB file path.
 
-    public:
                                 SettingsManager( void );
+
                                 ~SettingsManager( void );
+
+    public:
+        friend SettingsManager* SettingsInstance( void );
 
         bool                    exists( void );
         bool                    remove( void );
@@ -49,5 +52,7 @@ class SettingsManager
         void                    setDBFile( QString sDBFile );
         QString                 getDBFile( void );
 };
+
+SettingsManager* SettingsInstance();
 
 #endif // SETTINGSMANAGER_H

@@ -19,6 +19,12 @@
 
 #include "../headers/settingsmanager.h"
 
+SettingsManager* SettingsInstance( void )
+{
+        static SettingsManager sm;
+        return &sm;
+}
+
 /*!
   \param sConfigName Name of the configuration file.
 */

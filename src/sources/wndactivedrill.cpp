@@ -21,10 +21,9 @@
 #include "ui_wndactivedrill.h"
 
 wndActiveDrill::wndActiveDrill( QWidget *pParent, DatabaseManager *pDB) :
-    QMainWindow( pParent ), _pUI( new Ui::wndActiveDrill )
+    QMainWindow( pParent ), DatabaseItem( pDB, -1 )
 {
-    _pDB = pDB;
-    _iID = -1;
+    _pUI = new Ui::wndActiveDrill;
     _pUI->setupUi( this );
 
     _pUI->DB_DATE_DI_StartTime->setDateTime( QDateTime::currentDateTime() );
@@ -34,21 +33,20 @@ wndActiveDrill::wndActiveDrill( QWidget *pParent, DatabaseManager *pDB) :
 
     _pUI->tblTimesheet->setContextMenuPolicy( Qt::CustomContextMenu );
 
-    _pDB->buildQueries( "Drills", _pUI->centralWidget->nextInFocusChain(), "_DI_" );
-    _iID = _pDB->insertUI( "Drills", _pUI->centralWidget->nextInFocusChain(), "_DI_" );
+    _pDB->buildQueries( _pUI->centralWidget->nextInFocusChain(), "Drills", "_DI_" );
+    Insert();
 }
 
 wndActiveDrill::wndActiveDrill( QWidget *pParent, DatabaseManager *pDB, int iID ) :
-    QMainWindow( pParent ), _pUI( new Ui::wndActiveDrill )
+    QMainWindow( pParent ), DatabaseItem( pDB, iID )
 {
-    _pDB = pDB;
-    _iID = iID;
+    _pUI = new Ui::wndActiveDrill;
     _pUI->setupUi( this );
 
     _pUI->tblTimesheet->setContextMenuPolicy( Qt::CustomContextMenu );
 
-    _pDB->buildQueries( "Drills", _pUI->centralWidget->nextInFocusChain(), "_DI_" );
-    _pDB->selectUI( _iID, "Drills", _pUI->centralWidget->nextInFocusChain(), "_DI_" );
+    _pDB->buildQueries( _pUI->centralWidget->nextInFocusChain(), "Drills", "_DI_" );
+    Select();
     updateSheet();
 }
 
@@ -88,7 +86,7 @@ void wndActiveDrill::updateSheet( void )
 
 void wndActiveDrill::updateInformation( void )
 {
-    if ( _pDB->updateUI( _iID, "Drills", _pUI->centralWidget->nextInFocusChain(), "_DI_" ) )
+    if ( Update() )
     {
         QMessageBox::information( this, "Drill Updated", "Drill has been updated." );
     }
@@ -245,4 +243,37 @@ void wndActiveDrill::sheetRemoveFirefighter( void )
 
         updateSheet();
     }
+
+}
+
+bool wndActiveDrill::Insert( void )
+{
+    _iID = _pDB->insertUI( _pUI->centralWidget->nextInFocusChain(), "Drills", "_DI_" );
+    return ( _iID > 0 ) ? true : false;
+}
+
+bool wndActiveDrill::Update( void )
+{
+    return _pDB->updateUI( _iID, _pUI->centralWidget->nextInFocusChain(), "Drills", "_DI_" );
+}
+
+bool wndActiveDrill::Select( void )
+{
+    return _pDB->selectUI( _iID, _pUI->centralWidget->nextInFocusChain(), "Drills", "_DI_" );
+}
+
+bool wndActiveDrill::BuildQueries( void )
+{
+    _pDB->buildQueries( _pUI->centralWidget->nextInFocusChain(), "Drills", "_DI_" );
+    return true;
+}
+
+bool wndActiveDrill::Create( DatabaseManager *pDB )
+{
+    return pDB->createUI( "Drills" );
+}
+
+bool wndActiveDrill::Delete( DatabaseManager *pDB, int iID )
+{
+    return pDB->deleteUI( iID, "Drills" );
 }

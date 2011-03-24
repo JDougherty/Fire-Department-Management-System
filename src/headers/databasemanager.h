@@ -52,16 +52,19 @@ class DatabaseManager : public QObject
 
         QMap<QString, QMap<QString, QString> > _queryMap; //!< Dictionary containing UI queries
 
-        bool                    buildStructure( void );
-        bool                    verifyStructure( void );
+                                DatabaseManager( void );
+                                DatabaseManager( QString sDBFile );
 
-        QSqlQuery               bindValues( QWidget *pWidget, QString sAction, QString sTableName, QString sTabName = "" );
+                                ~DatabaseManager( void );
+
+        bool                    createTables( void );
+        bool                    verifyTables( void );
+
+        QSqlQuery               bindValues( QWidget *pWidget, QString sQuery, QString sTabName = "" );
         QList<QWidget *>        getWidgets( QWidget *pWidget, QString sTabName );
 
     public:
-                                DatabaseManager( void );
-                                DatabaseManager( QString sDBFile );
-                                ~DatabaseManager( void );
+        friend DatabaseManager* DatabaseInstance( void );
 
         void                    setDBFile( QString sDBFile );
 
@@ -70,19 +73,24 @@ class DatabaseManager : public QObject
         bool                    isOpen( void );
         void                    close( void );
 
-        bool                    build( void );
-        void                    buildQueries( QString sTableName, QWidget *pWidget, QString sTabName = "" );
+        bool                    create( void );
         bool                    verify( void );
         bool                    remove( void );
 
-        bool                    selectUI( int iID, QString sTableName, QWidget *pWidget, QString sTabName = "" );
-        int                     insertUI( QString sTableName, QWidget *pWidget, QString sTabName = "" );
-        bool                    updateUI( int iID, QString sTableName, QWidget *pWidget, QString sTabName = "" );
+        void                    buildQueries( void );
+        void                    buildQueries( QWidget *pWidget, QString sTableName, QString sTabName = "" );
+
+        bool                    selectUI( int iID, QWidget *pWidget, QString sTableName, QString sTabName = "" );
+        int                     insertUI( QWidget *pWidget, QString sTableName, QString sTabName = "" );
+        bool                    updateUI( int iID, QWidget *pWidget, QString sTableName, QString sTabName = "" );
+        bool                    createUI( QString sTableName );
         bool                    deleteUI( int iID, QString sTableName );
 
         bool                    query( QSqlQuery &qry );
 
         QSqlError               lastError( void );
 };
+
+DatabaseManager* DatabaseInstance();
 
 #endif

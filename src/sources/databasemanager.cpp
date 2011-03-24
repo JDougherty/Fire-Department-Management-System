@@ -18,6 +18,15 @@
 */
 
 #include "../headers/databasemanager.h"
+#include "../headers/wndactivecall.h"
+#include "../headers/wndactivedrill.h"
+#include "../headers/wndfirefighter.h"
+
+DatabaseManager* DatabaseInstance( void )
+{
+        static DatabaseManager db;
+        return &db;
+}
 
 DatabaseManager::DatabaseManager( void )
 {
@@ -116,27 +125,36 @@ bool DatabaseManager::remove( void )
     return bRemoved;
 }
 
-//! Builds the SQLite database file.
+//! Creates the SQLite database file.
 /*!
   \return bool - Successfully built the db file.
   \see verify()
 */
-bool DatabaseManager::build( void )
+bool DatabaseManager::create( void )
 {
-    return buildStructure();
+    return createTables();
+}
+
+void DatabaseManager::buildQueries( void )
+{
+    wndActiveCall *temp = new wndActiveCall( 0, this );
+    temp->BuildQueries( );
+    wndActiveDrill *temp2 = new wndActiveDrill( 0, this );
+    temp2->BuildQueries( );
+    wndFirefighter *temp3 = new wndFirefighter( 0, this );
+    temp3->BuildQueries( );
 }
 
 //! Creates the tables in the SQL Lite database.
 /*!
   \return bool - Successfully created the tables.
-  \see verifyStructure()
+  \see verifyTables()
 */
-bool DatabaseManager::buildStructure( void )
+bool DatabaseManager::createTables( void )
 {
     QSqlQuery query;
     QString sSchema;
     QStringList slSplitSchema;
-
 
     qDebug( "Database Manager: Creating the tables." );
 
@@ -215,113 +233,7 @@ bool DatabaseManager::buildStructure( void )
                  "name TEXT,"
                  "description TEXT,"
                  "category TEXT,"
-                 "checked INTEGER);"
-             "CREATE TABLE Calls ("
-                 "id INTEGER PRIMARY KEY,"
-                 "TS_CallNum INTEGER,"
-                 "AC1_Location TEXT,"
-                 "AC1_TravelDirections TEXT,"
-                 "AC1_NumMile TEXT,"
-                 "AC1_StreetPrefix TEXT,"
-                 "AC1_Street TEXT,"
-                 "AC1_StreetType TEXT,"
-                 "AC1_StreetSuffix TEXT,"
-                 "AC1_AptSuiteRm TEXT,"
-                 "AC1_CityTown TEXT,"
-                 "AC1_State TEXT,"
-                 "AC1_ZipCode TEXT,"
-                 "AC1_IncidentType TEXT,"
-                 "AC1_MutualAid TEXT,"
-                 "AC1_MutualAidFDID TEXT,"
-                 "AC1_MutualAidState TEXT,"
-                 "AC1_MutualAidIncidentNumber TEXT,"
-                 "AC1_Alarm TEXT,"
-                 "AC1_Arrival TEXT,"
-                 "AC1_Clear TEXT,"
-                 "AC1_PrimaryAction TEXT,"
-                 "AC1_SecondaryAction TEXT,"
-                 "AC2_Apparatus TEXT,"
-                 "AC2_Personnel TEXT,"
-                 "AC2_ValueOfProperty TEXT,"
-                 "AC2_TotalLoss TEXT,"
-                 "AC2_InjuriesFireService TEXT,"
-                 "AC2_InjuriesOther TEXT,"
-                 "AC2_DeathsFireService TEXT,"
-                 "AC2_DeathsOther TEXT,"
-                 "AC2_HazMatType TEXT,"
-                 "AC2_HazMatClass TEXT,"
-                 "AC2_HazMatAmount TEXT,"
-                 "AC2_HazMatUnit TEXT,"
-                 "AC2_PropertyDetector TEXT,"
-                 "AC2_MixedUseProperty TEXT,"
-                 "AC2_PropertyUse TEXT,"
-                 "AC2_NumUnits TEXT,"
-                 "AC2_JuvenileInvolvement TEXT,"
-                 "AF1_InvolvedBusinessName1 TEXT,"
-                 "AF1_InvolvedTitle1 TEXT,"
-                 "AF1_InvolvedFirstName1 TEXT,"
-                 "AF1_InvolvedMiddleInitial1 TEXT,"
-                 "AF1_InvolvedLastName1 TEXT,"
-                 "AF1_InvolvedSuffix1 TEXT,"
-                 "AF1_InvolvedNumMile1 TEXT,"
-                 "AF1_InvolvedStreetPrefix1 TEXT,"
-                 "AF1_InvolvedStreet1 TEXT,"
-                 "AF1_InvolvedStreetType1 TEXT,"
-                 "AF1_InvolvedStreetSuffix1 TEXT,"
-                 "AF1_InvolvedPOBox1 TEXT,"
-                 "AF1_InvolvedAptSuiteRm1 TEXT,"
-                 "AF1_InvolvedCityTown1 TEXT,"
-                 "AF1_InvolvedState1 TEXT,"
-                 "AF1_InvolvedZipCode1 TEXT,"
-                 "AF1_InvolvedBusinessName2 TEXT,"
-                 "AF1_InvolvedTitle2 TEXT,"
-                 "AF1_InvolvedFirstName2 TEXT,"
-                 "AF1_InvolvedMiddleInitial2 TEXT,"
-                 "AF1_InvolvedLastName2 TEXT,"
-                 "AF1_InvolvedSuffix2 TEXT,"
-                 "AF1_InvolvedNumMile2 TEXT,"
-                 "AF1_InvolvedStreetPrefix2 TEXT,"
-                 "AF1_InvolvedStreet2 TEXT,"
-                 "AF1_InvolvedStreetType2 TEXT,"
-                 "AF1_InvolvedStreetSuffix2 TEXT,"
-                 "AF1_InvolvedPOBox2 TEXT,"
-                 "AF1_InvolvedAptSuiteRm2 TEXT,"
-                 "AF1_InvolvedCityTown2 TEXT,"
-                 "AF1_InvolvedState2 TEXT,"
-                 "AF1_InvolvedZipCode2 TEXT,"
-                 "AF2_AreaOfIgnition TEXT,"
-                 "AF2_HeatSource TEXT,"
-                 "AF2_ItemFirstIgnited TEXT,"
-                 "AF2_TypeMaterialFirstIgnited TEXT,"
-                 "AF2_CauseOfIgnition TEXT,"
-                 "AF2_ContributingFactor TEXT,"
-                 "AF2_SpreadConfined TEXT,"
-                 "AF2_HumanFactors TEXT,"
-                 "AF2_HumanFactorsAge TEXT,"
-                 "AF2_HumanFactorsSex TEXT,"
-                 "AF2_EquipmentFactors TEXT,"
-                 "AF2_EquipmentFactorsPower TEXT,"
-                 "AF2_EquipmentFactorsPortability TEXT,"
-                 "AF2_MobilePropertyType TEXT,"
-                 "AF2_MobilePropertyMake TEXT,"
-                 "SF_BuildingType TEXT,"
-                 "SF_BuildingStatus TEXT,"
-                 "SF_BuildingHeightStories INTEGER,"
-                 "SF_MainFloorSizeFtW INTEGER,"
-                 "SF_MainFloorSizeFtH INTEGER,"
-                 "SF_StoryFireOrigin INTEGER,"
-                 "SF_FireSpread TEXT,"
-                 "SF_DetectorPresence INTEGER,"
-                 "SF_DetectorType TEXT,"
-                 "SF_DetectorPower TEXT,"
-                 "SF_DetectorOperation TEXT,"
-                 "SF_DetectorEffectiveness TEXT,"
-                 "SF_DetectorFailureReason TEXT,"
-                 "SF_AESPresence TEXT,"
-                 "SF_AESType TEXT,"
-                 "SF_AESOperation TEXT,"
-                 "SF_NumSprinklerHeadsOper INTEGER,"
-                 "SF_AESFailureReason TEXT)";
+                 "checked INTEGER)";
 
     // QSqlQuery::exec with SQLite will not execute multiple queries in a single execution.
     // Split the compound query into individual queries and execute each
@@ -339,7 +251,7 @@ bool DatabaseManager::buildStructure( void )
         }
     }
 
-    return true;
+    return wndActiveCall::Create( this );
 }
 
 //! Verifies the database's integrity.
@@ -349,15 +261,15 @@ bool DatabaseManager::buildStructure( void )
 */
 bool DatabaseManager::verify( void )
 {
-    return verifyStructure();
+    return verifyTables();
 }
 
 //! Verifies the database's table structure.
 /*!
   \return bool - Database tables are fine.
-  \see buildStructure()
+  \see createTables()
 */
-bool DatabaseManager::verifyStructure( void )
+bool DatabaseManager::verifyTables( void )
 {
     QSqlQuery qryTableNames;
     QSqlQuery qryTableInfo;
@@ -436,7 +348,7 @@ QList<QWidget *> DatabaseManager::getWidgets( QWidget *pWidget, QString sTabName
 
     for ( QWidget *pTmpWidget = pWidget->nextInFocusChain(); pTmpWidget != pWidget; pTmpWidget = pTmpWidget->nextInFocusChain() )
     {
-        if ( pTmpWidget->objectName().startsWith( "DB_" ) && (sTabName == "" ||  pTmpWidget->objectName().contains( sTabName ) ) )
+        if ( pTmpWidget->objectName().startsWith( "DB_" ) && ( sTabName == "" ||  pTmpWidget->objectName().contains( sTabName ) ) )
         {
             lWidgets += pTmpWidget;
         }
@@ -452,13 +364,13 @@ QList<QWidget *> DatabaseManager::getWidgets( QWidget *pWidget, QString sTabName
   \param sTableName Name of the DB table.
   \param sTabName Name of the UI tab (optional).
 */
-QSqlQuery DatabaseManager::bindValues( QWidget *pWidget, QString sAction, QString sTableName, QString sTabName )
+QSqlQuery DatabaseManager::bindValues( QWidget *pWidget, QString sQuery, QString sTabName )
 {
     QList<QWidget *> lWidgets = getWidgets( pWidget, sTabName );
     QWidget *pTmpWidget;
 
     QSqlQuery query;
-    query.prepare( _queryMap[sTableName][sAction] );
+    query.prepare( sQuery );
 
     foreach ( pTmpWidget, lWidgets )
     {
@@ -499,13 +411,15 @@ QSqlQuery DatabaseManager::bindValues( QWidget *pWidget, QString sAction, QStrin
   \param pWidget First widget in the chain.
   \param sTabName Name of the UI tab (optional).
 */
-void DatabaseManager::buildQueries( QString sTableName, QWidget *pWidget, QString sTabName )
+void DatabaseManager::buildQueries( QWidget *pWidget, QString sTableName, QString sTabName )
 {
     QString sCreateQuery, sSelectQuery, sInsertQuery, sInsertQueryValues, sUpdateQuery, sDeleteQuery, sDBObjName, sObjName;
-    QList<QWidget *> lWidgets = getWidgets( pWidget, sTabName );
+    QList<QWidget *> lWidgets;
     QWidget *pTmpWidget;
 
-    qDebug( "Database Manager: Generating queries for the '%s' table.", qPrintable( sTableName ) );
+    lWidgets = getWidgets( pWidget, sTabName );
+
+    qDebug( "Database Manager: Generating queries for '%s' table.", qPrintable( sTableName ) );
 
     sCreateQuery = "CREATE TABLE " + sTableName + "(id INTEGER PRIMARY KEY,";
     sSelectQuery = "SELECT ";
@@ -580,7 +494,7 @@ void DatabaseManager::buildQueries( QString sTableName, QWidget *pWidget, QStrin
     qDebug( "Database Manager: '%s' delete query: %s", qPrintable( sTableName ), qPrintable( sDeleteQuery ) );
 }
 
-bool DatabaseManager::selectUI( int iID, QString sTableName, QWidget *pWidget, QString sTabName )
+bool DatabaseManager::selectUI( int iID, QWidget *pWidget, QString sTableName, QString sTabName )
 {
     QList<QWidget *> lWidgets = getWidgets( pWidget, sTabName );
     QWidget *pTmpWidget;
@@ -632,9 +546,9 @@ bool DatabaseManager::selectUI( int iID, QString sTableName, QWidget *pWidget, Q
     return true;
 }
 
-int DatabaseManager::insertUI( QString sTableName, QWidget *pWidget, QString sTabName )
+int DatabaseManager::insertUI( QWidget *pWidget, QString sTableName, QString sTabName )
 {
-    QSqlQuery insertQuery = bindValues( pWidget, "insert", sTableName, sTabName );
+    QSqlQuery insertQuery = bindValues( pWidget, _queryMap[sTableName]["insert"], sTabName );
 
     if ( !query( insertQuery ) )
     {
@@ -650,9 +564,9 @@ int DatabaseManager::insertUI( QString sTableName, QWidget *pWidget, QString sTa
     return iID;
 }
 
-bool DatabaseManager::updateUI( int iID, QString sTableName, QWidget *pWidget, QString sTabName )
+bool DatabaseManager::updateUI( int iID, QWidget *pWidget, QString sTableName, QString sTabName )
 {
-    QSqlQuery updateQuery = bindValues( pWidget, "update", sTableName, sTabName );
+    QSqlQuery updateQuery = bindValues( pWidget, _queryMap[sTableName]["update"], sTabName );
 
     updateQuery.bindValue( ":id", iID );
 
@@ -667,6 +581,25 @@ bool DatabaseManager::updateUI( int iID, QString sTableName, QWidget *pWidget, Q
 
     return true;
 }
+
+bool DatabaseManager::createUI( QString sTableName )
+{
+    QSqlQuery createQuery;
+
+    createQuery.prepare( _queryMap[sTableName]["create"] );
+
+    if ( !query( createQuery ) )
+    {
+        qWarning( "Database Manager: Could not create table '%s': %s",
+                  qPrintable( sTableName ), qPrintable( createQuery.lastError().text() ) );
+        return false;
+    }
+
+    qDebug( "Database Manager: Created table '%s'.", qPrintable( sTableName ) );
+
+    return true;
+}
+
 
 bool DatabaseManager::deleteUI( int iID, QString sTableName )
 {

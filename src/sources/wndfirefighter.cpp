@@ -26,11 +26,10 @@
   \param pDB Pointer to the database manager.
 */
 wndFirefighter::wndFirefighter( QWidget *pParent, DatabaseManager *pDB ) :
-    QMainWindow( pParent ), _pUI( new Ui::wndFirefighter )
+    QMainWindow( pParent ), DatabaseItem( pDB, -1 )
 {
+    _pUI = new Ui::wndFirefighter;
     _pUI->setupUi( this );
-    _pDB = pDB;
-    _iID = -1;
 
     // Hide these tabs since we want to just enter basic info first
     _pUI->tabWidget->removeTab( 3 ); // tabReports
@@ -43,8 +42,6 @@ wndFirefighter::wndFirefighter( QWidget *pParent, DatabaseManager *pDB ) :
     // Disable the training and equipment fields
     enableTrainingFields( false );
     enableEquipmentFields( false );
-
-    _pDB->buildQueries( "Firefighters", _pUI->tabWidget->nextInFocusChain(), "_PI_" );
 }
 
 //! Constructor for editing a firefighter.
@@ -54,24 +51,19 @@ wndFirefighter::wndFirefighter( QWidget *pParent, DatabaseManager *pDB ) :
   \param iID Firefighter's DB id.
 */
 wndFirefighter::wndFirefighter( QWidget *pParent, DatabaseManager *pDB, int iID ) :
-    QMainWindow( pParent ), _pUI( new Ui::wndFirefighter )
+    QMainWindow( pParent ), DatabaseItem( pDB, iID )
 {
+    _pUI = new Ui::wndFirefighter;
     _pUI->setupUi( this );
-    _pDB = pDB;
-    _iID = iID;
 
     this->setWindowTitle( "Edit Firefighter" );
     _pUI->btnSavePersonalInfo->setText( "Save Firefighter" );
-
-    loadTrainingList();
-    loadEquipmentList();
 
     // Disable the training and equipment fields
     enableTrainingFields( false );
     enableEquipmentFields( false );
 
-    _pDB->buildQueries( "Firefighters", _pUI->tabWidget->nextInFocusChain(), "_PI_" );
-    _pDB->selectUI( _iID, "Firefighters", _pUI->tabWidget->nextInFocusChain(), "_PI_" );
+    Select();
 }
 
 wndFirefighter::~wndFirefighter( void )
@@ -109,8 +101,7 @@ void wndFirefighter::btnSavePersonalInfoClicked( void )
 
     if ( _iID <= 0 )
     {
-        _iID = _pDB->insertUI( "Firefighters", _pUI->tabPersonalInfo->nextInFocusChain(), "_PI_" );
-        if ( _iID > 0 )
+        if ( Insert() )
         {
             QMessageBox::information( this, "Firefighter Added", "Firefighter has been added." );
 
@@ -132,7 +123,7 @@ void wndFirefighter::btnSavePersonalInfoClicked( void )
     }
     else
     {
-        if ( _pDB->updateUI( _iID, "Firefighters", _pUI->tabPersonalInfo->nextInFocusChain(), "_PI_" ) )
+        if ( Update() )
         {
             QMessageBox::information( this, "Firefighter Updated", "Firefighter has been updated." );
         }
@@ -219,7 +210,6 @@ void wndFirefighter::trainingItemClicked( QListWidgetItem *item )
         if ( QMessageBox::question( this, "Training: Confirm Removal", "Are you sure you would like to remove this exam information?",
                                     QMessageBox::Yes, QMessageBox::No ) == QMessageBox::Yes )
         {
-
             // If so, build a query to remove the link from the database
             QSqlQuery removeFFTraining;
             removeFFTraining.prepare( "DELETE FROM fftraining WHERE ffid=? AND tid=(SELECT id FROM training WHERE title=?)" );
@@ -418,7 +408,6 @@ void wndFirefighter::equipmentItemClicked( QListWidgetItem *item )
         if ( QMessageBox::question( this, "Equipment: Confirm Removal", "Are you sure you would like to remove this piece of equipment?",
                                    QMessageBox::Yes, QMessageBox::No ) == QMessageBox::Yes )
         {
-
             // If so, build a query to remove the link from the database
             QSqlQuery removeFFEquip;
             removeFFEquip.prepare( "DELETE FROM ffequipment WHERE ffid=? AND eqid=(SELECT id FROM equipment WHERE title=?)" );
@@ -534,7 +523,7 @@ void wndFirefighter::btnSaveEquipmentItemClicked( void )
 
         if ( _pDB->query( updateQuery ) )
         {
-            QMessageBox::information( this, "Firefighter Information: Equipment Update","Equipment information successfully updated." );
+            QMessageBox::information( this, "Firefighter Information: Equipment Update", "Equipment information successfully updated." );
         }
         else
         {
@@ -546,3 +535,36 @@ void wndFirefighter::btnSaveEquipmentItemClicked( void )
     }
 }
 
+bool wndFirefighter::Insert( void )
+{
+    _iID = _pDB->insertUI( _pUI->tabWidget->nextInFocusChain(), "Firefighters", "_PI_" );
+    return ( _iID > 0 ) ? true : false;
+}
+
+bool wndFirefighter::Update( void )
+{
+    return _pDB->updateUI( _iID, _pUI->tabWidget->nextInFocusChain(), "Firefighters", "_PI_" );
+}
+
+bool wndFirefighter::Select( void )
+{
+    loadTrainingList();
+    loadEquipmentList();
+    return _pDB->selectUI( _iID, _pUI->tabWidget->nextInFocusChain(), "Firefighters", "_PI_" );
+}
+
+bool wndFirefighter::BuildQueries( void )
+{
+    _pDB->buildQueries( _pUI->tabWidget->nextInFocusChain(), "Firefighters", "_PI_" );
+    return true;
+}
+
+bool wndFirefighter::Create( DatabaseManager *pDB )
+{
+    return pDB->createUI( "Firefighters" );
+}
+
+bool wndFirefighter::Delete( DatabaseManager *pDB, int iID )
+{
+    return pDB->deleteUI( iID, "Firefighters" );
+}

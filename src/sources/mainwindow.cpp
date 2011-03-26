@@ -33,7 +33,7 @@ MainWindow::MainWindow( QWidget *pParent, DatabaseManager *pDB ) :
     _pDB = pDB;
 
     mdiArea = new QMdiArea;
-    mdiArea->setBackground( QBrush::QBrush( QColor::QColor( 128, 0, 0 ) ) );
+    mdiArea->setBackground( QBrush::QBrush( QColor::QColor( 128, 128, 128 ) ) );
     mdiArea->setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );
     mdiArea->setVerticalScrollBarPolicy( Qt::ScrollBarAsNeeded );
     setCentralWidget( mdiArea );

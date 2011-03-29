@@ -14,22 +14,17 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 */
 
-#include "../headers/wndfirefighter.h"
-#include "ui_wndfirefighter.h"
+#include "wndFirefighter.h"
+#include "ui_wndFirefighter.h"
 
-//! Constructor for adding a new firefighter.
-/*!
-  Hide extra tabs and change the window and button names.
-  \param pDB Pointer to the database manager.
-*/
-wndFirefighter::wndFirefighter( QWidget *pParent, DatabaseManager *pDB ) :
-    QMainWindow( pParent ), DatabaseItem( pDB, -1 )
+wndFirefighter::wndFirefighter( QWidget *pParent ) :
+    QMainWindow( pParent )
 {
     _pUI = new Ui::wndFirefighter;
     _pUI->setupUi( this );
+    _iID = -1;
 
     // Hide these tabs since we want to just enter basic info first
     _pUI->tabWidget->removeTab( 3 ); // tabReports
@@ -50,11 +45,12 @@ wndFirefighter::wndFirefighter( QWidget *pParent, DatabaseManager *pDB ) :
   \param pDB Pointer to the database manager.
   \param iID Firefighter's DB id.
 */
-wndFirefighter::wndFirefighter( QWidget *pParent, DatabaseManager *pDB, int iID ) :
-    QMainWindow( pParent ), DatabaseItem( pDB, iID )
+wndFirefighter::wndFirefighter( QWidget *pParent, int iID ) :
+    QMainWindow( pParent )
 {
     _pUI = new Ui::wndFirefighter;
     _pUI->setupUi( this );
+    _iID = iID;
 
     this->setWindowTitle( "Edit Firefighter" );
     _pUI->btnSavePersonalInfo->setText( "Save Firefighter" );
@@ -62,8 +58,6 @@ wndFirefighter::wndFirefighter( QWidget *pParent, DatabaseManager *pDB, int iID 
     // Disable the training and equipment fields
     enableTrainingFields( false );
     enableEquipmentFields( false );
-
-    Select();
 }
 
 wndFirefighter::~wndFirefighter( void )
@@ -101,7 +95,7 @@ void wndFirefighter::btnSavePersonalInfoClicked( void )
 
     if ( _iID <= 0 )
     {
-        if ( Insert() )
+        if ( true /*Insert()*/ )
         {
             QMessageBox::information( this, "Firefighter Added", "Firefighter has been added." );
 
@@ -123,7 +117,7 @@ void wndFirefighter::btnSavePersonalInfoClicked( void )
     }
     else
     {
-        if ( Update() )
+        if ( true /*Update()*/ )
         {
             QMessageBox::information( this, "Firefighter Updated", "Firefighter has been updated." );
         }
@@ -141,7 +135,7 @@ void wndFirefighter::btnSavePersonalInfoClicked( void )
 //! Populate the training tab with all of the individual training items.
 void wndFirefighter::loadTrainingList( void )
 {
-    QSqlQuery traininglist;
+    /*QSqlQuery traininglist;
 
     _pUI->lstTraining->clear();
 
@@ -171,7 +165,7 @@ void wndFirefighter::loadTrainingList( void )
     {
         qWarning( "Firefighter Error (%d): Could not get training exam information. Database Error: %s",
                  _iID, qPrintable( traininglist.lastError().text() ) );
-    }
+    }*/
 }
 
 //! Links or unliks a training exam to the firefighter being edited.
@@ -188,7 +182,7 @@ void wndFirefighter::trainingItemClicked( QListWidgetItem *item )
     // If the item is being checked, i.e. added:
     if ( item->checkState() == Qt::Checked )
     {
-        // Build a query to add the information to the database
+        /*// Build a query to add the information to the database
         QSqlQuery addFFTraining;
 
         addFFTraining.prepare( "INSERT INTO fftraining (tid,ffid) SELECT id,? FROM training WHERE title=?" );
@@ -202,7 +196,7 @@ void wndFirefighter::trainingItemClicked( QListWidgetItem *item )
                      _iID, qPrintable( exam ), qPrintable( addFFTraining.lastError().text() ) );
         }
 
-        toggleTrainingFields( item );
+        toggleTrainingFields( item );*/
     }
     else // If the item is being unchecked, i.e. removed
     {
@@ -210,7 +204,7 @@ void wndFirefighter::trainingItemClicked( QListWidgetItem *item )
         if ( QMessageBox::question( this, "Training: Confirm Removal", "Are you sure you would like to remove this exam information?",
                                     QMessageBox::Yes, QMessageBox::No ) == QMessageBox::Yes )
         {
-            // If so, build a query to remove the link from the database
+            /*// If so, build a query to remove the link from the database
             QSqlQuery removeFFTraining;
             removeFFTraining.prepare( "DELETE FROM fftraining WHERE ffid=? AND tid=(SELECT id FROM training WHERE title=?)" );
             removeFFTraining.addBindValue( _iID );
@@ -223,7 +217,7 @@ void wndFirefighter::trainingItemClicked( QListWidgetItem *item )
                         _iID, qPrintable( exam ), qPrintable( removeFFTraining.lastError().text() ) );
             }
 
-            toggleTrainingFields( item );
+            toggleTrainingFields( item );*/
         }
         else // If the uncheck was not intended, replace the check without destroying information
         {
@@ -275,7 +269,7 @@ void wndFirefighter::loadTrainingItem( QListWidgetItem *item )
 {
     if ( item )
     {
-        toggleTrainingFields( item );
+        /*toggleTrainingFields( item );
         QString exam( item->data( Qt::DisplayRole ).toString() );
         QSqlQuery selectQuery;
         selectQuery.prepare( "SELECT ffesig,supesig,tdate FROM fftraining WHERE ffid=? AND tid=(SELECT id FROM training WHERE title=?)" );
@@ -295,7 +289,7 @@ void wndFirefighter::loadTrainingItem( QListWidgetItem *item )
         {
             qWarning( "Firefighter Error (%d): Could not retrieve information for training exam '%s'. Database Error: %s",
                      _iID, qPrintable( exam ), qPrintable( selectQuery.lastError().text() ) );
-        }
+        }*/
     }
 }
 
@@ -308,7 +302,7 @@ void wndFirefighter::btnSaveTrainingItemClicked( void )
 {
     if ( _pUI->lstTraining->currentItem() )
     {
-        QString exam( _pUI->lstTraining->currentItem()->data( Qt::DisplayRole ).toString() );
+        /*QString exam( _pUI->lstTraining->currentItem()->data( Qt::DisplayRole ).toString() );
         QSqlQuery updateQuery;
 
         updateQuery.prepare( "UPDATE fftraining SET ffesig=?, supesig=?, tdate=? WHERE ffid=? AND tid=(SELECT id FROM training WHERE title=?)" );
@@ -328,7 +322,7 @@ void wndFirefighter::btnSaveTrainingItemClicked( void )
                                   "There was a problem updating the training exam information. See log for more information." );
             qWarning( "Firefighter Error (%d): Could not update training exam '%s'. Database Error: %s",
                      _iID, qPrintable( exam ), qPrintable( updateQuery.lastError().text() ) );
-        }
+        }*/
     }
 }
 
@@ -339,7 +333,7 @@ void wndFirefighter::btnSaveTrainingItemClicked( void )
 //! Populate the equipment tab with all of the individual equipment items.
 void wndFirefighter::loadEquipmentList( void )
 {
-    QSqlQuery equipmentlist;
+    /*QSqlQuery equipmentlist;
 
     _pUI->lstEquipment->clear();
 
@@ -369,7 +363,7 @@ void wndFirefighter::loadEquipmentList( void )
     {
         qWarning( "Firefighter Error (%d): Could not get equipment information. Database Error: %s",
                  _iID, qPrintable( equipmentlist.lastError().text() ) );
-    }
+    }*/
 }
 
 //! Links or unlinks a piece of equipment to the firefighter being edited.
@@ -386,7 +380,7 @@ void wndFirefighter::equipmentItemClicked( QListWidgetItem *item )
     // If the item is being checked, i.e. added:
     if ( item->checkState() == Qt::Checked )
     {
-        // Build a query to add the information to the database
+        /*// Build a query to add the information to the database
         QSqlQuery addFFequip;
 
         addFFequip.prepare( "INSERT INTO ffequipment (eqid,ffid) SELECT id,? FROM equipment WHERE title=?" );
@@ -400,7 +394,7 @@ void wndFirefighter::equipmentItemClicked( QListWidgetItem *item )
                      _iID, qPrintable( equip ), qPrintable( addFFequip.lastError().text() ) );
         }
 
-        toggleEquipmentFields( item );
+        toggleEquipmentFields( item );*/
     }
     else // If the item is being unchecked, i.e. removed
     {
@@ -408,7 +402,7 @@ void wndFirefighter::equipmentItemClicked( QListWidgetItem *item )
         if ( QMessageBox::question( this, "Equipment: Confirm Removal", "Are you sure you would like to remove this piece of equipment?",
                                    QMessageBox::Yes, QMessageBox::No ) == QMessageBox::Yes )
         {
-            // If so, build a query to remove the link from the database
+            /*// If so, build a query to remove the link from the database
             QSqlQuery removeFFEquip;
             removeFFEquip.prepare( "DELETE FROM ffequipment WHERE ffid=? AND eqid=(SELECT id FROM equipment WHERE title=?)" );
             removeFFEquip.addBindValue( _iID );
@@ -421,7 +415,7 @@ void wndFirefighter::equipmentItemClicked( QListWidgetItem *item )
                         _iID, qPrintable( equip ), qPrintable( removeFFEquip.lastError().text() ) );
             }
 
-            toggleEquipmentFields( item );
+            toggleEquipmentFields( item );*/
         }
         else // If the uncheck was not intended, replace the check without destroying information
         {
@@ -475,7 +469,7 @@ void wndFirefighter::enableEquipmentFields( bool bEnabled )
 */
 void wndFirefighter::loadEquipmentItem( QListWidgetItem *item )
 {
-    toggleEquipmentFields( item );
+    /*toggleEquipmentFields( item );
     QString equip( item->data( Qt::DisplayRole ).toString() );
     QSqlQuery selectQuery;
     selectQuery.prepare( "SELECT issued,size,type,serial,year FROM ffequipment WHERE ffid=? AND eqid=(SELECT id FROM equipment WHERE title=?)" );
@@ -498,7 +492,7 @@ void wndFirefighter::loadEquipmentItem( QListWidgetItem *item )
     {
         qWarning( "Firefighter Error (%d): Could not retrieve information for equipment '%s'. Database Error: %s",
                  _iID, qPrintable( equip ), qPrintable( selectQuery.lastError().text() ) );
-    }
+    }*/
 }
 
 //! Updates the size, type, and serial information for the highlighted equipment item.
@@ -510,7 +504,7 @@ void wndFirefighter::btnSaveEquipmentItemClicked( void )
 {
     if ( _pUI->lstEquipment->currentItem() )
     {
-        QString equip( _pUI->lstEquipment->currentItem()->data( Qt::DisplayRole ).toString() );
+        /*QString equip( _pUI->lstEquipment->currentItem()->data( Qt::DisplayRole ).toString() );
         QSqlQuery updateQuery;
         updateQuery.prepare( "UPDATE ffequipment SET issued=?, size=?, type=?, serial=?, year=? WHERE ffid=? AND eqid=(SELECT id FROM equipment WHERE title=?)" );
         updateQuery.addBindValue( _pUI->radEquipmentNew->isChecked() ? 1 : 0 );
@@ -531,40 +525,6 @@ void wndFirefighter::btnSaveEquipmentItemClicked( void )
                                   "There was a problem updating the equipment information. See log for more information." );
             qWarning( "Firefighter Error (%d): Could not update equipment '%s'. Database Error: %s",
                      _iID, qPrintable( equip ), qPrintable( updateQuery.lastError().text() ) );
-        }
+        }*/
     }
-}
-
-bool wndFirefighter::Insert( void )
-{
-    _iID = _pDB->insertUI( _pUI->tabWidget->nextInFocusChain(), "Firefighters", "_PI_" );
-    return ( _iID > 0 ) ? true : false;
-}
-
-bool wndFirefighter::Update( void )
-{
-    return _pDB->updateUI( _iID, _pUI->tabWidget->nextInFocusChain(), "Firefighters", "_PI_" );
-}
-
-bool wndFirefighter::Select( void )
-{
-    loadTrainingList();
-    loadEquipmentList();
-    return _pDB->selectUI( _iID, _pUI->tabWidget->nextInFocusChain(), "Firefighters", "_PI_" );
-}
-
-bool wndFirefighter::BuildQueries( void )
-{
-    _pDB->buildQueries( _pUI->tabWidget->nextInFocusChain(), "Firefighters", "_PI_" );
-    return true;
-}
-
-bool wndFirefighter::Create( DatabaseManager *pDB )
-{
-    return pDB->createUI( "Firefighters" );
-}
-
-bool wndFirefighter::Delete( DatabaseManager *pDB, int iID )
-{
-    return pDB->deleteUI( iID, "Firefighters" );
 }

@@ -18,7 +18,7 @@
 
 #include "managers/DatabaseManager.h"
 
-DatabaseManager* GetDatabaseManager( void )
+DatabaseManager* getDatabaseManager( void )
 {
     static DatabaseManager dbm;
     return &dbm;
@@ -26,17 +26,8 @@ DatabaseManager* GetDatabaseManager( void )
 
 DatabaseManager::DatabaseManager( void )
 {
-    _sDBFile = QString::null;
-
+    _sFile = QString::null;
     _DB = QSqlDatabase::addDatabase( "QSQLITE" );
-}
-
-DatabaseManager::DatabaseManager( QString sDBFile )
-{
-    _sDBFile = sDBFile;
-
-    _DB = QSqlDatabase::addDatabase( "QSQLITE" );
-    _DB.setDatabaseName( _sDBFile );
 }
 
 DatabaseManager::~DatabaseManager( void )
@@ -45,15 +36,28 @@ DatabaseManager::~DatabaseManager( void )
     QSqlDatabase::removeDatabase( "QSQLITE" );
 }
 
+bool DatabaseManager::initialize( void )
+{
+    SettingManager *sm = getSettingManager();
+    _sFile = sm->get( "database/file" ).toString();
+
+    if ( !exists() ) return false;
+
+    _DB = QSqlDatabase::addDatabase( "QSQLITE" );
+    _DB.setDatabaseName( _sFile );
+    return true;
+}
+
 //! Sets the DB file path.
 /*!
-  \param sDBFile DB file path.
+  \param sFile DB file path.
 */
-void DatabaseManager::setDBFile( QString sDBFile )
+bool DatabaseManager::setFile( QString sFile )
 {
-    close();
-    _sDBFile = sDBFile;
-    _DB.setDatabaseName( _sDBFile );
+    SettingManager *sm = getSettingManager();
+    sm->set( "database/file", sFile );
+
+    return initialize();
 }
 
 //! See if the SQL Lite file exists.
@@ -62,13 +66,13 @@ void DatabaseManager::setDBFile( QString sDBFile )
 */
 bool DatabaseManager::exists( void )
 {
-    if ( !QFile::exists( _sDBFile ) )
+    if ( !QFile::exists( _sFile ) )
     {
-        qDebug( "Database Manager: %s does not exist.", qPrintable( _sDBFile ) );
+        qDebug( "Database Manager: %s does not exist.", qPrintable( _sFile ) );
         return false;
     }
 
-    qDebug( "Database Manager: %s exists.", qPrintable( _sDBFile ) );
+    qDebug( "Database Manager: %s exists.", qPrintable( _sFile ) );
     return true;
 }
 
@@ -80,18 +84,18 @@ bool DatabaseManager::open( void )
 {
     if ( !_DB.open() ) // If database name (file) DNE it creates it then tries to open it
     {
-        qDebug( "Database Manager: Error opening %s: %s", qPrintable( _sDBFile ), qPrintable( _DB.lastError().databaseText() ) );
+        qDebug( "Database Manager: Error opening %s: %s", qPrintable( _sFile ), qPrintable( _DB.lastError().databaseText() ) );
         return false;
     }
 
-    qDebug( "Database Manager: Opened %s", qPrintable( _sDBFile ) );
+    qDebug( "Database Manager: Opened %s", qPrintable( _sFile ) );
     return true;
 }
 
 //! Closes the database.
 void DatabaseManager::close( void )
 {
-    qDebug( "Database Manager: Closed %s", qPrintable( _sDBFile ) );
+    qDebug( "Database Manager: Closed %s", qPrintable( _sFile ) );
     _DB.close();
 }
 
@@ -111,12 +115,12 @@ bool DatabaseManager::isOpen( void )
 bool DatabaseManager::remove( void )
 {
     close(); // Close the database if it is already open
-    bool bRemoved = QFile::remove( _sDBFile ); // Remove created database binary file
+    bool bRemoved = QFile::remove( _sFile ); // Remove created database binary file
 
     if ( bRemoved )
-        qDebug( "Database Manager: Removed %s", qPrintable( _sDBFile ) );
+        qDebug( "Database Manager: Removed %s", qPrintable( _sFile ) );
     else
-        qDebug( "Database Manager: Failed to remove %s", qPrintable( _sDBFile ) );
+        qDebug( "Database Manager: Failed to remove %s", qPrintable( _sFile ) );
 
     return bRemoved;
 }

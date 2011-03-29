@@ -19,67 +19,31 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent)
+MainWindow::MainWindow (QWidget *pParent ) :
+    QMainWindow( pParent )
 {
-    ui = new Ui::MainWindow;
-    ui->setupUi(this);
+    _pUI = new Ui::MainWindow;
+    _pUI->setupUi( this );
 
-    mdiArea = new QMdiArea;
-    mdiArea->setBackground( QBrush::QBrush( QColor::QColor( 128, 128, 128 ) ) );
-    mdiArea->setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );
-    mdiArea->setVerticalScrollBarPolicy( Qt::ScrollBarAsNeeded );
-    setCentralWidget( mdiArea );
-
-    if (!loadPlugin()) {
-        QMessageBox::information(this, "Error", "Could not load the plugin");
-    }
+    _pMDIArea = new QMdiArea;
+    _pMDIArea->setBackground( QBrush::QBrush( QColor::QColor( 128, 128, 128 ) ) );
+    _pMDIArea->setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );
+    _pMDIArea->setVerticalScrollBarPolicy( Qt::ScrollBarAsNeeded );
+    setCentralWidget( _pMDIArea );
 }
 
-MainWindow::~MainWindow()
+MainWindow::~MainWindow( void )
 {
-    delete ui;
+    delete _pUI;
 }
 
-bool MainWindow::loadPlugin()
+void MainWindow::registerPlugins( void )
 {
-    QDir pluginsDir(qApp->applicationDirPath());
-    qDebug( qPrintable( qApp->applicationDirPath() ) );
+    PluginManager *pm = getPluginManager();
 
-    #if defined(Q_OS_WIN)
-    if (pluginsDir.dirName().toLower() == "debug" || pluginsDir.dirName().toLower() == "release")
+    foreach ( MDIWindowPlugin *mdiWindowPlugin, pm->lMDIWindowPlugins )
     {
-        pluginsDir.cdUp();
-        pluginsDir.cdUp();
+        mdiWindowPlugin->menuBar( _pUI->menuTools );
+        mdiWindowPlugin->getInstance( this, _pMDIArea );
     }
-#elif defined(Q_OS_MAC)
-    if (pluginsDir.dirName() == "MacOS") {
-        pluginsDir.cdUp();
-        pluginsDir.cdUp();
-        pluginsDir.cdUp();
-    }
-#endif
-
-    pluginsDir.cd( "plugins" );
-
-    foreach (QString fileName, pluginsDir.entryList(QDir::Files))
-    {
-        QPluginLoader pluginLoader(pluginsDir.absoluteFilePath(fileName));
-        QObject *plugin = pluginLoader.instance();
-        if (plugin) {
-            DatabasePlugin *databasePlugin = qobject_cast<DatabasePlugin *>(plugin);
-            MDIWindowPlugin *mdiWindowPlugin = qobject_cast<MDIWindowPlugin *>(plugin);
-            if (databasePlugin)
-            {
-                _DatabasePlugin = databasePlugin;
-            }
-            if (mdiWindowPlugin)
-            {
-                _MDIWindowPlugin = mdiWindowPlugin;
-                _MDIWindowPlugin->menuBar( ui->menuTools );
-                _MDIWindowPlugin->getInstance( this, mdiArea );
-            }
-        }
-    }
-    return true;
 }

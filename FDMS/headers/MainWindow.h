@@ -25,9 +25,7 @@
 #include <QMdiArea>
 #include <QMessageBox>
 
-#include "plugins/DatabasePlugin.h"
-#include "plugins/MDIWindowPlugin.h"
-#include "MDIWindow.h"
+#include "managers/PluginManager.h"
 
 namespace Ui
 {
@@ -39,15 +37,14 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
     private:
-        Ui::MainWindow *ui;
-        QMdiArea                *mdiArea;
-        bool loadPlugin();
-        DatabasePlugin *_DatabasePlugin;
-        MDIWindowPlugin *_MDIWindowPlugin;
+        Ui::MainWindow              *_pUI;
+        QMdiArea                    *_pMDIArea;
 
     public:
-        MainWindow(QWidget *parent = 0);
-        ~MainWindow();
+                                    MainWindow( QWidget *pParent = 0 );
+                                    ~MainWindow( void );
+
+        void                        registerPlugins( void );
 };
 
 #endif // MAINWINDOW_H

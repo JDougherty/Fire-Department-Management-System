@@ -21,7 +21,7 @@
 
 #include "managers/SettingManager.h"
 
-SettingManager* GetSettingManager( void )
+SettingManager* getSettingManager( void )
 {
     static SettingManager sm;
     return &sm;
@@ -40,7 +40,14 @@ SettingManager::~SettingManager( void )
 void SettingManager::set( QString sKey, QVariant vValue )
 {
     _Entries.insert( sKey, vValue );
-    qDebug( "SettingManager: Set %s:%s", qPrintable( key ), qPrintable( value.toString() ) );
+    qDebug( "SettingManager: Set %s:%s", qPrintable( sKey ), qPrintable( vValue.toString() ) );
+}
+
+QVariant SettingManager::get( QString sKey )
+{
+
+    qDebug( "SettingManager: Get %s:%s", qPrintable( sKey ), qPrintable( _Entries[sKey].toString() ) );
+    return _Entries[sKey];
 }
 
 bool SettingManager::exists( void )
@@ -63,16 +70,16 @@ bool SettingManager::remove( void )
 void SettingManager::load( void )
 {
     QStringList keys = _pSettings->allKeys();
-    QVariant value;
+    QVariant vValue;
 
     qDebug( "SettingManager: Loading values from %s", qPrintable( _pSettings->fileName() ) );
     _Entries.clear();
 
-    foreach ( QString key, keys )
+    foreach ( QString sKey, keys )
     {
-        value = _pSettings->value( key );
-        _Entries.insert( key, value );
-        qDebug( "SettingManager: Loaded %s:%s", qPrintable( key ), qPrintable( value.toString() ) );
+        vValue = _pSettings->value( sKey );
+        _Entries.insert( sKey, vValue );
+        qDebug( "SettingManager: Loaded %s:%s", qPrintable( sKey ), qPrintable( vValue.toString() ) );
     }
 }
 

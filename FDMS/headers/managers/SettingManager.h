@@ -33,15 +33,17 @@ class SettingManager
         QMap<QString, QVariant>     _Entries;
 
     public:
-        friend SettingManager*      GetSettingManager( void );
+        friend SettingManager*      getSettingManager( void );
 
         void                        set( QString sKey, QVariant vValue );
+        QVariant                    get( QString sKey );
+
         bool                        exists( void );
         bool                        remove( void );
         void                        save( void );
         void                        load( void );
 };
 
-SettingManager* GetSettingManager();
+SettingManager* getSettingManager();
 
 #endif // SETTINGMANAGER_H

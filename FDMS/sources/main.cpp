@@ -18,6 +18,8 @@
 
 #include <QtGui/QApplication>
 
+#include "managers/DatabaseManager.h"
+#include "managers/PluginManager.h"
 #include "managers/SettingManager.h"
 #include "MainWindow.h"
 #include "wndSetup.h"
@@ -25,9 +27,22 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
-    wndSetup s(0);
+
+    DatabaseManager *dm = getDatabaseManager();
+    PluginManager *pm = getPluginManager();
+    SettingManager *sm = getSettingManager();
+
+    wndSetup s;
     s.show();
+
+   /* if ( !sm->exists() )
+    {
+        wndSetup s;
+    }
+
+
+    MainWindow w;
+    w.show();*/
+
     return a.exec();
 }

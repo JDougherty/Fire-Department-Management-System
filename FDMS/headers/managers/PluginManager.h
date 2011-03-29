@@ -19,19 +19,39 @@
 #ifndef PLUGINMANAGER_H
 #define PLUGINMANAGER_H
 
-#include <QObject>
+#include <QDir>
+#include <QList>
+#include <QPluginLoader>
 
-class PluginManager : public QObject
+#include "plugins/DatabasePlugin.h"
+#include "plugins/MDIWindowPlugin.h"
+#include "managers/SettingManager.h"
+
+class PluginManager
 {
     private:
                                     PluginManager( void );
                                     ~PluginManager( void );
 
-    public:
-        friend PluginManager*       GetPluginManager( void );
+        QString                     _sFolder; //!< Plugin folder path.
 
+    public:
+        friend PluginManager*       getPluginManager( void );
+
+        bool                        initialize( void );
+        bool                        setFolder( QString sFolder );
+
+        bool                        exists( void );
+
+        bool                        load( void );
+
+        DatabasePlugin*             GetDatabasePlugin( QString sName );
+        MDIWindowPlugin*            GetMDIWindowPlugin( QString sName );
+
+        QList<DatabasePlugin*>      lDatabasePlugins;
+        QList<MDIWindowPlugin*>     lMDIWindowPlugins;
 };
 
-PluginManager* GetPluginManager();
+PluginManager* getPluginManager();
 
 #endif // PLUGINMANAGER_H

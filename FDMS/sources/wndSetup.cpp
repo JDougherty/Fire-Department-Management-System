@@ -29,9 +29,6 @@ wndSetup::wndSetup( QWidget *pParent ) :
         QMainWindow( pParent ), _pUI( new Ui::wndSetup )
 {
     _pUI->setupUi( this );
-    _pDB = GetDatabaseManager();
-    _pSM = GetSettingManager();
-    //_pMW = pMW;
 
     _iInstallType = NOT_DEFINED;
 
@@ -154,6 +151,8 @@ void wndSetup::on_btnExInstDBSettings_clicked( void )
 */
 void wndSetup::on_btnExInstFinish_clicked( void )
 {
+    SettingManager *pSM = getSettingManager();
+    DatabaseManager *pDM = getDatabaseManager();
     QString sDBFile;
 
     _pUI->progExInstStatus->show();
@@ -186,8 +185,8 @@ void wndSetup::on_btnExInstFinish_clicked( void )
     _pUI->lblExInstStatus->setText( QString( "Opening the database." ) );
     _pUI->progExInstStatus->setValue( 30 );
 
-    _pDB->setDBFile( sDBFile );
-    if ( !_pDB->open() )
+    pDM->setFile( sDBFile );
+    if ( !pDM->open() )
     {
         QMessageBox::critical( this, "Critical Error", "Database could not be opened.", QMessageBox::Ok );
         qCritical( "Setup: Critical Error - Database: Could not be opened." );
@@ -198,7 +197,7 @@ void wndSetup::on_btnExInstFinish_clicked( void )
     _pUI->lblExInstStatus->setText( QString( "Verifying the database." ) );
     _pUI->progExInstStatus->setValue( 50 );
 
-    if ( !_pDB->verify() )
+    if ( !pDM->verify() )
     {
         QMessageBox::critical( this, "Critical Error", "Database has an invalid structure.", QMessageBox::Ok );
         qCritical( "Setup: Critical Error - Database: Invalid structure." );
@@ -210,8 +209,8 @@ void wndSetup::on_btnExInstFinish_clicked( void )
     _pUI->lblExInstStatus->setText( QString( "Saving configuration file." ) );
     _pUI->progExInstStatus->setValue( 80 );
 
-    _pSM->set( "database/file", sDBFile );
-    _pSM->save();
+    pSM->set( "database/file", sDBFile );
+    pSM->save();
 
     // All done
     _pUI->lblExInstStatus->setText( QString( "Finished." ) );
@@ -287,6 +286,8 @@ void wndSetup::on_btnNewInstDBSettings_clicked( void )
 */
 void wndSetup::on_btnNewInstFinish_clicked( void )
 {
+    SettingManager *pSM = getSettingManager();
+    DatabaseManager *pDM = getDatabaseManager();
     QString sDBLocation;
     QString sDBFile;
 
@@ -324,8 +325,8 @@ void wndSetup::on_btnNewInstFinish_clicked( void )
     sDBFile.append( QDir::separator() ).append( "fdms.db" );
     sDBFile = QDir::toNativeSeparators( sDBFile );
 
-    _pDB->setDBFile( sDBFile );
-    if ( _pDB->exists() )
+    pDM->setFile( sDBFile );
+    if ( pDM->exists() )
     {
         int iResult = QMessageBox::question( this, "Overwrite database?", "Database file already exists in this directory.\nOverwrite the file?",
                                              QMessageBox::Yes | QMessageBox::No );
@@ -333,7 +334,7 @@ void wndSetup::on_btnNewInstFinish_clicked( void )
         switch ( iResult )
         {
            case QMessageBox::Yes:
-               _pDB->remove();
+               pDM->remove();
                break;
            case QMessageBox::No:
                _pUI->tabWidget->setCurrentIndex( 2 ); // tabNewInstDBSettings
@@ -348,7 +349,7 @@ void wndSetup::on_btnNewInstFinish_clicked( void )
          }
     }
 
-    if ( !_pDB->open() )
+    if ( !pDM->open() )
     {
         QMessageBox::critical( this, "Critical Error", "Database could not be opened.", QMessageBox::Ok );
         qCritical( "Setup: Critical Error - Database: Could not be opened." );
@@ -359,7 +360,7 @@ void wndSetup::on_btnNewInstFinish_clicked( void )
     _pUI->lblNewInstStatus->setText( QString( "Building the database." ) );
     _pUI->progNewInstStatus->setValue( 45 );
 
-    if ( !_pDB->create() )
+    if ( !pDM->create() )
     {
         QMessageBox::critical( this, "Critical Error", "Database could not be created.", QMessageBox::Ok );
         qCritical( "Setup: Critical Error - Database: Could not be created." );
@@ -370,7 +371,7 @@ void wndSetup::on_btnNewInstFinish_clicked( void )
     _pUI->lblNewInstStatus->setText( QString( "Verifying the database." ) );
     _pUI->progNewInstStatus->setValue( 60 );
 
-    if ( !_pDB->verify() )
+    if ( !pDM->verify() )
     {
         QMessageBox::critical( this, "Critical Error", "Database has an invalid structure.", QMessageBox::Ok );
         qCritical( "Setup: Critical Error - Database: Invalid structure." );
@@ -382,8 +383,8 @@ void wndSetup::on_btnNewInstFinish_clicked( void )
     _pUI->progNewInstStatus->setValue( 80 );
     _pUI->lblNewInstStatus->setText( QString( "Saving configuration file." ) );
 
-    _pSM->set( "database/file", sDBFile );
-    _pSM->save();
+    pSM->set( "database/file", sDBFile );
+    pSM->save();
 
     // All done
     _pUI->lblNewInstStatus->setText( QString( "Finished." ) );

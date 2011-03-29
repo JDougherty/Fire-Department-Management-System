@@ -49,9 +49,6 @@ class wndSetup : public QMainWindow
         };
 
         Ui::wndSetup                *_pUI;
-        DatabaseManager             *_pDB;
-        SettingManager              *_pSM;
-        //MainWindow                *_pMW;
 
         int                         _iInstallType;
 
@@ -73,7 +70,7 @@ class wndSetup : public QMainWindow
         void                        changeEvent( QEvent *e );
 
     public:
-                                    wndSetup( QWidget *pParent );
+                                    wndSetup( QWidget *pParent = 0 );
                                     ~wndSetup( void );
 };
 

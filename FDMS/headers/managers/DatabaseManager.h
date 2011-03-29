@@ -38,21 +38,16 @@
 #include <QComboBox>
 #include <QCheckBox>
 
+#include "managers/SettingManager.h"
+
 //! Handles a DB connection and verifies DB integrity.
 /*!
   Basically a wrapper for QSqlDatabase.
 */
-class DatabaseManager : public QObject
+class DatabaseManager
 {
     private:
-        QSqlDatabase                _DB;
-
-        QString                     _sDBFile; //!< DB file path.
-
-        QMap<QString, QMap<QString, QString> > _queryMap; //!< Dictionary containing UI queries
-
                                     DatabaseManager( void );
-                                    DatabaseManager( QString sDBFile );
                                     ~DatabaseManager( void );
 
         bool                        createTables( void );
@@ -61,10 +56,15 @@ class DatabaseManager : public QObject
         QSqlQuery                   bindValues( QWidget *pWidget, QString sQuery, QString sTabName = "" );
         QList<QWidget *>            getWidgets( QWidget *pWidget, QString sTabName );
 
-    public:
-        friend DatabaseManager*     GetDatabaseManager( void );
+        QSqlDatabase                _DB;
 
-        void                        setDBFile( QString sDBFile );
+        QString                     _sFile; //!< DB file path.
+
+    public:
+        friend DatabaseManager*     getDatabaseManager( void );
+
+        bool                        initialize( void );
+        bool                        setFile( QString sFile );
 
         bool                        exists( void );
         bool                        open( void );
@@ -82,6 +82,6 @@ class DatabaseManager : public QObject
         QSqlError                   lastError( void );
 };
 
-DatabaseManager* GetDatabaseManager();
+DatabaseManager* getDatabaseManager();
 
 #endif

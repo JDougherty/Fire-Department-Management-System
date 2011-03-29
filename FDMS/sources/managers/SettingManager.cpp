@@ -37,6 +37,12 @@ SettingManager::~SettingManager( void )
     delete _pSettings;
 }
 
+void SettingManager::set( QString sKey, QVariant vValue )
+{
+    _Entries.insert( sKey, vValue );
+    qDebug( "SettingManager: Set %s:%s", qPrintable( key ), qPrintable( value.toString() ) );
+}
+
 bool SettingManager::exists( void )
 {
     if ( !QFile::exists( _pSettings->fileName() ) )
@@ -65,15 +71,19 @@ void SettingManager::load( void )
     foreach ( QString key, keys )
     {
         value = _pSettings->value( key );
-        _Entries.push_back( QPair<QString, QVariant>( key, value ) );
-        qDebug( "SettingManager: %s:%s", qPrintable( key ), qPrintable( value.toString() ) );
+        _Entries.insert( key, value );
+        qDebug( "SettingManager: Loaded %s:%s", qPrintable( key ), qPrintable( value.toString() ) );
     }
 }
 
 void SettingManager::save( void )
 {
     qDebug( "SettingManager: Saving values to %s", qPrintable( _pSettings->fileName() ) );
-    _pSettings->beginGroup( "database" );
-    _pSettings->setValue( "file", "somefilepath" );
-    _pSettings->endGroup();
+
+    QMapIterator<QString, QVariant> itr( _Entries );
+    while ( itr.hasNext() )
+    {
+        itr.next();
+        _pSettings->setValue( itr.key(), itr.value() );
+    }
 }

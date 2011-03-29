@@ -18,16 +18,16 @@
 
 #include <QtGui/QApplication>
 
-#include "MainWindow.h"
 #include "managers/SettingManager.h"
+#include "MainWindow.h"
+#include "wndSetup.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     MainWindow w;
     w.show();
-    SettingManager *sm = GetSettingManager();
-    sm->save();
-    sm->load();
+    wndSetup s(0);
+    s.show();
     return a.exec();
 }

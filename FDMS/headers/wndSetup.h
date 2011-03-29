@@ -14,17 +14,17 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 */
 
 #ifndef WNDSETUP_H
 #define WNDSETUP_H
 
+#include <QFileDialog>
 #include <QMainWindow>
 #include <QMessageBox>
-#include "databasemanager.h"
-#include "settingsmanager.h"
-#include "mainwindow.h"
+
+#include "managers/DatabaseManager.h"
+#include "managers/SettingManager.h"
 
 namespace Ui
 {
@@ -48,33 +48,33 @@ class wndSetup : public QMainWindow
             EXISTING_INST   /*!< Connect to an existing DB. */
         };
 
-        Ui::wndSetup            *_pUI;
-        DatabaseManager         *_pDB;
-        SettingsManager         *_pSM;
-        MainWindow              *_pMW;
+        Ui::wndSetup                *_pUI;
+        DatabaseManager             *_pDB;
+        SettingManager              *_pSM;
+        //MainWindow                *_pMW;
 
-        int                     _iInstallType;
+        int                         _iInstallType;
 
-        void                    clearAndHideProgressBars( void );
+        void                        clearAndHideProgressBars( void );
 
     private slots:
-        void                    on_btnExInstFinish_clicked( void );
-        void                    on_btnExInstDBSettings_clicked( void );
-        void                    on_btnNewInstFinish_clicked( void );
-        void                    on_btnNewInstDBSettings_clicked( void );
-        void                    on_btnNewInstFDSettings_clicked( void );
-        void                    on_btnExInstDBFile_clicked( void );
-        void                    on_radioExInst_clicked( void );
-        void                    on_radioNewInst_clicked( void );
-        void                    on_btnSetupContinue_clicked( void );
-        void                    on_btnNewInstDBLocation_clicked( void );
+        void                        on_btnExInstFinish_clicked( void );
+        void                        on_btnExInstDBSettings_clicked( void );
+        void                        on_btnNewInstFinish_clicked( void );
+        void                        on_btnNewInstDBSettings_clicked( void );
+        void                        on_btnNewInstFDSettings_clicked( void );
+        void                        on_btnExInstDBFile_clicked( void );
+        void                        on_radioExInst_clicked( void );
+        void                        on_radioNewInst_clicked( void );
+        void                        on_btnSetupContinue_clicked( void );
+        void                        on_btnNewInstDBLocation_clicked( void );
 
     protected:
-        void                    changeEvent( QEvent *e );
+        void                        changeEvent( QEvent *e );
 
     public:
-                                wndSetup( QWidget *pParent, DatabaseManager *newDb, SettingsManager *sm, MainWindow *pMW );
-                                ~wndSetup( void );
+                                    wndSetup( QWidget *pParent );
+                                    ~wndSetup( void );
 };
 
 #endif // WNDSETUP_H

@@ -14,18 +14,14 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 */
 
-#include "../headers/databasemanager.h"
-#include "../headers/wndactivecall.h"
-#include "../headers/wndactivedrill.h"
-#include "../headers/wndfirefighter.h"
+#include "managers/DatabaseManager.h"
 
-DatabaseManager* DatabaseInstance( void )
+DatabaseManager* GetDatabaseManager( void )
 {
-        static DatabaseManager db;
-        return &db;
+    static DatabaseManager dbm;
+    return &dbm;
 }
 
 DatabaseManager::DatabaseManager( void )
@@ -135,16 +131,6 @@ bool DatabaseManager::create( void )
     return createTables();
 }
 
-void DatabaseManager::buildQueries( void )
-{
-    wndActiveCall *temp = new wndActiveCall( 0, this );
-    temp->BuildQueries( );
-    wndActiveDrill *temp2 = new wndActiveDrill( 0, this );
-    temp2->BuildQueries( );
-    wndFirefighter *temp3 = new wndFirefighter( 0, this );
-    temp3->BuildQueries( );
-}
-
 //! Creates the tables in the SQL Lite database.
 /*!
   \return bool - Successfully created the tables.
@@ -251,7 +237,7 @@ bool DatabaseManager::createTables( void )
         }
     }
 
-    return wndActiveCall::Create( this );
+    return true;
 }
 
 //! Verifies the database's integrity.
@@ -306,9 +292,9 @@ bool DatabaseManager::verifyTables( void )
     QString chksum = md5bytearray.toHex().constData();
 
     // And compare to expected value
-    if ( chksum != "bf3ff44dca466e437936daa42c85cc49" )
+    if ( chksum != "c6bc29f4490a6d43302b6c76605b7c2a" )
     {
-        qDebug( "Database Manager: Invalid structure. Expected chksum bf3ff44dca466e437936daa42c85cc49, but got %s", qPrintable( chksum ) );
+        qDebug( "Database Manager: Invalid structure. Expected chksum c6bc29f4490a6d43302b6c76605b7c2a, but got %s", qPrintable( chksum ) );
         return false;
     }
 
@@ -403,220 +389,4 @@ QSqlQuery DatabaseManager::bindValues( QWidget *pWidget, QString sQuery, QString
     }
 
     return query;
-}
-
-//! Builds the queries for all of the widgets in the focus chain.
-/*!
-  \param sTableName Name of the DB table.
-  \param pWidget First widget in the chain.
-  \param sTabName Name of the UI tab (optional).
-*/
-void DatabaseManager::buildQueries( QWidget *pWidget, QString sTableName, QString sTabName )
-{
-    QString sCreateQuery, sSelectQuery, sInsertQuery, sInsertQueryValues, sUpdateQuery, sDeleteQuery, sDBObjName, sObjName;
-    QList<QWidget *> lWidgets;
-    QWidget *pTmpWidget;
-
-    lWidgets = getWidgets( pWidget, sTabName );
-
-    qDebug( "Database Manager: Generating queries for '%s' table.", qPrintable( sTableName ) );
-
-    sCreateQuery = "CREATE TABLE " + sTableName + "(id INTEGER PRIMARY KEY,";
-    sSelectQuery = "SELECT ";
-    sInsertQuery = "INSERT INTO " + sTableName + " ( ";
-    sInsertQueryValues = " VALUES ( ";
-    sUpdateQuery = "UPDATE " + sTableName + " SET ";
-
-    foreach ( pTmpWidget, lWidgets )
-    {
-        sDBObjName = pTmpWidget->objectName();
-
-        if ( sDBObjName.startsWith( "DB_TEXT" ) )
-        {
-            sObjName = sDBObjName.right( sDBObjName.size() - 8 );
-            sCreateQuery += sObjName + " TEXT,";
-        }
-        else if ( sDBObjName.startsWith( "DB_INT" ) )
-        {
-            sObjName = sDBObjName.right( sDBObjName.size() - 7 );
-            sCreateQuery += sObjName + " INTEGER,";
-        }
-        else if ( sDBObjName.startsWith( "DB_DATE" ) )
-        {
-            sObjName = sDBObjName.right( sDBObjName.size() - 8 );
-            sCreateQuery += sObjName + " INTEGER,";
-        }
-        else if ( sDBObjName.startsWith( "DB_CHECK" ) )
-        {
-            sObjName = sDBObjName.right( sDBObjName.size() - 9 );
-            sCreateQuery += sObjName + " INTEGER,";
-        }
-        else
-        {
-            qWarning( "Database Manager: Unrecognized DB field type '%s'.", qPrintable( sDBObjName ) );
-            continue;
-        }
-
-        sSelectQuery += sObjName + ",";
-
-        sInsertQuery += sObjName + ",";
-        sInsertQueryValues += ":" + sDBObjName + ",";
-
-        sUpdateQuery += sObjName + " = :" + sDBObjName + ",";
-    }
-
-    sCreateQuery.replace( sCreateQuery.size() - 1, 1, QChar( ')' ) ); // replace the last char with ')'
-
-    sSelectQuery.replace( sSelectQuery.size() - 1, 1, QChar( ' ' ) ); // replace the last char with ' '
-    sSelectQuery += "FROM " + sTableName + " WHERE id = :id";
-
-    sInsertQuery.replace( sInsertQuery.size() - 1, 1, QChar( ')' ) ); // replace the last char with ')'
-    sInsertQueryValues.replace( sInsertQueryValues.size() - 1, 1, QChar( ')' ) ); // replace the last char with ')'
-    sInsertQuery += sInsertQueryValues;
-
-    sUpdateQuery.replace( sUpdateQuery.size() - 1, 1, QChar( ' ' ) ); // replace the last char with ' '
-    sUpdateQuery += "WHERE id = :id";
-
-    sDeleteQuery = "DELETE FROM " + sTableName + " WHERE id = :id";
-
-    QMap<QString, QString> uiQueries;
-    uiQueries.insert( "create", sCreateQuery );
-    uiQueries.insert( "select", sSelectQuery );
-    uiQueries.insert( "insert", sInsertQuery );
-    uiQueries.insert( "update", sUpdateQuery );
-    uiQueries.insert( "delete", sDeleteQuery );
-    _queryMap.insert( sTableName, uiQueries );
-
-    qDebug( "Database Manager: '%s' create query: %s", qPrintable( sTableName ), qPrintable( sCreateQuery ) );
-    qDebug( "Database Manager: '%s' select query: %s", qPrintable( sTableName ), qPrintable( sSelectQuery ) );
-    qDebug( "Database Manager: '%s' insert query: %s", qPrintable( sTableName ), qPrintable( sInsertQuery ) );
-    qDebug( "Database Manager: '%s' update query: %s", qPrintable( sTableName ), qPrintable( sUpdateQuery ) );
-    qDebug( "Database Manager: '%s' delete query: %s", qPrintable( sTableName ), qPrintable( sDeleteQuery ) );
-}
-
-bool DatabaseManager::selectUI( int iID, QWidget *pWidget, QString sTableName, QString sTabName )
-{
-    QList<QWidget *> lWidgets = getWidgets( pWidget, sTabName );
-    QWidget *pTmpWidget;
-
-    QSqlQuery selectQuery;
-    selectQuery.prepare( _queryMap[sTableName]["select"] );
-    selectQuery.bindValue( ":id", iID );
-
-    if ( !query( selectQuery ) )
-    {
-        qWarning( "Database Manager: Could not select from table '%s' entry #%d: %s",
-                  qPrintable( sTableName ), iID, qPrintable( selectQuery.lastError().text() ) );
-        return false;
-    }
-
-    selectQuery.next();
-
-    QVariant result;
-    int i = 0;
-    foreach ( pTmpWidget, lWidgets )
-    {
-        QLineEdit *tmplineedit = qobject_cast<QLineEdit *>( pTmpWidget );
-        QDateTimeEdit *tmpdatetime = qobject_cast<QDateTimeEdit *>( pTmpWidget );
-        QComboBox *tmpcombo = qobject_cast<QComboBox *>( pTmpWidget );
-        QCheckBox *tmpcheck = qobject_cast<QCheckBox *>( pTmpWidget );
-
-        result = selectQuery.value( i );
-        if ( !result.isValid() )
-            break;
-
-        if ( tmplineedit )
-        {
-            tmplineedit->setText( result.toString() );
-        }
-        else if ( tmpdatetime )
-        {
-            tmpdatetime->setDate( result.toDate() );
-        }
-        else if ( tmpcheck )
-        {
-            tmpcheck->setCheckState( result.toBool() ? Qt::Checked : Qt::Unchecked );
-        }
-
-        i++;
-    }
-
-    qDebug( "Database Manager: Selected entry #%d from table '%s'.", iID, qPrintable( sTableName ) );
-
-    return true;
-}
-
-int DatabaseManager::insertUI( QWidget *pWidget, QString sTableName, QString sTabName )
-{
-    QSqlQuery insertQuery = bindValues( pWidget, _queryMap[sTableName]["insert"], sTabName );
-
-    if ( !query( insertQuery ) )
-    {
-        qWarning( "Database Manager: Could not insert new entry in table '%s': %s",
-                  qPrintable( sTableName ), qPrintable( insertQuery.lastError().text() ) );
-        return -1;
-    }
-
-    int iID = insertQuery.lastInsertId().toInt();
-
-    qDebug( "Database Manager: Inserted entry #%d in table '%s'.", iID, qPrintable( sTableName ) );
-
-    return iID;
-}
-
-bool DatabaseManager::updateUI( int iID, QWidget *pWidget, QString sTableName, QString sTabName )
-{
-    QSqlQuery updateQuery = bindValues( pWidget, _queryMap[sTableName]["update"], sTabName );
-
-    updateQuery.bindValue( ":id", iID );
-
-    if ( !query( updateQuery ) )
-    {
-        qWarning( "Database Manager: Could not update entry #%d in table '%s': %s",
-                  iID, qPrintable( sTableName ), qPrintable( updateQuery.lastError().text() ) );
-        return false;
-    }
-
-    qDebug( "Database Manager: Updated entry #%d in table '%s'.", iID, qPrintable( sTableName ) );
-
-    return true;
-}
-
-bool DatabaseManager::createUI( QString sTableName )
-{
-    QSqlQuery createQuery;
-
-    createQuery.prepare( _queryMap[sTableName]["create"] );
-
-    if ( !query( createQuery ) )
-    {
-        qWarning( "Database Manager: Could not create table '%s': %s",
-                  qPrintable( sTableName ), qPrintable( createQuery.lastError().text() ) );
-        return false;
-    }
-
-    qDebug( "Database Manager: Created table '%s'.", qPrintable( sTableName ) );
-
-    return true;
-}
-
-
-bool DatabaseManager::deleteUI( int iID, QString sTableName )
-{
-    QSqlQuery removeQuery;
-
-    removeQuery.prepare( _queryMap[sTableName]["delete"] );
-
-    removeQuery.bindValue( ":id", iID );
-
-    if ( !query( removeQuery ) )
-    {
-        qWarning( "Database Manager: Could not delete entry #%d table '%s': %s",
-                  iID, qPrintable( sTableName ), qPrintable( removeQuery.lastError().text() ) );
-        return false;
-    }
-
-    qDebug( "Database Manager: Deleted entry #%d from table '%s'.", iID, qPrintable( sTableName ) );
-
-    return true;
 }

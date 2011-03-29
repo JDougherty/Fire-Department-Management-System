@@ -18,3 +18,6 @@ DESTDIR = ../plugins
 
 FORMS += \
     wndfirefighter.ui
+
+RESOURCES += \
+    resources.qrc

@@ -30,11 +30,12 @@ class SettingManager
 
         QSettings                   *_pSettings;
 
-        QList<QPair<QString, QVariant> > _Entries;
+        QMap<QString, QVariant>     _Entries;
 
     public:
         friend SettingManager*      GetSettingManager( void );
 
+        void                        set( QString sKey, QVariant vValue );
         bool                        exists( void );
         bool                        remove( void );
         void                        save( void );

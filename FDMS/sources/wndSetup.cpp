@@ -14,12 +14,10 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 */
 
-#include <QFileDialog>
-#include "../headers/wndsetup.h"
-#include "ui_wndsetup.h"
+#include "wndSetup.h"
+#include "ui_wndSetup.h"
 
 /*!
   \param pParent Pointer to the parent widget.
@@ -27,13 +25,13 @@
   \param pSM Pointer to the settings manager; saves program configuration.
   \param pMW Pointer to the main window; called when setup is complete.
 */
-wndSetup::wndSetup( QWidget *pParent, DatabaseManager *pDB, SettingsManager *pSM, MainWindow *pMW ) :
+wndSetup::wndSetup( QWidget *pParent ) :
         QMainWindow( pParent ), _pUI( new Ui::wndSetup )
 {
     _pUI->setupUi( this );
-    _pDB = pDB;
-    _pSM = pSM;
-    _pMW = pMW;
+    _pDB = GetDatabaseManager();
+    _pSM = GetSettingManager();
+    //_pMW = pMW;
 
     _iInstallType = NOT_DEFINED;
 
@@ -212,14 +210,14 @@ void wndSetup::on_btnExInstFinish_clicked( void )
     _pUI->lblExInstStatus->setText( QString( "Saving configuration file." ) );
     _pUI->progExInstStatus->setValue( 80 );
 
-    _pSM->setDBFile( sDBFile );
+    _pSM->set( "database/file", sDBFile );
     _pSM->save();
 
     // All done
     _pUI->lblExInstStatus->setText( QString( "Finished." ) );
     _pUI->progExInstStatus->setValue( 100 );
 
-    _pMW->showMaximized();
+    //_pMW->showMaximized();
     hide();
 }
 
@@ -384,13 +382,13 @@ void wndSetup::on_btnNewInstFinish_clicked( void )
     _pUI->progNewInstStatus->setValue( 80 );
     _pUI->lblNewInstStatus->setText( QString( "Saving configuration file." ) );
 
-    _pSM->setDBFile( sDBFile );
+    _pSM->set( "database/file", sDBFile );
     _pSM->save();
 
     // All done
     _pUI->lblNewInstStatus->setText( QString( "Finished." ) );
     _pUI->progNewInstStatus->setValue( 100 );
 
-    _pMW->showMaximized();
+    //_pMW->showMaximized();
     hide();
 }

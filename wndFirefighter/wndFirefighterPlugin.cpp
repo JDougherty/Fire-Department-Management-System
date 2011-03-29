@@ -23,7 +23,9 @@
 
 void wndFirefighterPlugin::menuBar( QMenu *pMenuBar )
 {
-    pMenuBar->addAction( "Add Firefighter" );
+    QIcon icon;
+    icon.addFile(QString::fromUtf8(":/icons/AddFirefighter.png"), QSize(), QIcon::Normal, QIcon::Off);
+    pMenuBar->addAction( icon, "Add Firefighter" );
 }
 
 MDIWindow* wndFirefighterPlugin::getInstance( QWidget *pParent )

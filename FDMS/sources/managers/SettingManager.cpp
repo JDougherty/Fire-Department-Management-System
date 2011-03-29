@@ -34,7 +34,28 @@ SettingManager::SettingManager( void )
 
 SettingManager::~SettingManager( void )
 {
+    save();
     delete _pSettings;
+}
+
+bool SettingManager::initialize( void )
+{
+    if ( !exists() ) return false;
+
+    load();
+    return true;
+}
+
+bool SettingManager::exists( void )
+{
+    if ( !QFile::exists( _pSettings->fileName() ) )
+    {
+        qDebug( "SettingManager: %s does not exist.", qPrintable( _pSettings->fileName() ) );
+        return false;
+    }
+
+    qDebug( "SettingManager: %s exists.", qPrintable( _pSettings->fileName() ) );
+    return true;
 }
 
 void SettingManager::set( QString sKey, QVariant vValue )
@@ -48,18 +69,6 @@ QVariant SettingManager::get( QString sKey )
 
     qDebug( "SettingManager: Get %s:%s", qPrintable( sKey ), qPrintable( _Entries[sKey].toString() ) );
     return _Entries[sKey];
-}
-
-bool SettingManager::exists( void )
-{
-    if ( !QFile::exists( _pSettings->fileName() ) )
-    {
-        qDebug( "SettingManager: %s does not exist.", qPrintable( _pSettings->fileName() ) );
-        return false;
-    }
-
-    qDebug( "SettingManager: %s exists.", qPrintable( _pSettings->fileName() ) );
-    return true;
 }
 
 bool SettingManager::remove( void )

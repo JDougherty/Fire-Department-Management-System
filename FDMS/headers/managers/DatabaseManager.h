@@ -64,7 +64,9 @@ class DatabaseManager
         friend DatabaseManager*     getDatabaseManager( void );
 
         bool                        initialize( void );
+
         bool                        setFile( QString sFile );
+        bool                        removeFile( void );
 
         bool                        exists( void );
         bool                        open( void );
@@ -73,7 +75,6 @@ class DatabaseManager
 
         bool                        create( void );
         bool                        verify( void );
-        bool                        remove( void );
 
         void                        buildQueries( QWidget *pWidget, QString sTableName, QString sTabName = "" );
 

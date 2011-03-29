@@ -16,13 +16,13 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "MainWindow.h"
-#include "ui_MainWindow.h"
+#include "wndMain.h"
+#include "ui_wndMain.h"
 
-MainWindow::MainWindow (QWidget *pParent ) :
+wndMain::wndMain (QWidget *pParent ) :
     QMainWindow( pParent )
 {
-    _pUI = new Ui::MainWindow;
+    _pUI = new Ui::wndMain;
     _pUI->setupUi( this );
 
     _pMDIArea = new QMdiArea;
@@ -32,12 +32,12 @@ MainWindow::MainWindow (QWidget *pParent ) :
     setCentralWidget( _pMDIArea );
 }
 
-MainWindow::~MainWindow( void )
+wndMain::~wndMain( void )
 {
     delete _pUI;
 }
 
-void MainWindow::registerPlugins( void )
+void wndMain::registerPlugins( void )
 {
     PluginManager *pm = getPluginManager();
 

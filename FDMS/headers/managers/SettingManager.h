@@ -35,6 +35,8 @@ class SettingManager
     public:
         friend SettingManager*      getSettingManager( void );
 
+        bool                        initialize( void );
+
         void                        set( QString sKey, QVariant vValue );
         QVariant                    get( QString sKey );
 

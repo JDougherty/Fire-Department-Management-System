@@ -6,23 +6,25 @@ UI_DIR = ui/
 INCLUDEPATH += headers
 
 SOURCES += sources/main.cpp \
-    sources/MainWindow.cpp \
+    sources/wndMain.cpp \
     sources/managers/PluginManager.cpp \
     sources/managers/SettingManager.cpp \
     sources/wndSetup.cpp \
     sources/managers/DatabaseManager.cpp
 	
-HEADERS += headers/MainWindow.h \
+HEADERS += \
     headers/MDIWindow.h \
     headers/plugins/MDIWindowPlugin.h \
     headers/plugins/DatabasePlugin.h \
     headers/managers/PluginManager.h \
     headers/managers/SettingManager.h \
     headers/wndSetup.h \
-    headers/managers/DatabaseManager.h
+    headers/managers/DatabaseManager.h \
+    headers/wndMain.h
 
-FORMS += forms/MainWindow.ui \
-    forms/wndSetup.ui
+FORMS += \
+    forms/wndSetup.ui \
+    forms/wndMain.ui
 
 RESOURCES += \
     resources/resources.qrc

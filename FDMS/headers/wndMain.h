@@ -29,20 +29,20 @@
 
 namespace Ui
 {
-    class MainWindow;
+    class wndMain;
 }
 
-class MainWindow : public QMainWindow
+class wndMain : public QMainWindow
 {
     Q_OBJECT
 
     private:
-        Ui::MainWindow              *_pUI;
+        Ui::wndMain                 *_pUI;
         QMdiArea                    *_pMDIArea;
 
     public:
-                                    MainWindow( QWidget *pParent = 0 );
-                                    ~MainWindow( void );
+                                    wndMain( QWidget *pParent = 0 );
+                                    ~wndMain( void );
 
         void                        registerPlugins( void );
 };

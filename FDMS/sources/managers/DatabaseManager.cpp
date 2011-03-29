@@ -60,13 +60,30 @@ bool DatabaseManager::setFile( QString sFile )
     return initialize();
 }
 
+//! Deletes the SQLite database file.
+/*!
+  \return bool - Successfully deleted the db file.
+*/
+bool DatabaseManager::removeFile( void )
+{
+    close(); // Close the database if it is already open
+    bool bRemoved = QFile::remove( _sFile ); // Remove created database binary file
+
+    if ( bRemoved )
+        qDebug( "Database Manager: Removed %s", qPrintable( _sFile ) );
+    else
+        qDebug( "Database Manager: Failed to remove %s", qPrintable( _sFile ) );
+
+    return bRemoved;
+}
+
 //! See if the SQL Lite file exists.
 /*!
   \return bool - DB file exists.
 */
 bool DatabaseManager::exists( void )
 {
-    if ( !QFile::exists( _sFile ) )
+    if ( _sFile == QString::null || !QFile::exists( _sFile ) )
     {
         qDebug( "Database Manager: %s does not exist.", qPrintable( _sFile ) );
         return false;
@@ -92,13 +109,6 @@ bool DatabaseManager::open( void )
     return true;
 }
 
-//! Closes the database.
-void DatabaseManager::close( void )
-{
-    qDebug( "Database Manager: Closed %s", qPrintable( _sFile ) );
-    _DB.close();
-}
-
 //! Checks if the database is open or not.
 /*!
   \return bool - DB opened.
@@ -108,21 +118,11 @@ bool DatabaseManager::isOpen( void )
     return _DB.isOpen();
 }
 
-//! Deletes the SQLite database file.
-/*!
-  \return bool - Successfully deleted the db file.
-*/
-bool DatabaseManager::remove( void )
+//! Closes the database.
+void DatabaseManager::close( void )
 {
-    close(); // Close the database if it is already open
-    bool bRemoved = QFile::remove( _sFile ); // Remove created database binary file
-
-    if ( bRemoved )
-        qDebug( "Database Manager: Removed %s", qPrintable( _sFile ) );
-    else
-        qDebug( "Database Manager: Failed to remove %s", qPrintable( _sFile ) );
-
-    return bRemoved;
+    qDebug( "Database Manager: Closed %s", qPrintable( _sFile ) );
+    _DB.close();
 }
 
 //! Creates the SQLite database file.
@@ -306,15 +306,6 @@ bool DatabaseManager::verifyTables( void )
     return true;
 }
 
-//! Wrapper to return the SQLite database last error.
-/*!
-  \return QSqlError - Returned by the SQLite database.
-*/
-QSqlError DatabaseManager::lastError( void )
-{
-    return _DB.lastError();
-}
-
 //! Executes a query through the database.
 /*!
   \param query QSqlQuery which has been prepared and bound upon.
@@ -325,6 +316,15 @@ bool DatabaseManager::query( QSqlQuery &query )
    bool ret = query.exec();
    qDebug( "Database Manager: Executing Query: %s", qPrintable( query.executedQuery() ) );
    return ret;
+}
+
+//! Wrapper to return the SQLite database last error.
+/*!
+  \return QSqlError - Returned by the SQLite database.
+*/
+QSqlError DatabaseManager::lastError( void )
+{
+    return _DB.lastError();
 }
 
 //! Gets a list of all of the matching DB widgets.

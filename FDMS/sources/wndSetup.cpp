@@ -21,13 +21,11 @@
 
 /*!
   \param pParent Pointer to the parent widget.
-  \param pDB Pointer to the database manager; for opening, building, and verifying the DB.
-  \param pSM Pointer to the settings manager; saves program configuration.
-  \param pMW Pointer to the main window; called when setup is complete.
 */
 wndSetup::wndSetup( QWidget *pParent ) :
-        QMainWindow( pParent ), _pUI( new Ui::wndSetup )
+        QMainWindow( pParent )
 {
+    _pUI = new Ui::wndSetup;
     _pUI->setupUi( this );
 
     _iInstallType = NOT_DEFINED;
@@ -209,14 +207,12 @@ void wndSetup::on_btnExInstFinish_clicked( void )
     _pUI->lblExInstStatus->setText( QString( "Saving configuration file." ) );
     _pUI->progExInstStatus->setValue( 80 );
 
-    pSM->set( "database/file", sDBFile );
     pSM->save();
 
     // All done
     _pUI->lblExInstStatus->setText( QString( "Finished." ) );
     _pUI->progExInstStatus->setValue( 100 );
 
-    //_pMW->showMaximized();
     hide();
 }
 
@@ -334,7 +330,7 @@ void wndSetup::on_btnNewInstFinish_clicked( void )
         switch ( iResult )
         {
            case QMessageBox::Yes:
-               pDM->remove();
+               pDM->removeFile();
                break;
            case QMessageBox::No:
                _pUI->tabWidget->setCurrentIndex( 2 ); // tabNewInstDBSettings
@@ -383,13 +379,11 @@ void wndSetup::on_btnNewInstFinish_clicked( void )
     _pUI->progNewInstStatus->setValue( 80 );
     _pUI->lblNewInstStatus->setText( QString( "Saving configuration file." ) );
 
-    pSM->set( "database/file", sDBFile );
     pSM->save();
 
     // All done
     _pUI->lblNewInstStatus->setText( QString( "Finished." ) );
     _pUI->progNewInstStatus->setValue( 100 );
 
-    //_pMW->showMaximized();
     hide();
 }

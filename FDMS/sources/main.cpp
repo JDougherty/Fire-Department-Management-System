@@ -21,28 +21,69 @@
 #include "managers/DatabaseManager.h"
 #include "managers/PluginManager.h"
 #include "managers/SettingManager.h"
-#include "MainWindow.h"
+#include "wndMain.h"
 #include "wndSetup.h"
 
-int main(int argc, char *argv[])
+int main( int argc, char *argv[] )
 {
-    QApplication a(argc, argv);
+    QApplication application( argc, argv );
+    SettingManager *pSM = getSettingManager();
+    DatabaseManager *pDM = getDatabaseManager();
+    PluginManager *pPM = getPluginManager();
 
-    DatabaseManager *dm = getDatabaseManager();
-    PluginManager *pm = getPluginManager();
-    SettingManager *sm = getSettingManager();
-
-    wndSetup s;
-    s.show();
-
-   /* if ( !sm->exists() )
+    if ( !pSM->initialize() )
     {
+        qDebug( "Running setup." );
         wndSetup s;
+        s.show();
+        return application.exec();
     }
 
+    if ( !pDM->initialize() )
+    {
+        int iResult = QMessageBox::critical( 0, "Error", "Database Manager could not be initialized. Run setup?", QMessageBox::Yes | QMessageBox::No );
 
-    MainWindow w;
-    w.show();*/
+        switch ( iResult )
+        {
+            case QMessageBox::Yes:
+            {
+                qDebug( "Running setup." );
+                wndSetup s;
+                s.show();
+                return application.exec();
+            }
+            case QMessageBox::No:
+            {
+                QMessageBox::critical( 0, "Error", "Startup cannnot continue. Closing program.", QMessageBox::Ok );
+                qCritical( "Startup cannot continue." );
+                return 0;
+            }
+        }
+    }
 
-    return a.exec();
+    if ( !pPM->initialize() )
+    {
+        int iResult = QMessageBox::critical( 0, "Error", "Plugin Manager could not be initialized. Run setup?", QMessageBox::Yes | QMessageBox::No );
+
+        switch ( iResult )
+        {
+            case QMessageBox::Yes:
+            {
+                qDebug( "Running program setup." );
+                wndSetup s;
+                s.show();
+                return application.exec();
+            }
+            case QMessageBox::No:
+            {
+                QMessageBox::critical( 0, "Error", "Startup cannnot continue. Closing program.", QMessageBox::Ok );
+                qCritical( "Startup cannot continue." );
+                return 0;
+            }
+        }
+    }
+
+    wndMain w;
+    w.show();
+    return application.exec();
 }

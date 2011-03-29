@@ -58,7 +58,7 @@ bool PluginManager::setFolder( QString sFolder )
 */
 bool PluginManager::exists( void )
 {
-    if ( !QDir( _sFolder ).exists() )
+    if ( _sFolder == QString::null || !QDir( _sFolder ).exists() )
     {
         qDebug( "PluginManager: %s folder does not exist.", qPrintable( _sFolder ) );
         return false;

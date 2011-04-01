@@ -17,46 +17,293 @@
 */
 
 #include "wndSetup.h"
-#include "ui_wndSetup.h"
+
+pgIntro::pgIntro( QWidget *pParent )
+    : QWizardPage( pParent )
+{
+    QVBoxLayout *pBoxLayout = new QVBoxLayout;
+    QFont font;
+
+    setTitle( tr( "Setup Information" ) );
+
+    pLabelIntro = new QLabel( tr( "Welcome to the setup for the Fire Department Management System. "
+                            "Please select an installation process below. Refer to the documentation "
+                            "if you are unsure of what a specific step requires." ) );
+    pLabelOptions = new QLabel( tr( "If you are seeing this window, your FDMS configuration file was not "
+                                  "found. If this is not your first time launching the Fire Department "
+                                  "Management System, you may wish to close this window now and refer to "
+                                  "the documentation for restoring the program." ) );
+
+    pRadioNewInstallation = new QRadioButton( tr( "Set up a new instace of the Fire Department Management System " ) );
+    pRadioExistingInstallation = new QRadioButton( tr( "Connect to an existing instance of the Fire Department "
+                                                       "Management System") );
+
+    pBoxLayout->addWidget( pLabelIntro );
+    pBoxLayout->addSpacing( 15 );
+    pBoxLayout->addWidget( pLabelOptions );
+    pBoxLayout->addSpacing( 40 );
+    pBoxLayout->addWidget( pRadioNewInstallation );
+    pBoxLayout->addWidget( pRadioExistingInstallation );
+
+    setLayout( pBoxLayout );
+
+    pRadioNewInstallation->setChecked( true );
+
+    registerField( "newInstallation", pRadioNewInstallation );
+    registerField( "existingInstallation", pRadioExistingInstallation );
+
+    font.setPointSize( 10 );
+    pLabelIntro->setFont( font );
+    pLabelOptions->setFont( font );
+    pRadioNewInstallation->setFont( font );
+    pRadioExistingInstallation->setFont( font );
+
+    pLabelIntro->setWordWrap( true );
+    pLabelOptions->setWordWrap( true );
+}
+
+int pgIntro::nextId( void ) const
+{
+    if ( pRadioNewInstallation->isChecked() )
+        return wndSetup::NewDatabase;
+    else
+        return wndSetup::ExistingDatabase;
+}
+
+pgNewDatabase::pgNewDatabase( QWidget *pParent )
+    : QWizardPage( pParent )
+{
+    QGridLayout *pGridLayout = new QGridLayout();
+    QFont font;
+
+    setTitle( tr( "Database Settings" ) );
+
+    pLabelFolder = new QLabel( tr( "Database Folder" ) );
+    pLineEditFolder = new QLineEdit();
+    pButtonFolder = new QPushButton( tr( "Browse..." ) );
+
+    pGridLayout->addWidget( pLabelFolder, 0, 0 );
+    pGridLayout->addWidget( pLineEditFolder, 0, 1 );
+    pGridLayout->addWidget( pButtonFolder, 0, 3 );
+
+    setLayout( pGridLayout );
+
+    registerField( "database.folder*", pLineEditFolder );
+    connect( pButtonFolder, SIGNAL( clicked() ), this, SLOT( browse() ) );
+
+    pLineEditFolder->setReadOnly( true );
+
+    font.setPointSize( 10 );
+    pLabelFolder->setFont( font );
+    pButtonFolder->setFont( font );
+}
+
+int pgNewDatabase::nextId( void ) const
+{
+    return wndSetup::Plugins;
+}
+
+void pgNewDatabase::cleanupPage( void )
+{
+    pLineEditFolder->setText( tr( "" ) );
+}
+
+void pgNewDatabase::browse( void )
+{
+    QString sFolder =  QFileDialog::getExistingDirectory( this, "Select the database folder.", QString::null, QFileDialog::ShowDirsOnly );
+
+    if ( !sFolder.isEmpty() )
+    {
+        qDebug( "Setup: Database folder: %s", qPrintable( sFolder ) );
+        pLineEditFolder->setText( sFolder );
+    }
+}
+
+pgExistingDatabase::pgExistingDatabase( QWidget *pParent )
+    : QWizardPage( pParent )
+{
+    QGridLayout *pGridLayout = new QGridLayout();
+    QFont font;
+
+    setTitle( tr( "Database Settings" ) );
+
+    pLabelFile = new QLabel( tr( "Database File" ) );
+    pLineEditFile= new QLineEdit();
+    pButtonFile = new QPushButton( tr( "Browse..." ) );
+
+    pGridLayout->addWidget( pLabelFile, 0, 0 );
+    pGridLayout->addWidget( pLineEditFile, 0, 1 );
+    pGridLayout->addWidget( pButtonFile, 0, 3 );
+
+    setLayout( pGridLayout );
+
+    registerField( "database.file*", pLineEditFile );
+    connect( pButtonFile, SIGNAL( clicked() ), this, SLOT( browse() ) );
+
+    pLineEditFile->setReadOnly( true );
+
+    font.setPointSize( 10 );
+    pLabelFile->setFont( font );
+    pButtonFile->setFont( font );
+}
+
+int pgExistingDatabase::nextId( void ) const
+{
+    return wndSetup::Plugins;
+}
+
+bool pgExistingDatabase::isComplete( void )
+{
+    DatabaseManager *dbm = getDatabaseManager();
+
+    if ( !QFile::exists( pLineEditFile->text() ) )
+    {
+        QMessageBox::critical( this, "Error", "Please select a database file that exists.", QMessageBox::Ok );
+        return false;
+    }
+
+    dbm->setFile( pLineEditFile->text() );
+    if ( !dbm->open() )
+    {
+        QMessageBox::critical( this, "Error", "Database could not be opened.", QMessageBox::Ok );
+        return false;
+    }
+
+    if ( !dbm->verify() )
+    {
+        QMessageBox::critical( this, "Error", "Database has an invalid structure.", QMessageBox::Ok );
+        return false;
+    }
+
+    return true;
+}
+
+void pgExistingDatabase::cleanupPage( void )
+{
+    pLineEditFile->setText( tr( "" ) );
+}
+
+void pgExistingDatabase::browse( void )
+{
+    QString sFile = QFileDialog::getOpenFileName( this, "Select the database file.", QString::null, "*.db" );
+
+    if ( !sFile.isEmpty() )
+    {
+        qDebug( "Setup: Database file: %s", qPrintable( sFile ) );
+        pLineEditFile->setText( sFile );
+    }
+}
+
+void pgPlugins::addPlugin( QAbstractItemModel *model, const QString &name, const QString &version, const QString &filename )
+{
+    model->insertRow( 0 );
+    //model->setData( model->index( 0, 0 ), Qt::Unchecked, Qt::CheckStateRole );
+    model->setData( model->index( 0, 0 ), name );
+    model->setData( model->index( 0, 1 ), version );
+    model->setData( model->index( 0, 2 ), filename );
+}
+
+pgPlugins::pgPlugins( QWidget *pParent )
+    : QWizardPage( pParent )
+{
+    QGridLayout *pGridLayout = new QGridLayout();
+    QVBoxLayout *pBoxLayout = new QVBoxLayout();
+    QFont font;
+
+    setTitle( tr( "Plugin Settings" ) );
+
+    pLabelFolder = new QLabel( tr( "Plugin Folder" ) );
+    pLineEditFolder = new QLineEdit();
+    pButtonFolder = new QPushButton( tr( "Browse..." ) );
+    pGroupBoxPlugins = new QGroupBox( tr( "Plugins" ) );
+    pTreeViewPlugins = new QTreeView();
+
+    pGridLayout->addWidget( pLabelFolder, 0, 0 );
+    pGridLayout->addWidget( pLineEditFolder, 0, 1 );
+    pGridLayout->addWidget( pButtonFolder, 0, 3 );
+    pGridLayout->setRowMinimumHeight( 1, 15 );
+    pGridLayout->addWidget( pGroupBoxPlugins, 2, 0, 3, 0 );
+    pBoxLayout->addWidget( pTreeViewPlugins );
+
+    pGroupBoxPlugins->setLayout( pBoxLayout );
+    setLayout( pGridLayout );
+
+    registerField( "plugins.folder*", pLineEditFolder );
+    connect( pButtonFolder, SIGNAL( clicked() ), this, SLOT( browse() ) );
+
+    pTreeViewPlugins->setSelectionMode( QTreeView::MultiSelection );
+    pTreeViewPlugins->setSelectionBehavior( QAbstractItemView::SelectRows );
+    pTreeViewPlugins->setEditTriggers( QAbstractItemView::NoEditTriggers );
+    pTreeViewPlugins->setRootIsDecorated( false );
+    pTreeViewPlugins->setSortingEnabled( true );
+
+    pLineEditFolder->setReadOnly( true );
+
+    font.setPointSize( 10 );
+    pLabelFolder->setFont( font );
+    pButtonFolder->setFont( font );
+}
+
+void pgPlugins::cleanupPage( void )
+{
+    QStandardItemModel *model = new QStandardItemModel( 0, 0, this );
+    pTreeViewPlugins->setModel( model );
+    pLineEditFolder->setText( tr( "" ) );
+    qDebug ("AAAAAAAAA");
+}
+
+void pgPlugins::browse( void )
+{
+    QString sFolder =  QFileDialog::getExistingDirectory( this, "Select the plugin folder.", QString::null, QFileDialog::ShowDirsOnly );
+
+    if ( !sFolder.isEmpty() )
+    {
+        qDebug( "Setup: Plugin folder: %s", qPrintable( sFolder ) );
+        pLineEditFolder->setText( sFolder );
+
+        QStandardItemModel *model = new QStandardItemModel( 0, 3, this );
+        //model->setHeaderData( 0, Qt::Horizontal, QObject::tr( " " ) );
+        model->setHeaderData( 0, Qt::Horizontal, QObject::tr( "Name" ) );
+        model->setHeaderData( 1, Qt::Horizontal, QObject::tr( "File Name" ) );
+        model->setHeaderData( 2, Qt::Horizontal, QObject::tr( "Version" ) );
+        addPlugin( model, "Firefighter", "firefighterd.dll", "1.0" );
+        addPlugin( model, "wndFirefighter", "wndfirefighterd.dll", "1.0" );
+
+        pTreeViewPlugins->setModel( model );
+
+        //pTreeViewPlugins->header()->resizeSection( 0, 30 );
+        pTreeViewPlugins->header()->resizeSection( 0, 200 );
+        pTreeViewPlugins->header()->resizeSection( 1, 200 );
+        pTreeViewPlugins->header()->resizeSection( 2, 100 );
+    }
+}
 
 /*!
   \param pParent Pointer to the parent widget.
 */
 wndSetup::wndSetup( QWidget *pParent ) :
-        QMainWindow( pParent )
+        QWizard( pParent )
 {
-    _pUI = new Ui::wndSetup;
-    _pUI->setupUi( this );
+    QIcon icon;
 
-    _iInstallType = NOT_DEFINED;
+    icon.addFile( QString::fromUtf8(":/icons/Icon.png"), QSize(), QIcon::Normal, QIcon::Off );
 
-    // Doesnt delete the tabs
-    _pUI->tabWidget->removeTab( 5 ); // tabExInstFinish
-    _pUI->tabWidget->removeTab( 4 ); // tabExInstDBSettings
-    _pUI->tabWidget->removeTab( 3 ); // tabNewInstFinish
-    _pUI->tabWidget->removeTab( 2 ); // tabNewInstDBSettings
-    _pUI->tabWidget->removeTab( 1 ); // tabNewInstFDSettings
+    setWindowTitle( tr( "Fire Department Management System" ) );
+    setWindowIcon( icon );
+    setWizardStyle( QWizard::ClassicStyle );
+    setMinimumSize( 650, 400 );
+    setMaximumSize( 650, 400 );
+
+    setPage( Intro, new pgIntro );
+    setPage( NewDatabase, new pgNewDatabase );
+    setPage( ExistingDatabase, new pgExistingDatabase );
+    setPage( Plugins, new pgPlugins );
 
     clearAndHideProgressBars();
 }
 
 wndSetup::~wndSetup( void )
 {
-    delete _pUI;
-}
-
-void wndSetup::changeEvent( QEvent *e )
-{
-    QMainWindow::changeEvent( e );
-
-    switch ( e->type() )
-    {
-        case QEvent::LanguageChange:
-            _pUI->retranslateUi( this );
-            break;
-        default:
-            break;
-    }
 }
 
 //! Hides and resets the progress bars and status labels.
@@ -65,7 +312,7 @@ void wndSetup::changeEvent( QEvent *e )
 */
 void wndSetup::clearAndHideProgressBars( void )
 {
-    _pUI->progExInstStatus->setValue( 0 );
+   /*_pUI->progExInstStatus->setValue( 0 );
     _pUI->progExInstStatus->hide();
     _pUI->lblExInstStatus->setText( QString::null );
     _pUI->lblExInstStatus->hide();
@@ -73,30 +320,74 @@ void wndSetup::clearAndHideProgressBars( void )
     _pUI->progNewInstStatus->setValue( 0 );
     _pUI->progNewInstStatus->hide();
     _pUI->lblNewInstStatus->setText( QString::null );
-    _pUI->lblNewInstStatus->hide();
+    _pUI->lblNewInstStatus->hide();*/
 }
 
 //! User clicked "Continue" on the main setup tab
 void wndSetup::on_btnSetupContinue_clicked( void )
 {
-    if ( _pUI->radioExInst->isChecked() || _pUI->radioNewInst->isChecked() )
+    /*if ( _pUI->radioExInst->isChecked() || _pUI->radioNewInst->isChecked() )
     {
         _pUI->tabWidget->setCurrentIndex( 1 );
     }
     else
     {
         QMessageBox::warning( this, "Error", "Please select an installation option.", QMessageBox::Ok );
-    }
+    }*/
 }
 
-/*
-    Using an existing instance
-*/
+//! User clicked browse button to select plugin folder
+void wndSetup::on_btnPluginSettingsFolder_clicked( void )
+{
+    /*QString sPluginFolder =  QFileDialog::getExistingDirectory( this, "", QString::null, QFileDialog::ShowDirsOnly );
+
+    if ( !sPluginFolder.isEmpty() )
+    {
+        qDebug( "Setup: Plugin path: %s", qPrintable( sPluginFolder ) );
+        _pUI->lePluginSettingsFolder->setText( sPluginFolder );
+
+        QStringList plugins = PluginManager::findPlugins( sPluginFolder );
+
+                // Hide the primary key column
+                //_pUI->tblResults->hideColumn( 0 );
+
+        QStringList a;
+        a << "aaaaa" << "BBBB" << "CCCCC" << "DDDD";
+        QStandardItemModel model(4, 4);
+        model.setHorizontalHeaderLabels(a);
+        for (int row = 0; row < 4; ++row) {
+            for (int column = 0; column < 4; ++column) {
+                QStandardItem *item = new QStandardItem(QString("row %0, column %1").arg(row).arg(column));
+                model.setItem(row, column, item);
+            }
+        }
+
+        //model.setHeaderData(0, Qt::Horizontal, "AAAAAAA");
+        _pUI->tblPluginSettingsPlugins->setModel(&model);
+    }*/
+}
+
+//! User clicked "Continue" on the plugin settings tab
+void wndSetup::on_btnPluginSettings_clicked( void )
+{
+    /*if ( _pUI->leExInstDBLocation->text().isEmpty() )
+    {
+        QMessageBox::warning( this, "Error", "Please select a plugin folder.", QMessageBox::Ok );
+    }
+    else
+    {
+         _pUI->tabWidget->setCurrentIndex( 2 );
+    }*/
+}
+
+/*****************************************************************************************************************/
+/* EXISTING INSTANCE                                                                                             */
+/*****************************************************************************************************************/
 
 //! User chose to connect to an existing instance
 void wndSetup::on_radioExInst_clicked( void )
 {
-    // Clicking the radio button even if checked calls this function so see if we need to do anything
+    /*// Clicking the radio button even if checked calls this function so see if we need to do anything
     if ( _iInstallType != EXISTING_INST )
     {
         qDebug( "Setup: User wants to install an existing instance." );
@@ -104,42 +395,44 @@ void wndSetup::on_radioExInst_clicked( void )
         // got to hide the tabs for existing installation
         if ( _iInstallType == NEW_INST )
         {
-            _pUI->tabWidget->removeTab( 3 ); // tabNewInstFinish
-            _pUI->tabWidget->removeTab( 2 ); // tabNewInstDBSettings
-            _pUI->tabWidget->removeTab( 1 ); // tabNewInstFDSettings
+            _pUI->tabWidget->removeTab( 4 ); // tabNewInstFinish
+            _pUI->tabWidget->removeTab( 3 ); // tabNewInstDBSettings
+            _pUI->tabWidget->removeTab( 2 ); // tabNewInstFDSettings
+            _pUI->tabWidget->removeTab( 1 ); // tabPluginSettings
         }
 
         // add back the tabs for the new installation
-        _pUI->tabWidget->addTab( _pUI->tabExInstDBSettings, "Step 1: Database Settings" );
+        _pUI->tabWidget->addTab( _pUI->tabPluginSettings, "Step 1: Plugin Settings" );
+        _pUI->tabWidget->addTab( _pUI->tabExInstDBSettings, "Step 2: Database Settings" );
 
         _iInstallType = EXISTING_INST;
-    }
+    }*/
 }
 
 //! User clicked browse button to select DB file
 void wndSetup::on_btnExInstDBFile_clicked( void )
 {
-    QString sDBFile = QFileDialog::getOpenFileName( this, "Select the database file.", QString::null, "*.db" );
+    /*QString sDBFile = QFileDialog::getOpenFileName( this, "Select the database file.", QString::null, "*.db" );
 
     if ( !sDBFile.isEmpty() )
     {
         qDebug( "Setup: Database file: %s", qPrintable( sDBFile ) );
         _pUI->leExInstDBLocation->setText( sDBFile );
-    }
+    }*/
 }
 
 //! User clicked "Continue" on DB Settings tab
 void wndSetup::on_btnExInstDBSettings_clicked( void )
 {
-    if ( _pUI->leExInstDBLocation->text().isEmpty() )
+    /*if ( _pUI->leExInstDBLocation->text().isEmpty() )
     {
         QMessageBox::warning( this, "Error", "Please select a database file.", QMessageBox::Ok );
     }
     else
     {
         _pUI->tabWidget->addTab( _pUI->tabExInstFinish, "Finish" );
-        _pUI->tabWidget->setCurrentIndex( 2 ); // tabExInstFinish
-    }
+        _pUI->tabWidget->setCurrentIndex( 3 ); // tabExInstFinish
+    }*/
 }
 
 //! User clicked "Finish"
@@ -149,7 +442,7 @@ void wndSetup::on_btnExInstDBSettings_clicked( void )
 */
 void wndSetup::on_btnExInstFinish_clicked( void )
 {
-    SettingManager *pSM = getSettingManager();
+    /*SettingManager *pSM = getSettingManager();
     DatabaseManager *pDM = getDatabaseManager();
     QString sDBFile;
 
@@ -163,7 +456,7 @@ void wndSetup::on_btnExInstFinish_clicked( void )
     sDBFile = _pUI->leExInstDBLocation->text();
     if ( sDBFile == "" )
     {
-        _pUI->tabWidget->setCurrentIndex( 1 ); // tabExInstDBSettings
+        _pUI->tabWidget->setCurrentIndex( 2 ); // tabExInstDBSettings
         QMessageBox::warning( this, "Error", "Please select a database file.", QMessageBox::Ok );
         clearAndHideProgressBars();
         return;
@@ -173,7 +466,7 @@ void wndSetup::on_btnExInstFinish_clicked( void )
 
     if ( !QFile::exists( sDBFile ) )
     {
-        _pUI->tabWidget->setCurrentIndex( 1 ); // tabExInstDBSettings
+        _pUI->tabWidget->setCurrentIndex( 2 ); // tabExInstDBSettings
         QMessageBox::warning( this, "Error", "Please select a file that exists.", QMessageBox::Ok );
         clearAndHideProgressBars();
         return;
@@ -213,17 +506,17 @@ void wndSetup::on_btnExInstFinish_clicked( void )
     _pUI->lblExInstStatus->setText( QString( "Finished." ) );
     _pUI->progExInstStatus->setValue( 100 );
 
-    hide();
+    hide();*/
 }
 
-/*
-    Installing a new instance
-*/
+/*****************************************************************************************************************/
+/* NEW INSTANCE                                                                                                  */
+/*****************************************************************************************************************/
 
 //! User chose to setup a new FDMS instance
 void wndSetup::on_radioNewInst_clicked( void )
 {
-    // Clicking the radio button even if checked calls this function so see if we need to do anything
+    /*// Clicking the radio button even if checked calls this function so see if we need to do anything
     if ( _iInstallType != NEW_INST )
     {
         qDebug( "Setup: User wants to install a new instance." );
@@ -231,48 +524,50 @@ void wndSetup::on_radioNewInst_clicked( void )
         // got to hide the tabs for existing installation
         if ( _iInstallType == EXISTING_INST )
         {
-            _pUI->tabWidget->removeTab( 2 ); // tabExInstFinish
-            _pUI->tabWidget->removeTab( 1 ); // tabExInstDBSettings
+            _pUI->tabWidget->removeTab( 3 ); // tabExInstFinish
+            _pUI->tabWidget->removeTab( 2 ); // tabExInstDBSettings
+            _pUI->tabWidget->removeTab( 1 ); // tabPluginSettings
         }
 
         // add back the tabs for the new installation
-        _pUI->tabWidget->addTab( _pUI->tabNewInstFDSettings, "Step 1: Fire Department Information" );
-        _pUI->tabWidget->addTab( _pUI->tabNewInstDBSettings, "Step 2: Database Settings" );
+        _pUI->tabWidget->addTab( _pUI->tabPluginSettings, "Step 1: Plugin Settings" );
+        _pUI->tabWidget->addTab( _pUI->tabNewInstFDSettings, "Step 2: Fire Department Information" );
+        _pUI->tabWidget->addTab( _pUI->tabNewInstDBSettings, "Step 3: Database Settings" );
 
         _iInstallType = NEW_INST;
-    }
-}
-
-//! User clicked browse button to select DB location
-void wndSetup::on_btnNewInstDBLocation_clicked( void )
-{
-    QString sDBLocation =  QFileDialog::getExistingDirectory( this, "", QString::null, QFileDialog::ShowDirsOnly );
-
-    if ( !sDBLocation.isEmpty() )
-    {
-        qDebug( "Setup: Database path: %s", qPrintable( sDBLocation ) );
-        _pUI->leNewInstDBLocation->setText( sDBLocation );
-    }
+    }*/
 }
 
 //! User clicked "Continue" on FD Settings tab
 void wndSetup::on_btnNewInstFDSettings_clicked( void )
 {
-     _pUI->tabWidget->setCurrentIndex( 2 ); // tabNewInstDBSettings
+     //_pUI->tabWidget->setCurrentIndex( 3 ); // tabNewInstDBSettings
+}
+
+//! User clicked browse button to select DB location
+void wndSetup::on_btnNewInstDBLocation_clicked( void )
+{
+    /*QString sDBLocation =  QFileDialog::getExistingDirectory( this, "", QString::null, QFileDialog::ShowDirsOnly );
+
+    if ( !sDBLocation.isEmpty() )
+    {
+        qDebug( "Setup: Database path: %s", qPrintable( sDBLocation ) );
+        _pUI->leNewInstDBLocation->setText( sDBLocation );
+    }*/
 }
 
 //! User clicked "Continue" on DB Settings tab
 void wndSetup::on_btnNewInstDBSettings_clicked( void )
 {
-    if ( _pUI->leNewInstDBLocation->text().isEmpty() )
+    /*if ( _pUI->leNewInstDBLocation->text().isEmpty() )
     {
         QMessageBox::warning( this, "Error", "Please select a location to place the database file.", QMessageBox::Ok );
     }
     else
     {
          _pUI->tabWidget->addTab( _pUI->tabNewInstFinish, "Finish" );
-        _pUI->tabWidget->setCurrentIndex( 3 ); // tabNewInstFinish
-    }
+        _pUI->tabWidget->setCurrentIndex( 4 ); // tabNewInstFinish
+    }*/
 }
 
 //! User clicked "Finish"
@@ -282,7 +577,7 @@ void wndSetup::on_btnNewInstDBSettings_clicked( void )
 */
 void wndSetup::on_btnNewInstFinish_clicked( void )
 {
-    SettingManager *pSM = getSettingManager();
+    /*SettingManager *pSM = getSettingManager();
     DatabaseManager *pDM = getDatabaseManager();
     QString sDBLocation;
     QString sDBFile;
@@ -297,7 +592,7 @@ void wndSetup::on_btnNewInstFinish_clicked( void )
     sDBLocation = _pUI->leNewInstDBLocation->text();
     if ( sDBLocation == "" )
     {
-        _pUI->tabWidget->setCurrentIndex( 2 ); // tabNewInstDBSettings
+        _pUI->tabWidget->setCurrentIndex( 3 ); // tabNewInstDBSettings
         QMessageBox::warning( this, "Error", "Please select a location to place the database file.", QMessageBox::Ok );
         clearAndHideProgressBars();
         return;
@@ -307,7 +602,7 @@ void wndSetup::on_btnNewInstFinish_clicked( void )
 
     if ( !QFile::exists( sDBLocation ) )
     {
-        _pUI->tabWidget->setCurrentIndex( 2 ); // tabNewInstDBSettings
+        _pUI->tabWidget->setCurrentIndex( 3 ); // tabNewInstDBSettings
         QMessageBox::warning( this, "Error", "Please select a location that exists.", QMessageBox::Ok );
         clearAndHideProgressBars();
         return;
@@ -385,5 +680,5 @@ void wndSetup::on_btnNewInstFinish_clicked( void )
     _pUI->lblNewInstStatus->setText( QString( "Finished." ) );
     _pUI->progNewInstStatus->setValue( 100 );
 
-    hide();
+    hide();*/
 }

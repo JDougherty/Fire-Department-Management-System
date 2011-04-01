@@ -38,6 +38,8 @@ class PluginManager
     public:
         friend PluginManager*       getPluginManager( void );
 
+        static QStringList          findPlugins( QString sFolder );
+
         bool                        initialize( void );
         bool                        setFolder( QString sFolder );
 
@@ -45,8 +47,8 @@ class PluginManager
 
         bool                        load( void );
 
-        DatabasePlugin*             GetDatabasePlugin( QString sName );
-        MDIWindowPlugin*            GetMDIWindowPlugin( QString sName );
+        DatabasePlugin*             getDatabasePlugin( QString sName );
+        MDIWindowPlugin*            getMDIWindowPlugin( QString sName );
 
         QList<DatabasePlugin*>      lDatabasePlugins;
         QList<MDIWindowPlugin*>     lMDIWindowPlugins;

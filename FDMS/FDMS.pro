@@ -23,7 +23,6 @@ HEADERS += \
     headers/wndMain.h
 
 FORMS += \
-    forms/wndSetup.ui \
     forms/wndMain.ui
 
 RESOURCES += \

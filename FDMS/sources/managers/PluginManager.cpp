@@ -92,9 +92,9 @@ bool PluginManager::load( void )
     lDatabasePlugins.clear();
     lMDIWindowPlugins.clear();
 
-    foreach ( QString fileName, pluginsDir.entryList( QDir::Files ) )
+    foreach ( QString sFileName, pluginsDir.entryList( QDir::Files ) )
     {
-        QPluginLoader pluginLoader( pluginsDir.absoluteFilePath( fileName ) );
+        QPluginLoader pluginLoader( pluginsDir.absoluteFilePath( sFileName ) );
         QObject *plugin = pluginLoader.instance();
 
         if ( plugin )
@@ -113,4 +113,28 @@ bool PluginManager::load( void )
         }
     }
     return true;
+}
+
+QStringList PluginManager::findPlugins( QString sFolder )
+{
+    QDir pluginsDir( sFolder );
+    QStringList plugins;
+
+    foreach ( QString sFileName, pluginsDir.entryList( QDir::Files ) )
+    {
+        QPluginLoader pluginLoader( pluginsDir.absoluteFilePath( sFileName ) );
+        QObject *plugin = pluginLoader.instance();
+
+        if ( plugin )
+        {
+            DatabasePlugin *databasePlugin = qobject_cast<DatabasePlugin*>( plugin );
+            MDIWindowPlugin *mdiWindowPlugin = qobject_cast<MDIWindowPlugin*>( plugin );
+
+            if ( databasePlugin || mdiWindowPlugin )
+            {
+                plugins.append( sFileName );
+            }
+        }
+    }
+    return plugins;
 }

@@ -16,19 +16,22 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef FIREFIGHTER_H
-#define FIREFIGHTER_H
+#include "FirefighterPlugin.h"
 
-#include <QObject>
-#include "plugins/DatabasePlugin.h"
-
-class Firefighter : public QObject, DatabasePlugin
+PluginInfo FirefighterPlugin::getPluginInfo( void )
 {
-    Q_OBJECT
-    Q_INTERFACES(DatabasePlugin)
+    return PluginInfo( "Firefighter", "0.01" );
+}
 
-    public:
-        QString                     echo(const QString &message);
-};
+DependencyList FirefighterPlugin::getDependencies( void )
+{
+    DependencyList dependencies;
+    return dependencies;
+}
 
-#endif // FIREFIGHTER_H
+QString FirefighterPlugin::echo(const QString &message)
+{
+    return message + "AAAAAAAAAAA";
+}
+
+Q_EXPORT_PLUGIN2( firefighter, FirefighterPlugin );

@@ -36,6 +36,8 @@
 #include "managers/DatabaseManager.h"
 #include "managers/PluginManager.h"
 #include "managers/SettingManager.h"
+#include "plugins/BasePlugin.h"
+#include "plugins/DependencyList.h"
 
 //! The interface and logic for setting up the FDMS.
 /*!
@@ -155,6 +157,7 @@ class pgPlugins : public QWizardPage
     public:
                                     pgPlugins( QWidget *pParent = 0 );
 
+        bool                        isComplete( void ) ;
         void                        cleanupPage( void );
 };
 

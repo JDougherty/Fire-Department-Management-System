@@ -154,24 +154,24 @@ int pgExistingDatabase::nextId( void ) const
 
 bool pgExistingDatabase::isComplete( void )
 {
-    DatabaseManager *dbm = getDatabaseManager();
+    DatabaseManager *pDBM = getDatabaseManager();
 
     if ( !QFile::exists( pLineEditFile->text() ) )
     {
-        QMessageBox::critical( this, "Error", "Please select a database file that exists.", QMessageBox::Ok );
+        QMessageBox::critical( this, tr( "Error" ), tr( "Please select a database file that exists." ), QMessageBox::Ok );
         return false;
     }
 
-    dbm->setFile( pLineEditFile->text() );
-    if ( !dbm->open() )
+    pDBM->setFile( pLineEditFile->text() );
+    if ( !pDBM->open() )
     {
-        QMessageBox::critical( this, "Error", "Database could not be opened.", QMessageBox::Ok );
+        QMessageBox::critical( this, tr( "Error" ), tr( "Database could not be opened." ), QMessageBox::Ok );
         return false;
     }
 
-    if ( !dbm->verify() )
+    if ( !pDBM->verify() )
     {
-        QMessageBox::critical( this, "Error", "Database has an invalid structure.", QMessageBox::Ok );
+        QMessageBox::critical( this, tr( "Error" ), tr( "Database has an invalid structure." ), QMessageBox::Ok );
         return false;
     }
 
@@ -185,11 +185,11 @@ void pgExistingDatabase::cleanupPage( void )
 
 void pgExistingDatabase::browse( void )
 {
-    QString sFile = QFileDialog::getOpenFileName( this, "Select the database file.", QString::null, "*.db" );
+    QString sFile = QFileDialog::getOpenFileName( this, tr( "Select the database file." ), QString::null, "*.db" );
 
     if ( !sFile.isEmpty() )
     {
-        qDebug( "Setup: Database file: %s", qPrintable( sFile ) );
+        qDebug( qPrintable( tr( "Setup: Database file: %s" ) ), qPrintable( sFile ) );
         pLineEditFile->setText( sFile );
     }
 }
@@ -244,37 +244,92 @@ pgPlugins::pgPlugins( QWidget *pParent )
     pButtonFolder->setFont( font );
 }
 
+bool pgPlugins::isComplete( void )
+{
+    PluginManager *pPM = getPluginManager();
+    bool bAllMet, bMet;
+
+    foreach ( BasePlugin *pPlugin1, pPM->lDatabasePlugins )
+    {
+        bAllMet = true;
+        foreach ( PluginInfo dependency, pPlugin1->getDependencies() )
+        {
+            bMet = false;
+            foreach ( BasePlugin *pPlugin2, pPM->lDatabasePlugins )
+            {
+                if ( pPlugin2->getPluginInfo() == dependency )
+                {
+                    bMet = true;
+                    break;
+                }
+            }
+
+            if ( !bMet )
+            {
+                bAllMet = false;
+                break;
+            }
+        }
+
+        if ( !bAllMet )
+        {
+            QMessageBox::critical( this, tr( "Error" ), tr( "Plugin " ) + pPlugin1->getPluginInfo().getName() +
+                                   tr( "requires " ) + pPlugin1->getDependencies().toString() + "." );
+            return false;
+        }
+    }
+
+    return true;
+}
+
 void pgPlugins::cleanupPage( void )
 {
     QStandardItemModel *model = new QStandardItemModel( 0, 0, this );
     pTreeViewPlugins->setModel( model );
     pLineEditFolder->setText( tr( "" ) );
-    qDebug ("AAAAAAAAA");
 }
 
 void pgPlugins::browse( void )
 {
-    QString sFolder =  QFileDialog::getExistingDirectory( this, "Select the plugin folder.", QString::null, QFileDialog::ShowDirsOnly );
+    QString sFolder =  QFileDialog::getExistingDirectory( this, tr( "Select the plugin folder." ), QString::null, QFileDialog::ShowDirsOnly );
 
     if ( !sFolder.isEmpty() )
     {
-        qDebug( "Setup: Plugin folder: %s", qPrintable( sFolder ) );
+        QStandardItemModel *model = new QStandardItemModel( 0, 3, this );
+        PluginManager *pPM = getPluginManager();
+
+        model->setHeaderData( 0, Qt::Horizontal, tr( "Name" ) );
+        model->setHeaderData( 1, Qt::Horizontal, tr( "Version" ) );
+        model->setHeaderData( 2, Qt::Horizontal, tr( "Dependencies" ) );
+
+        qDebug( qPrintable( tr( "Setup: Plugin folder: %s" ) ), qPrintable( sFolder ) );
+
+        if ( !pPM->setFolder( sFolder ) )
+        {
+            QMessageBox::critical( this, tr( "Error" ), tr( "Could not open plugin folder." ) );
+            return;
+        }
+
         pLineEditFolder->setText( sFolder );
 
-        QStandardItemModel *model = new QStandardItemModel( 0, 3, this );
-        //model->setHeaderData( 0, Qt::Horizontal, QObject::tr( " " ) );
-        model->setHeaderData( 0, Qt::Horizontal, QObject::tr( "Name" ) );
-        model->setHeaderData( 1, Qt::Horizontal, QObject::tr( "File Name" ) );
-        model->setHeaderData( 2, Qt::Horizontal, QObject::tr( "Version" ) );
-        addPlugin( model, "Firefighter", "firefighterd.dll", "1.0" );
-        addPlugin( model, "wndFirefighter", "wndfirefighterd.dll", "1.0" );
+        if ( !pPM->load() )
+        {
+            QMessageBox::critical( this, tr( "Error" ), tr( "Could not load plugins." ) );
+            return;
+        }
+
+        foreach( DatabasePlugin *pPlugin, pPM->lDatabasePlugins )
+            addPlugin( model, pPlugin->getPluginInfo().getName(), pPlugin->getPluginInfo().getVersion(), pPlugin->getDependencies().toString() );
+
+        foreach( MDIWindowPlugin *pPlugin, pPM->lMDIWindowPlugins )
+            addPlugin( model, pPlugin->getPluginInfo().getName(), pPlugin->getPluginInfo().getVersion(), pPlugin->getDependencies().toString() );
 
         pTreeViewPlugins->setModel( model );
 
         //pTreeViewPlugins->header()->resizeSection( 0, 30 );
         pTreeViewPlugins->header()->resizeSection( 0, 200 );
-        pTreeViewPlugins->header()->resizeSection( 1, 200 );
-        pTreeViewPlugins->header()->resizeSection( 2, 100 );
+        pTreeViewPlugins->header()->resizeSection( 1, 60 );
+        pTreeViewPlugins->header()->resizeSection( 2, 200 );
     }
 }
 
@@ -286,7 +341,7 @@ wndSetup::wndSetup( QWidget *pParent ) :
 {
     QIcon icon;
 
-    icon.addFile( QString::fromUtf8(":/icons/Icon.png"), QSize(), QIcon::Normal, QIcon::Off );
+    icon.addFile( QString::fromUtf8( ":/icons/Icon.png" ), QSize(), QIcon::Normal, QIcon::Off );
 
     setWindowTitle( tr( "Fire Department Management System" ) );
     setWindowIcon( icon );

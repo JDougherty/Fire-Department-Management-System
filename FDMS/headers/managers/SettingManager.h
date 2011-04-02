@@ -19,6 +19,9 @@
 #ifndef SETTINGMANAGER_H
 #define SETTINGMANAGER_H
 
+#include <QDir>
+#include <QFile>
+#include <QObject>
 #include <QSettings>
 #include <QString>
 

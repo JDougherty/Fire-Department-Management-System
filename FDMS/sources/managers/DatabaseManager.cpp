@@ -70,9 +70,9 @@ bool DatabaseManager::removeFile( void )
     bool bRemoved = QFile::remove( _sFile ); // Remove created database binary file
 
     if ( bRemoved )
-        qDebug( "Database Manager: Removed %s", qPrintable( _sFile ) );
+        qDebug( qPrintable( QObject::tr( "Database Manager: Removed %s" ) ), qPrintable( _sFile ) );
     else
-        qDebug( "Database Manager: Failed to remove %s", qPrintable( _sFile ) );
+        qDebug( qPrintable( QObject::tr( "Database Manager: Failed to remove %s" ) ), qPrintable( _sFile ) );
 
     return bRemoved;
 }
@@ -85,11 +85,11 @@ bool DatabaseManager::exists( void )
 {
     if ( _sFile == QString::null || !QFile::exists( _sFile ) )
     {
-        qDebug( "Database Manager: %s does not exist.", qPrintable( _sFile ) );
+        qDebug( qPrintable( QObject::tr( "Database Manager: %s does not exist." ) ), qPrintable( _sFile ) );
         return false;
     }
 
-    qDebug( "Database Manager: %s exists.", qPrintable( _sFile ) );
+    qDebug( qPrintable( QObject::tr( "Database Manager: %s exists." ) ), qPrintable( _sFile ) );
     return true;
 }
 
@@ -101,11 +101,11 @@ bool DatabaseManager::open( void )
 {
     if ( !_DB.open() ) // If database name (file) DNE it creates it then tries to open it
     {
-        qDebug( "Database Manager: Error opening %s: %s", qPrintable( _sFile ), qPrintable( _DB.lastError().databaseText() ) );
+        qDebug( qPrintable( QObject::tr( "Database Manager: Error opening %s: %s" ) ), qPrintable( _sFile ), qPrintable( _DB.lastError().databaseText() ) );
         return false;
     }
 
-    qDebug( "Database Manager: Opened %s", qPrintable( _sFile ) );
+    qDebug( qPrintable( QObject::tr( "Database Manager: Opened %s" ) ), qPrintable( _sFile ) );
     return true;
 }
 
@@ -121,7 +121,7 @@ bool DatabaseManager::isOpen( void )
 //! Closes the database.
 void DatabaseManager::close( void )
 {
-    qDebug( "Database Manager: Closed %s", qPrintable( _sFile ) );
+    qDebug( qPrintable( QObject::tr( "Database Manager: Closed %s" ) ), qPrintable( _sFile ) );
     _DB.close();
 }
 
@@ -146,7 +146,7 @@ bool DatabaseManager::createTables( void )
     QString sSchema;
     QStringList slSplitSchema;
 
-    qDebug( "Database Manager: Creating the tables." );
+    qDebug( qPrintable( QObject::tr( "Database Manager: Creating the tables." ) ) );
 
     sSchema = ""
              "CREATE TABLE department"
@@ -232,11 +232,11 @@ bool DatabaseManager::createTables( void )
     {
         if ( query.exec( slSplitSchema[i] ) )
         {
-            qDebug( "Database Manager: Structure Initialization: %s", qPrintable( query.lastQuery() ) );
+            qDebug( qPrintable( QObject::tr( "Database Manager: Structure Initialization: %s" ) ), qPrintable( query.lastQuery() ) );
         }
         else
         {
-            qDebug( "Database Manager: Structure Initialization: %s", qPrintable( query.lastError().databaseText() ) );
+            qDebug( qPrintable( QObject::tr( "Database Manager: Structure Initialization: %s" ) ), qPrintable( query.lastError().databaseText() ) );
             return false;
         }
     }
@@ -265,7 +265,7 @@ bool DatabaseManager::verifyTables( void )
     QSqlQuery qryTableInfo;
     QString sTableSchema;
 
-    qDebug( "Database Manager: Verifying the database." );
+    qDebug( qPrintable( QObject::tr( "Database Manager: Verifying the database." ) ) );
 
     // While we're here, let's turn on foreign key support
     qryTableNames.exec( "PRAGMA foreign_keys = ON;" );
@@ -298,11 +298,11 @@ bool DatabaseManager::verifyTables( void )
     // And compare to expected value
     if ( chksum != "c6bc29f4490a6d43302b6c76605b7c2a" )
     {
-        qDebug( "Database Manager: Invalid structure. Expected chksum c6bc29f4490a6d43302b6c76605b7c2a, but got %s", qPrintable( chksum ) );
+        qDebug( qPrintable( QObject::tr( "Database Manager: Invalid structure. Expected chksum c6bc29f4490a6d43302b6c76605b7c2a, but got %s" ) ), qPrintable( chksum ) );
         return false;
     }
 
-    qDebug( "Database Manager: Valid structure." );
+    qDebug( qPrintable( QObject::tr( "Database Manager: Valid structure." ) ) );
     return true;
 }
 
@@ -314,7 +314,7 @@ bool DatabaseManager::verifyTables( void )
 bool DatabaseManager::query( QSqlQuery &query )
 {
    bool ret = query.exec();
-   qDebug( "Database Manager: Executing Query: %s", qPrintable( query.executedQuery() ) );
+   qDebug( qPrintable( QObject::tr( "Database Manager: Executing Query: %s" ) ), qPrintable( query.executedQuery() ) );
    return ret;
 }
 

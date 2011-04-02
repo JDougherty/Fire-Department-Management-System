@@ -21,13 +21,16 @@
 
 #include <QString>
 
-class DatabasePlugin
+#include "BasePlugin.h"
+
+class DatabasePlugin : public BasePlugin
 {
     public:
         virtual                     ~DatabasePlugin( void ) {}
+
         virtual QString             echo( const QString &message ) = 0;
 };
 
-Q_DECLARE_INTERFACE( DatabasePlugin, "com.FDS.Plugin.DatabasePlugin/1.0" );
+Q_DECLARE_INTERFACE( DatabasePlugin, "com.FDS.Plugin.Database/1.0" );
 
 #endif // DATABASEPLUGIN_H

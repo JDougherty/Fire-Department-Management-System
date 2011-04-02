@@ -16,27 +16,23 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef MDIWINDOWPLUGIN_H
-#define MDIWINDOWPLUGIN_H
+#ifndef PLUGININFO_H
+#define PLUGININFO_H
 
-#include <QMdiArea>
-#include <QMenu>
 #include <QString>
 
-#include "BasePlugin.h"
-#include "MDIWindow.h"
-
-class MDIWindowPlugin : public BasePlugin
+class PluginInfo
 {
+    private:
+        QString                     _sName, _sVersion;
+
     public:
-        virtual                     ~MDIWindowPlugin( void ) {}
+                                    PluginInfo( QString sName, QString sVersion );
 
-        virtual MDIWindow *         getInstance( QWidget *pParent ) = 0;
-        virtual MDIWindow *         getInstance( QWidget *pParent, QMdiArea *pMDIArea ) = 0;
-
-        virtual void                menuBar( QMenu *pMenuBar ) = 0;
+        QString                     getName( void ) const;
+        QString                     getVersion( void ) const;
+        QString                     toString( void ) const;
+        bool                        operator==( const PluginInfo &other ) const;
 };
 
-Q_DECLARE_INTERFACE( MDIWindowPlugin, "com.FDS.Plugin.MDIWindow/1.0" );
-
-#endif // MDIWINDOWPLUGIN_H
+#endif // PLUGININFO_H

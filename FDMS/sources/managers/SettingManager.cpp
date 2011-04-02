@@ -16,9 +16,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <QFile>
-#include <QDir>
-
 #include "managers/SettingManager.h"
 
 SettingManager* getSettingManager( void )
@@ -50,24 +47,24 @@ bool SettingManager::exists( void )
 {
     if ( !QFile::exists( _pSettings->fileName() ) )
     {
-        qDebug( "SettingManager: %s does not exist.", qPrintable( _pSettings->fileName() ) );
+        qDebug( qPrintable( QObject::QObject::tr( "SettingManager: %s does not exist." ) ), qPrintable( _pSettings->fileName() ) );
         return false;
     }
 
-    qDebug( "SettingManager: %s exists.", qPrintable( _pSettings->fileName() ) );
+    qDebug( qPrintable( QObject::tr( "SettingManager: %s exists." ) ), qPrintable( _pSettings->fileName() ) );
     return true;
 }
 
 void SettingManager::set( QString sKey, QVariant vValue )
 {
     _Entries.insert( sKey, vValue );
-    qDebug( "SettingManager: Set %s:%s", qPrintable( sKey ), qPrintable( vValue.toString() ) );
+    qDebug( qPrintable( QObject::tr( "SettingManager: Set %s:%s", qPrintable( sKey ) ) ), qPrintable( vValue.toString() ) );
 }
 
 QVariant SettingManager::get( QString sKey )
 {
 
-    qDebug( "SettingManager: Get %s:%s", qPrintable( sKey ), qPrintable( _Entries[sKey].toString() ) );
+    qDebug( qPrintable( QObject::tr( "SettingManager: Get %s:%s", qPrintable( sKey ) ) ), qPrintable( _Entries[sKey].toString() ) );
     return _Entries[sKey];
 }
 
@@ -81,20 +78,20 @@ void SettingManager::load( void )
     QStringList keys = _pSettings->allKeys();
     QVariant vValue;
 
-    qDebug( "SettingManager: Loading values from %s", qPrintable( _pSettings->fileName() ) );
+    qDebug( qPrintable( QObject::tr( "SettingManager: Loading values from %s" ) ), qPrintable( _pSettings->fileName() ) );
     _Entries.clear();
 
     foreach ( QString sKey, keys )
     {
         vValue = _pSettings->value( sKey );
         _Entries.insert( sKey, vValue );
-        qDebug( "SettingManager: Loaded %s:%s", qPrintable( sKey ), qPrintable( vValue.toString() ) );
+        qDebug( qPrintable( QObject::tr( "SettingManager: Loaded %s:%s" ) ), qPrintable( sKey ), qPrintable( vValue.toString() ) );
     }
 }
 
 void SettingManager::save( void )
 {
-    qDebug( "SettingManager: Saving values to %s", qPrintable( _pSettings->fileName() ) );
+    qDebug( qPrintable( QObject::tr( "SettingManager: Saving values to %s" ) ), qPrintable( _pSettings->fileName() ) );
 
     QMapIterator<QString, QVariant> itr( _Entries );
     while ( itr.hasNext() )

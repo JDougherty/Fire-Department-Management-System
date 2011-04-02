@@ -18,7 +18,7 @@
 
 #include "wndFirefighterPlugin.h"
 
-PluginInfo wndFirefighterPlugin::getPluginInfo( void )
+PluginInfo wndFirefighterPlugin::getInfo( void )
 {
     return PluginInfo( "wndFirefighter", "0.01" );
 }

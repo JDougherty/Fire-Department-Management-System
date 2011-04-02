@@ -17,7 +17,7 @@ TARGET = $$qtLibraryTarget($$TARGET)
 DESTDIR = ../plugins
 
 FORMS += \
-    wndfirefighter.ui
+    wndFirefighter.ui
 
 RESOURCES += \
     resources.qrc

@@ -14,7 +14,7 @@ class BasePlugin
     public:
         virtual                     ~BasePlugin( void ) {}
 
-        virtual PluginInfo          getPluginInfo( void ) = 0;
+        virtual PluginInfo          getInfo( void ) = 0;
         virtual DependencyList      getDependencies( void ) = 0;
 
         bool dependenciesMet( QList<BasePlugin*> plugins )
@@ -27,7 +27,7 @@ class BasePlugin
 
                 foreach ( BasePlugin *pPlugin, plugins )
                 {
-                    if ( pPlugin->getPluginInfo() == dependency )
+                    if ( pPlugin->getInfo() == dependency )
                     {
                         bMet = true;
                         break;
@@ -37,13 +37,13 @@ class BasePlugin
                 if ( !bMet )
                 {
                     qDebug( "%s", qPrintable( QObject::tr( "BasePlugin: Need " ) + getDependencies().toString() + "." ) );
-                    qDebug( "%s", qPrintable( QObject::tr( "BasePlugin: Dependencies NOT met for " ) + getPluginInfo().toString() + "." ) );
+                    qDebug( "%s", qPrintable( QObject::tr( "BasePlugin: Dependencies NOT met for " ) + getInfo().toString() + "." ) );
                     return false;
                 }
 
             }
 
-            qDebug( "%s", qPrintable( QObject::tr( "BasePlugin: Dependencies met for " ) + getPluginInfo().toString() + "." ) );
+            qDebug( "%s", qPrintable( QObject::tr( "BasePlugin: Dependencies met for " ) + getInfo().toString() + "." ) );
             return true;
         }
 };

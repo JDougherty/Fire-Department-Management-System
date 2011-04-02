@@ -18,7 +18,7 @@
 
 #include "FirefighterPlugin.h"
 
-PluginInfo FirefighterPlugin::getPluginInfo( void )
+PluginInfo FirefighterPlugin::getInfo( void )
 {
     return PluginInfo( "Firefighter", "0.01" );
 }

@@ -35,7 +35,7 @@ class wndFirefighterPlugin : public QObject, MDIWindowPlugin
     Q_INTERFACES( MDIWindowPlugin )
 
     public:
-        PluginInfo                  getPluginInfo( void );
+        PluginInfo                  getInfo( void );
         DependencyList              getDependencies( void );
 
         MDIWindow *                 getInstance( QWidget *pParent );

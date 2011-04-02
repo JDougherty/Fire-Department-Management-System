@@ -143,7 +143,7 @@ pgNewDatabase::pgNewDatabase( QWidget *pParent )
 
     setLayout( pGridLayout );
 
-    registerField( "database.folder", pLineEditFolder );
+    registerField( "database.folder*", pLineEditFolder );
     connect( pButtonFolder, SIGNAL( clicked() ), this, SLOT( browse() ) );
 }
 
@@ -293,8 +293,15 @@ pgPlugins::pgPlugins( QWidget *pParent )
     pGroupBoxPlugins->setLayout( pBoxLayout );
     setLayout( pGridLayout );
 
-    registerField( "plugins.folder", pLineEditFolder );
+    qRegisterMetaType<QList<PluginInfo> >( "QList<PluginInfo>" );
+    registerField( "plugins.folder*", pLineEditFolder );
+    registerField( "plugins.selected", this, "getPluginInfo" );
     connect( pButtonFolder, SIGNAL( clicked() ), this, SLOT( browse() ) );
+}
+
+QList<PluginInfo> pgPlugins::getPluginInfo( void )
+{
+    return lPluginInfo;
 }
 
 void pgPlugins::addPlugin( QAbstractItemModel *pModel, const QString &sName, const QString &sVersion, const QString &sDependencies )
@@ -321,20 +328,8 @@ void pgPlugins::browse( void )
         pLineEditFolder->setText( sFolder );
         qDebug( qPrintable( tr( "Setup: Plugin folder: %s" ) ), qPrintable( sFolder ) );
 
-        /*if ( !pPM->setFolder( sFolder ) )
-        {
-            QMessageBox::critical( this, tr( "Error" ), tr( "Could not open plugin folder." ) );
-            return;
-        }
-
-        if ( !pPM->load() )
-        {
-            QMessageBox::critical( this, tr( "Error" ), tr( "Could not load plugins." ) );
-            return;
-        }*/
-
         foreach ( BasePlugin *pPlugin, PluginManager::findAll( sFolder ) )
-            addPlugin( pModel, pPlugin->getPluginInfo().getName(), pPlugin->getPluginInfo().getVersion(), pPlugin->getDependencies().toString() );
+            addPlugin( pModel, pPlugin->getInfo().getName(), pPlugin->getInfo().getVersion(), pPlugin->getDependencies().toString() );
 
         //pTreeViewPlugins->header()->resizeSection( 0, 30 );
         pTreeViewPlugins->header()->resizeSection( 0, 200 );
@@ -356,6 +351,7 @@ bool pgPlugins::validatePage( void )
 {
     QList<BasePlugin*> lPlugins = PluginManager::findAll( pLineEditFolder->text() );
     QList<BasePlugin*> lPluginsSelected;
+    lPluginInfo.clear();
 
     // loop over the selected rows
     foreach ( QModelIndex index, pTreeViewPlugins->selectionModel()->selectedRows() )
@@ -366,10 +362,11 @@ bool pgPlugins::validatePage( void )
         // find this plugin
         foreach ( BasePlugin *pPlugin, lPlugins )
         {
-            if ( pPlugin->getPluginInfo().getName().compare( sPluginName ) == 0 &&
-                 pPlugin->getPluginInfo().getVersion().compare( sVersion ) == 0 )
+            if ( pPlugin->getInfo().getName().compare( sPluginName ) == 0 &&
+                 pPlugin->getInfo().getVersion().compare( sVersion ) == 0 )
             {
                 lPluginsSelected.push_back( pPlugin );
+                lPluginInfo.push_back( pPlugin->getInfo() );
             }
         }
     }
@@ -378,7 +375,7 @@ bool pgPlugins::validatePage( void )
     {
         if ( !pPlugin->dependenciesMet( lPluginsSelected ) )
         {
-            QMessageBox::critical( this, tr( "Error" ), tr( "Plugin " ) + pPlugin->getPluginInfo().getName() +
+            QMessageBox::critical( this, tr( "Error" ), tr( "Plugin " ) + pPlugin->getInfo().getName() +
                                                tr( " requires " ) + pPlugin->getDependencies().toString() + "." );
             return false;
         }
@@ -420,6 +417,25 @@ bool pgInstall::validatePage( void )
 {
     if ( !bInstalled )
     {
+        PluginManager *pPM = getPluginManager();
+        QString sPluginFolder = field( "plugins.folder" ).toString();
+        QList<PluginInfo> lPluginInfo = field( "plugins.selected" ).value<QList<PluginInfo> >();
+
+        foreach (PluginInfo p, lPluginInfo)
+            qDebug (qPrintable(p.toString()));
+
+        if ( !pPM->setFolder( sPluginFolder ) )
+        {
+            QMessageBox::critical( this, tr( "Error" ), tr( "Could not open plugin folder." ) );
+            return false;
+        }
+
+        if ( !pPM->load(  ) )
+        {
+            QMessageBox::critical( this, tr( "Error" ), tr( "Could not load plugins." ) );
+            return false;
+        }
+
         bInstalled = true;
         wizard()->button( QWizard::BackButton )->setDisabled( true );
         wizard()->button( QWizard::CancelButton )->setDisabled( true );

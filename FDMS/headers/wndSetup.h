@@ -118,12 +118,13 @@ class pgExistingDatabase : public QWizardPage
 class pgPlugins : public QWizardPage
 {
     Q_OBJECT
+    Q_PROPERTY( QList<PluginInfo> getPluginInfo READ getPluginInfo )
 
     private:
+        QList<PluginInfo>           lPluginInfo;
         QLabel                      *pLabelFolder;
         QLineEdit                   *pLineEditFolder;
         QPushButton                 *pButtonFolder;
-
         QGroupBox                   *pGroupBoxPlugins;
         QTreeView                   *pTreeViewPlugins;
 
@@ -136,9 +137,12 @@ class pgPlugins : public QWizardPage
     public:
                                     pgPlugins( QWidget *pParent = 0 );
 
+        QList<PluginInfo>           getPluginInfo( void );
+
         void                        cleanupPage( void );
         bool                        validatePage( void );
 };
+Q_DECLARE_METATYPE( QList<PluginInfo> );
 
 class pgInstall : public QWizardPage
 {

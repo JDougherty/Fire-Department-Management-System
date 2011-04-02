@@ -32,7 +32,7 @@ class FirefighterPlugin : public QObject, DatabasePlugin
     Q_INTERFACES( DatabasePlugin )
 
     public:
-        PluginInfo                  getPluginInfo( void );
+        PluginInfo                  getInfo( void );
         DependencyList              getDependencies( void );
 
         QString                     echo( const QString &message );

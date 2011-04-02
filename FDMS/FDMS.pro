@@ -10,9 +10,7 @@ SOURCES += sources/main.cpp \
     sources/managers/PluginManager.cpp \
     sources/managers/SettingManager.cpp \
     sources/wndSetup.cpp \
-    sources/managers/DatabaseManager.cpp \
-    sources/plugins/PluginInfo.cpp \
-    sources/plugins/DependencyList.cpp
+    sources/managers/DatabaseManager.cpp
 	
 HEADERS += \
     headers/MDIWindow.h \

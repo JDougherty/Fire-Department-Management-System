@@ -9,12 +9,32 @@
 class DependencyList : public QList<PluginInfo>
 {
     public:
+        DependencyList( void )
+        {
 
-                                    DependencyList( void );
+        }
 
-        void                        add( const PluginInfo &d );
-        bool                        contains( const PluginInfo &otherInfo ) const;
-        QString                     toString( void ) const;
+        void add( const PluginInfo &d )
+        {
+            push_back( d );
+        }
+
+        bool contains( const PluginInfo &otherInfo ) const
+        {
+            return contains( otherInfo );
+        }
+
+        QString toString( void ) const
+        {
+            QString s;
+
+            for ( QList<PluginInfo>::const_iterator itr = begin(); itr != end(); itr++ )
+                s += itr->toString() + ", ";
+
+            s.chop( 2 );
+
+            return s;
+        }
 };
 
 #endif // DEPENDENCYLIST_H

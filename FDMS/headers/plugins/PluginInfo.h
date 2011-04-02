@@ -24,15 +24,34 @@
 class PluginInfo
 {
     private:
-        QString                     _sName, _sVersion;
+        QString _sName, _sVersion;
 
     public:
-                                    PluginInfo( QString sName, QString sVersion );
+        PluginInfo( QString sName, QString sVersion )
+        {
+            _sName = sName;
+            _sVersion = sVersion;
+        }
 
-        QString                     getName( void ) const;
-        QString                     getVersion( void ) const;
-        QString                     toString( void ) const;
-        bool                        operator==( const PluginInfo &other ) const;
+        QString getName( void ) const
+        {
+            return _sName;
+        }
+
+        QString getVersion( void ) const
+        {
+            return _sVersion;
+        }
+
+        QString toString( void ) const
+        {
+            return _sName + " v" + _sVersion;
+        }
+
+        bool operator==( const PluginInfo &other ) const
+        {
+            return ( other._sName == _sName && other._sVersion == _sVersion );
+        }
 };
 
 #endif // PLUGININFO_H

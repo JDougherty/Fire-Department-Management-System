@@ -37,14 +37,18 @@ class wndMain : public QMainWindow
     Q_OBJECT
 
     private:
+                                    wndMain( QWidget *pParent = 0 );
+                                    ~wndMain( void );
+
         Ui::wndMain                 *_pUI;
         QMdiArea                    *_pMDIArea;
 
     public:
-                                    wndMain( QWidget *pParent = 0 );
-                                    ~wndMain( void );
+        friend wndMain*             getWNDMain( void );
 
         void                        registerPlugins( void );
 };
+
+wndMain* getWNDMain( void );
 
 #endif // MAINWINDOW_H

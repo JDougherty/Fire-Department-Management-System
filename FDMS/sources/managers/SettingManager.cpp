@@ -58,13 +58,13 @@ bool SettingManager::exists( void )
 void SettingManager::set( QString sKey, QVariant vValue )
 {
     _Entries.insert( sKey, vValue );
-    qDebug( qPrintable( QObject::tr( "SettingManager: Set %s:%s", qPrintable( sKey ) ) ), qPrintable( vValue.toString() ) );
+    qDebug( qPrintable( QObject::tr( "SettingManager: Set %s : %s", qPrintable( sKey ) ) ), qPrintable( vValue.toString() ) );
 }
 
 QVariant SettingManager::get( QString sKey )
 {
 
-    qDebug( qPrintable( QObject::tr( "SettingManager: Get %s:%s", qPrintable( sKey ) ) ), qPrintable( _Entries[sKey].toString() ) );
+    qDebug( qPrintable( QObject::tr( "SettingManager: Get %s : %s", qPrintable( sKey ) ) ), qPrintable( _Entries[sKey].toString() ) );
     return _Entries[sKey];
 }
 

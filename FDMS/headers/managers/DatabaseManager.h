@@ -83,6 +83,6 @@ class DatabaseManager
         QSqlError                   lastError( void );
 };
 
-DatabaseManager* getDatabaseManager();
+DatabaseManager* getDatabaseManager( void );
 
 #endif

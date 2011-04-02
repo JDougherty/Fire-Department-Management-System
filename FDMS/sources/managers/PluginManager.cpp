@@ -93,52 +93,67 @@ bool PluginManager::load( void )
 
     lDatabasePlugins.clear();
     lMDIWindowPlugins.clear();
+    lPlugins.clear();
 
     foreach ( QString sFileName, pluginsDir.entryList( QDir::Files ) )
     {
         QPluginLoader pluginLoader( pluginsDir.absoluteFilePath( sFileName ) );
-        QObject *plugin = pluginLoader.instance();
+        QObject *pPlugin = pluginLoader.instance();
 
-        if ( plugin )
+        if ( pPlugin )
         {
-            DatabasePlugin *databasePlugin = qobject_cast<DatabasePlugin*>( plugin );
-            MDIWindowPlugin *mdiWindowPlugin = qobject_cast<MDIWindowPlugin*>( plugin );
+            DatabasePlugin *pDatabasePlugin = qobject_cast<DatabasePlugin*>( pPlugin );
+            MDIWindowPlugin *pMDIWindowPlugin = qobject_cast<MDIWindowPlugin*>( pPlugin );
 
-            if ( databasePlugin )
+            if ( pDatabasePlugin )
             {
-                lDatabasePlugins.append( databasePlugin );
-                lPlugins.append( ( BasePlugin* )databasePlugin );
+                qDebug( qPrintable( QObject::tr( "PluginManager: Loaded %s." ) ), qPrintable( pDatabasePlugin->getPluginInfo().toString() ) );
+                lDatabasePlugins.append( pDatabasePlugin );
+                lPlugins.append( (BasePlugin*)pDatabasePlugin );
             }
-            else if ( mdiWindowPlugin )
+            else if ( pMDIWindowPlugin )
             {
-                lMDIWindowPlugins.append( mdiWindowPlugin );
-                lPlugins.append( ( BasePlugin* )mdiWindowPlugin );
+                qDebug( qPrintable( QObject::tr( "PluginManager: Loaded %s." ) ), qPrintable( pMDIWindowPlugin->getPluginInfo().toString() ) );
+                lMDIWindowPlugins.append( pMDIWindowPlugin );
+                lPlugins.append( (BasePlugin*)pMDIWindowPlugin );
             }
         }
     }
     return true;
 }
 
-QStringList PluginManager::findPlugins( QString sFolder )
+QList<BasePlugin*> PluginManager::findAll( QString sFolder )
 {
     QDir pluginsDir( sFolder );
-    QStringList plugins;
+    QList<BasePlugin*> lPlugins;
+
+    qDebug( "%s", qPrintable( QObject::tr( "PluginManager: Finding plugins." ) ) );
+
+    if ( sFolder.isEmpty() )
+        return lPlugins;
 
     foreach ( QString sFileName, pluginsDir.entryList( QDir::Files ) )
     {
         QPluginLoader pluginLoader( pluginsDir.absoluteFilePath( sFileName ) );
-        QObject *plugin = pluginLoader.instance();
+        QObject *pPlugin = pluginLoader.instance();
 
-        if ( plugin )
+        if ( pPlugin )
         {
-            DatabasePlugin *databasePlugin = qobject_cast<DatabasePlugin*>( plugin );
-            MDIWindowPlugin *mdiWindowPlugin = qobject_cast<MDIWindowPlugin*>( plugin );
+            DatabasePlugin *pDatabasePlugin = qobject_cast<DatabasePlugin*>( pPlugin );
+            MDIWindowPlugin *pMDIWindowPlugin = qobject_cast<MDIWindowPlugin*>( pPlugin );
 
-            if ( databasePlugin || mdiWindowPlugin )
+            if ( pDatabasePlugin )
             {
-                plugins.append( sFileName );
+                qDebug( qPrintable( QObject::tr( "PluginManager: Found %s." ) ), qPrintable( pDatabasePlugin->getPluginInfo().toString() ) );
+                lPlugins.append( (BasePlugin*)pDatabasePlugin );
+            }
+            else if ( pMDIWindowPlugin )
+            {
+                qDebug( qPrintable( QObject::tr( "PluginManager: Found %s." ) ), qPrintable( pMDIWindowPlugin->getPluginInfo().toString() ) );
+                lPlugins.append( (BasePlugin*)pMDIWindowPlugin );
             }
         }
     }
-    return plugins;
+
+    return lPlugins;
 }

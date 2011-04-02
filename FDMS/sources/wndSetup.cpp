@@ -88,7 +88,7 @@ pgNewDatabase::pgNewDatabase( QWidget *pParent )
 
     setLayout( pGridLayout );
 
-    registerField( "database.folder*", pLineEditFolder );
+    registerField( "database.folder", pLineEditFolder );
     connect( pButtonFolder, SIGNAL( clicked() ), this, SLOT( browse() ) );
 
     pLineEditFolder->setReadOnly( true );
@@ -152,7 +152,7 @@ int pgExistingDatabase::nextId( void ) const
     return wndSetup::Plugins;
 }
 
-bool pgExistingDatabase::isComplete( void )
+bool pgExistingDatabase::validatePage( void )
 {
     DatabaseManager *pDBM = getDatabaseManager();
 
@@ -208,6 +208,7 @@ pgPlugins::pgPlugins( QWidget *pParent )
 {
     QGridLayout *pGridLayout = new QGridLayout();
     QVBoxLayout *pBoxLayout = new QVBoxLayout();
+    QStandardItemModel *pModel;
     QFont font;
 
     setTitle( tr( "Plugin Settings" ) );
@@ -217,6 +218,7 @@ pgPlugins::pgPlugins( QWidget *pParent )
     pButtonFolder = new QPushButton( tr( "Browse..." ) );
     pGroupBoxPlugins = new QGroupBox( tr( "Plugins" ) );
     pTreeViewPlugins = new QTreeView();
+    pModel = new QStandardItemModel( 0, 0, pTreeViewPlugins );
 
     pGridLayout->addWidget( pLabelFolder, 0, 0 );
     pGridLayout->addWidget( pLineEditFolder, 0, 1 );
@@ -228,7 +230,9 @@ pgPlugins::pgPlugins( QWidget *pParent )
     pGroupBoxPlugins->setLayout( pBoxLayout );
     setLayout( pGridLayout );
 
-    registerField( "plugins.folder*", pLineEditFolder );
+    pTreeViewPlugins->setModel( pModel );
+
+    registerField( "plugins.folder", pLineEditFolder );
     connect( pButtonFolder, SIGNAL( clicked() ), this, SLOT( browse() ) );
 
     pTreeViewPlugins->setSelectionMode( QTreeView::MultiSelection );
@@ -244,39 +248,37 @@ pgPlugins::pgPlugins( QWidget *pParent )
     pButtonFolder->setFont( font );
 }
 
-bool pgPlugins::isComplete( void )
+bool pgPlugins::validatePage( void )
 {
-    PluginManager *pPM = getPluginManager();
-    bool bAllMet, bMet;
+    QList<BasePlugin*> lPlugins = PluginManager::findAll( pLineEditFolder->text() );
+    QList<BasePlugin*> lPluginsSelected;
 
-    foreach ( BasePlugin *pPlugin1, pPM->lDatabasePlugins )
+    // loop over the selected rows
+    foreach ( QModelIndex index, pTreeViewPlugins->selectionModel()->selectedRows() )
     {
-        bAllMet = true;
-        foreach ( PluginInfo dependency, pPlugin1->getDependencies() )
-        {
-            bMet = false;
-            foreach ( BasePlugin *pPlugin2, pPM->lDatabasePlugins )
-            {
-                if ( pPlugin2->getPluginInfo() == dependency )
-                {
-                    bMet = true;
-                    break;
-                }
-            }
+        QString sPluginName = pTreeViewPlugins->model()->data( index ).toString();
+        QString sVersion = pTreeViewPlugins->model()->data( index.sibling( index.row(), index.column() + 1 ) ).toString();
 
-            if ( !bMet )
+        // find this plugin
+        foreach ( BasePlugin *pPlugin, lPlugins )
+        {
+            if ( pPlugin->getPluginInfo().getName().compare( sPluginName ) == 0 &&
+                 pPlugin->getPluginInfo().getVersion().compare( sVersion ) == 0 )
             {
-                bAllMet = false;
-                break;
+                lPluginsSelected.push_back( pPlugin );
             }
         }
+    }
 
-        if ( !bAllMet )
+    foreach ( BasePlugin *pPlugin, lPluginsSelected )
+    {
+        if ( !pPlugin->dependenciesMet( lPluginsSelected ) )
         {
-            QMessageBox::critical( this, tr( "Error" ), tr( "Plugin " ) + pPlugin1->getPluginInfo().getName() +
-                                   tr( "requires " ) + pPlugin1->getDependencies().toString() + "." );
+            QMessageBox::critical( this, tr( "Error" ), tr( "Plugin " ) + pPlugin->getPluginInfo().getName() +
+                                               tr( " requires " ) + pPlugin->getDependencies().toString() + "." );
             return false;
         }
+        break;
     }
 
     return true;
@@ -284,53 +286,99 @@ bool pgPlugins::isComplete( void )
 
 void pgPlugins::cleanupPage( void )
 {
-    QStandardItemModel *model = new QStandardItemModel( 0, 0, this );
-    pTreeViewPlugins->setModel( model );
+    QStandardItemModel *pModel = new QStandardItemModel( 0, 0, pTreeViewPlugins );
+    pTreeViewPlugins->setModel( pModel );
     pLineEditFolder->setText( tr( "" ) );
 }
 
 void pgPlugins::browse( void )
 {
-    QString sFolder =  QFileDialog::getExistingDirectory( this, tr( "Select the plugin folder." ), QString::null, QFileDialog::ShowDirsOnly );
+    QString sFolder = QFileDialog::getExistingDirectory( this, tr( "Select the plugin folder." ), QString::null, QFileDialog::ShowDirsOnly );
 
     if ( !sFolder.isEmpty() )
     {
-        QStandardItemModel *model = new QStandardItemModel( 0, 3, this );
-        PluginManager *pPM = getPluginManager();
+        QStandardItemModel *pModel = new QStandardItemModel( 0, 0, pTreeViewPlugins );
 
-        model->setHeaderData( 0, Qt::Horizontal, tr( "Name" ) );
-        model->setHeaderData( 1, Qt::Horizontal, tr( "Version" ) );
-        model->setHeaderData( 2, Qt::Horizontal, tr( "Dependencies" ) );
+        pModel->setHeaderData( 0, Qt::Horizontal, tr( "Name" ) );
+        pModel->setHeaderData( 1, Qt::Horizontal, tr( "Version" ) );
+        pModel->setHeaderData( 2, Qt::Horizontal, tr( "Dependencies" ) );
 
+        pLineEditFolder->setText( sFolder );
         qDebug( qPrintable( tr( "Setup: Plugin folder: %s" ) ), qPrintable( sFolder ) );
 
-        if ( !pPM->setFolder( sFolder ) )
+        /*if ( !pPM->setFolder( sFolder ) )
         {
             QMessageBox::critical( this, tr( "Error" ), tr( "Could not open plugin folder." ) );
             return;
         }
 
-        pLineEditFolder->setText( sFolder );
-
         if ( !pPM->load() )
         {
             QMessageBox::critical( this, tr( "Error" ), tr( "Could not load plugins." ) );
             return;
-        }
+        }*/
 
-        foreach( DatabasePlugin *pPlugin, pPM->lDatabasePlugins )
-            addPlugin( model, pPlugin->getPluginInfo().getName(), pPlugin->getPluginInfo().getVersion(), pPlugin->getDependencies().toString() );
-
-        foreach( MDIWindowPlugin *pPlugin, pPM->lMDIWindowPlugins )
-            addPlugin( model, pPlugin->getPluginInfo().getName(), pPlugin->getPluginInfo().getVersion(), pPlugin->getDependencies().toString() );
-
-        pTreeViewPlugins->setModel( model );
+        foreach ( BasePlugin *pPlugin, PluginManager::findAll( sFolder ) )
+            addPlugin( pModel, pPlugin->getPluginInfo().getName(), pPlugin->getPluginInfo().getVersion(), pPlugin->getDependencies().toString() );
 
         //pTreeViewPlugins->header()->resizeSection( 0, 30 );
         pTreeViewPlugins->header()->resizeSection( 0, 200 );
         pTreeViewPlugins->header()->resizeSection( 1, 60 );
         pTreeViewPlugins->header()->resizeSection( 2, 200 );
+
+        pTreeViewPlugins->setModel( pModel );
     }
+}
+
+pgInstall::pgInstall( QWidget *pParent )
+    : QWizardPage( pParent )
+{
+    QVBoxLayout *pBoxLayout = new QVBoxLayout;
+    QFont font;
+
+    setTitle( tr( "Install" ) );
+
+    pLabelInfo = new QLabel( tr( "Click install to start the installation process." ) );
+
+    pBoxLayout->addWidget( pLabelInfo );
+
+    setLayout( pBoxLayout );
+
+    font.setPointSize( 10 );
+    pLabelInfo->setFont( font );
+
+    pLabelInfo->setWordWrap( true );
+}
+
+void pgInstall::initializePage( void )
+{
+    setCommitPage( true );
+    setButtonText( QWizard::CommitButton, tr( "Install" ) );
+}
+
+bool pgInstall::validatePage( void )
+{
+    return true;
+}
+
+pgFinish::pgFinish( QWidget *pParent )
+    : QWizardPage( pParent )
+{
+    QVBoxLayout *pBoxLayout = new QVBoxLayout;
+    QFont font;
+
+    setTitle( tr( "Setup Complete" ) );
+
+    pLabelOutro = new QLabel( tr( "Thank you for choosing the Fire Department Management System!" ) );
+
+    pBoxLayout->addWidget( pLabelOutro );
+
+    setLayout( pBoxLayout );
+
+    font.setPointSize( 10 );
+    pLabelOutro->setFont( font );
+
+    pLabelOutro->setWordWrap( true );
 }
 
 /*!
@@ -349,145 +397,22 @@ wndSetup::wndSetup( QWidget *pParent ) :
     setMinimumSize( 650, 400 );
     setMaximumSize( 650, 400 );
 
-    setPage( Intro, new pgIntro );
-    setPage( NewDatabase, new pgNewDatabase );
-    setPage( ExistingDatabase, new pgExistingDatabase );
-    setPage( Plugins, new pgPlugins );
-
-    clearAndHideProgressBars();
+    setPage( Intro, new pgIntro( this ) );
+    setPage( NewDatabase, new pgNewDatabase( this ) );
+    setPage( ExistingDatabase, new pgExistingDatabase( this ) );
+    setPage( Plugins, new pgPlugins( this ) );
+    setPage( Install, new pgInstall( this ) );
+    setPage( Finish, new pgFinish( this ) );
 }
 
 wndSetup::~wndSetup( void )
 {
 }
 
-//! Hides and resets the progress bars and status labels.
-/*!
-  Called when setup fails for any reason.
-*/
-void wndSetup::clearAndHideProgressBars( void )
+void wndSetup::accept( void )
 {
-   /*_pUI->progExInstStatus->setValue( 0 );
-    _pUI->progExInstStatus->hide();
-    _pUI->lblExInstStatus->setText( QString::null );
-    _pUI->lblExInstStatus->hide();
-
-    _pUI->progNewInstStatus->setValue( 0 );
-    _pUI->progNewInstStatus->hide();
-    _pUI->lblNewInstStatus->setText( QString::null );
-    _pUI->lblNewInstStatus->hide();*/
-}
-
-//! User clicked "Continue" on the main setup tab
-void wndSetup::on_btnSetupContinue_clicked( void )
-{
-    /*if ( _pUI->radioExInst->isChecked() || _pUI->radioNewInst->isChecked() )
-    {
-        _pUI->tabWidget->setCurrentIndex( 1 );
-    }
-    else
-    {
-        QMessageBox::warning( this, "Error", "Please select an installation option.", QMessageBox::Ok );
-    }*/
-}
-
-//! User clicked browse button to select plugin folder
-void wndSetup::on_btnPluginSettingsFolder_clicked( void )
-{
-    /*QString sPluginFolder =  QFileDialog::getExistingDirectory( this, "", QString::null, QFileDialog::ShowDirsOnly );
-
-    if ( !sPluginFolder.isEmpty() )
-    {
-        qDebug( "Setup: Plugin path: %s", qPrintable( sPluginFolder ) );
-        _pUI->lePluginSettingsFolder->setText( sPluginFolder );
-
-        QStringList plugins = PluginManager::findPlugins( sPluginFolder );
-
-                // Hide the primary key column
-                //_pUI->tblResults->hideColumn( 0 );
-
-        QStringList a;
-        a << "aaaaa" << "BBBB" << "CCCCC" << "DDDD";
-        QStandardItemModel model(4, 4);
-        model.setHorizontalHeaderLabels(a);
-        for (int row = 0; row < 4; ++row) {
-            for (int column = 0; column < 4; ++column) {
-                QStandardItem *item = new QStandardItem(QString("row %0, column %1").arg(row).arg(column));
-                model.setItem(row, column, item);
-            }
-        }
-
-        //model.setHeaderData(0, Qt::Horizontal, "AAAAAAA");
-        _pUI->tblPluginSettingsPlugins->setModel(&model);
-    }*/
-}
-
-//! User clicked "Continue" on the plugin settings tab
-void wndSetup::on_btnPluginSettings_clicked( void )
-{
-    /*if ( _pUI->leExInstDBLocation->text().isEmpty() )
-    {
-        QMessageBox::warning( this, "Error", "Please select a plugin folder.", QMessageBox::Ok );
-    }
-    else
-    {
-         _pUI->tabWidget->setCurrentIndex( 2 );
-    }*/
-}
-
-/*****************************************************************************************************************/
-/* EXISTING INSTANCE                                                                                             */
-/*****************************************************************************************************************/
-
-//! User chose to connect to an existing instance
-void wndSetup::on_radioExInst_clicked( void )
-{
-    /*// Clicking the radio button even if checked calls this function so see if we need to do anything
-    if ( _iInstallType != EXISTING_INST )
-    {
-        qDebug( "Setup: User wants to install an existing instance." );
-
-        // got to hide the tabs for existing installation
-        if ( _iInstallType == NEW_INST )
-        {
-            _pUI->tabWidget->removeTab( 4 ); // tabNewInstFinish
-            _pUI->tabWidget->removeTab( 3 ); // tabNewInstDBSettings
-            _pUI->tabWidget->removeTab( 2 ); // tabNewInstFDSettings
-            _pUI->tabWidget->removeTab( 1 ); // tabPluginSettings
-        }
-
-        // add back the tabs for the new installation
-        _pUI->tabWidget->addTab( _pUI->tabPluginSettings, "Step 1: Plugin Settings" );
-        _pUI->tabWidget->addTab( _pUI->tabExInstDBSettings, "Step 2: Database Settings" );
-
-        _iInstallType = EXISTING_INST;
-    }*/
-}
-
-//! User clicked browse button to select DB file
-void wndSetup::on_btnExInstDBFile_clicked( void )
-{
-    /*QString sDBFile = QFileDialog::getOpenFileName( this, "Select the database file.", QString::null, "*.db" );
-
-    if ( !sDBFile.isEmpty() )
-    {
-        qDebug( "Setup: Database file: %s", qPrintable( sDBFile ) );
-        _pUI->leExInstDBLocation->setText( sDBFile );
-    }*/
-}
-
-//! User clicked "Continue" on DB Settings tab
-void wndSetup::on_btnExInstDBSettings_clicked( void )
-{
-    /*if ( _pUI->leExInstDBLocation->text().isEmpty() )
-    {
-        QMessageBox::warning( this, "Error", "Please select a database file.", QMessageBox::Ok );
-    }
-    else
-    {
-        _pUI->tabWidget->addTab( _pUI->tabExInstFinish, "Finish" );
-        _pUI->tabWidget->setCurrentIndex( 3 ); // tabExInstFinish
-    }*/
+    getWNDMain()->show();
+    hide();
 }
 
 //! User clicked "Finish"
@@ -562,67 +487,6 @@ void wndSetup::on_btnExInstFinish_clicked( void )
     _pUI->progExInstStatus->setValue( 100 );
 
     hide();*/
-}
-
-/*****************************************************************************************************************/
-/* NEW INSTANCE                                                                                                  */
-/*****************************************************************************************************************/
-
-//! User chose to setup a new FDMS instance
-void wndSetup::on_radioNewInst_clicked( void )
-{
-    /*// Clicking the radio button even if checked calls this function so see if we need to do anything
-    if ( _iInstallType != NEW_INST )
-    {
-        qDebug( "Setup: User wants to install a new instance." );
-
-        // got to hide the tabs for existing installation
-        if ( _iInstallType == EXISTING_INST )
-        {
-            _pUI->tabWidget->removeTab( 3 ); // tabExInstFinish
-            _pUI->tabWidget->removeTab( 2 ); // tabExInstDBSettings
-            _pUI->tabWidget->removeTab( 1 ); // tabPluginSettings
-        }
-
-        // add back the tabs for the new installation
-        _pUI->tabWidget->addTab( _pUI->tabPluginSettings, "Step 1: Plugin Settings" );
-        _pUI->tabWidget->addTab( _pUI->tabNewInstFDSettings, "Step 2: Fire Department Information" );
-        _pUI->tabWidget->addTab( _pUI->tabNewInstDBSettings, "Step 3: Database Settings" );
-
-        _iInstallType = NEW_INST;
-    }*/
-}
-
-//! User clicked "Continue" on FD Settings tab
-void wndSetup::on_btnNewInstFDSettings_clicked( void )
-{
-     //_pUI->tabWidget->setCurrentIndex( 3 ); // tabNewInstDBSettings
-}
-
-//! User clicked browse button to select DB location
-void wndSetup::on_btnNewInstDBLocation_clicked( void )
-{
-    /*QString sDBLocation =  QFileDialog::getExistingDirectory( this, "", QString::null, QFileDialog::ShowDirsOnly );
-
-    if ( !sDBLocation.isEmpty() )
-    {
-        qDebug( "Setup: Database path: %s", qPrintable( sDBLocation ) );
-        _pUI->leNewInstDBLocation->setText( sDBLocation );
-    }*/
-}
-
-//! User clicked "Continue" on DB Settings tab
-void wndSetup::on_btnNewInstDBSettings_clicked( void )
-{
-    /*if ( _pUI->leNewInstDBLocation->text().isEmpty() )
-    {
-        QMessageBox::warning( this, "Error", "Please select a location to place the database file.", QMessageBox::Ok );
-    }
-    else
-    {
-         _pUI->tabWidget->addTab( _pUI->tabNewInstFinish, "Finish" );
-        _pUI->tabWidget->setCurrentIndex( 4 ); // tabNewInstFinish
-    }*/
 }
 
 //! User clicked "Finish"

@@ -40,7 +40,7 @@ class PluginManager
     public:
         friend PluginManager*       getPluginManager( void );
 
-        static QStringList          findPlugins( QString sFolder );
+        static QList<BasePlugin*>   findAll( QString sFolder );
 
         bool                        initialize( void );
         bool                        setFolder( QString sFolder );
@@ -57,6 +57,6 @@ class PluginManager
         QList<MDIWindowPlugin*>     lMDIWindowPlugins;
 };
 
-PluginManager* getPluginManager();
+PluginManager* getPluginManager( void );
 
 #endif // PLUGINMANAGER_H

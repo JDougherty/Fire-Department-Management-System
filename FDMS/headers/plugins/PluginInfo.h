@@ -50,7 +50,7 @@ class PluginInfo
 
         bool operator==( const PluginInfo &other ) const
         {
-            return ( other._sName == _sName && other._sVersion == _sVersion );
+            return ( other._sName.compare( _sName ) == 0 && other._sVersion.compare( _sVersion ) == 0 );
         }
 };
 

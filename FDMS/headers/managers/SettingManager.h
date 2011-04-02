@@ -49,6 +49,6 @@ class SettingManager
         void                        load( void );
 };
 
-SettingManager* getSettingManager();
+SettingManager* getSettingManager( void );
 
 #endif // SETTINGMANAGER_H

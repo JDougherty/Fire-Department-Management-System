@@ -19,6 +19,12 @@
 #include "wndMain.h"
 #include "ui_wndMain.h"
 
+wndMain* getWNDMain( void )
+{
+    static wndMain m;
+    return &m;
+}
+
 wndMain::wndMain (QWidget *pParent ) :
     QMainWindow( pParent )
 {

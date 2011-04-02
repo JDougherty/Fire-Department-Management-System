@@ -85,7 +85,6 @@ int main( int argc, char *argv[] )
         }
     }
 
-    wndMain w;
-    w.show();
+    getWNDMain()->show();
     return application.exec();
 }

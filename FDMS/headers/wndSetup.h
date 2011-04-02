@@ -38,6 +38,7 @@
 #include "managers/SettingManager.h"
 #include "plugins/BasePlugin.h"
 #include "plugins/DependencyList.h"
+#include "wndMain.h"
 
 //! The interface and logic for setting up the FDMS.
 /*!
@@ -49,38 +50,19 @@ class wndSetup : public QWizard
     Q_OBJECT
 
     private:
-        //! Installation methods
-        enum {
-            NOT_DEFINED,    /*!< Method not selected. */
-            NEW_INST,       /*!< Configure a new DB. */
-            EXISTING_INST   /*!< Connect to an existing DB. */
-        };
-
         int                         _iInstallType;
 
-        void                        clearAndHideProgressBars( void );
-
     private slots:
-        void                        on_btnSetupContinue_clicked( void );
-        void                        on_btnPluginSettingsFolder_clicked( void );
-        void                        on_btnPluginSettings_clicked( void );
-
-        void                        on_radioExInst_clicked( void );
-        void                        on_btnExInstDBFile_clicked( void );
-        void                        on_btnExInstDBSettings_clicked( void );
         void                        on_btnExInstFinish_clicked( void );
-
-        void                        on_radioNewInst_clicked( void );
-        void                        on_btnNewInstFDSettings_clicked( void );
-        void                        on_btnNewInstDBLocation_clicked( void );
-        void                        on_btnNewInstDBSettings_clicked( void );
         void                        on_btnNewInstFinish_clicked( void );
 
     public:
                                     wndSetup( QWidget *pParent = 0 );
                                     ~wndSetup( void );
 
-        enum { Intro, NewDatabase, ExistingDatabase, Plugins, Finish };
+        void                        accept( void );
+
+        enum { Intro, NewDatabase, ExistingDatabase, Plugins, Install, Finish };
 };
 
 class pgIntro : public QWizardPage
@@ -132,7 +114,7 @@ class pgExistingDatabase : public QWizardPage
                                     pgExistingDatabase( QWidget *pParent = 0 );
 
         int                         nextId( void ) const;
-        bool                        isComplete( void ) ;
+        bool                        validatePage( void );
         void                        cleanupPage( void );
 };
 
@@ -157,8 +139,33 @@ class pgPlugins : public QWizardPage
     public:
                                     pgPlugins( QWidget *pParent = 0 );
 
-        bool                        isComplete( void ) ;
+        bool                        validatePage( void );
         void                        cleanupPage( void );
+};
+
+class pgInstall : public QWizardPage
+{
+    Q_OBJECT
+
+    private:
+        QLabel                      *pLabelInfo;
+
+    public:
+                                    pgInstall( QWidget *pParent = 0 );
+
+        void                        initializePage( void );
+        bool                        validatePage( void );
+};
+
+class pgFinish : public QWizardPage
+{
+    Q_OBJECT
+
+    private:
+        QLabel                      *pLabelOutro;
+
+    public:
+                                    pgFinish( QWidget *pParent = 0 );
 };
 
 #endif // WNDSETUP_H

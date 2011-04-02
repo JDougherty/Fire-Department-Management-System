@@ -4,9 +4,9 @@ CONFIG += plugin
 
 INCLUDEPATH += ../FDMS/headers
 
-HEADERS = Firefighter.h
+HEADERS = FirefighterPlugin.h
 
-SOURCES = Firefighter.cpp
+SOURCES = FirefighterPlugin.cpp
 
 TARGET = $$qtLibraryTarget($$TARGET)
 

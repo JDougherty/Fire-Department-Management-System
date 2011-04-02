@@ -31,8 +31,8 @@ wndFirefighter::wndFirefighter( QWidget *pParent ) :
     _pUI->tabWidget->removeTab( 2 ); // tabEquipment
     _pUI->tabWidget->removeTab( 1 ); // tabTraining
 
-    this->setWindowTitle( "Add Firefighter" );
-    _pUI->btnSavePersonalInfo->setText( "Add Firefighter" );
+    this->setWindowTitle( tr( "Add Firefighter" ) );
+    _pUI->btnSavePersonalInfo->setText( tr( "Add Firefighter" ) );
 
     // Disable the training and equipment fields
     enableTrainingFields( false );
@@ -52,8 +52,8 @@ wndFirefighter::wndFirefighter( QWidget *pParent, int iID ) :
     _pUI->setupUi( this );
     _iID = iID;
 
-    this->setWindowTitle( "Edit Firefighter" );
-    _pUI->btnSavePersonalInfo->setText( "Save Firefighter" );
+    this->setWindowTitle( tr( "Edit Firefighter" ) );
+    _pUI->btnSavePersonalInfo->setText( tr( "Save Firefighter" ) );
 
     // Disable the training and equipment fields
     enableTrainingFields( false );
@@ -72,23 +72,23 @@ wndFirefighter::~wndFirefighter( void )
 //! Updates the firefighter's personal information in the database when the Update button is clicked.
 void wndFirefighter::btnSavePersonalInfoClicked( void )
 {
-    if ( _pUI->DB_TEXT_PI_FirstName->text() == "" )
+    if ( _pUI->DB_TEXT_PI_FirstName->text().isEmpty() )
     {
-        QMessageBox::warning( this, "Firefighter Error", "Save failed! Please enter a first name for this firefighter." );
+        QMessageBox::warning( this, tr( "Firefighter Error" ), tr( "Save failed! Please enter a first name for this firefighter." ) );
         _pUI->DB_TEXT_PI_FirstName->setFocus();
         return;
     }
 
     if ( _pUI->DB_TEXT_PI_LastName->text() == "" )
     {
-        QMessageBox::warning( this, "Firefighter Error", "Save failed! Please enter a last name for this firefighter." );
+        QMessageBox::warning( this, tr( "Firefighter Error" ), tr( "Save failed! Please enter a last name for this firefighter." ) );
         _pUI->DB_TEXT_PI_LastName->setFocus();
         return;
     }
 
-    if ( _pUI->DB_TEXT_PI_LocalID->text() == "" )
+    if ( _pUI->DB_TEXT_PI_LocalID->text().isEmpty() )
     {
-        QMessageBox::warning( this, "Firefighter Error", "Save failed! Please enter a local id for this firefighter." );
+        QMessageBox::warning( this, tr( "Firefighter Error" ), tr( "Save failed! Please enter a local id for this firefighter." ) );
         _pUI->DB_TEXT_PI_LocalID->setFocus();
         return;
     }
@@ -97,33 +97,33 @@ void wndFirefighter::btnSavePersonalInfoClicked( void )
     {
         if ( true /*Insert()*/ )
         {
-            QMessageBox::information( this, "Firefighter Added", "Firefighter has been added." );
+            QMessageBox::information( this, tr( "Firefighter Added" ), tr( "Firefighter has been added." ) );
 
             // show the additional tabs
-            _pUI->tabWidget->addTab( _pUI->tabTraining, "Training" );
-            _pUI->tabWidget->addTab( _pUI->tabEquipment, "Equipment" );
-            _pUI->tabWidget->addTab( _pUI->tabReports, "Reports" );
+            _pUI->tabWidget->addTab( _pUI->tabTraining, tr( "Training" ) );
+            _pUI->tabWidget->addTab( _pUI->tabEquipment, tr( "Equipment" ) );
+            _pUI->tabWidget->addTab( _pUI->tabReports, tr( "Reports" ) );
 
-            this->setWindowTitle( "Edit Firefighter" );
-            _pUI->btnSavePersonalInfo->setText( "Save Firefighter" );
+            this->setWindowTitle( tr( "Edit Firefighter" ) );
+            _pUI->btnSavePersonalInfo->setText( tr( "Save Firefighter" ) );
 
             loadTrainingList();
             loadEquipmentList();
         }
         else
         {
-            QMessageBox::warning( this, "Firefighter Error", "Firefighter could not be added! See log file for more information." );
+            QMessageBox::warning( this, tr( "Firefighter Error" ), tr( "Firefighter could not be added! See log file for more information." ) );
         }
     }
     else
     {
         if ( true /*Update()*/ )
         {
-            QMessageBox::information( this, "Firefighter Updated", "Firefighter has been updated." );
+            QMessageBox::information( this, tr( "Firefighter Updated" ), tr( "Firefighter has been updated." ) );
         }
         else
         {
-            QMessageBox::warning( this, "Firefighter Error", "Firefighter could not be updated! See log for more information." );
+            QMessageBox::warning( this, tr( "Firefighter Error" ), tr( "Firefighter could not be updated! See log for more information." ) );
         }
     }
 }

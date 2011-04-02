@@ -10,7 +10,9 @@ SOURCES += sources/main.cpp \
     sources/managers/PluginManager.cpp \
     sources/managers/SettingManager.cpp \
     sources/wndSetup.cpp \
-    sources/managers/DatabaseManager.cpp
+    sources/managers/DatabaseManager.cpp \
+    sources/plugins/PluginInfo.cpp \
+    sources/plugins/DependencyList.cpp
 	
 HEADERS += \
     headers/MDIWindow.h \
@@ -20,7 +22,10 @@ HEADERS += \
     headers/managers/SettingManager.h \
     headers/wndSetup.h \
     headers/managers/DatabaseManager.h \
-    headers/wndMain.h
+    headers/wndMain.h \
+    headers/plugins/BasePlugin.h \
+    headers/plugins/PluginInfo.h \
+    headers/plugins/DependencyList.h
 
 FORMS += \
     forms/wndMain.ui

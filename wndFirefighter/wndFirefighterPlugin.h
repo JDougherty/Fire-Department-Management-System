@@ -21,9 +21,13 @@
 
 #include <QMenu>
 #include <QObject>
+#include <QtCore/QtPlugin>
 
+#include "plugins/DependencyList.h"
 #include "plugins/MDIWindowPlugin.h"
+#include "plugins/PluginInfo.h"
 #include "MDIWindow.h"
+#include "wndFirefighter.h"
 
 class wndFirefighterPlugin : public QObject, MDIWindowPlugin
 {
@@ -31,6 +35,9 @@ class wndFirefighterPlugin : public QObject, MDIWindowPlugin
     Q_INTERFACES( MDIWindowPlugin )
 
     public:
+        PluginInfo                  getPluginInfo( void );
+        DependencyList              getDependencies( void );
+
         MDIWindow *                 getInstance( QWidget *pParent );
         MDIWindow *                 getInstance( QWidget *pParent, QMdiArea *pMDIArea );
 

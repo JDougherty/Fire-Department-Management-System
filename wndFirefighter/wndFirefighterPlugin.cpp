@@ -16,16 +16,25 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <QtCore/QtPlugin>
-
 #include "wndFirefighterPlugin.h"
-#include "wndFirefighter.h"
+
+PluginInfo wndFirefighterPlugin::getPluginInfo( void )
+{
+    return PluginInfo( "wndFirefighter", "0.01" );
+}
+
+DependencyList wndFirefighterPlugin::getDependencies( void )
+{
+    DependencyList dependencies;
+    dependencies.add( PluginInfo( "Firefighter", "0.01" ) );
+    return dependencies;
+}
 
 void wndFirefighterPlugin::menuBar( QMenu *pMenuBar )
 {
     QIcon icon;
-    icon.addFile(QString::fromUtf8(":/icons/AddFirefighter.png"), QSize(), QIcon::Normal, QIcon::Off);
-    pMenuBar->addAction( icon, "Add Firefighter" );
+    icon.addFile( QString::fromUtf8( ":/icons/AddFirefighter.png" ), QSize(), QIcon::Normal, QIcon::Off );
+    pMenuBar->addAction( icon, tr( "Add Firefighter" ) );
 }
 
 MDIWindow* wndFirefighterPlugin::getInstance( QWidget *pParent )

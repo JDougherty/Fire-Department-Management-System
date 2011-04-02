@@ -19,24 +19,24 @@
 #ifndef DATABASEMANAGER_H
 #define DATABASEMANAGER_H
 
-#include <QObject>
-#include <QSqlDatabase>
-#include <QSqlError>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QCryptographicHash>
+#include <QDateTimeEdit>
+#include <QDir>
 #include <QFile>
+#include <QLineEdit>
+#include <QMap>
+#include <QObject>
 #include <QString>
 #include <QStringList>
+#include <QSqlDatabase>
+#include <QSqlError>
 #include <QSqlQuery>
-#include <QVariant>
 #include <QtDebug>
-#include <QCryptographicHash>
-#include <QDir>
-#include <QWidget>
-#include <QMap>
-#include <QLineEdit>
 #include <QTextEdit>
-#include <QDateTimeEdit>
-#include <QComboBox>
-#include <QCheckBox>
+#include <QVariant>
+#include <QWidget>
 
 #include "managers/SettingManager.h"
 

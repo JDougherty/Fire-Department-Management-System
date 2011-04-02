@@ -60,17 +60,19 @@ bool PluginManager::exists( void )
 {
     if ( _sFolder == QString::null || !QDir( _sFolder ).exists() )
     {
-        qDebug( "PluginManager: %s folder does not exist.", qPrintable( _sFolder ) );
+        qDebug( qPrintable( QObject::tr( "PluginManager: %s folder does not exist." ) ), qPrintable( _sFolder ) );
         return false;
     }
 
-    qDebug( "PluginManager: %s folder exists.", qPrintable( _sFolder ) );
+    qDebug( qPrintable( QObject::tr( "PluginManager: %s folder exists." ) ), qPrintable( _sFolder ) );
     return true;
 }
 
 bool PluginManager::load( void )
 {
     QDir pluginsDir( _sFolder );
+
+    qDebug( qPrintable( QObject::tr( "PluginManager: Loading plugins." ) ) );
 
 #if defined( Q_OS_WIN )
     if ( pluginsDir.dirName().toLower() == "debug" || pluginsDir.dirName().toLower() == "release" )
@@ -105,10 +107,12 @@ bool PluginManager::load( void )
             if ( databasePlugin )
             {
                 lDatabasePlugins.append( databasePlugin );
+                lPlugins.append( ( BasePlugin* )databasePlugin );
             }
             else if ( mdiWindowPlugin )
             {
                 lMDIWindowPlugins.append( mdiWindowPlugin );
+                lPlugins.append( ( BasePlugin* )mdiWindowPlugin );
             }
         }
     }

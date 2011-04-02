@@ -16,6 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <QObject>
 #include <QtGui/QApplication>
 
 #include "managers/DatabaseManager.h"
@@ -33,7 +34,7 @@ int main( int argc, char *argv[] )
 
     if ( !pSM->initialize() )
     {
-        qDebug( "Running setup." );
+        qDebug( qPrintable( QObject::tr( "Running setup." ) ) );
         wndSetup s;
         s.show();
         return application.exec();
@@ -41,21 +42,21 @@ int main( int argc, char *argv[] )
 
     if ( !pDM->initialize() )
     {
-        int iResult = QMessageBox::critical( 0, "Error", "Database Manager could not be initialized. Run setup?", QMessageBox::Yes | QMessageBox::No );
+        int iResult = QMessageBox::critical( 0, QObject::tr( "Error" ), QObject::tr( "Database Manager could not be initialized. Run setup?" ), QMessageBox::Yes | QMessageBox::No );
 
         switch ( iResult )
         {
             case QMessageBox::Yes:
             {
-                qDebug( "Running setup." );
+                qDebug( qPrintable( QObject::tr( "Running setup." ) ) );
                 wndSetup s;
                 s.show();
                 return application.exec();
             }
             case QMessageBox::No:
             {
-                QMessageBox::critical( 0, "Error", "Startup cannnot continue. Closing program.", QMessageBox::Ok );
-                qCritical( "Startup cannot continue." );
+                QMessageBox::critical( 0, QObject::tr( "Error" ), QObject::tr( "Startup cannnot continue. Closing program." ), QMessageBox::Ok );
+                qCritical( qPrintable( QObject::tr( "Startup cannot continue." ) ) );
                 return 0;
             }
         }
@@ -63,21 +64,22 @@ int main( int argc, char *argv[] )
 
     if ( !pPM->initialize() )
     {
-        int iResult = QMessageBox::critical( 0, "Error", "Plugin Manager could not be initialized. Run setup?", QMessageBox::Yes | QMessageBox::No );
+        int iResult = QMessageBox::critical( 0, QObject::tr( "Error" ), QObject::tr( "Plugin Manager could not be initialized. Run setup?" ),
+                                             QMessageBox::Yes | QMessageBox::No );
 
         switch ( iResult )
         {
             case QMessageBox::Yes:
             {
-                qDebug( "Running program setup." );
+                qDebug( qPrintable( QObject::tr( "Running program setup." ) ) );
                 wndSetup s;
                 s.show();
                 return application.exec();
             }
             case QMessageBox::No:
             {
-                QMessageBox::critical( 0, "Error", "Startup cannnot continue. Closing program.", QMessageBox::Ok );
-                qCritical( "Startup cannot continue." );
+                QMessageBox::critical( 0, QObject::tr( "Error" ), QObject::tr( "Startup cannnot continue. Closing program." ), QMessageBox::Ok );
+                qCritical( qPrintable( QObject::tr( "Startup cannot continue." ) ) );
                 return 0;
             }
         }

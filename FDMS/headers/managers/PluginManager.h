@@ -21,8 +21,10 @@
 
 #include <QDir>
 #include <QList>
+#include <QObject>
 #include <QPluginLoader>
 
+#include "plugins/BasePlugin.h"
 #include "plugins/DatabasePlugin.h"
 #include "plugins/MDIWindowPlugin.h"
 #include "managers/SettingManager.h"
@@ -50,6 +52,7 @@ class PluginManager
         DatabasePlugin*             getDatabasePlugin( QString sName );
         MDIWindowPlugin*            getMDIWindowPlugin( QString sName );
 
+        QList<BasePlugin*>          lPlugins;
         QList<DatabasePlugin*>      lDatabasePlugins;
         QList<MDIWindowPlugin*>     lMDIWindowPlugins;
 };

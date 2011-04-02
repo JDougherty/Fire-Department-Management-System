@@ -16,27 +16,30 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef MDIWINDOWPLUGIN_H
-#define MDIWINDOWPLUGIN_H
+#include "plugins/DependencyList.h"
 
-#include <QMdiArea>
-#include <QMenu>
-#include <QString>
-
-#include "BasePlugin.h"
-#include "MDIWindow.h"
-
-class MDIWindowPlugin : public BasePlugin
+DependencyList::DependencyList( void )
 {
-    public:
-        virtual                     ~MDIWindowPlugin( void ) {}
+}
 
-        virtual MDIWindow *         getInstance( QWidget *pParent ) = 0;
-        virtual MDIWindow *         getInstance( QWidget *pParent, QMdiArea *pMDIArea ) = 0;
+void DependencyList::add( const PluginInfo &d )
+{
+    push_back( d );
+}
 
-        virtual void                menuBar( QMenu *pMenuBar ) = 0;
-};
+bool DependencyList::contains( const PluginInfo &otherInfo ) const
+{
+    return contains( otherInfo );
+}
 
-Q_DECLARE_INTERFACE( MDIWindowPlugin, "com.FDS.Plugin.MDIWindow/1.0" );
+QString DependencyList::toString( void ) const
+{
+    QString s;
 
-#endif // MDIWINDOWPLUGIN_H
+    for ( QList<PluginInfo>::const_iterator itr = begin(); itr != end(); itr++ )
+        s += itr->toString() + ", ";
+
+    s.chop( 2 );
+
+    return s;
+}

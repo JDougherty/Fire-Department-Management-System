@@ -72,7 +72,7 @@ bool PluginManager::load( void )
 {
     QDir pluginsDir( _sFolder );
 
-    qDebug( qPrintable( QObject::tr( "PluginManager: Loading plugins." ) ) );
+    qDebug( "%s", qPrintable( QObject::tr( "PluginManager: Loading plugins." ) ) );
 
 #if defined( Q_OS_WIN )
     if ( pluginsDir.dirName().toLower() == "debug" || pluginsDir.dirName().toLower() == "release" )

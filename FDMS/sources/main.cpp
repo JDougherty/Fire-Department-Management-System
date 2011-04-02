@@ -34,7 +34,7 @@ int main( int argc, char *argv[] )
 
     if ( !pSM->initialize() )
     {
-        qDebug( qPrintable( QObject::tr( "Running setup." ) ) );
+        qDebug( "%s", qPrintable( QObject::tr( "Running setup." ) ) );
         wndSetup s;
         s.show();
         return application.exec();
@@ -48,7 +48,7 @@ int main( int argc, char *argv[] )
         {
             case QMessageBox::Yes:
             {
-                qDebug( qPrintable( QObject::tr( "Running setup." ) ) );
+                qDebug( "%s", qPrintable( QObject::tr( "Running setup." ) ) );
                 wndSetup s;
                 s.show();
                 return application.exec();
@@ -56,7 +56,7 @@ int main( int argc, char *argv[] )
             case QMessageBox::No:
             {
                 QMessageBox::critical( 0, QObject::tr( "Error" ), QObject::tr( "Startup cannnot continue. Closing program." ), QMessageBox::Ok );
-                qCritical( qPrintable( QObject::tr( "Startup cannot continue." ) ) );
+                qCritical( "%s", qPrintable( QObject::tr( "Startup cannot continue." ) ) );
                 return 0;
             }
         }
@@ -71,7 +71,7 @@ int main( int argc, char *argv[] )
         {
             case QMessageBox::Yes:
             {
-                qDebug( qPrintable( QObject::tr( "Running program setup." ) ) );
+                qDebug( "%s", qPrintable( QObject::tr( "Running program setup." ) ) );
                 wndSetup s;
                 s.show();
                 return application.exec();
@@ -79,7 +79,7 @@ int main( int argc, char *argv[] )
             case QMessageBox::No:
             {
                 QMessageBox::critical( 0, QObject::tr( "Error" ), QObject::tr( "Startup cannnot continue. Closing program." ), QMessageBox::Ok );
-                qCritical( qPrintable( QObject::tr( "Startup cannot continue." ) ) );
+                qCritical( "%s", qPrintable( QObject::tr( "Startup cannot continue." ) ) );
                 return 0;
             }
         }

@@ -146,7 +146,7 @@ bool DatabaseManager::createTables( void )
     QString sSchema;
     QStringList slSplitSchema;
 
-    qDebug( qPrintable( QObject::tr( "Database Manager: Creating the tables." ) ) );
+    qDebug( "%s", qPrintable( QObject::tr( "Database Manager: Creating the tables." ) ) );
 
     sSchema = ""
              "CREATE TABLE department"
@@ -265,7 +265,7 @@ bool DatabaseManager::verifyTables( void )
     QSqlQuery qryTableInfo;
     QString sTableSchema;
 
-    qDebug( qPrintable( QObject::tr( "Database Manager: Verifying the database." ) ) );
+    qDebug( "%s", qPrintable( QObject::tr( "Database Manager: Verifying the database." ) ) );
 
     // While we're here, let's turn on foreign key support
     qryTableNames.exec( "PRAGMA foreign_keys = ON;" );
@@ -302,7 +302,7 @@ bool DatabaseManager::verifyTables( void )
         return false;
     }
 
-    qDebug( qPrintable( QObject::tr( "Database Manager: Valid structure." ) ) );
+    qDebug( "%s", qPrintable( QObject::tr( "Database Manager: Valid structure." ) ) );
     return true;
 }
 

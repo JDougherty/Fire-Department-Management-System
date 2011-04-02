@@ -18,6 +18,51 @@
 
 #include "wndSetup.h"
 
+/*****************************************************************************************************************/
+/* wndSetup                                                                                             wndSetup */
+/*****************************************************************************************************************/
+
+/*!
+  \param pParent Pointer to the parent widget.
+*/
+wndSetup::wndSetup( QWidget *pParent ) :
+        QWizard( pParent )
+{
+    QIcon icon;
+
+    icon.addFile( QString::fromUtf8( ":/icons/Icon.png" ), QSize(), QIcon::Normal, QIcon::Off );
+
+    setWindowTitle( tr( "Fire Department Management System" ) );
+    setWindowIcon( icon );
+    setWizardStyle( QWizard::ClassicStyle );
+    setMinimumSize( 650, 400 );
+    setMaximumSize( 650, 400 );
+
+    setPage( INTRO, new pgIntro( this ) );
+    setPage( NEW_DATABASE, new pgNewDatabase( this ) );
+    setPage( EXISTING_DATABASE, new pgExistingDatabase( this ) );
+    setPage( PLUGINS, new pgPlugins( this ) );
+    setPage( INSTALL, new pgInstall( this ) );
+    setPage( FINISH, new pgFinish( this ) );
+
+    setOption( QWizard::NoBackButtonOnStartPage );
+    setOption( QWizard::NoBackButtonOnLastPage );
+}
+
+wndSetup::~wndSetup( void )
+{
+}
+
+void wndSetup::accept( void )
+{
+    getWNDMain()->show();
+    hide();
+}
+
+/*****************************************************************************************************************/
+/* pgIntro                                                                                               pgIntro */
+/*****************************************************************************************************************/
+
 pgIntro::pgIntro( QWidget *pParent )
     : QWizardPage( pParent )
 {
@@ -45,12 +90,7 @@ pgIntro::pgIntro( QWidget *pParent )
     pBoxLayout->addWidget( pRadioNewInstallation );
     pBoxLayout->addWidget( pRadioExistingInstallation );
 
-    setLayout( pBoxLayout );
-
     pRadioNewInstallation->setChecked( true );
-
-    registerField( "newInstallation", pRadioNewInstallation );
-    registerField( "existingInstallation", pRadioExistingInstallation );
 
     font.setPointSize( 10 );
     pLabelIntro->setFont( font );
@@ -60,15 +100,24 @@ pgIntro::pgIntro( QWidget *pParent )
 
     pLabelIntro->setWordWrap( true );
     pLabelOptions->setWordWrap( true );
+
+    setLayout( pBoxLayout );
+
+    registerField( "newInstallation", pRadioNewInstallation );
+    registerField( "existingInstallation", pRadioExistingInstallation );
 }
 
 int pgIntro::nextId( void ) const
 {
     if ( pRadioNewInstallation->isChecked() )
-        return wndSetup::NewDatabase;
+        return wndSetup::NEW_DATABASE;
     else
-        return wndSetup::ExistingDatabase;
+        return wndSetup::EXISTING_DATABASE;
 }
+
+/*****************************************************************************************************************/
+/* pgNewDatabase                                                                                   pgNewDatabase */
+/*****************************************************************************************************************/
 
 pgNewDatabase::pgNewDatabase( QWidget *pParent )
     : QWizardPage( pParent )
@@ -86,21 +135,21 @@ pgNewDatabase::pgNewDatabase( QWidget *pParent )
     pGridLayout->addWidget( pLineEditFolder, 0, 1 );
     pGridLayout->addWidget( pButtonFolder, 0, 3 );
 
-    setLayout( pGridLayout );
-
-    registerField( "database.folder", pLineEditFolder );
-    connect( pButtonFolder, SIGNAL( clicked() ), this, SLOT( browse() ) );
-
     pLineEditFolder->setReadOnly( true );
 
     font.setPointSize( 10 );
     pLabelFolder->setFont( font );
     pButtonFolder->setFont( font );
+
+    setLayout( pGridLayout );
+
+    registerField( "database.folder", pLineEditFolder );
+    connect( pButtonFolder, SIGNAL( clicked() ), this, SLOT( browse() ) );
 }
 
 int pgNewDatabase::nextId( void ) const
 {
-    return wndSetup::Plugins;
+    return wndSetup::PLUGINS;
 }
 
 void pgNewDatabase::cleanupPage( void )
@@ -119,6 +168,10 @@ void pgNewDatabase::browse( void )
     }
 }
 
+/*****************************************************************************************************************/
+/* pgExistingDatabase                                                                         pgExistingDatabase */
+/*****************************************************************************************************************/
+
 pgExistingDatabase::pgExistingDatabase( QWidget *pParent )
     : QWizardPage( pParent )
 {
@@ -135,28 +188,45 @@ pgExistingDatabase::pgExistingDatabase( QWidget *pParent )
     pGridLayout->addWidget( pLineEditFile, 0, 1 );
     pGridLayout->addWidget( pButtonFile, 0, 3 );
 
-    setLayout( pGridLayout );
-
-    registerField( "database.file*", pLineEditFile );
-    connect( pButtonFile, SIGNAL( clicked() ), this, SLOT( browse() ) );
-
     pLineEditFile->setReadOnly( true );
 
     font.setPointSize( 10 );
     pLabelFile->setFont( font );
     pButtonFile->setFont( font );
+
+    setLayout( pGridLayout );
+
+    registerField( "database.file*", pLineEditFile );
+    connect( pButtonFile, SIGNAL( clicked() ), this, SLOT( browse() ) );
+}
+
+void pgExistingDatabase::browse( void )
+{
+    QString sFile = QFileDialog::getOpenFileName( this, tr( "Select the database file." ), QString::null, "*.db" );
+
+    if ( !sFile.isEmpty() )
+    {
+        qDebug( qPrintable( tr( "Setup: Database file: %s" ) ), qPrintable( sFile ) );
+        pLineEditFile->setText( sFile );
+    }
 }
 
 int pgExistingDatabase::nextId( void ) const
 {
-    return wndSetup::Plugins;
+    return wndSetup::PLUGINS;
 }
+
+void pgExistingDatabase::cleanupPage( void )
+{
+    pLineEditFile->setText( tr( "" ) );
+}
+
 
 bool pgExistingDatabase::validatePage( void )
 {
     DatabaseManager *pDBM = getDatabaseManager();
 
-    if ( !QFile::exists( pLineEditFile->text() ) )
+    if ( QFile::exists( pLineEditFile->text() ) )
     {
         QMessageBox::critical( this, tr( "Error" ), tr( "Please select a database file that exists." ), QMessageBox::Ok );
         return false;
@@ -178,30 +248,9 @@ bool pgExistingDatabase::validatePage( void )
     return true;
 }
 
-void pgExistingDatabase::cleanupPage( void )
-{
-    pLineEditFile->setText( tr( "" ) );
-}
-
-void pgExistingDatabase::browse( void )
-{
-    QString sFile = QFileDialog::getOpenFileName( this, tr( "Select the database file." ), QString::null, "*.db" );
-
-    if ( !sFile.isEmpty() )
-    {
-        qDebug( qPrintable( tr( "Setup: Database file: %s" ) ), qPrintable( sFile ) );
-        pLineEditFile->setText( sFile );
-    }
-}
-
-void pgPlugins::addPlugin( QAbstractItemModel *model, const QString &name, const QString &version, const QString &filename )
-{
-    model->insertRow( 0 );
-    //model->setData( model->index( 0, 0 ), Qt::Unchecked, Qt::CheckStateRole );
-    model->setData( model->index( 0, 0 ), name );
-    model->setData( model->index( 0, 1 ), version );
-    model->setData( model->index( 0, 2 ), filename );
-}
+/*****************************************************************************************************************/
+/* pgPlugins                                                                                           pgPlugins */
+/*****************************************************************************************************************/
 
 pgPlugins::pgPlugins( QWidget *pParent )
     : QWizardPage( pParent )
@@ -227,14 +276,6 @@ pgPlugins::pgPlugins( QWidget *pParent )
     pGridLayout->addWidget( pGroupBoxPlugins, 2, 0, 3, 0 );
     pBoxLayout->addWidget( pTreeViewPlugins );
 
-    pGroupBoxPlugins->setLayout( pBoxLayout );
-    setLayout( pGridLayout );
-
-    pTreeViewPlugins->setModel( pModel );
-
-    registerField( "plugins.folder", pLineEditFolder );
-    connect( pButtonFolder, SIGNAL( clicked() ), this, SLOT( browse() ) );
-
     pTreeViewPlugins->setSelectionMode( QTreeView::MultiSelection );
     pTreeViewPlugins->setSelectionBehavior( QAbstractItemView::SelectRows );
     pTreeViewPlugins->setEditTriggers( QAbstractItemView::NoEditTriggers );
@@ -246,49 +287,23 @@ pgPlugins::pgPlugins( QWidget *pParent )
     font.setPointSize( 10 );
     pLabelFolder->setFont( font );
     pButtonFolder->setFont( font );
-}
 
-bool pgPlugins::validatePage( void )
-{
-    QList<BasePlugin*> lPlugins = PluginManager::findAll( pLineEditFolder->text() );
-    QList<BasePlugin*> lPluginsSelected;
-
-    // loop over the selected rows
-    foreach ( QModelIndex index, pTreeViewPlugins->selectionModel()->selectedRows() )
-    {
-        QString sPluginName = pTreeViewPlugins->model()->data( index ).toString();
-        QString sVersion = pTreeViewPlugins->model()->data( index.sibling( index.row(), index.column() + 1 ) ).toString();
-
-        // find this plugin
-        foreach ( BasePlugin *pPlugin, lPlugins )
-        {
-            if ( pPlugin->getPluginInfo().getName().compare( sPluginName ) == 0 &&
-                 pPlugin->getPluginInfo().getVersion().compare( sVersion ) == 0 )
-            {
-                lPluginsSelected.push_back( pPlugin );
-            }
-        }
-    }
-
-    foreach ( BasePlugin *pPlugin, lPluginsSelected )
-    {
-        if ( !pPlugin->dependenciesMet( lPluginsSelected ) )
-        {
-            QMessageBox::critical( this, tr( "Error" ), tr( "Plugin " ) + pPlugin->getPluginInfo().getName() +
-                                               tr( " requires " ) + pPlugin->getDependencies().toString() + "." );
-            return false;
-        }
-        break;
-    }
-
-    return true;
-}
-
-void pgPlugins::cleanupPage( void )
-{
-    QStandardItemModel *pModel = new QStandardItemModel( 0, 0, pTreeViewPlugins );
     pTreeViewPlugins->setModel( pModel );
-    pLineEditFolder->setText( tr( "" ) );
+
+    pGroupBoxPlugins->setLayout( pBoxLayout );
+    setLayout( pGridLayout );
+
+    registerField( "plugins.folder", pLineEditFolder );
+    connect( pButtonFolder, SIGNAL( clicked() ), this, SLOT( browse() ) );
+}
+
+void pgPlugins::addPlugin( QAbstractItemModel *pModel, const QString &sName, const QString &sVersion, const QString &sDependencies )
+{
+    pModel->insertRow( 0 );
+    //pModel->setData( pModel->index( 0, 0 ), Qt::Unchecked, Qt::CheckStateRole );
+    pModel->setData( pModel->index( 0, 0 ), sName );
+    pModel->setData( pModel->index( 0, 1 ), sVersion );
+    pModel->setData( pModel->index( 0, 2 ), sDependencies );
 }
 
 void pgPlugins::browse( void )
@@ -330,11 +345,60 @@ void pgPlugins::browse( void )
     }
 }
 
+void pgPlugins::cleanupPage( void )
+{
+    QStandardItemModel *pModel = new QStandardItemModel( 0, 0, pTreeViewPlugins );
+    pTreeViewPlugins->setModel( pModel );
+    pLineEditFolder->setText( tr( "" ) );
+}
+
+bool pgPlugins::validatePage( void )
+{
+    QList<BasePlugin*> lPlugins = PluginManager::findAll( pLineEditFolder->text() );
+    QList<BasePlugin*> lPluginsSelected;
+
+    // loop over the selected rows
+    foreach ( QModelIndex index, pTreeViewPlugins->selectionModel()->selectedRows() )
+    {
+        QString sPluginName = pTreeViewPlugins->model()->data( index ).toString();
+        QString sVersion = pTreeViewPlugins->model()->data( index.sibling( index.row(), index.column() + 1 ) ).toString();
+
+        // find this plugin
+        foreach ( BasePlugin *pPlugin, lPlugins )
+        {
+            if ( pPlugin->getPluginInfo().getName().compare( sPluginName ) == 0 &&
+                 pPlugin->getPluginInfo().getVersion().compare( sVersion ) == 0 )
+            {
+                lPluginsSelected.push_back( pPlugin );
+            }
+        }
+    }
+
+    foreach ( BasePlugin *pPlugin, lPluginsSelected )
+    {
+        if ( !pPlugin->dependenciesMet( lPluginsSelected ) )
+        {
+            QMessageBox::critical( this, tr( "Error" ), tr( "Plugin " ) + pPlugin->getPluginInfo().getName() +
+                                               tr( " requires " ) + pPlugin->getDependencies().toString() + "." );
+            return false;
+        }
+        break;
+    }
+
+    return true;
+}
+
+/*****************************************************************************************************************/
+/* pgInstall                                                                                           pgInstall */
+/*****************************************************************************************************************/
+
 pgInstall::pgInstall( QWidget *pParent )
     : QWizardPage( pParent )
 {
     QVBoxLayout *pBoxLayout = new QVBoxLayout;
     QFont font;
+
+    bInstalled = false;
 
     setTitle( tr( "Install" ) );
 
@@ -342,24 +406,34 @@ pgInstall::pgInstall( QWidget *pParent )
 
     pBoxLayout->addWidget( pLabelInfo );
 
-    setLayout( pBoxLayout );
-
     font.setPointSize( 10 );
     pLabelInfo->setFont( font );
 
     pLabelInfo->setWordWrap( true );
-}
 
-void pgInstall::initializePage( void )
-{
-    setCommitPage( true );
-    setButtonText( QWizard::CommitButton, tr( "Install" ) );
+    setLayout( pBoxLayout );
+
+    setButtonText( QWizard::NextButton, tr( "Install" ) );
 }
 
 bool pgInstall::validatePage( void )
 {
+    if ( !bInstalled )
+    {
+        bInstalled = true;
+        wizard()->button( QWizard::BackButton )->setDisabled( true );
+        wizard()->button( QWizard::CancelButton )->setDisabled( true );
+        pLabelInfo->setText( tr( "Installation complete." ) );
+        setButtonText( QWizard::NextButton, tr( "Next" ) );
+        return false;
+    }
+
     return true;
 }
+
+/*****************************************************************************************************************/
+/* pgFinish                                                                                             pgFinish */
+/*****************************************************************************************************************/
 
 pgFinish::pgFinish( QWidget *pParent )
     : QWizardPage( pParent )
@@ -373,46 +447,17 @@ pgFinish::pgFinish( QWidget *pParent )
 
     pBoxLayout->addWidget( pLabelOutro );
 
-    setLayout( pBoxLayout );
-
     font.setPointSize( 10 );
     pLabelOutro->setFont( font );
 
     pLabelOutro->setWordWrap( true );
+
+    setLayout( pBoxLayout );
 }
 
-/*!
-  \param pParent Pointer to the parent widget.
-*/
-wndSetup::wndSetup( QWidget *pParent ) :
-        QWizard( pParent )
+void pgFinish::initializePage( void )
 {
-    QIcon icon;
-
-    icon.addFile( QString::fromUtf8( ":/icons/Icon.png" ), QSize(), QIcon::Normal, QIcon::Off );
-
-    setWindowTitle( tr( "Fire Department Management System" ) );
-    setWindowIcon( icon );
-    setWizardStyle( QWizard::ClassicStyle );
-    setMinimumSize( 650, 400 );
-    setMaximumSize( 650, 400 );
-
-    setPage( Intro, new pgIntro( this ) );
-    setPage( NewDatabase, new pgNewDatabase( this ) );
-    setPage( ExistingDatabase, new pgExistingDatabase( this ) );
-    setPage( Plugins, new pgPlugins( this ) );
-    setPage( Install, new pgInstall( this ) );
-    setPage( Finish, new pgFinish( this ) );
-}
-
-wndSetup::~wndSetup( void )
-{
-}
-
-void wndSetup::accept( void )
-{
-    getWNDMain()->show();
-    hide();
+    wizard()->setOption( QWizard::NoCancelButton );
 }
 
 //! User clicked "Finish"

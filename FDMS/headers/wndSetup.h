@@ -49,9 +49,6 @@ class wndSetup : public QWizard
 {
     Q_OBJECT
 
-    private:
-        int                         _iInstallType;
-
     private slots:
         void                        on_btnExInstFinish_clicked( void );
         void                        on_btnNewInstFinish_clicked( void );
@@ -62,7 +59,7 @@ class wndSetup : public QWizard
 
         void                        accept( void );
 
-        enum { Intro, NewDatabase, ExistingDatabase, Plugins, Install, Finish };
+        enum { INTRO, NEW_DATABASE, EXISTING_DATABASE, PLUGINS, INSTALL, FINISH };
 };
 
 class pgIntro : public QWizardPage
@@ -114,8 +111,8 @@ class pgExistingDatabase : public QWizardPage
                                     pgExistingDatabase( QWidget *pParent = 0 );
 
         int                         nextId( void ) const;
-        bool                        validatePage( void );
         void                        cleanupPage( void );
+        bool                        validatePage( void );
 };
 
 class pgPlugins : public QWizardPage
@@ -130,8 +127,8 @@ class pgPlugins : public QWizardPage
         QGroupBox                   *pGroupBoxPlugins;
         QTreeView                   *pTreeViewPlugins;
 
-        void                        addPlugin( QAbstractItemModel *model, const QString &name,
-                                               const QString &version, const QString &filename );
+        void                        addPlugin( QAbstractItemModel *pModel, const QString &sName,
+                                               const QString &sVersion, const QString &sDependencies );
 
     protected slots:
         void                        browse( void );
@@ -139,8 +136,8 @@ class pgPlugins : public QWizardPage
     public:
                                     pgPlugins( QWidget *pParent = 0 );
 
-        bool                        validatePage( void );
         void                        cleanupPage( void );
+        bool                        validatePage( void );
 };
 
 class pgInstall : public QWizardPage
@@ -149,11 +146,11 @@ class pgInstall : public QWizardPage
 
     private:
         QLabel                      *pLabelInfo;
+        bool                        bInstalled;
 
     public:
                                     pgInstall( QWidget *pParent = 0 );
 
-        void                        initializePage( void );
         bool                        validatePage( void );
 };
 
@@ -166,6 +163,8 @@ class pgFinish : public QWizardPage
 
     public:
                                     pgFinish( QWidget *pParent = 0 );
+
+        void                        initializePage( void );
 };
 
 #endif // WNDSETUP_H

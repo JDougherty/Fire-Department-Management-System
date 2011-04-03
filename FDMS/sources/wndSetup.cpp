@@ -422,7 +422,7 @@ bool pgInstall::validatePage( void )
         QList<PluginInfo> lPluginInfo = field( "plugins.selected" ).value<QList<PluginInfo> >();
 
         foreach (PluginInfo p, lPluginInfo)
-            qDebug (qPrintable(p.toString()));
+            qDebug ( "%s", qPrintable(p.toString()));
 
         if ( !pPM->setFolder( sPluginFolder ) )
         {

@@ -225,23 +225,29 @@ void pgExistingDatabase::cleanupPage( void )
 bool pgExistingDatabase::validatePage( void )
 {
     DatabaseManager *pDBM = getDatabaseManager();
+    QString sDatabaseFile = pLineEditFile->text();
 
-    if ( QFile::exists( pLineEditFile->text() ) )
+    if ( !pDBM->setFile( sDatabaseFile ) )
     {
-        QMessageBox::critical( this, tr( "Error" ), tr( "Please select a database file that exists." ), QMessageBox::Ok );
+        QMessageBox::critical( this, tr( "Error" ), tr( "Could not set database file." ) );
         return false;
     }
 
-    pDBM->setFile( pLineEditFile->text() );
+    if ( !pDBM->exists() )
+    {
+        QMessageBox::critical( this, tr( "Error" ), tr( "Database file does not exist." ) );
+        return false;
+    }
+
+    if ( !pDBM->initialize() )
+    {
+        QMessageBox::critical( this, tr( "Error" ), tr( "Could not initialize the database manager." ) );
+        return false;
+    }
+
     if ( !pDBM->open() )
     {
-        QMessageBox::critical( this, tr( "Error" ), tr( "Database could not be opened." ), QMessageBox::Ok );
-        return false;
-    }
-
-    if ( !pDBM->verify() )
-    {
-        QMessageBox::critical( this, tr( "Error" ), tr( "Database has an invalid structure." ), QMessageBox::Ok );
+        QMessageBox::critical( this, tr( "Error" ), tr( "Could not open database file." ) );
         return false;
     }
 
@@ -328,10 +334,62 @@ void pgPlugins::browse( void )
         pLineEditFolder->setText( sFolder );
         qDebug( qPrintable( tr( "Setup: Plugin folder: %s" ) ), qPrintable( sFolder ) );
 
-        foreach ( BasePlugin *pPlugin, PluginManager::findAll( sFolder ) )
-            addPlugin( pModel, pPlugin->getInfo().getName(), pPlugin->getInfo().getVersion(), pPlugin->getDependencies().toString() );
+        if ( field( "newInstallation" ).toBool() )
+        {
+            foreach ( BasePlugin *pPlugin, PluginManager::findAll( sFolder ) )
+                addPlugin( pModel, pPlugin->getInfo().getName(), pPlugin->getInfo().getVersion(), pPlugin->getDependencies().toString() );
 
-        pTreeViewPlugins->setModel( pModel );
+            pTreeViewPlugins->setModel( pModel );
+        }
+        else if ( field( "existingInstallation" ).toBool() )
+        {
+            PluginManager *pPM = getPluginManager();
+
+            if ( !pPM->setFolder( sFolder ) )
+            {
+                QMessageBox::critical( this, tr( "Error" ), tr( "Could not set plugin folder." ) );
+                this->wizard()->button( QWizard::NextButton )->setEnabled( false );
+                return;
+            }
+
+            if ( !pPM->exists( ) )
+            {
+                QMessageBox::critical( this, tr( "Error" ), tr( "Plugin folder does not exist." ) );
+                this->wizard()->button( QWizard::NextButton )->setEnabled( false );
+                return;
+            }
+
+            if ( !pPM->initialize() )
+            {
+                QMessageBox::critical( this, tr( "Error" ), tr( "Could not initialize the plugin manager." ) );
+                this->wizard()->button( QWizard::NextButton )->setEnabled( false );
+                return;
+            }
+
+            if ( !pPM->load( ) )
+            {
+                QMessageBox::critical( this, tr( "Error" ), tr( "Could not load required plugins." ) );
+                this->wizard()->button( QWizard::NextButton )->setEnabled( false );
+                return;
+            }
+
+            foreach ( BasePlugin *pPlugin, pPM->lPlugins )
+                addPlugin( pModel, pPlugin->getInfo().getName(), pPlugin->getInfo().getVersion(), pPlugin->getDependencies().toString() );
+
+            pTreeViewPlugins->setSelectionMode( QTreeView::NoSelection );
+            pTreeViewPlugins->setModel( pModel );
+            pTreeViewPlugins->selectionModel()->select( pTreeViewPlugins->model()->index(0,0), QItemSelectionModel::Select | QItemSelectionModel::Columns );
+            pTreeViewPlugins->selectionModel()->select( pTreeViewPlugins->model()->index(0,1), QItemSelectionModel::Select | QItemSelectionModel::Columns );
+            pTreeViewPlugins->selectionModel()->select( pTreeViewPlugins->model()->index(0,2), QItemSelectionModel::Select | QItemSelectionModel::Columns );
+
+            wizard()->button( QWizard::NextButton )->setEnabled( true );
+        }
+        else
+        {
+            QMessageBox::critical( this, tr( "Error" ), tr( "Unknown installation type." ) );
+            this->wizard()->button( QWizard::NextButton )->setEnabled( false );
+            return;
+        }
 
         //pTreeViewPlugins->header()->resizeSection( 0, 30 );
         pTreeViewPlugins->header()->resizeSection( 0, 200 );
@@ -349,26 +407,57 @@ void pgPlugins::cleanupPage( void )
 
 bool pgPlugins::validatePage( void )
 {
-    QList<BasePlugin*> lPlugins = PluginManager::findAll( pLineEditFolder->text() );
-    QList<BasePlugin*> lPluginsSelected;
-    lPluginInfo.clear();
+     QList<BasePlugin*> lPlugins;
+     QList<BasePlugin*> lPluginsSelected;
+     lPluginInfo.clear();
 
-    // loop over the selected rows
-    foreach ( QModelIndex index, pTreeViewPlugins->selectionModel()->selectedRows() )
+    if ( field( "newInstallation" ).toBool() )
     {
-        QString sPluginName = pTreeViewPlugins->model()->data( index ).toString();
-        QString sVersion = pTreeViewPlugins->model()->data( index.sibling( index.row(), index.column() + 1 ) ).toString();
+        // get all of the plugins in the folder
+        lPlugins = PluginManager::findAll( pLineEditFolder->text() );
 
-        // find this plugin
-        foreach ( BasePlugin *pPlugin, lPlugins )
+        // loop over the selected rows
+        foreach ( QModelIndex index, pTreeViewPlugins->selectionModel()->selectedRows() )
         {
-            if ( pPlugin->getInfo().getName().compare( sPluginName ) == 0 &&
-                 pPlugin->getInfo().getVersion().compare( sVersion ) == 0 )
+            QString sPluginName = pTreeViewPlugins->model()->data( index ).toString();
+            QString sVersion = pTreeViewPlugins->model()->data( index.sibling( index.row(), index.column() + 1 ) ).toString();
+            bool bFound = false;
+
+            // find this plugin
+            foreach ( BasePlugin *pPlugin, lPlugins )
             {
-                lPluginsSelected.push_back( pPlugin );
-                lPluginInfo.push_back( pPlugin->getInfo() );
+                if ( pPlugin->getInfo().getName().compare( sPluginName ) == 0 &&
+                     pPlugin->getInfo().getVersion().compare( sVersion ) == 0 )
+                {
+                    lPluginsSelected.push_back( pPlugin );
+                    lPluginInfo.push_back( pPlugin->getInfo() );
+                    bFound = true;
+                }
+            }
+
+            if ( !bFound )
+            {
+                QMessageBox::critical( this, tr( "Error" ), tr( "The selected plugin could not be found in the folder." ) );
+                return false;
             }
         }
+    }
+    else if ( field( "existingInstallation" ).toBool() )
+    {
+        PluginManager *pPM = getPluginManager();
+
+        if ( !pPM->load( ) )
+        {
+            QMessageBox::critical( this, tr( "Error" ), tr( "Could not load required plugins." ) );
+            return false;
+        }
+
+        lPluginsSelected = pPM->lPlugins;
+    }
+    else
+    {
+        QMessageBox::critical( this, tr( "Error" ), tr( "Unknown installation type." ) );
+        return false;
     }
 
     foreach ( BasePlugin *pPlugin, lPluginsSelected )
@@ -376,7 +465,7 @@ bool pgPlugins::validatePage( void )
         if ( !pPlugin->dependenciesMet( lPluginsSelected ) )
         {
             QMessageBox::critical( this, tr( "Error" ), tr( "Plugin " ) + pPlugin->getInfo().getName() +
-                                               tr( " requires " ) + pPlugin->getDependencies().toString() + "." );
+                tr( " requires " ) + pPlugin->getDependencies().toString() + "." );
             return false;
         }
         break;
@@ -435,7 +524,7 @@ bool pgInstall::validatePage( void )
             return false;
         }
 
-        if ( pDBM->exists() )
+        if ( field( "newInstallation" ).toBool() && pDBM->exists() )
         {
             int iResult = QMessageBox::question( this, QObject::tr( "Existing database detected." ), QObject::tr( "An existing database "
                 "was detected.\n\nWould you like to remove it so that installation can continue?" ), QMessageBox::Yes | QMessageBox::No );
@@ -486,13 +575,13 @@ bool pgInstall::validatePage( void )
             return false;
         }
 
-        if ( !pPM->install( lPluginInfo ) )
+        if ( field( "newInstallation" ).toBool() && !pPM->install( lPluginInfo ) )
         {
             QMessageBox::critical( this, tr( "Error" ), tr( "Could not install plugins." ) );
             return false;
         }
 
-        if ( !pPM->load( ) )
+        if ( !pPM->load() )
         {
             QMessageBox::critical( this, tr( "Error" ), tr( "Could not load plugins." ) );
             return false;

@@ -157,18 +157,18 @@ bool PluginManager::load( )
 
     qDebug( "%s", qPrintable( QObject::tr( "PluginManager: Loading plugins." ) ) );
 
-    lDatabasePlugins.clear();
-    lMDIWindowPlugins.clear();
-    lPlugins.clear();
+    lDatabasePlugins.clear(); lMDIWindowPlugins.clear(); lPlugins.clear();
 
     if ( !Plugin::load( installedPlugins ) )
     {
-        qDebug( "%s", qPrintable( QObject::tr( "PluginManager: Could not load plugins." ) ) );
+        qDebug( "%s", qPrintable( QObject::tr( "PluginManager: Could not load required plugins." ) ) );
         return false;
     }
 
     foreach ( installedPlugin, installedPlugins )
     {
+        bool loadedPlugin = false;
+
         foreach ( QString sFileName, pluginsDir.entryList( QDir::Files ) )
         {
             QPluginLoader pluginLoader( pluginsDir.absoluteFilePath( sFileName ) );
@@ -187,13 +187,15 @@ bool PluginManager::load( )
                     {
                         qDebug( qPrintable( QObject::tr( "PluginManager: Failed to load %s expected hash %s but file had %s" ) ),
                                 qPrintable( installedPlugin.first.toString() ), qPrintable( installedPlugin.second ), qPrintable( sHash ) );
+                        lDatabasePlugins.clear(); lMDIWindowPlugins.clear(); lPlugins.clear();
                         return false;
                     }
 
                     qDebug( qPrintable( QObject::tr( "PluginManager: Loaded %s." ) ), qPrintable( pDatabasePlugin->getInfo().toString() ) );
                     lDatabasePlugins.append( pDatabasePlugin );
                     lPlugins.append( (BasePlugin*)pDatabasePlugin );
-
+                    loadedPlugin = true;
+                    break;
                 }
                 else if ( pMDIWindowPlugin && pMDIWindowPlugin->getInfo() == installedPlugin.first )
                 {
@@ -203,16 +205,37 @@ bool PluginManager::load( )
                     {
                         qDebug( qPrintable( QObject::tr( "PluginManager: Failed to load %s expected hash %s but file had %s" ) ),
                                 qPrintable( installedPlugin.first.toString() ), qPrintable( installedPlugin.second ), qPrintable( sHash ) );
+                        lDatabasePlugins.clear(); lMDIWindowPlugins.clear(); lPlugins.clear();
                         return false;
                     }
 
                     qDebug( qPrintable( QObject::tr( "PluginManager: Loaded %s." ) ), qPrintable( pMDIWindowPlugin->getInfo().toString() ) );
                     lMDIWindowPlugins.append( pMDIWindowPlugin );
                     lPlugins.append( (BasePlugin*)pMDIWindowPlugin );
+                    loadedPlugin = true;
+                    break;
                 }
             }
         }
+        if ( !loadedPlugin )
+        {
+            qDebug( qPrintable( QObject::tr( "PluginManager: Could not find plugin file for %s." ) ), qPrintable( installedPlugin.first.toString() ) );
+            lDatabasePlugins.clear(); lMDIWindowPlugins.clear(); lPlugins.clear();
+            return false;
+        }
     }
+
+    foreach ( BasePlugin *pPlugin, lPlugins )
+    {
+        if ( !pPlugin->dependenciesMet( lPlugins ) )
+        {
+            qDebug( "%s", qPrintable( QObject::tr( "PluginManager: Dependencies not met." ) ) );
+            lDatabasePlugins.clear(); lMDIWindowPlugins.clear(); lPlugins.clear();
+            return false;
+        }
+        break;
+    }
+
     return true;
 }
 

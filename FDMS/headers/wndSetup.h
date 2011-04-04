@@ -23,6 +23,7 @@
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QHeaderView>
+#include <QItemSelectionModel>
 #include <QLabel>
 #include <QMessageBox>
 #include <QPushButton>

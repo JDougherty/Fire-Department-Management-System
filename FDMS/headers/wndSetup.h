@@ -49,10 +49,6 @@ class wndSetup : public QWizard
 {
     Q_OBJECT
 
-    private slots:
-        void                        on_btnExInstFinish_clicked( void );
-        void                        on_btnNewInstFinish_clicked( void );
-
     public:
                                     wndSetup( QWidget *pParent = 0 );
                                     ~wndSetup( void );
@@ -172,4 +168,3 @@ class pgFinish : public QWizardPage
 };
 
 #endif // WNDSETUP_H
-

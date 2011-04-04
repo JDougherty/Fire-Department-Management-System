@@ -24,6 +24,12 @@ DatabaseManager* getDatabaseManager( void )
     return &dbm;
 }
 
+QSqlDatabase getDatabaseManagerConnection( void )
+{
+    return getDatabaseManager()->getConnection();
+}
+
+
 DatabaseManager::DatabaseManager( void )
 {
     _sFile = QString::null;
@@ -39,12 +45,11 @@ DatabaseManager::~DatabaseManager( void )
 bool DatabaseManager::initialize( void )
 {
     SettingManager *sm = getSettingManager();
+
     _sFile = sm->get( "database/file" ).toString();
-
-    if ( !exists() ) return false;
-
     _DB = QSqlDatabase::addDatabase( "QSQLITE" );
     _DB.setDatabaseName( _sFile );
+
     return true;
 }
 
@@ -55,9 +60,11 @@ bool DatabaseManager::initialize( void )
 bool DatabaseManager::setFile( QString sFile )
 {
     SettingManager *sm = getSettingManager();
-    sm->set( "database/file", sFile );
 
-    return initialize();
+    sm->set( "database/file", sFile );
+    _sFile = sFile;
+
+    return true;
 }
 
 //! Deletes the SQLite database file.
@@ -304,6 +311,11 @@ bool DatabaseManager::verifyTables( void )
 
     qDebug( "%s", qPrintable( QObject::tr( "Database Manager: Valid structure." ) ) );
     return true;
+}
+
+QSqlDatabase DatabaseManager::getConnection( void )
+{
+    return _DB;
 }
 
 //! Executes a query through the database.

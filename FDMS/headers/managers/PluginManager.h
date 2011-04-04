@@ -19,11 +19,15 @@
 #ifndef PLUGINMANAGER_H
 #define PLUGINMANAGER_H
 
+#include <QByteArray>
+#include <QCryptographicHash>
 #include <QDir>
+#include <QFile>
 #include <QList>
 #include <QObject>
 #include <QPluginLoader>
 
+#include "database_objects/Plugin.h"
 #include "plugins/BasePlugin.h"
 #include "plugins/DatabasePlugin.h"
 #include "plugins/MDIWindowPlugin.h"
@@ -34,6 +38,8 @@ class PluginManager
     private:
                                     PluginManager( void );
                                     ~PluginManager( void );
+
+        QString                     getPluginHash( QString sFileName );
 
         QString                     _sFolder; //!< Plugin folder path.
 
@@ -47,6 +53,7 @@ class PluginManager
 
         bool                        exists( void );
 
+        bool                        install( QList<PluginInfo> lInstallThesePlugins );
         bool                        load( void );
 
         DatabasePlugin*             getDatabasePlugin( QString sName );

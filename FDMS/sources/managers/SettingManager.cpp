@@ -85,7 +85,7 @@ void SettingManager::load( void )
     {
         vValue = _pSettings->value( sKey );
         _Entries.insert( sKey, vValue );
-        qDebug( qPrintable( QObject::tr( "SettingManager: Loaded %s:%s" ) ), qPrintable( sKey ), qPrintable( vValue.toString() ) );
+        qDebug( qPrintable( QObject::tr( "SettingManager: Loaded %s : %s" ) ), qPrintable( sKey ), qPrintable( vValue.toString() ) );
     }
 }
 

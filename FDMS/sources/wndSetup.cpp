@@ -319,7 +319,7 @@ void pgPlugins::browse( void )
 
     if ( !sFolder.isEmpty() )
     {
-        QStandardItemModel *pModel = new QStandardItemModel( 0, 0, pTreeViewPlugins );
+        QStandardItemModel *pModel = new QStandardItemModel( 0, 3, pTreeViewPlugins );
 
         pModel->setHeaderData( 0, Qt::Horizontal, tr( "Name" ) );
         pModel->setHeaderData( 1, Qt::Horizontal, tr( "Version" ) );
@@ -331,12 +331,12 @@ void pgPlugins::browse( void )
         foreach ( BasePlugin *pPlugin, PluginManager::findAll( sFolder ) )
             addPlugin( pModel, pPlugin->getInfo().getName(), pPlugin->getInfo().getVersion(), pPlugin->getDependencies().toString() );
 
+        pTreeViewPlugins->setModel( pModel );
+
         //pTreeViewPlugins->header()->resizeSection( 0, 30 );
         pTreeViewPlugins->header()->resizeSection( 0, 200 );
         pTreeViewPlugins->header()->resizeSection( 1, 60 );
         pTreeViewPlugins->header()->resizeSection( 2, 200 );
-
-        pTreeViewPlugins->setModel( pModel );
     }
 }
 
@@ -417,20 +417,82 @@ bool pgInstall::validatePage( void )
 {
     if ( !bInstalled )
     {
+        DatabaseManager *pDBM = getDatabaseManager();
         PluginManager *pPM = getPluginManager();
+        QString sDatabaseFolder = field( "database.folder" ).toString();
         QString sPluginFolder = field( "plugins.folder" ).toString();
         QList<PluginInfo> lPluginInfo = field( "plugins.selected" ).value<QList<PluginInfo> >();
 
-        foreach (PluginInfo p, lPluginInfo)
-            qDebug ( "%s", qPrintable(p.toString()));
-
-        if ( !pPM->setFolder( sPluginFolder ) )
+        if ( !pDBM->setFile( sDatabaseFolder + QDir::separator() + "fdms.db" ) )
         {
-            QMessageBox::critical( this, tr( "Error" ), tr( "Could not open plugin folder." ) );
+            QMessageBox::critical( this, tr( "Error" ), tr( "Could not set database file." ) );
             return false;
         }
 
-        if ( !pPM->load(  ) )
+        if ( !pDBM->initialize() )
+        {
+            QMessageBox::critical( this, tr( "Error" ), tr( "Could not initialize the database manager." ) );
+            return false;
+        }
+
+        if ( pDBM->exists() )
+        {
+            int iResult = QMessageBox::question( this, QObject::tr( "Existing database detected." ), QObject::tr( "An existing database "
+                "was detected.\n\nWould you like to remove it so that installation can continue?" ), QMessageBox::Yes | QMessageBox::No );
+
+            switch ( iResult )
+            {
+                case QMessageBox::Yes:
+                {
+                    if ( !pDBM->removeFile() )
+                    {
+                        QMessageBox::critical( this, QObject::tr( "Error" ), QObject::tr( "Failed to remove the file. Installation "
+                            "cannot continue." ), QMessageBox::Ok );
+                        qDebug( "%s", qPrintable( QObject::tr( "Failed to remove the file. Installation cannot continue." ) ) );
+                    }
+                    break;
+                }
+                case QMessageBox::No:
+                {
+                    QMessageBox::critical( this, QObject::tr( "Error" ), QObject::tr( "Installation cannot continue without first "
+                        "removing the database file." ), QMessageBox::Ok );
+                    qDebug( "%s", qPrintable( QObject::tr( "Installation cannot continue without first removing the database file." ) ) );
+                    return false;
+                }
+            }
+        }
+
+        if ( !pDBM->open() )
+        {
+            QMessageBox::critical( this, tr( "Error" ), tr( "Could not open database file." ) );
+            return false;
+        }
+
+        if ( !pPM->setFolder( sPluginFolder ) )
+        {
+            QMessageBox::critical( this, tr( "Error" ), tr( "Could not set plugin folder." ) );
+            return false;
+        }
+
+        if ( !pPM->exists( ) )
+        {
+            QMessageBox::critical( this, tr( "Error" ), tr( "Plugin folder does not exist." ) );
+            return false;
+        }
+
+        if ( !pPM->initialize() )
+        {
+            QMessageBox::critical( this, tr( "Error" ), tr( "Could not initialize the plugin manager." ) );
+            return false;
+        }
+
+        if ( !pPM->install( lPluginInfo ) )
+        {
+            QMessageBox::critical( this, tr( "Error" ), tr( "Could not install plugins." ) );
+            return false;
+        }
+
+        if ( !pPM->load( ) )
         {
             QMessageBox::critical( this, tr( "Error" ), tr( "Could not load plugins." ) );
             return false;
@@ -474,191 +536,4 @@ pgFinish::pgFinish( QWidget *pParent )
 void pgFinish::initializePage( void )
 {
     wizard()->setOption( QWizard::NoCancelButton );
-}
-
-//! User clicked "Finish"
-/*!
-  Checks user input, opens and validates the DB, saves the settings, and
-  launches the main menu.
-*/
-void wndSetup::on_btnExInstFinish_clicked( void )
-{
-    /*SettingManager *pSM = getSettingManager();
-    DatabaseManager *pDM = getDatabaseManager();
-    QString sDBFile;
-
-    _pUI->progExInstStatus->show();
-    _pUI->lblExInstStatus->show();
-
-    // Check user input
-    _pUI->lblExInstStatus->setText( QString( "Checking user input." ) );
-    _pUI->progExInstStatus->setValue( 1 ); // forces the ui to update and show the text and progress bar
-
-    sDBFile = _pUI->leExInstDBLocation->text();
-    if ( sDBFile == "" )
-    {
-        _pUI->tabWidget->setCurrentIndex( 2 ); // tabExInstDBSettings
-        QMessageBox::warning( this, "Error", "Please select a database file.", QMessageBox::Ok );
-        clearAndHideProgressBars();
-        return;
-    }
-
-    _pUI->progExInstStatus->setValue( 15 );
-
-    if ( !QFile::exists( sDBFile ) )
-    {
-        _pUI->tabWidget->setCurrentIndex( 2 ); // tabExInstDBSettings
-        QMessageBox::warning( this, "Error", "Please select a file that exists.", QMessageBox::Ok );
-        clearAndHideProgressBars();
-        return;
-    }
-
-    // Try connecting to the database
-    _pUI->lblExInstStatus->setText( QString( "Opening the database." ) );
-    _pUI->progExInstStatus->setValue( 30 );
-
-    pDM->setFile( sDBFile );
-    if ( !pDM->open() )
-    {
-        QMessageBox::critical( this, "Critical Error", "Database could not be opened.", QMessageBox::Ok );
-        qCritical( "Setup: Critical Error - Database: Could not be opened." );
-        clearAndHideProgressBars();
-        return;
-    }
-
-    _pUI->lblExInstStatus->setText( QString( "Verifying the database." ) );
-    _pUI->progExInstStatus->setValue( 50 );
-
-    if ( !pDM->verify() )
-    {
-        QMessageBox::critical( this, "Critical Error", "Database has an invalid structure.", QMessageBox::Ok );
-        qCritical( "Setup: Critical Error - Database: Invalid structure." );
-        clearAndHideProgressBars();
-        return;
-    }
-
-    // Save the configuration file
-    _pUI->lblExInstStatus->setText( QString( "Saving configuration file." ) );
-    _pUI->progExInstStatus->setValue( 80 );
-
-    pSM->save();
-
-    // All done
-    _pUI->lblExInstStatus->setText( QString( "Finished." ) );
-    _pUI->progExInstStatus->setValue( 100 );
-
-    hide();*/
-}
-
-//! User clicked "Finish"
-/*!
-  Checks user input, opens, builds, and validates the DB, saves the settings, and
-  launches the main menu.
-*/
-void wndSetup::on_btnNewInstFinish_clicked( void )
-{
-    /*SettingManager *pSM = getSettingManager();
-    DatabaseManager *pDM = getDatabaseManager();
-    QString sDBLocation;
-    QString sDBFile;
-
-    _pUI->progNewInstStatus->show();
-    _pUI->lblNewInstStatus->show();
-
-    // Check user input
-    _pUI->lblNewInstStatus->setText( QString( "Checking user input." ) );
-    _pUI->progNewInstStatus->setValue( 1 ); // forces the ui to update and show the text and progress bar
-
-    sDBLocation = _pUI->leNewInstDBLocation->text();
-    if ( sDBLocation == "" )
-    {
-        _pUI->tabWidget->setCurrentIndex( 3 ); // tabNewInstDBSettings
-        QMessageBox::warning( this, "Error", "Please select a location to place the database file.", QMessageBox::Ok );
-        clearAndHideProgressBars();
-        return;
-    }
-
-    _pUI->progNewInstStatus->setValue( 15 );
-
-    if ( !QFile::exists( sDBLocation ) )
-    {
-        _pUI->tabWidget->setCurrentIndex( 3 ); // tabNewInstDBSettings
-        QMessageBox::warning( this, "Error", "Please select a location that exists.", QMessageBox::Ok );
-        clearAndHideProgressBars();
-        return;
-    }
-
-    // Try setting up the database
-    _pUI->lblNewInstStatus->setText( QString( "Opening the database." ) );
-    _pUI->progNewInstStatus->setValue( 30 );
-
-    sDBFile = sDBLocation;
-    sDBFile.append( QDir::separator() ).append( "fdms.db" );
-    sDBFile = QDir::toNativeSeparators( sDBFile );
-
-    pDM->setFile( sDBFile );
-    if ( pDM->exists() )
-    {
-        int iResult = QMessageBox::question( this, "Overwrite database?", "Database file already exists in this directory.\nOverwrite the file?",
-                                             QMessageBox::Yes | QMessageBox::No );
-
-        switch ( iResult )
-        {
-           case QMessageBox::Yes:
-               pDM->removeFile();
-               break;
-           case QMessageBox::No:
-               _pUI->tabWidget->setCurrentIndex( 2 ); // tabNewInstDBSettings
-               QMessageBox::warning( this, "Select database location.", "Please select a new database location.", QMessageBox::Ok );
-               clearAndHideProgressBars();
-               return;
-           default:
-               QMessageBox::critical( this, "Critical Error", "Default case reached.", QMessageBox::Ok );
-               qCritical( "Setup: Critical Error - Default case reached." );
-               clearAndHideProgressBars();
-               return;
-         }
-    }
-
-    if ( !pDM->open() )
-    {
-        QMessageBox::critical( this, "Critical Error", "Database could not be opened.", QMessageBox::Ok );
-        qCritical( "Setup: Critical Error - Database: Could not be opened." );
-        clearAndHideProgressBars();
-        return;
-    }
-
-    _pUI->lblNewInstStatus->setText( QString( "Building the database." ) );
-    _pUI->progNewInstStatus->setValue( 45 );
-
-    if ( !pDM->create() )
-    {
-        QMessageBox::critical( this, "Critical Error", "Database could not be created.", QMessageBox::Ok );
-        qCritical( "Setup: Critical Error - Database: Could not be created." );
-        clearAndHideProgressBars();
-        return;
-    }
-
-    _pUI->lblNewInstStatus->setText( QString( "Verifying the database." ) );
-    _pUI->progNewInstStatus->setValue( 60 );
-
-    if ( !pDM->verify() )
-    {
-        QMessageBox::critical( this, "Critical Error", "Database has an invalid structure.", QMessageBox::Ok );
-        qCritical( "Setup: Critical Error - Database: Invalid structure." );
-        clearAndHideProgressBars();
-        return;
-    }
-
-    //Save the configuration file
-    _pUI->progNewInstStatus->setValue( 80 );
-    _pUI->lblNewInstStatus->setText( QString( "Saving configuration file." ) );
-
-    pSM->save();
-
-    // All done
-    _pUI->lblNewInstStatus->setText( QString( "Finished." ) );
-    _pUI->progNewInstStatus->setValue( 100 );
-
-    hide();*/
 }

@@ -32,6 +32,7 @@
 #include <QStringList>
 #include <QSqlDatabase>
 #include <QSqlError>
+#include <QSqlRecord>
 #include <QSqlQuery>
 #include <QtDebug>
 #include <QTextEdit>
@@ -62,6 +63,7 @@ class DatabaseManager
 
     public:
         friend DatabaseManager*     getDatabaseManager( void );
+        friend QSqlDatabase         getDatabaseManagerConnection( void );
 
         bool                        initialize( void );
 
@@ -76,6 +78,8 @@ class DatabaseManager
         bool                        create( void );
         bool                        verify( void );
 
+        QSqlDatabase                getConnection( void );
+
         void                        buildQueries( QWidget *pWidget, QString sTableName, QString sTabName = "" );
 
         bool                        query( QSqlQuery &qry );
@@ -84,5 +88,6 @@ class DatabaseManager
 };
 
 DatabaseManager* getDatabaseManager( void );
+QSqlDatabase getDatabaseManagerConnection( void );
 
 #endif

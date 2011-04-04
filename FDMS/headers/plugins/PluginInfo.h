@@ -27,6 +27,12 @@ class PluginInfo
         QString _sName, _sVersion;
 
     public:
+        PluginInfo( void )
+        {
+            _sName = "invalid";
+            _sVersion = "invalid";
+        }
+
         PluginInfo( QString sName, QString sVersion )
         {
             _sName = sName;

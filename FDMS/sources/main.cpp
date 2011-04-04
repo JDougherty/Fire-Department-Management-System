@@ -29,10 +29,10 @@ int main( int argc, char *argv[] )
 {
     QApplication application( argc, argv );
     SettingManager *pSM = getSettingManager();
-    DatabaseManager *pDM = getDatabaseManager();
+    DatabaseManager *pDBM = getDatabaseManager();
     PluginManager *pPM = getPluginManager();
 
-    if ( !pSM->initialize() )
+    if ( !pSM->initialize() || !pSM->exists() )
     {
         qDebug( "%s", qPrintable( QObject::tr( "Running setup." ) ) );
         wndSetup s;
@@ -40,7 +40,7 @@ int main( int argc, char *argv[] )
         return application.exec();
     }
 
-    if ( !pDM->initialize() )
+    if ( !pDBM->initialize() || !pDBM->exists() || !pDBM->open() )
     {
         int iResult = QMessageBox::critical( 0, QObject::tr( "Error" ), QObject::tr( "Database Manager could not be initialized. Run setup?" ), QMessageBox::Yes | QMessageBox::No );
 
@@ -62,7 +62,7 @@ int main( int argc, char *argv[] )
         }
     }
 
-    if ( !pPM->initialize() )
+    if ( !pPM->initialize() || !pPM->exists() ||!pPM->load() )
     {
         int iResult = QMessageBox::critical( 0, QObject::tr( "Error" ), QObject::tr( "Plugin Manager could not be initialized. Run setup?" ),
                                              QMessageBox::Yes | QMessageBox::No );
@@ -85,6 +85,7 @@ int main( int argc, char *argv[] )
         }
     }
 
+    getWNDMain()->registerPlugins();
     getWNDMain()->show();
     return application.exec();
 }

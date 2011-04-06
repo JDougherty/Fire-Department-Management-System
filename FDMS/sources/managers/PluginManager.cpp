@@ -161,10 +161,11 @@ bool PluginManager::load( )
 
     if ( !Plugin::load( installedPlugins ) )
     {
-        qDebug( "%s", qPrintable( QObject::tr( "PluginManager: Could not load required plugins." ) ) );
+        qDebug( "%s", qPrintable( QObject::tr( "PluginManager: Could not load required plugins from database." ) ) );
         return false;
     }
 
+    // match plugins from db to those in the folder
     foreach ( installedPlugin, installedPlugins )
     {
         bool loadedPlugin = false;
@@ -227,9 +228,9 @@ bool PluginManager::load( )
 
     foreach ( BasePlugin *pPlugin, lPlugins )
     {
-        if ( !pPlugin->dependenciesMet( lPlugins ) )
+        if ( !pPlugin->loadDependencies( lPlugins ) )
         {
-            qDebug( "%s", qPrintable( QObject::tr( "PluginManager: Dependencies not met." ) ) );
+            qDebug( qPrintable( QObject::tr( "PluginManager: Could not load all dependencies for %s." ) ), qPrintable( pPlugin->getInfo().toString() ) );
             lDatabasePlugins.clear(); lMDIWindowPlugins.clear(); lPlugins.clear();
             return false;
         }

@@ -416,7 +416,7 @@ bool pgPlugins::validatePage( void )
         // get all of the plugins in the folder
         lPlugins = PluginManager::findAll( pLineEditFolder->text() );
 
-        // loop over the selected rows
+        // loop over the selected rows and match the plugin info up
         foreach ( QModelIndex index, pTreeViewPlugins->selectionModel()->selectedRows() )
         {
             QString sPluginName = pTreeViewPlugins->model()->data( index ).toString();
@@ -441,34 +441,39 @@ bool pgPlugins::validatePage( void )
                 return false;
             }
         }
+
+        // check dependencies
+        foreach ( BasePlugin *pPlugin1, lPluginsSelected )
+        {
+            foreach ( PluginInfo requiredPlugin, pPlugin1->getDependencies() )
+            {
+                bool bMet;
+                foreach ( BasePlugin *pPlugin2, lPluginsSelected )
+                {
+                    if ( requiredPlugin == pPlugin2->getInfo() )
+                    {
+                        bMet = true;
+                        break;
+                    }
+                }
+                if ( !bMet )
+                {
+                    QMessageBox::critical( this, tr( "Error" ), tr( "Plugin " ) + pPlugin1->getInfo().getName() +
+                        tr( " requires " ) + requiredPlugin.toString() + "." );
+                    return false;
+                }
+            }
+        }
     }
     else if ( field( "existingInstallation" ).toBool() )
     {
-        PluginManager *pPM = getPluginManager();
-
-        if ( !pPM->load( ) )
-        {
-            QMessageBox::critical( this, tr( "Error" ), tr( "Could not load required plugins." ) );
-            return false;
-        }
-
-        lPluginsSelected = pPM->lPlugins;
+        // browse() already loaded the plugins into the plugin manager
+        lPluginsSelected = getPluginManager()->lPlugins;
     }
     else
     {
         QMessageBox::critical( this, tr( "Error" ), tr( "Unknown installation type." ) );
         return false;
-    }
-
-    foreach ( BasePlugin *pPlugin, lPluginsSelected )
-    {
-        if ( !pPlugin->dependenciesMet( lPluginsSelected ) )
-        {
-            QMessageBox::critical( this, tr( "Error" ), tr( "Plugin " ) + pPlugin->getInfo().getName() +
-                tr( " requires " ) + pPlugin->getDependencies().toString() + "." );
-            return false;
-        }
-        break;
     }
 
     return true;
@@ -538,6 +543,7 @@ bool pgInstall::validatePage( void )
                         QMessageBox::critical( this, QObject::tr( "Error" ), QObject::tr( "Failed to remove the file. Installation "
                             "cannot continue." ), QMessageBox::Ok );
                         qDebug( "%s", qPrintable( QObject::tr( "Failed to remove the file. Installation cannot continue." ) ) );
+                        return false;
                     }
                     break;
                 }
@@ -563,7 +569,7 @@ bool pgInstall::validatePage( void )
             return false;
         }
 
-        if ( !pPM->exists( ) )
+        if ( !pPM->exists() )
         {
             QMessageBox::critical( this, tr( "Error" ), tr( "Plugin folder does not exist." ) );
             return false;

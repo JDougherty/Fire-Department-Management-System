@@ -11,24 +11,28 @@
 
 class BasePlugin
 {
+    private:
+        QList<BasePlugin*>          _Dependencies;
+
     public:
         virtual                     ~BasePlugin( void ) {}
 
         virtual PluginInfo          getInfo( void ) = 0;
         virtual DependencyList      getDependencies( void ) = 0;
 
-        bool dependenciesMet( QList<BasePlugin*> plugins )
+        bool loadDependencies( QList<BasePlugin*> plugins )
         {
-            bool bMet;
+             _Dependencies.clear();
 
             foreach ( PluginInfo dependency, getDependencies() )
             {
-                bMet = false;
+                bool bMet = false;
 
                 foreach ( BasePlugin *pPlugin, plugins )
                 {
                     if ( pPlugin->getInfo() == dependency )
                     {
+                        _Dependencies.push_back( pPlugin );
                         bMet = true;
                         break;
                     }
@@ -36,8 +40,9 @@ class BasePlugin
 
                 if ( !bMet )
                 {
+                    _Dependencies.clear();
                     qDebug( "%s", qPrintable( QObject::tr( "BasePlugin: Need " ) + getDependencies().toString() + "." ) );
-                    qDebug( "%s", qPrintable( QObject::tr( "BasePlugin: Dependencies NOT met for " ) + getInfo().toString() + "." ) );
+                    qDebug( "%s", qPrintable( QObject::tr( "BasePlugin: Could not load all dependencies for " ) + getInfo().toString() + "." ) );
                     return false;
                 }
 

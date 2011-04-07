@@ -43,6 +43,12 @@ wndMain::~wndMain( void )
     delete _pUI;
 }
 
+void wndMain::closeEvent( QCloseEvent *pEvent )
+ {
+    _pMDIArea->closeAllSubWindows();
+    pEvent->accept();
+}
+
 void wndMain::registerPlugins( void )
 {
     PluginManager *pm = getPluginManager();

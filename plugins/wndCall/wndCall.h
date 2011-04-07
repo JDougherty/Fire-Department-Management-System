@@ -14,46 +14,37 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 */
 
-#ifndef WNDACTIVECALL_H
-#define WNDACTIVECALL_H
+#ifndef WNDACTIVE_H
+#define WNDACTIVE_H
 
-#include <QMainWindow>
+#include <QListWidgetItem>
 #include <QMessageBox>
-#include <QList>
-#include "databaseitem.h"
+
+#include "MDIWindow.h"
 
 namespace Ui
 {
-    class wndActiveCall;
+    class wndCall;
 }
 
 //! GUI for adding a call and editing call data.
-class wndActiveCall : public QMainWindow, public DatabaseItem
+class wndCall : public QMainWindow, public MDIWindow
 {
     Q_OBJECT
 
     private:
-        Ui::wndActiveCall       *_pUI;
+        Ui::wndCall                 *_pUI;
+        int                         _iID;
 
     private slots:
-        void                    btnSaveCallClicked( void );
+        void                        btnSaveCallClicked( void );
 
     public:
-                                wndActiveCall( QWidget *pParent, DatabaseManager *pDB );
-                                wndActiveCall( QWidget *pParent, DatabaseManager *pDB, int iID );
-
-                                ~wndActiveCall( void );
-
-        bool                    Insert( void );
-        bool                    Update( void );
-        bool                    Select( void );
-
-        bool                    BuildQueries( void );
-        static bool             Create( DatabaseManager *pDB );
-        static bool             Delete( DatabaseManager *pDB, int iID );
+                                    wndCall( QWidget *pParent );
+                                    wndCall( QWidget *pParent, int iID );
+                                    ~wndCall( void );
 };
 
-#endif // WNDACTIVECALL_H
+#endif // WNDACTIVE_H

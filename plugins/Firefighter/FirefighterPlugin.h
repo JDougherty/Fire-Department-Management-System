@@ -16,32 +16,26 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef WNDFIREFIGHTERPLUGIN_H
-#define WNDFIREFIGHTERPLUGIN_H
+#ifndef FIREFIGHTERPLUGIN_H
+#define FIREFIGHTERPLUGIN_H
 
-#include <QMenu>
 #include <QObject>
 #include <QtCore/QtPlugin>
 
+#include "plugins/DatabasePlugin.h"
 #include "plugins/DependencyList.h"
-#include "plugins/MDIWindowPlugin.h"
 #include "plugins/PluginInfo.h"
-#include "MDIWindow.h"
-#include "wndFirefighter.h"
 
-class wndFirefighterPlugin : public QObject, MDIWindowPlugin
+class CallPlugin : public QObject, DatabasePlugin
 {
     Q_OBJECT
-    Q_INTERFACES( MDIWindowPlugin )
+    Q_INTERFACES( DatabasePlugin )
 
     public:
         PluginInfo                  getInfo( void );
         DependencyList              getDependencies( void );
 
-        MDIWindow *                 getInstance( QWidget *pParent );
-        MDIWindow *                 getInstance( QWidget *pParent, QMdiArea *pMDIArea );
-
-        void                        menuBar( QMenu *pMenuBar );
+        QString                     echo( const QString &message );
 };
 
-#endif // WNDFIREFIGHTERPLUGIN_H
+#endif // FIREFIGHTERPLUGIN_H

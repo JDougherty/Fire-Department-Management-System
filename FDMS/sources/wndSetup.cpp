@@ -55,6 +55,7 @@ wndSetup::~wndSetup( void )
 
 void wndSetup::accept( void )
 {
+    getWNDMain()->registerPlugins();
     getWNDMain()->show();
     hide();
 }
@@ -447,7 +448,7 @@ bool pgPlugins::validatePage( void )
         {
             foreach ( PluginInfo requiredPlugin, pPlugin1->getDependencies() )
             {
-                bool bMet;
+                bool bMet = false;
                 foreach ( BasePlugin *pPlugin2, lPluginsSelected )
                 {
                     if ( requiredPlugin == pPlugin2->getInfo() )

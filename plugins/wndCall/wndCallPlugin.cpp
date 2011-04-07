@@ -16,22 +16,38 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "FirefighterPlugin.h"
+#include "wndCallPlugin.h"
 
-PluginInfo FirefighterPlugin::getInfo( void )
+PluginInfo wndCallPlugin::getInfo( void )
 {
-    return PluginInfo( "Firefighter", "0.01" );
+    return PluginInfo( "wndCall", "0.01" );
 }
 
-DependencyList FirefighterPlugin::getDependencies( void )
+DependencyList wndCallPlugin::getDependencies( void )
 {
     DependencyList dependencies;
+    dependencies.add( PluginInfo( "Call", "0.01" ) );
     return dependencies;
 }
 
-QString FirefighterPlugin::echo(const QString &message)
+void wndCallPlugin::menuBar( QMenu *pMenuBar )
 {
-    return message + "AAAAAAAAAAA";
+    QIcon icon;
+    icon.addFile( QString::fromUtf8( ":/icons/AddCall.png" ), QSize(), QIcon::Normal, QIcon::Off );
+    pMenuBar->addAction( icon, tr( "Add Call" ) );
 }
 
-Q_EXPORT_PLUGIN2( firefighter, FirefighterPlugin );
+MDIWindow* wndCallPlugin::getInstance( QWidget *pParent )
+{
+    wndCall *pWindow = new wndCall( pParent );
+    return pWindow;
+}
+
+MDIWindow* wndCallPlugin::getInstance( QWidget *pParent, QMdiArea *pMDIArea )
+{
+    wndCall *pWindow = new wndCall( pParent );
+    pMDIArea->addSubWindow( pWindow );
+    return pWindow;
+}
+
+Q_EXPORT_PLUGIN2( wndcall, wndCallPlugin );

@@ -4,7 +4,7 @@ UI_DIR = ui/
 
 CONFIG += plugin
 
-INCLUDEPATH += ../FDMS/headers
+INCLUDEPATH += ../../FDMS/headers
 
 HEADERS = wndFirefighter.h \
     wndFirefighterPlugin.h
@@ -14,7 +14,7 @@ SOURCES = wndFirefighter.cpp \
 
 TARGET = $$qtLibraryTarget($$TARGET)
 
-DESTDIR = ../plugins
+DESTDIR = ../
 
 FORMS += \
     wndFirefighter.ui

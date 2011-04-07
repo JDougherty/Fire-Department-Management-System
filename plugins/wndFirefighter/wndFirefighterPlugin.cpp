@@ -18,36 +18,36 @@
 
 #include "wndFirefighterPlugin.h"
 
-PluginInfo wndFirefighterPlugin::getInfo( void )
+PluginInfo wndCallPlugin::getInfo( void )
 {
     return PluginInfo( "wndFirefighter", "0.01" );
 }
 
-DependencyList wndFirefighterPlugin::getDependencies( void )
+DependencyList wndCallPlugin::getDependencies( void )
 {
     DependencyList dependencies;
     dependencies.add( PluginInfo( "Firefighter", "0.01" ) );
     return dependencies;
 }
 
-void wndFirefighterPlugin::menuBar( QMenu *pMenuBar )
+void wndCallPlugin::menuBar( QMenu *pMenuBar )
 {
     QIcon icon;
     icon.addFile( QString::fromUtf8( ":/icons/AddFirefighter.png" ), QSize(), QIcon::Normal, QIcon::Off );
     pMenuBar->addAction( icon, tr( "Add Firefighter" ) );
 }
 
-MDIWindow* wndFirefighterPlugin::getInstance( QWidget *pParent )
+MDIWindow* wndCallPlugin::getInstance( QWidget *pParent )
 {
     wndFirefighter *pWindow = new wndFirefighter( pParent );
     return pWindow;
 }
 
-MDIWindow* wndFirefighterPlugin::getInstance( QWidget *pParent, QMdiArea *pMDIArea )
+MDIWindow* wndCallPlugin::getInstance( QWidget *pParent, QMdiArea *pMDIArea )
 {
     wndFirefighter *pWindow = new wndFirefighter( pParent );
     pMDIArea->addSubWindow( pWindow );
     return pWindow;
 }
 
-Q_EXPORT_PLUGIN2( wndfirefighter, wndFirefighterPlugin );
+Q_EXPORT_PLUGIN2( wndfirefighter, wndCallPlugin );

@@ -19,6 +19,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QCloseEvent>
 #include <QDir>
 #include <QPluginLoader>
 #include <QMainWindow>
@@ -42,6 +43,9 @@ class wndMain : public QMainWindow
 
         Ui::wndMain                 *_pUI;
         QMdiArea                    *_pMDIArea;
+
+    protected:
+        void                        closeEvent( QCloseEvent *event );
 
     public:
         friend wndMain*             getWNDMain( void );

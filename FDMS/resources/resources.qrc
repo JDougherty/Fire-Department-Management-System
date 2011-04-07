@@ -1,9 +1,7 @@
 <RCC>
     <qresource prefix="/icons">
         <file>Icon.png</file>
-        <file>AddCall.png</file>
         <file>AddDrill.png</file>
-        <file>AddFirefighter.png</file>
         <file>InventoryCheck.png</file>
         <file>InventoryControl.png</file>
     </qresource>

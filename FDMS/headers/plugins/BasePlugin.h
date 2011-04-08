@@ -11,7 +11,7 @@
 
 class BasePlugin
 {
-    private:
+    protected:
         QList<BasePlugin*>          _Dependencies;
 
     public:

@@ -26,6 +26,7 @@ HEADERS += \
     headers/plugins/PluginInfo.h \
     headers/plugins/DependencyList.h \
     headers/database_objects/Plugin.h \
+    headers/database_objects/DatabaseItem.h
 
 FORMS += \
     forms/wndMain.ui

@@ -16,25 +16,26 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef DATABASEPLUGIN_H
-#define DATABASEPLUGIN_H
+#ifndef FIREFIGHTER_H
+#define FIREFIGHTER_H
 
-#include <QString>
+#include <QList>
+#include <QObject>
+#include <QPair>
+#include <QSqlTableModel>
 
-#include "BasePlugin.h"
 #include "database_objects/DatabaseItem.h"
+#include "managers/DatabaseManager.h"
 
-class DatabasePlugin : public BasePlugin
+class Firefighter : public DatabaseItem
 {
     public:
-        virtual                     ~DatabasePlugin( void ) {}
+                                    Firefighter( void );
+                                    Firefighter( int iID );
 
-        virtual DatabaseItem *      getInstance( void ) = 0;
-        virtual DatabaseItem *      getInstance( int iID ) = 0;
-
-        virtual QString             echo( const QString &message ) = 0;
+        bool                        createTable( void );
+        bool                        save( void );
+        bool                        load( void );
 };
 
-Q_DECLARE_INTERFACE( DatabasePlugin, "com.FDS.Plugin.Database/1.0" );
-
-#endif // DATABASEPLUGIN_H
+#endif // FIREFIGHTER_H

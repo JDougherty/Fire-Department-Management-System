@@ -31,7 +31,6 @@ class MDIWindowPlugin : public BasePlugin
     public:
         virtual                     ~MDIWindowPlugin( void ) {}
 
-        virtual MDIWindow *         getInstance( QWidget *pParent ) = 0;
         virtual MDIWindow *         getInstance( QWidget *pParent, QMdiArea *pMDIArea ) = 0;
 
         virtual void                menuBar( QMenu *pMenuBar ) = 0;

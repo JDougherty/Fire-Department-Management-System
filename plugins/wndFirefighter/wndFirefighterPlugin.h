@@ -23,7 +23,7 @@
 #include <QObject>
 #include <QtCore/QtPlugin>
 
-#include "plugins/DatabasePlugin.h"
+#include "plugins/DatabaseObjectPlugin.h"
 #include "plugins/DependencyList.h"
 #include "plugins/MDIWindowPlugin.h"
 #include "plugins/PluginInfo.h"
@@ -39,7 +39,6 @@ class wndCallPlugin : public QObject, MDIWindowPlugin
         PluginInfo                  getInfo( void );
         DependencyList              getDependencies( void );
 
-        MDIWindow *                 getInstance( QWidget *pParent );
         MDIWindow *                 getInstance( QWidget *pParent, QMdiArea *pMDIArea );
 
         void                        menuBar( QMenu *pMenuBar );

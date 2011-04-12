@@ -22,7 +22,7 @@
 #include <QListWidgetItem>
 #include <QMessageBox>
 
-#include "database_objects/DatabaseItem.h"
+#include "database_objects/DatabaseObject.h"
 #include "MDIWindow.h"
 
 namespace Ui
@@ -36,7 +36,7 @@ class wndFirefighter : public QMainWindow, public MDIWindow
 
     private:
         Ui::wndFirefighter          *_pUI;
-        DatabaseItem                *_pFirefighter;
+        DatabaseObject              *_pFirefighter;
 
         void                        loadTrainingList( void );
         void                        toggleTrainingFields( QListWidgetItem *item );
@@ -58,7 +58,7 @@ class wndFirefighter : public QMainWindow, public MDIWindow
         void                        loadEquipmentItem( QListWidgetItem *item );
 
     public:
-                                    wndFirefighter( QWidget *pParent, DatabaseItem *pFirefighter );
+                                    wndFirefighter( QWidget *pParent, DatabaseObject *pFirefighter );
                                     ~wndFirefighter( void );
 
         void                        show( void );

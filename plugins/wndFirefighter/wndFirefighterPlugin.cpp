@@ -37,15 +37,9 @@ void wndCallPlugin::menuBar( QMenu *pMenuBar )
     pMenuBar->addAction( icon, tr( "Add Firefighter" ) );
 }
 
-MDIWindow* wndCallPlugin::getInstance( QWidget *pParent )
-{
-    wndFirefighter *pWindow = new wndFirefighter( pParent );
-    return pWindow;
-}
-
 MDIWindow* wndCallPlugin::getInstance( QWidget *pParent, QMdiArea *pMDIArea )
 {
-    wndFirefighter *pWindow = new wndFirefighter( pParent, ((DatabasePlugin*)_Dependencies[0])->getInstance() );
+    wndFirefighter *pWindow = new wndFirefighter( pParent, ((DatabaseObjectPlugin*)_Dependencies[0])->getInstance() );
     pMDIArea->addSubWindow( pWindow );
     return pWindow;
 }

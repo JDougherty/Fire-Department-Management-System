@@ -16,25 +16,25 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef DATABASEPLUGIN_H
-#define DATABASEPLUGIN_H
+#ifndef DATABASEOBJECTPLUGIN_H
+#define DATABASEOBJECTPLUGIN_H
 
 #include <QString>
 
 #include "BasePlugin.h"
-#include "database_objects/DatabaseItem.h"
+#include "database_objects/DatabaseObject.h"
 
-class DatabasePlugin : public BasePlugin
+class DatabaseObjectPlugin : public BasePlugin
 {
     public:
-        virtual                     ~DatabasePlugin( void ) {}
+        virtual                     ~DatabaseObjectPlugin( void ) {}
 
-        virtual DatabaseItem *      getInstance( void ) = 0;
-        virtual DatabaseItem *      getInstance( int iID ) = 0;
+        virtual DatabaseObject *    getInstance( void ) = 0;
+        virtual DatabaseObject *    getInstance( int iID ) = 0;
 
         virtual QString             echo( const QString &message ) = 0;
 };
 
-Q_DECLARE_INTERFACE( DatabasePlugin, "com.FDS.Plugin.Database/1.0" );
+Q_DECLARE_INTERFACE( DatabaseObjectPlugin, "com.FDS.Plugin.DatabaseObject/1.0" );
 
-#endif // DATABASEPLUGIN_H
+#endif // DATABASEOBJECTPLUGIN_H

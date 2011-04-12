@@ -99,7 +99,7 @@ bool PluginManager::install( QList<PluginInfo> lInstallThesePlugins )
 
     qDebug( "%s", qPrintable( QObject::tr( "PluginManager: Installing plugins." ) ) );
 
-    lDatabasePlugins.clear();
+    lDatabaseObjectPlugins.clear();
     lMDIWindowPlugins.clear();
     lPlugins.clear();
 
@@ -116,20 +116,20 @@ bool PluginManager::install( QList<PluginInfo> lInstallThesePlugins )
 
         if ( pPlugin )
         {
-            DatabasePlugin *pDatabasePlugin = qobject_cast<DatabasePlugin*>( pPlugin );
+            DatabaseObjectPlugin *pDatabaseObjectPlugin = qobject_cast<DatabaseObjectPlugin*>( pPlugin );
             MDIWindowPlugin *pMDIWindowPlugin = qobject_cast<MDIWindowPlugin*>( pPlugin );
 
-            if ( pDatabasePlugin && lInstallThesePlugins.contains( pDatabasePlugin->getInfo() ) )
+            if ( pDatabaseObjectPlugin && lInstallThesePlugins.contains( pDatabaseObjectPlugin->getInfo() ) )
             {
-                if ( !Plugin::save( pDatabasePlugin->getInfo(), getPluginHash( pluginsDir.absoluteFilePath( sFileName ) ) ) )
+                if ( !Plugin::save( pDatabaseObjectPlugin->getInfo(), getPluginHash( pluginsDir.absoluteFilePath( sFileName ) ) ) )
                 {
-                    qDebug( qPrintable( QObject::tr( "PluginManager: Failed to install %s." ) ), qPrintable( pDatabasePlugin->getInfo().toString() ) );
+                    qDebug( qPrintable( QObject::tr( "PluginManager: Failed to install %s." ) ), qPrintable( pDatabaseObjectPlugin->getInfo().toString() ) );
                     return false;
                 }
 
-                qDebug( qPrintable( QObject::tr( "PluginManager: Installed %s." ) ), qPrintable( pDatabasePlugin->getInfo().toString() ) );
-                lDatabasePlugins.append( pDatabasePlugin );
-                lPlugins.append( (BasePlugin*)pDatabasePlugin );
+                qDebug( qPrintable( QObject::tr( "PluginManager: Installed %s." ) ), qPrintable( pDatabaseObjectPlugin->getInfo().toString() ) );
+                lDatabaseObjectPlugins.append( pDatabaseObjectPlugin );
+                lPlugins.append( (BasePlugin*)pDatabaseObjectPlugin );
 
             }
             else if ( pMDIWindowPlugin && lInstallThesePlugins.contains( pMDIWindowPlugin->getInfo() ) )
@@ -157,7 +157,7 @@ bool PluginManager::load( )
 
     qDebug( "%s", qPrintable( QObject::tr( "PluginManager: Loading plugins." ) ) );
 
-    lDatabasePlugins.clear(); lMDIWindowPlugins.clear(); lPlugins.clear();
+    lDatabaseObjectPlugins.clear(); lMDIWindowPlugins.clear(); lPlugins.clear();
 
     if ( !Plugin::load( installedPlugins ) )
     {
@@ -177,10 +177,10 @@ bool PluginManager::load( )
 
             if ( pPlugin )
             {
-                DatabasePlugin *pDatabasePlugin = qobject_cast<DatabasePlugin*>( pPlugin );
+                DatabaseObjectPlugin *pDatabaseObjectPlugin = qobject_cast<DatabaseObjectPlugin*>( pPlugin );
                 MDIWindowPlugin *pMDIWindowPlugin = qobject_cast<MDIWindowPlugin*>( pPlugin );
 
-                if ( pDatabasePlugin && pDatabasePlugin->getInfo() == installedPlugin.first )
+                if ( pDatabaseObjectPlugin && pDatabaseObjectPlugin->getInfo() == installedPlugin.first )
                 {
                     QString sHash = getPluginHash( pluginsDir.absoluteFilePath( sFileName ) );
 
@@ -188,13 +188,13 @@ bool PluginManager::load( )
                     {
                         qDebug( qPrintable( QObject::tr( "PluginManager: Failed to load %s expected hash %s but file had %s" ) ),
                                 qPrintable( installedPlugin.first.toString() ), qPrintable( installedPlugin.second ), qPrintable( sHash ) );
-                        lDatabasePlugins.clear(); lMDIWindowPlugins.clear(); lPlugins.clear();
+                        lDatabaseObjectPlugins.clear(); lMDIWindowPlugins.clear(); lPlugins.clear();
                         return false;
                     }
 
-                    qDebug( qPrintable( QObject::tr( "PluginManager: Loaded %s." ) ), qPrintable( pDatabasePlugin->getInfo().toString() ) );
-                    lDatabasePlugins.append( pDatabasePlugin );
-                    lPlugins.append( (BasePlugin*)pDatabasePlugin );
+                    qDebug( qPrintable( QObject::tr( "PluginManager: Loaded %s." ) ), qPrintable( pDatabaseObjectPlugin->getInfo().toString() ) );
+                    lDatabaseObjectPlugins.append( pDatabaseObjectPlugin );
+                    lPlugins.append( (BasePlugin*)pDatabaseObjectPlugin );
                     loadedPlugin = true;
                     break;
                 }
@@ -206,7 +206,7 @@ bool PluginManager::load( )
                     {
                         qDebug( qPrintable( QObject::tr( "PluginManager: Failed to load %s expected hash %s but file had %s" ) ),
                                 qPrintable( installedPlugin.first.toString() ), qPrintable( installedPlugin.second ), qPrintable( sHash ) );
-                        lDatabasePlugins.clear(); lMDIWindowPlugins.clear(); lPlugins.clear();
+                        lDatabaseObjectPlugins.clear(); lMDIWindowPlugins.clear(); lPlugins.clear();
                         return false;
                     }
 
@@ -221,7 +221,7 @@ bool PluginManager::load( )
         if ( !loadedPlugin )
         {
             qDebug( qPrintable( QObject::tr( "PluginManager: Could not find plugin file for %s." ) ), qPrintable( installedPlugin.first.toString() ) );
-            lDatabasePlugins.clear(); lMDIWindowPlugins.clear(); lPlugins.clear();
+            lDatabaseObjectPlugins.clear(); lMDIWindowPlugins.clear(); lPlugins.clear();
             return false;
         }
     }
@@ -231,7 +231,7 @@ bool PluginManager::load( )
         if ( !pPlugin->loadDependencies( lPlugins ) )
         {
             qDebug( qPrintable( QObject::tr( "PluginManager: Could not load all dependencies for %s." ) ), qPrintable( pPlugin->getInfo().toString() ) );
-            lDatabasePlugins.clear(); lMDIWindowPlugins.clear(); lPlugins.clear();
+            lDatabaseObjectPlugins.clear(); lMDIWindowPlugins.clear(); lPlugins.clear();
             return false;
         }
         break;
@@ -257,13 +257,13 @@ QList<BasePlugin*> PluginManager::findAll( QString sFolder )
 
         if ( pPlugin )
         {
-            DatabasePlugin *pDatabasePlugin = qobject_cast<DatabasePlugin*>( pPlugin );
+            DatabaseObjectPlugin *pDatabaseObjectPlugin = qobject_cast<DatabaseObjectPlugin*>( pPlugin );
             MDIWindowPlugin *pMDIWindowPlugin = qobject_cast<MDIWindowPlugin*>( pPlugin );
 
-            if ( pDatabasePlugin )
+            if ( pDatabaseObjectPlugin )
             {
-                qDebug( qPrintable( QObject::tr( "PluginManager: Found %s." ) ), qPrintable( pDatabasePlugin->getInfo().toString() ) );
-                lPlugins.append( (BasePlugin*)pDatabasePlugin );
+                qDebug( qPrintable( QObject::tr( "PluginManager: Found %s." ) ), qPrintable( pDatabaseObjectPlugin->getInfo().toString() ) );
+                lPlugins.append( (BasePlugin*)pDatabaseObjectPlugin );
             }
             else if ( pMDIWindowPlugin )
             {

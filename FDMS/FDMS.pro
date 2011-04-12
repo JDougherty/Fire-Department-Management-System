@@ -16,7 +16,6 @@ SOURCES += sources/main.cpp \
 HEADERS += \
     headers/MDIWindow.h \
     headers/plugins/MDIWindowPlugin.h \
-    headers/plugins/DatabasePlugin.h \
     headers/managers/PluginManager.h \
     headers/managers/SettingManager.h \
     headers/wndSetup.h \
@@ -26,7 +25,8 @@ HEADERS += \
     headers/plugins/PluginInfo.h \
     headers/plugins/DependencyList.h \
     headers/database_objects/Plugin.h \
-    headers/database_objects/DatabaseItem.h
+    headers/plugins/DatabaseObjectPlugin.h \
+    headers/database_objects/DatabaseObject.h
 
 FORMS += \
     forms/wndMain.ui

@@ -30,13 +30,13 @@ DependencyList FirefighterPlugin::getDependencies( void )
     return dependencies;
 }
 
-DatabaseItem* FirefighterPlugin::getInstance( void )
+DatabaseObject* FirefighterPlugin::getInstance( void )
 {
     Firefighter *pFirefighter = new Firefighter();
     return pFirefighter;
 }
 
-DatabaseItem* FirefighterPlugin::getInstance( int iID )
+DatabaseObject* FirefighterPlugin::getInstance( int iID )
 {
     Firefighter *pFirefighter = new Firefighter( iID );
     return pFirefighter;

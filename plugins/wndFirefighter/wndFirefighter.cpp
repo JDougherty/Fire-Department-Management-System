@@ -19,7 +19,7 @@
 #include "wndFirefighter.h"
 #include "ui_wndFirefighter.h"
 
-wndFirefighter::wndFirefighter( QWidget *pParent, DatabaseItem *pFirefighter ) :
+wndFirefighter::wndFirefighter( QWidget *pParent, DatabaseObject *pFirefighter ) :
     QMainWindow( pParent )
 {
     _pUI = new Ui::wndFirefighter;

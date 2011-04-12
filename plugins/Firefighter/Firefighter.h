@@ -24,10 +24,10 @@
 #include <QPair>
 #include <QSqlTableModel>
 
-#include "database_objects/DatabaseItem.h"
+#include "database_objects/DatabaseObject.h"
 #include "managers/DatabaseManager.h"
 
-class Firefighter : public DatabaseItem
+class Firefighter : public DatabaseObject
 {
     public:
                                     Firefighter( void );

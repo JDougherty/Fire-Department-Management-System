@@ -29,7 +29,7 @@
 
 #include "database_objects/Plugin.h"
 #include "plugins/BasePlugin.h"
-#include "plugins/DatabasePlugin.h"
+#include "plugins/DatabaseObjectPlugin.h"
 #include "plugins/MDIWindowPlugin.h"
 #include "managers/SettingManager.h"
 
@@ -56,11 +56,11 @@ class PluginManager
         bool                        install( QList<PluginInfo> lInstallThesePlugins );
         bool                        load( void );
 
-        DatabasePlugin*             getDatabasePlugin( QString sName );
+        DatabaseObjectPlugin*             getDatabaseObjectPlugin( QString sName );
         MDIWindowPlugin*            getMDIWindowPlugin( QString sName );
 
         QList<BasePlugin*>          lPlugins;
-        QList<DatabasePlugin*>      lDatabasePlugins;
+        QList<DatabaseObjectPlugin*> lDatabaseObjectPlugins;
         QList<MDIWindowPlugin*>     lMDIWindowPlugins;
 };
 

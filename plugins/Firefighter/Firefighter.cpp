@@ -18,13 +18,12 @@
 
 #include "Firefighter.h"
 
-Firefighter::Firefighter( void ) :
-        DatabaseItem( -1 )
+Firefighter::Firefighter( void )
 {
+    _iID = -1;
 }
 
-Firefighter::Firefighter( int iID ) :
-        DatabaseItem( iID )
+Firefighter::Firefighter( int iID )
 {
     _iID = iID;
     load();

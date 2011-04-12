@@ -22,22 +22,22 @@
 #include <QObject>
 #include <QtCore/QtPlugin>
 
-#include "database_objects/DatabaseItem.h"
-#include "plugins/DatabasePlugin.h"
+#include "database_objects/DatabaseObject.h"
+#include "plugins/DatabaseObjectPlugin.h"
 #include "plugins/DependencyList.h"
 #include "plugins/PluginInfo.h"
 
-class FirefighterPlugin : public QObject, DatabasePlugin
+class FirefighterPlugin : public QObject, DatabaseObjectPlugin
 {
     Q_OBJECT
-    Q_INTERFACES( DatabasePlugin )
+    Q_INTERFACES( DatabaseObjectPlugin )
 
     public:
         PluginInfo                  getInfo( void );
         DependencyList              getDependencies( void );
 
-        DatabaseItem *              getInstance( void );
-        DatabaseItem *              getInstance( int iID );
+        DatabaseObject *            getInstance( void );
+        DatabaseObject *            getInstance( int iID );
 
         QString                     echo( const QString &message );
 };

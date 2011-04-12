@@ -19,41 +19,28 @@
 #include "wndFirefighter.h"
 #include "ui_wndFirefighter.h"
 
-wndFirefighter::wndFirefighter( QWidget *pParent ) :
+wndFirefighter::wndFirefighter( QWidget *pParent, DatabaseItem *pFirefighter ) :
     QMainWindow( pParent )
 {
     _pUI = new Ui::wndFirefighter;
     _pUI->setupUi( this );
-    _iID = -1;
+    _pFirefighter = pFirefighter;
 
-    // Hide these tabs since we want to just enter basic info first
-    _pUI->tabWidget->removeTab( 3 ); // tabReports
-    _pUI->tabWidget->removeTab( 2 ); // tabEquipment
-    _pUI->tabWidget->removeTab( 1 ); // tabTraining
+    if ( _pFirefighter->ID() <= 0 )
+    {
+        // Hide these tabs since we want to just enter basic info first
+        _pUI->tabWidget->removeTab( 3 ); // tabReports
+        _pUI->tabWidget->removeTab( 2 ); // tabEquipment
+        _pUI->tabWidget->removeTab( 1 ); // tabTraining
 
-    this->setWindowTitle( tr( "Add Firefighter" ) );
-    _pUI->btnSavePersonalInfo->setText( tr( "Add Firefighter" ) );
-
-    // Disable the training and equipment fields
-    enableTrainingFields( false );
-    enableEquipmentFields( false );
-}
-
-//! Constructor for editing a firefighter.
-/*!
-  Load the firefighter's data.
-  \param pDB Pointer to the database manager.
-  \param iID Firefighter's DB id.
-*/
-wndFirefighter::wndFirefighter( QWidget *pParent, int iID ) :
-    QMainWindow( pParent )
-{
-    _pUI = new Ui::wndFirefighter;
-    _pUI->setupUi( this );
-    _iID = iID;
-
-    this->setWindowTitle( tr( "Edit Firefighter" ) );
-    _pUI->btnSavePersonalInfo->setText( tr( "Save Firefighter" ) );
+        this->setWindowTitle( tr( "Add Firefighter" ) );
+        _pUI->btnSavePersonalInfo->setText( tr( "Add Firefighter" ) );
+    }
+    else
+    {
+        this->setWindowTitle( tr( "Edit Firefighter" ) );
+        _pUI->btnSavePersonalInfo->setText( tr( "Save Firefighter" ) );
+    }
 
     // Disable the training and equipment fields
     enableTrainingFields( false );
@@ -93,9 +80,9 @@ void wndFirefighter::btnSavePersonalInfoClicked( void )
         return;
     }
 
-    if ( _iID <= 0 )
+    if ( _pFirefighter->ID() <= 0 )
     {
-        if ( true /*Insert()*/ )
+        if ( _pFirefighter->save() )
         {
             QMessageBox::information( this, tr( "Firefighter Added" ), tr( "Firefighter has been added." ) );
 
@@ -117,7 +104,7 @@ void wndFirefighter::btnSavePersonalInfoClicked( void )
     }
     else
     {
-        if ( true /*Update()*/ )
+        if ( _pFirefighter->save() )
         {
             QMessageBox::information( this, tr( "Firefighter Updated" ), tr( "Firefighter has been updated." ) );
         }

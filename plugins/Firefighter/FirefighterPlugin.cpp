@@ -16,22 +16,35 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "Firefighter.h"
 #include "FirefighterPlugin.h"
 
-PluginInfo CallPlugin::getInfo( void )
+PluginInfo FirefighterPlugin::getInfo( void )
 {
     return PluginInfo( "Firefighter", "0.01" );
 }
 
-DependencyList CallPlugin::getDependencies( void )
+DependencyList FirefighterPlugin::getDependencies( void )
 {
     DependencyList dependencies;
     return dependencies;
 }
 
-QString CallPlugin::echo( const QString &message )
+DatabaseItem* FirefighterPlugin::getInstance( void )
+{
+    Firefighter *pFirefighter = new Firefighter();
+    return pFirefighter;
+}
+
+DatabaseItem* FirefighterPlugin::getInstance( int iID )
+{
+    Firefighter *pFirefighter = new Firefighter( iID );
+    return pFirefighter;
+}
+
+QString FirefighterPlugin::echo( const QString &message )
 {
     return message + "AAAAAAAAAAA";
 }
 
-Q_EXPORT_PLUGIN2( firefighter, CallPlugin );
+Q_EXPORT_PLUGIN2( firefighter, FirefighterPlugin );

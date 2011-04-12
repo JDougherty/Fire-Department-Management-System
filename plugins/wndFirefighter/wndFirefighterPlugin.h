@@ -23,6 +23,7 @@
 #include <QObject>
 #include <QtCore/QtPlugin>
 
+#include "plugins/DatabasePlugin.h"
 #include "plugins/DependencyList.h"
 #include "plugins/MDIWindowPlugin.h"
 #include "plugins/PluginInfo.h"

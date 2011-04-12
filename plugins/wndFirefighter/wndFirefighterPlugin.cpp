@@ -45,7 +45,7 @@ MDIWindow* wndCallPlugin::getInstance( QWidget *pParent )
 
 MDIWindow* wndCallPlugin::getInstance( QWidget *pParent, QMdiArea *pMDIArea )
 {
-    wndFirefighter *pWindow = new wndFirefighter( pParent );
+    wndFirefighter *pWindow = new wndFirefighter( pParent, ((DatabasePlugin*)_Dependencies[0])->getInstance() );
     pMDIArea->addSubWindow( pWindow );
     return pWindow;
 }

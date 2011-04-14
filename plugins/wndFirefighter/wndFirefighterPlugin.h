@@ -30,7 +30,7 @@
 #include "MDIWindow.h"
 #include "wndFirefighter.h"
 
-class wndCallPlugin : public QObject, MDIWindowPlugin
+class wndFirefighterPlugin : public QObject, MDIWindowPlugin
 {
     Q_OBJECT
     Q_INTERFACES( MDIWindowPlugin )
@@ -41,7 +41,7 @@ class wndCallPlugin : public QObject, MDIWindowPlugin
 
         MDIWindow *                 getInstance( QWidget *pParent, QMdiArea *pMDIArea );
 
-        void                        menuBar( QMenu *pMenuBar );
+        void                        addToMenuBar( QMenu *pMenuBar );
 };
 
 #endif // WNDFIREFIGHTERPLUGIN_H

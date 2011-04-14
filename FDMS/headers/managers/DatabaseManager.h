@@ -51,43 +51,27 @@ class DatabaseManager
                                     DatabaseManager( void );
                                     ~DatabaseManager( void );
 
-        bool                        createTables( void );
-        bool                        verifyTables( void );
-
-        QSqlQuery                   bindValues( QWidget *pWidget, QString sQuery, QString sTabName = "" );
-        QList<QWidget *>            getWidgets( QWidget *pWidget, QString sTabName );
-
         QSqlDatabase                _DB;
 
         QString                     _sFile; //!< DB file path.
 
     public:
-        friend DatabaseManager*     getDatabaseManager( void );
-        friend QSqlDatabase         getDatabaseManagerConnection( void );
-
-        bool                        initialize( void );
+        static DatabaseManager*     getInstance( void );
 
         bool                        setFile( QString sFile );
-        bool                        removeFile( void );
+        bool                        getFile( void );
+        bool                        deleteFile( void );
+        bool                        existsFile( void );
 
-        bool                        exists( void );
         bool                        open( void );
         bool                        isOpen( void );
         void                        close( void );
 
-        bool                        create( void );
-        bool                        verify( void );
-
         QSqlDatabase                getConnection( void );
-
-        void                        buildQueries( QWidget *pWidget, QString sTableName, QString sTabName = "" );
 
         bool                        query( QSqlQuery &qry );
 
         QSqlError                   lastError( void );
 };
-
-DatabaseManager* getDatabaseManager( void );
-QSqlDatabase getDatabaseManagerConnection( void );
 
 #endif

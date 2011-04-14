@@ -28,11 +28,15 @@
 int main( int argc, char *argv[] )
 {
     QApplication application( argc, argv );
-    SettingManager *pSM = getSettingManager();
-    DatabaseManager *pDBM = getDatabaseManager();
-    PluginManager *pPM = getPluginManager();
+    SettingManager *pSM = SettingManager::getInstance();
+    DatabaseManager *pDBM = DatabaseManager::getInstance();
+    PluginManager *pPM = PluginManager::getInstance();
+    qDebug( "%s", qPrintable( QObject::tr( "Running setup." ) ) );
+    wndSetup s;
+    s.show();
+    return application.exec();
 
-    if ( !pSM->initialize() || !pSM->exists() )
+    if ( !pSM->existsFile() || !pSM->loadValues() )
     {
         qDebug( "%s", qPrintable( QObject::tr( "Running setup." ) ) );
         wndSetup s;
@@ -40,7 +44,7 @@ int main( int argc, char *argv[] )
         return application.exec();
     }
 
-    if ( !pDBM->initialize() || !pDBM->exists() || !pDBM->open() )
+    if ( !pDBM->getFile() || !pDBM->existsFile() || !pDBM->open() )
     {
         int iResult = QMessageBox::critical( 0, QObject::tr( "Error" ), QObject::tr( "Database Manager could not be initialized. Run setup?" ), QMessageBox::Yes | QMessageBox::No );
 
@@ -62,7 +66,7 @@ int main( int argc, char *argv[] )
         }
     }
 
-    if ( !pPM->initialize() || !pPM->exists() ||!pPM->load() )
+    if ( !pPM->getFolder() || !pPM->existsFolder() ||!pPM->loadPlugins() )
     {
         int iResult = QMessageBox::critical( 0, QObject::tr( "Error" ), QObject::tr( "Plugin Manager could not be initialized. Run setup?" ),
                                              QMessageBox::Yes | QMessageBox::No );
@@ -85,7 +89,7 @@ int main( int argc, char *argv[] )
         }
     }
 
-    getWNDMain()->registerPlugins();
+    getWNDMain()->registerWithPlugins();
     getWNDMain()->show();
     return application.exec();
 }

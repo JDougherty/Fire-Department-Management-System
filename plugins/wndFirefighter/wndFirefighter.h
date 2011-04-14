@@ -30,7 +30,7 @@ namespace Ui
     class wndFirefighter;
 }
 
-class wndFirefighter : public QMainWindow, public MDIWindow
+class wndFirefighter : public MDIWindow
 {
     Q_OBJECT
 
@@ -58,7 +58,7 @@ class wndFirefighter : public QMainWindow, public MDIWindow
         void                        loadEquipmentItem( QListWidgetItem *item );
 
     public:
-                                    wndFirefighter( QWidget *pParent, DatabaseObject *pFirefighter );
+                                    wndFirefighter( QWidget *pParent );
                                     ~wndFirefighter( void );
 
         void                        show( void );

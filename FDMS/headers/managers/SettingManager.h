@@ -36,19 +36,16 @@ class SettingManager
         QMap<QString, QVariant>     _Entries;
 
     public:
-        friend SettingManager*      getSettingManager( void );
+        static SettingManager*      getInstance( void );
 
-        bool                        initialize( void );
+        bool                        existsFile( void );
+        bool                        deleteFile( void );
 
-        void                        set( QString sKey, QVariant vValue );
-        QVariant                    get( QString sKey );
+        bool                        saveValues( void );
+        bool                        loadValues( void );
 
-        bool                        exists( void );
-        bool                        remove( void );
-        void                        save( void );
-        void                        load( void );
+        bool                        setValue( QString sKey, QVariant vValue );
+        QVariant                    getValue( QString sKey );
 };
-
-SettingManager* getSettingManager( void );
 
 #endif // SETTINGMANAGER_H

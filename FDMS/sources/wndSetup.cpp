@@ -55,7 +55,7 @@ wndSetup::~wndSetup( void )
 
 void wndSetup::accept( void )
 {
-    getWNDMain()->registerPlugins();
+    getWNDMain()->registerWithPlugins();
     getWNDMain()->show();
     hide();
 }
@@ -225,7 +225,7 @@ void pgExistingDatabase::cleanupPage( void )
 
 bool pgExistingDatabase::validatePage( void )
 {
-    DatabaseManager *pDBM = getDatabaseManager();
+    DatabaseManager *pDBM = DatabaseManager::getInstance();
     QString sDatabaseFile = pLineEditFile->text();
 
     if ( !pDBM->setFile( sDatabaseFile ) )
@@ -234,15 +234,9 @@ bool pgExistingDatabase::validatePage( void )
         return false;
     }
 
-    if ( !pDBM->exists() )
+    if ( !pDBM->existsFile() )
     {
         QMessageBox::critical( this, tr( "Error" ), tr( "Database file does not exist." ) );
-        return false;
-    }
-
-    if ( !pDBM->initialize() )
-    {
-        QMessageBox::critical( this, tr( "Error" ), tr( "Could not initialize the database manager." ) );
         return false;
     }
 
@@ -344,7 +338,7 @@ void pgPlugins::browse( void )
         }
         else if ( field( "existingInstallation" ).toBool() )
         {
-            PluginManager *pPM = getPluginManager();
+            PluginManager *pPM = PluginManager::getInstance();
 
             if ( !pPM->setFolder( sFolder ) )
             {
@@ -353,21 +347,14 @@ void pgPlugins::browse( void )
                 return;
             }
 
-            if ( !pPM->exists( ) )
+            if ( !pPM->existsFolder( ) )
             {
                 QMessageBox::critical( this, tr( "Error" ), tr( "Plugin folder does not exist." ) );
                 this->wizard()->button( QWizard::NextButton )->setEnabled( false );
                 return;
             }
 
-            if ( !pPM->initialize() )
-            {
-                QMessageBox::critical( this, tr( "Error" ), tr( "Could not initialize the plugin manager." ) );
-                this->wizard()->button( QWizard::NextButton )->setEnabled( false );
-                return;
-            }
-
-            if ( !pPM->load( ) )
+            if ( !pPM->loadPlugins( ) )
             {
                 QMessageBox::critical( this, tr( "Error" ), tr( "Could not load required plugins." ) );
                 this->wizard()->button( QWizard::NextButton )->setEnabled( false );
@@ -469,7 +456,7 @@ bool pgPlugins::validatePage( void )
     else if ( field( "existingInstallation" ).toBool() )
     {
         // browse() already loaded the plugins into the plugin manager
-        lPluginsSelected = getPluginManager()->lPlugins;
+        lPluginsSelected = PluginManager::getInstance()->lPlugins;
     }
     else
     {
@@ -512,8 +499,8 @@ bool pgInstall::validatePage( void )
 {
     if ( !bInstalled )
     {
-        DatabaseManager *pDBM = getDatabaseManager();
-        PluginManager *pPM = getPluginManager();
+        DatabaseManager *pDBM = DatabaseManager::getInstance();
+        PluginManager *pPM = PluginManager::getInstance();
         QString sDatabaseFolder = field( "database.folder" ).toString();
         QString sPluginFolder = field( "plugins.folder" ).toString();
         QList<PluginInfo> lPluginInfo = field( "plugins.selected" ).value<QList<PluginInfo> >();
@@ -524,13 +511,7 @@ bool pgInstall::validatePage( void )
             return false;
         }
 
-        if ( !pDBM->initialize() )
-        {
-            QMessageBox::critical( this, tr( "Error" ), tr( "Could not initialize the database manager." ) );
-            return false;
-        }
-
-        if ( field( "newInstallation" ).toBool() && pDBM->exists() )
+        if ( field( "newInstallation" ).toBool() && pDBM->existsFile() )
         {
             int iResult = QMessageBox::question( this, QObject::tr( "Existing database detected." ), QObject::tr( "An existing database "
                 "was detected.\n\nWould you like to remove it so that installation can continue?" ), QMessageBox::Yes | QMessageBox::No );
@@ -539,7 +520,7 @@ bool pgInstall::validatePage( void )
             {
                 case QMessageBox::Yes:
                 {
-                    if ( !pDBM->removeFile() )
+                    if ( !pDBM->deleteFile() )
                     {
                         QMessageBox::critical( this, QObject::tr( "Error" ), QObject::tr( "Failed to remove the file. Installation "
                             "cannot continue." ), QMessageBox::Ok );
@@ -570,25 +551,19 @@ bool pgInstall::validatePage( void )
             return false;
         }
 
-        if ( !pPM->exists() )
+        if ( !pPM->existsFolder() )
         {
             QMessageBox::critical( this, tr( "Error" ), tr( "Plugin folder does not exist." ) );
             return false;
         }
 
-        if ( !pPM->initialize() )
-        {
-            QMessageBox::critical( this, tr( "Error" ), tr( "Could not initialize the plugin manager." ) );
-            return false;
-        }
-
-        if ( field( "newInstallation" ).toBool() && !pPM->install( lPluginInfo ) )
+        if ( field( "newInstallation" ).toBool() && !pPM->installPlugins( lPluginInfo ) )
         {
             QMessageBox::critical( this, tr( "Error" ), tr( "Could not install plugins." ) );
             return false;
         }
 
-        if ( !pPM->load() )
+        if ( !pPM->loadPlugins() )
         {
             QMessageBox::critical( this, tr( "Error" ), tr( "Could not load plugins." ) );
             return false;

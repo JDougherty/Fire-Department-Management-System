@@ -18,7 +18,7 @@
 
 #include "managers/PluginManager.h"
 
-PluginManager* getPluginManager( void )
+PluginManager* PluginManager::getInstance( void )
 {
     static PluginManager db;
     return &db;
@@ -34,30 +34,28 @@ PluginManager::~PluginManager( void )
 
 }
 
-bool PluginManager::initialize( void )
+bool PluginManager::getFolder( void )
 {
-    SettingManager *sm = getSettingManager();
-
-    _sFolder = sm->get( "plugins/folder" ).toString();
-
+    _sFolder = SettingManager::getInstance()->getValue( "plugins/folder" ).toString();
     return true;
 }
 
 bool PluginManager::setFolder( QString sFolder )
 {
-    SettingManager *sm = getSettingManager();
+    if ( SettingManager::getInstance()->setValue( "plugins/folder", sFolder ) )
+    {
+        _sFolder = sFolder;
+        return true;
+    }
 
-    sm->set( "plugins/folder", sFolder );
-    _sFolder = sFolder;
-
-    return true;
+    return false;
 }
 
 //! See if the folder exists.
 /*!
   \return bool - Plugin folder exists.
 */
-bool PluginManager::exists( void )
+bool PluginManager::existsFolder( void )
 {
     if ( _sFolder == QString::null || !QDir( _sFolder ).exists() )
     {
@@ -69,7 +67,7 @@ bool PluginManager::exists( void )
     return true;
 }
 
-QString PluginManager::getPluginHash( QString sFileName )
+QString PluginManager::calculatePluginHash( QString sFileName )
 {
     QCryptographicHash crypto( QCryptographicHash::Sha1 );
     QFile file( sFileName );
@@ -93,7 +91,7 @@ QString PluginManager::getPluginHash( QString sFileName )
     return sHash;
 }
 
-bool PluginManager::install( QList<PluginInfo> lInstallThesePlugins )
+bool PluginManager::installPlugins( QList<PluginInfo> lInstallThesePlugins )
 {
     QDir pluginsDir( _sFolder );
 
@@ -121,7 +119,7 @@ bool PluginManager::install( QList<PluginInfo> lInstallThesePlugins )
 
             if ( pDatabaseObjectPlugin && lInstallThesePlugins.contains( pDatabaseObjectPlugin->getInfo() ) )
             {
-                if ( !Plugin::save( pDatabaseObjectPlugin->getInfo(), getPluginHash( pluginsDir.absoluteFilePath( sFileName ) ) ) )
+                if ( !Plugin::save( pDatabaseObjectPlugin->getInfo(), calculatePluginHash( pluginsDir.absoluteFilePath( sFileName ) ) ) )
                 {
                     qDebug( qPrintable( QObject::tr( "PluginManager: Failed to install %s." ) ), qPrintable( pDatabaseObjectPlugin->getInfo().toString() ) );
                     return false;
@@ -134,7 +132,7 @@ bool PluginManager::install( QList<PluginInfo> lInstallThesePlugins )
             }
             else if ( pMDIWindowPlugin && lInstallThesePlugins.contains( pMDIWindowPlugin->getInfo() ) )
             {
-                if ( !Plugin::save( pMDIWindowPlugin->getInfo(), getPluginHash( pluginsDir.absoluteFilePath( sFileName ) ) ) )
+                if ( !Plugin::save( pMDIWindowPlugin->getInfo(), calculatePluginHash( pluginsDir.absoluteFilePath( sFileName ) ) ) )
                 {
                     qDebug( qPrintable( QObject::tr( "PluginManager: Failed to install %s." ) ), qPrintable( pMDIWindowPlugin->getInfo().toString() ) );
                     return false;
@@ -149,7 +147,7 @@ bool PluginManager::install( QList<PluginInfo> lInstallThesePlugins )
     return true;
 }
 
-bool PluginManager::load( )
+bool PluginManager::loadPlugins( void )
 {
     QList<QPair<PluginInfo, QString> > installedPlugins;
     QPair<PluginInfo, QString> installedPlugin;
@@ -182,7 +180,7 @@ bool PluginManager::load( )
 
                 if ( pDatabaseObjectPlugin && pDatabaseObjectPlugin->getInfo() == installedPlugin.first )
                 {
-                    QString sHash = getPluginHash( pluginsDir.absoluteFilePath( sFileName ) );
+                    QString sHash = calculatePluginHash( pluginsDir.absoluteFilePath( sFileName ) );
 
                     if ( sHash != installedPlugin.second )
                     {
@@ -200,7 +198,7 @@ bool PluginManager::load( )
                 }
                 else if ( pMDIWindowPlugin && pMDIWindowPlugin->getInfo() == installedPlugin.first )
                 {
-                    QString sHash = getPluginHash( pluginsDir.absoluteFilePath( sFileName ) );
+                    QString sHash = calculatePluginHash( pluginsDir.absoluteFilePath( sFileName ) );
 
                     if ( sHash != installedPlugin.second )
                     {

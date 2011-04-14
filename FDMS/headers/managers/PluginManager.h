@@ -39,31 +39,25 @@ class PluginManager
                                     PluginManager( void );
                                     ~PluginManager( void );
 
-        QString                     getPluginHash( QString sFileName );
+        QString                     calculatePluginHash( QString sFileName );
 
         QString                     _sFolder; //!< Plugin folder path.
 
     public:
-        friend PluginManager*       getPluginManager( void );
+        static PluginManager*       getInstance( void );
 
         static QList<BasePlugin*>   findAll( QString sFolder );
 
-        bool                        initialize( void );
+        bool                        getFolder( void );
         bool                        setFolder( QString sFolder );
+        bool                        existsFolder( void );
 
-        bool                        exists( void );
-
-        bool                        install( QList<PluginInfo> lInstallThesePlugins );
-        bool                        load( void );
-
-        DatabaseObjectPlugin*             getDatabaseObjectPlugin( QString sName );
-        MDIWindowPlugin*            getMDIWindowPlugin( QString sName );
+        bool                        installPlugins( QList<PluginInfo> lInstallThesePlugins );
+        bool                        loadPlugins( void );
 
         QList<BasePlugin*>          lPlugins;
         QList<DatabaseObjectPlugin*> lDatabaseObjectPlugins;
         QList<MDIWindowPlugin*>     lMDIWindowPlugins;
 };
-
-PluginManager* getPluginManager( void );
 
 #endif // PLUGINMANAGER_H

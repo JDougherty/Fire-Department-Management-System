@@ -23,6 +23,7 @@ class DatabaseObject
 {
     protected:
         int                         _iID;
+        QMap<QString, QVariant>     _Entry;
 
     public:
         virtual                     ~DatabaseObject( void ) {}
@@ -30,8 +31,11 @@ class DatabaseObject
         int                         ID( void ) { return _iID; }
 
         virtual bool                createTable( void ) = 0;
-        virtual bool                save( void ) = 0;
-        virtual bool                load( void ) = 0;
+
+        bool                        setValue( QString sItemName, QVariant vData ) { _Entry[sItemName] = vData; return true; }
+        QMap<QString, QVariant>     getValues( void ) { return _Entry; }
+        virtual bool                saveValues( void ) = 0;
+        virtual bool                loadValues( void ) = 0;
 };
 
 #endif // DATABASEOBJECT_H

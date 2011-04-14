@@ -49,13 +49,13 @@ void wndMain::closeEvent( QCloseEvent *pEvent )
     pEvent->accept();
 }
 
-void wndMain::registerPlugins( void )
+void wndMain::registerWithPlugins( void )
 {
-    PluginManager *pm = getPluginManager();
+    PluginManager *pPM = PluginManager::getInstance();
 
-    foreach ( MDIWindowPlugin *mdiWindowPlugin, pm->lMDIWindowPlugins )
+    foreach ( MDIWindowPlugin *mdiWindowPlugin, pPM->lMDIWindowPlugins )
     {
-        mdiWindowPlugin->menuBar( _pUI->menuTools );
+        mdiWindowPlugin->addToMenuBar( _pUI->menuTools );
         mdiWindowPlugin->getInstance( this, _pMDIArea );
     }
 }

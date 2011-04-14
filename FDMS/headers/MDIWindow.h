@@ -22,7 +22,7 @@
 #include <QMainWindow>
 #include <QString>
 
-class MDIWindow
+class MDIWindow : public QMainWindow
 {
     public:
         virtual                     ~MDIWindow( void ) {}

@@ -50,7 +50,7 @@ class wndMain : public QMainWindow
     public:
         friend wndMain*             getWNDMain( void );
 
-        void                        registerPlugins( void );
+        void                        registerWithPlugins( void );
 };
 
 wndMain* getWNDMain( void );

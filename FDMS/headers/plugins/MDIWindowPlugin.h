@@ -33,7 +33,7 @@ class MDIWindowPlugin : public BasePlugin
 
         virtual MDIWindow *         getInstance( QWidget *pParent, QMdiArea *pMDIArea ) = 0;
 
-        virtual void                menuBar( QMenu *pMenuBar ) = 0;
+        virtual void                addToMenuBar( QMenu *pMenuBar ) = 0;
 };
 
 Q_DECLARE_INTERFACE( MDIWindowPlugin, "com.FDS.Plugin.MDIWindow/1.0" );

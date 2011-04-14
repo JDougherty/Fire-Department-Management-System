@@ -19,15 +19,16 @@
 #include "wndFirefighter.h"
 #include "ui_wndFirefighter.h"
 
-wndFirefighter::wndFirefighter( QWidget *pParent, DatabaseObject *pFirefighter ) :
-    QMainWindow( pParent )
+wndFirefighter::wndFirefighter( QWidget *pParent )
 {
+    setParent( pParent );
     _pUI = new Ui::wndFirefighter;
     _pUI->setupUi( this );
-    _pFirefighter = pFirefighter;
+    //_pUI->setupUi( this );
+    //_pFirefighter = pFirefighter;
 
-    if ( _pFirefighter->ID() <= 0 )
-    {
+    //if ( _pFirefighter->ID() <= 0 )
+    //{
         // Hide these tabs since we want to just enter basic info first
         _pUI->tabWidget->removeTab( 3 ); // tabReports
         _pUI->tabWidget->removeTab( 2 ); // tabEquipment
@@ -35,7 +36,7 @@ wndFirefighter::wndFirefighter( QWidget *pParent, DatabaseObject *pFirefighter )
 
         this->setWindowTitle( tr( "Add Firefighter" ) );
         _pUI->btnSavePersonalInfo->setText( tr( "Add Firefighter" ) );
-    }
+    /*}
     else
     {
         this->setWindowTitle( tr( "Edit Firefighter" ) );
@@ -44,7 +45,7 @@ wndFirefighter::wndFirefighter( QWidget *pParent, DatabaseObject *pFirefighter )
 
     // Disable the training and equipment fields
     enableTrainingFields( false );
-    enableEquipmentFields( false );
+    enableEquipmentFields( false );*/
 }
 
 wndFirefighter::~wndFirefighter( void )
@@ -80,7 +81,7 @@ void wndFirefighter::btnSavePersonalInfoClicked( void )
         return;
     }
 
-    if ( _pFirefighter->ID() <= 0 )
+    /*if ( _pFirefighter->ID() <= 0 )
     {
         if ( _pFirefighter->save() )
         {
@@ -112,7 +113,7 @@ void wndFirefighter::btnSavePersonalInfoClicked( void )
         {
             QMessageBox::warning( this, tr( "Firefighter Error" ), tr( "Firefighter could not be updated! See log for more information." ) );
         }
-    }
+    }*/
 }
 
 /*****************************************************************************************************************/

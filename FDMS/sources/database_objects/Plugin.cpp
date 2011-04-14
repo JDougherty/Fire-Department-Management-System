@@ -2,7 +2,7 @@
 
 bool Plugin::createTable( void )
 {
-    DatabaseManager *pDBM = getDatabaseManager();
+    DatabaseManager *pDBM = DatabaseManager::getInstance();
     QString queryString;
     QSqlQuery query;
 
@@ -29,7 +29,7 @@ bool Plugin::createTable( void )
 
 bool Plugin::save( PluginInfo pluginInfo, QString sHash )
 {
-    QSqlTableModel model( 0, getDatabaseManagerConnection() );
+    QSqlTableModel model( 0, DatabaseManager::getInstance()->getConnection() );
 
     model.setTable( "Plugins" );
     model.insertRow( 0 );
@@ -50,7 +50,7 @@ bool Plugin::save( PluginInfo pluginInfo, QString sHash )
 
 bool Plugin::load( QList<QPair<PluginInfo, QString> > &lInstalledPlugins )
 {
-    QSqlTableModel model( 0, getDatabaseManagerConnection() );
+    QSqlTableModel model( 0, DatabaseManager::getInstance()->getConnection() );
     QString sName, sVersion, sHash;
 
     model.setTable( "Plugins" );

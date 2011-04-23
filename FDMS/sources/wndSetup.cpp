@@ -331,7 +331,7 @@ void pgPlugins::browse( void )
 
         if ( field( "newInstallation" ).toBool() )
         {
-            foreach ( BasePlugin *pPlugin, PluginManager::findAll( sFolder ) )
+            foreach ( BasePlugin *pPlugin, PluginManager::findAllPlugins( sFolder ) )
                 addPlugin( pModel, pPlugin->getInfo().getName(), pPlugin->getInfo().getVersion(), pPlugin->getDependencies().toString() );
 
             pTreeViewPlugins->setModel( pModel );
@@ -402,7 +402,7 @@ bool pgPlugins::validatePage( void )
     if ( field( "newInstallation" ).toBool() )
     {
         // get all of the plugins in the folder
-        lPlugins = PluginManager::findAll( pLineEditFolder->text() );
+        lPlugins = PluginManager::findAllPlugins( pLineEditFolder->text() );
 
         // loop over the selected rows and match the plugin info up
         foreach ( QModelIndex index, pTreeViewPlugins->selectionModel()->selectedRows() )

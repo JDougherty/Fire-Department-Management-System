@@ -19,6 +19,9 @@
 #ifndef DATABASEOBJECT_H
 #define DATABASEOBJECT_H
 
+#include <QString>
+#include <QVariant>
+
 class DatabaseObject
 {
     protected:
@@ -31,6 +34,7 @@ class DatabaseObject
         int                         ID( void ) { return _iID; }
 
         virtual bool                createTable( void ) = 0;
+        virtual bool                verifyTable( void ) = 0;
 
         bool                        setValue( QString sItemName, QVariant vData ) { _Entry[sItemName] = vData; return true; }
         QMap<QString, QVariant>     getValues( void ) { return _Entry; }

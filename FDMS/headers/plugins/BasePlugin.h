@@ -22,7 +22,9 @@ class BasePlugin
 
         bool loadDependencies( QList<BasePlugin*> plugins )
         {
-             _Dependencies.clear();
+            _Dependencies.clear();
+
+            qDebug( "%s", qPrintable( QObject::tr( "BasePlugin: Loading dependencies for " ) + getInfo().toString() + "." ) );
 
             foreach ( PluginInfo dependency, getDependencies() )
             {
@@ -48,7 +50,7 @@ class BasePlugin
 
             }
 
-            qDebug( "%s", qPrintable( QObject::tr( "BasePlugin: Dependencies met for " ) + getInfo().toString() + "." ) );
+            qDebug( "%s", qPrintable( QObject::tr( "BasePlugin: Dependencies met." ) ) );
             return true;
         }
 };

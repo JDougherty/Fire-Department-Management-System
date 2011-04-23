@@ -49,7 +49,14 @@ bool SettingManager::existsFile( void )
 
 bool SettingManager::deleteFile( void )
 {
-    return QFile::remove( _pSettings->fileName() );
+    bool bRemoved = QFile::remove( _pSettings->fileName() ); // Remove the INI file
+
+    if ( bRemoved )
+        qDebug( qPrintable( QObject::tr( "SettingManager: Removed %s" ) ), qPrintable( _pSettings->fileName() ) );
+    else
+        qDebug( qPrintable( QObject::tr( "SettingManager: Failed to remove %s" ) ), qPrintable( _pSettings->fileName() ) );
+
+    return bRemoved;
 }
 
 bool SettingManager::saveValues( void )

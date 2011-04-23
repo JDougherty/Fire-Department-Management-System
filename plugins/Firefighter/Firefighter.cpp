@@ -26,7 +26,7 @@ Firefighter::Firefighter( void )
 Firefighter::Firefighter( int iID )
 {
     _iID = iID;
-    load();
+    loadValues();
 }
 
 bool Firefighter::createTable( void )
@@ -57,7 +57,12 @@ bool Firefighter::createTable( void )
     return true;
 }
 
-bool Firefighter::save( void )
+bool Firefighter::verifyTable( void )
+{
+    return true;
+}
+
+bool Firefighter::saveValues( void )
 {
     /*QSqlTableModel model( 0, getDatabaseManagerConnection() );
 
@@ -78,7 +83,7 @@ bool Firefighter::save( void )
     return true;
 }
 
-bool Firefighter::load( void )
+bool Firefighter::loadValues( void )
 {
     /*QSqlTableModel model( 0, getDatabaseManagerConnection() );
     QString sName, sVersion, sHash;

@@ -65,7 +65,7 @@ class DatabaseManager
 
         bool                        open( void );
         bool                        isOpen( void );
-        void                        close( void );
+        bool                        close( void );
 
         QSqlDatabase                getConnection( void );
 

@@ -42,9 +42,4 @@ DatabaseObject* FirefighterPlugin::getInstance( int iID )
     return pFirefighter;
 }
 
-QString FirefighterPlugin::echo( const QString &message )
-{
-    return message + "AAAAAAAAAAA";
-}
-
 Q_EXPORT_PLUGIN2( firefighter, FirefighterPlugin );

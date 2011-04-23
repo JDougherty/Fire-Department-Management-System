@@ -232,13 +232,12 @@ bool PluginManager::loadPlugins( void )
             lDatabaseObjectPlugins.clear(); lMDIWindowPlugins.clear(); lPlugins.clear();
             return false;
         }
-        break;
     }
 
     return true;
 }
 
-QList<BasePlugin*> PluginManager::findAll( QString sFolder )
+QList<BasePlugin*> PluginManager::findAllPlugins( QString sFolder )
 {
     QDir pluginsDir( sFolder );
     QList<BasePlugin*> lPlugins;

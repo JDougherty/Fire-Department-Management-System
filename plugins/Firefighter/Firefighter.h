@@ -34,8 +34,10 @@ class Firefighter : public DatabaseObject
                                     Firefighter( int iID );
 
         bool                        createTable( void );
-        bool                        save( void );
-        bool                        load( void );
+        bool                        verifyTable( void );
+
+        bool                        saveValues( void );
+        bool                        loadValues( void );
 };
 
 #endif // FIREFIGHTER_H

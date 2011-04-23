@@ -19,11 +19,6 @@ class DependencyList : public QList<PluginInfo>
             push_back( d );
         }
 
-        bool contains( const PluginInfo &otherInfo ) const
-        {
-            return contains( otherInfo );
-        }
-
         QString toString( void ) const
         {
             QString s;

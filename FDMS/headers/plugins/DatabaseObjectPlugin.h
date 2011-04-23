@@ -31,8 +31,6 @@ class DatabaseObjectPlugin : public BasePlugin
 
         virtual DatabaseObject *    getInstance( void ) = 0;
         virtual DatabaseObject *    getInstance( int iID ) = 0;
-
-        virtual QString             echo( const QString &message ) = 0;
 };
 
 Q_DECLARE_INTERFACE( DatabaseObjectPlugin, "com.FDS.Plugin.DatabaseObject/1.0" );

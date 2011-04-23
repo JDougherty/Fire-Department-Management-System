@@ -46,7 +46,7 @@ class PluginManager
     public:
         static PluginManager*       getInstance( void );
 
-        static QList<BasePlugin*>   findAll( QString sFolder );
+        static QList<BasePlugin*>   findAllPlugins( QString sFolder );
 
         bool                        getFolder( void );
         bool                        setFolder( QString sFolder );

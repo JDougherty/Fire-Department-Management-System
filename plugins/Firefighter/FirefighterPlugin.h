@@ -38,8 +38,6 @@ class FirefighterPlugin : public QObject, DatabaseObjectPlugin
 
         DatabaseObject *            getInstance( void );
         DatabaseObject *            getInstance( int iID );
-
-        QString                     echo( const QString &message );
 };
 
 #endif // FIREFIGHTERPLUGIN_H

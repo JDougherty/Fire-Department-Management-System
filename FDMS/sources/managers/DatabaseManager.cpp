@@ -67,9 +67,9 @@ bool DatabaseManager::deleteFile( void )
     bool bRemoved = QFile::remove( _sFile ); // Remove created database binary file
 
     if ( bRemoved )
-        qDebug( qPrintable( QObject::tr( "Database Manager: Removed %s" ) ), qPrintable( _sFile ) );
+        qDebug( qPrintable( QObject::tr( "DatabaseManager: Removed %s" ) ), qPrintable( _sFile ) );
     else
-        qDebug( qPrintable( QObject::tr( "Database Manager: Failed to remove %s" ) ), qPrintable( _sFile ) );
+        qDebug( qPrintable( QObject::tr( "DatabaseManager: Failed to remove %s" ) ), qPrintable( _sFile ) );
 
     return bRemoved;
 }
@@ -82,11 +82,11 @@ bool DatabaseManager::existsFile( void )
 {
     if ( _sFile == QString::null || !QFile::exists( _sFile ) )
     {
-        qDebug( qPrintable( QObject::tr( "Database Manager: %s does not exist." ) ), qPrintable( _sFile ) );
+        qDebug( qPrintable( QObject::tr( "DatabaseManager: %s does not exist." ) ), qPrintable( _sFile ) );
         return false;
     }
 
-    qDebug( qPrintable( QObject::tr( "Database Manager: %s exists." ) ), qPrintable( _sFile ) );
+    qDebug( qPrintable( QObject::tr( "DatabaseManager: %s exists." ) ), qPrintable( _sFile ) );
     return true;
 }
 
@@ -100,11 +100,11 @@ bool DatabaseManager::open( void )
 
     if ( !_DB.open() ) // If database name (file) DNE it creates it then tries to open it
     {
-        qDebug( qPrintable( QObject::tr( "Database Manager: Error opening %s: %s" ) ), qPrintable( _sFile ), qPrintable( _DB.lastError().databaseText() ) );
+        qDebug( qPrintable( QObject::tr( "DatabaseManager: Error opening %s: %s" ) ), qPrintable( _sFile ), qPrintable( _DB.lastError().databaseText() ) );
         return false;
     }
 
-    qDebug( qPrintable( QObject::tr( "Database Manager: Opened %s" ) ), qPrintable( _sFile ) );
+    qDebug( qPrintable( QObject::tr( "DatabaseManager: Opened %s" ) ), qPrintable( _sFile ) );
     return true;
 }
 
@@ -118,10 +118,11 @@ bool DatabaseManager::isOpen( void )
 }
 
 //! Closes the database.
-void DatabaseManager::close( void )
+bool DatabaseManager::close( void )
 {
-    qDebug( qPrintable( QObject::tr( "Database Manager: Closed %s" ) ), qPrintable( _sFile ) );
+    qDebug( qPrintable( QObject::tr( "DatabaseManager: Closed %s" ) ), qPrintable( _sFile ) );
     _DB.close();
+    return true;
 }
 
 QSqlDatabase DatabaseManager::getConnection( void )
@@ -137,7 +138,7 @@ QSqlDatabase DatabaseManager::getConnection( void )
 bool DatabaseManager::query( QSqlQuery &query )
 {
    bool ret = query.exec();
-   qDebug( qPrintable( QObject::tr( "Database Manager: Executing Query: %s" ) ), qPrintable( query.executedQuery() ) );
+   qDebug( qPrintable( QObject::tr( "DatabaseManager: Executing Query: %s" ) ), qPrintable( query.executedQuery() ) );
    return ret;
 }
 

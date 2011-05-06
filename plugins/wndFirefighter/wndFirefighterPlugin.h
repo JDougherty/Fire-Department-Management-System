@@ -39,9 +39,12 @@ class wndFirefighterPlugin : public QObject, MDIWindowPlugin
         PluginInfo                  getInfo( void );
         DependencyList              getDependencies( void );
 
-        MDIWindow *                 getInstance( QWidget *pParent, QMdiArea *pMDIArea );
+        MDIWindow *                 getInstance( QWidget *pParent);
 
         void                        addToMenuBar( QMenu *pMenuBar );
+
+    protected slots:
+        void                        showWindow( void );
 };
 
 #endif // WNDFIREFIGHTERPLUGIN_H

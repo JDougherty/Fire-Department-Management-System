@@ -34,14 +34,22 @@ void wndFirefighterPlugin::addToMenuBar( QMenu *pMenuBar )
 {
     QIcon icon;
     icon.addFile( QString::fromUtf8( ":/icons/AddFirefighter.png" ), QSize(), QIcon::Normal, QIcon::Off );
-    pMenuBar->addAction( icon, tr( "Add Firefighter" ) );
+    QAction *a = new QAction(icon, tr( "Add Firefighter"), pMenuBar );
+
+    connect( a, SIGNAL( triggered() ), this, SLOT( showWindow() ) );
+    pMenuBar->addAction( a );
 }
 
-MDIWindow* wndFirefighterPlugin::getInstance( QWidget *pParent, QMdiArea *pMDIArea )
+void wndFirefighterPlugin::showWindow( void )
 {
-    wndFirefighter *pWindow = new wndFirefighter( pParent );
-    pMDIArea->addSubWindow( pWindow );
-    return pWindow;
+    MDIWindow *pMDIWindow = getInstance( NULL );
+    _pMDIArea->addSubWindow(pMDIWindow);
+    pMDIWindow->show();
+}
+
+MDIWindow* wndFirefighterPlugin::getInstance( QWidget *pParent )
+{
+    return new wndFirefighter( pParent );
 }
 
 Q_EXPORT_PLUGIN2( wndfirefighter, wndFirefighterPlugin );

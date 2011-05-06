@@ -28,12 +28,22 @@
 
 class MDIWindowPlugin : public BasePlugin
 {
+    protected:
+        QWidget                     *_pParent;
+        QMdiArea                    *_pMDIArea;
+
     public:
         virtual                     ~MDIWindowPlugin( void ) {}
 
-        virtual MDIWindow *         getInstance( QWidget *pParent, QMdiArea *pMDIArea ) = 0;
+        virtual MDIWindow *         getInstance( QWidget *pParent ) = 0;
 
         virtual void                addToMenuBar( QMenu *pMenuBar ) = 0;
+
+        void registerAsParent( QWidget *pParent, QMdiArea *pMDIArea )
+        {
+            _pParent = pParent;
+            _pMDIArea = pMDIArea;
+        }
 };
 
 Q_DECLARE_INTERFACE( MDIWindowPlugin, "com.FDS.Plugin.MDIWindow/1.0" );

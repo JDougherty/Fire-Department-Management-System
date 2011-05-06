@@ -55,7 +55,7 @@ void wndMain::registerWithPlugins( void )
 
     foreach ( MDIWindowPlugin *mdiWindowPlugin, pPM->lMDIWindowPlugins )
     {
+        mdiWindowPlugin->registerAsParent( this, _pMDIArea );
         mdiWindowPlugin->addToMenuBar( _pUI->menuTools );
-        mdiWindowPlugin->getInstance( this, _pMDIArea );
     }
 }

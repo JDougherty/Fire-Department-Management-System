@@ -20,24 +20,11 @@
 #include "ui_wndCall.h"
 
 //! Constructor for adding a new call.
-wndCall::wndCall( QWidget *pParent ) :
-    QMainWindow( pParent )
+wndCall::wndCall( QWidget *pParent )
 {
+    setParent( pParent );
     _pUI = new Ui::wndCall;
     _pUI->setupUi( this );
-    _iID = -1;
-}
-
-//! Constructor for editing a call.
-/*!
-  \param iID Call's DB id.
-*/
-wndCall::wndCall( QWidget *pParent, int iID ) :
-    QMainWindow( pParent )
-{
-    _pUI = new Ui::wndCall;
-    _pUI->setupUi( this );
-    _iID = iID;
 }
 
 wndCall::~wndCall( void )

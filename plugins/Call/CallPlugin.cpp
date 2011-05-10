@@ -16,6 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "Call.h"
 #include "CallPlugin.h"
 
 PluginInfo CallPlugin::getInfo( void )
@@ -29,9 +30,16 @@ DependencyList CallPlugin::getDependencies( void )
     return dependencies;
 }
 
-QString CallPlugin::echo( const QString &message )
+DatabaseObject* CallPlugin::getInstance( void )
 {
-    return message + "AAAAAAAAAAA";
+    Call *pCall = new Call();
+    return pCall;
+}
+
+DatabaseObject* CallPlugin::getInstance( int iID )
+{
+    Call *pCall = new Call( iID );
+    return pCall;
 }
 
 Q_EXPORT_PLUGIN2( call, CallPlugin );

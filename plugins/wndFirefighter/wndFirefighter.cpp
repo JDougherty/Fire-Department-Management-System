@@ -24,7 +24,6 @@ wndFirefighter::wndFirefighter( QWidget *pParent )
     setParent( pParent );
     _pUI = new Ui::wndFirefighter;
     _pUI->setupUi( this );
-    //_pUI->setupUi( this );
     //_pFirefighter = pFirefighter;
 
     //if ( _pFirefighter->ID() <= 0 )

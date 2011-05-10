@@ -1,12 +1,16 @@
+QT += sql
+
 TEMPLATE = lib
 
 CONFIG += plugin
 
 INCLUDEPATH += ../../FDMS/headers
 
-HEADERS = CallPlugin.h
+HEADERS = CallPlugin.h \
+    Call.h
 
-SOURCES = CallPlugin.cpp
+SOURCES = CallPlugin.cpp \
+    Call.cpp
 
 TARGET = $$qtLibraryTarget($$TARGET)
 

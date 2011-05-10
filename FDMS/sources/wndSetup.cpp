@@ -80,7 +80,7 @@ pgIntro::pgIntro( QWidget *pParent )
                                   "Management System, you may wish to close this window now and refer to "
                                   "the documentation for restoring the program." ) );
 
-    pRadioNewInstallation = new QRadioButton( tr( "Set up a new instace of the Fire Department Management System " ) );
+    pRadioNewInstallation = new QRadioButton( tr( "Set up a new instance of the Fire Department Management System " ) );
     pRadioExistingInstallation = new QRadioButton( tr( "Connect to an existing instance of the Fire Department "
                                                        "Management System") );
 

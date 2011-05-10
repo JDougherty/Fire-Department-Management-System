@@ -30,24 +30,26 @@ DependencyList wndCallPlugin::getDependencies( void )
     return dependencies;
 }
 
-void wndCallPlugin::menuBar( QMenu *pMenuBar )
+void wndCallPlugin::addToMenuBar( QMenu *pMenuBar )
 {
     QIcon icon;
     icon.addFile( QString::fromUtf8( ":/icons/AddCall.png" ), QSize(), QIcon::Normal, QIcon::Off );
-    pMenuBar->addAction( icon, tr( "Add Call" ) );
+    QAction *a = new QAction(icon, tr( "Add Call"), pMenuBar );
+
+    connect( a, SIGNAL( triggered() ), this, SLOT( showWindow() ) );
+    pMenuBar->addAction( a );
+}
+
+void wndCallPlugin::showWindow( void )
+{
+    MDIWindow *pMDIWindow = getInstance( NULL );
+    _pMDIArea->addSubWindow(pMDIWindow);
+    pMDIWindow->show();
 }
 
 MDIWindow* wndCallPlugin::getInstance( QWidget *pParent )
 {
-    wndCall *pWindow = new wndCall( pParent );
-    return pWindow;
-}
-
-MDIWindow* wndCallPlugin::getInstance( QWidget *pParent, QMdiArea *pMDIArea )
-{
-    wndCall *pWindow = new wndCall( pParent );
-    pMDIArea->addSubWindow( pWindow );
-    return pWindow;
+    return new wndCall( pParent );
 }
 
 Q_EXPORT_PLUGIN2( wndcall, wndCallPlugin );

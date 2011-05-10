@@ -30,20 +30,18 @@ namespace Ui
 }
 
 //! GUI for adding a call and editing call data.
-class wndCall : public QMainWindow, public MDIWindow
+class wndCall : public MDIWindow
 {
     Q_OBJECT
 
     private:
         Ui::wndCall                 *_pUI;
-        int                         _iID;
 
     private slots:
         void                        btnSaveCallClicked( void );
 
     public:
                                     wndCall( QWidget *pParent );
-                                    wndCall( QWidget *pParent, int iID );
                                     ~wndCall( void );
 };
 

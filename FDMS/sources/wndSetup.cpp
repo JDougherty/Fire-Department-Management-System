@@ -383,6 +383,7 @@ void pgPlugins::browse( void )
         pTreeViewPlugins->header()->resizeSection( 0, 200 );
         pTreeViewPlugins->header()->resizeSection( 1, 60 );
         pTreeViewPlugins->header()->resizeSection( 2, 200 );
+        pTreeViewPlugins->selectAll();
     }
 }
 

@@ -48,30 +48,143 @@
 class DatabaseManager
 {
     private:
-                                    DatabaseManager( void );
-                                    ~DatabaseManager( void );
+        DatabaseManager( void )
+        {
+            _sFile = QString::null;
+            _DB = QSqlDatabase::addDatabase( "QSQLITE" );
+        }
+
+        ~DatabaseManager( void )
+        {
+            close();
+            QSqlDatabase::removeDatabase( "QSQLITE" );
+        }
 
         QSqlDatabase                _DB;
 
         QString                     _sFile; //!< DB file path.
 
-    public:
-        static DatabaseManager*     getInstance( void );
+    public:      
+        static DatabaseManager* getInstance( void )
+        {
+            static DatabaseManager dbm;
+            return &dbm;
+        }
 
-        bool                        setFile( QString sFile );
-        bool                        getFile( void );
-        bool                        deleteFile( void );
-        bool                        existsFile( void );
+        //! Sets the DB file path.
+        /*!
+          \param sFile DB file path.
+        */
+        bool setFile( QString sFile )
+        {
+            if ( SettingManager::getInstance()->setValue( "database/file", sFile ) )
+            {
+                _sFile = sFile;
+                return true;
+            }
 
-        bool                        open( void );
-        bool                        isOpen( void );
-        bool                        close( void );
+            return false;
+        }
 
-        QSqlDatabase                getConnection( void );
+        bool getFile( void )
+        {
+            _sFile = SettingManager::getInstance()->getValue( "database/file" ).toString();
+            return true;
+        }
 
-        bool                        query( QSqlQuery &qry );
+        //! Deletes the SQLite database file.
+        /*!
+          \return bool - Successfully deleted the db file.
+        */
+        bool deleteFile( void )
+        {
+            close(); // Close the database if it is already open
+            bool bRemoved = QFile::remove( _sFile ); // Remove created database binary file
 
-        QSqlError                   lastError( void );
+            if ( bRemoved )
+                qDebug( qPrintable( QObject::tr( "DatabaseManager: Removed %s" ) ), qPrintable( _sFile ) );
+            else
+                qDebug( qPrintable( QObject::tr( "DatabaseManager: Failed to remove %s" ) ), qPrintable( _sFile ) );
+
+            return bRemoved;
+        }
+
+        //! See if the SQL Lite file exists.
+        /*!
+          \return bool - DB file exists.
+        */
+        bool existsFile( void )
+        {
+            if ( _sFile == QString::null || !QFile::exists( _sFile ) )
+            {
+                qDebug( qPrintable( QObject::tr( "DatabaseManager: %s does not exist." ) ), qPrintable( _sFile ) );
+                return false;
+            }
+
+            qDebug( qPrintable( QObject::tr( "DatabaseManager: %s exists." ) ), qPrintable( _sFile ) );
+            return true;
+        }
+
+        //! Attempts to open the database (and creates the file if DNE).
+        /*!
+          \return bool - Successfully opened the database.
+        */
+        bool open( void )
+        {
+            _DB.setDatabaseName( _sFile );
+
+            if ( !_DB.open() ) // If database name (file) DNE it creates it then tries to open it
+            {
+                qDebug( qPrintable( QObject::tr( "DatabaseManager: Error opening %s: %s" ) ), qPrintable( _sFile ), qPrintable( _DB.lastError().databaseText() ) );
+                return false;
+            }
+
+            qDebug( qPrintable( QObject::tr( "DatabaseManager: Opened %s" ) ), qPrintable( _sFile ) );
+            return true;
+        }
+
+        //! Checks if the database is open or not.
+        /*!
+          \return bool - DB opened.
+        */
+        bool isOpen( void )
+        {
+            return _DB.isOpen();
+        }
+
+        //! Closes the database.
+        bool close( void )
+        {
+            qDebug( qPrintable( QObject::tr( "DatabaseManager: Closed %s" ) ), qPrintable( _sFile ) );
+            _DB.close();
+            return true;
+        }
+
+        QSqlDatabase getConnection( void )
+        {
+            return _DB;
+        }
+
+        //! Executes a query through the database.
+        /*!
+          \param query QSqlQuery which has been prepared and bound upon.
+          \return bool - Query executed successfully.
+        */
+        bool query( QSqlQuery &query )
+        {
+           bool ret = query.exec();
+           qDebug( qPrintable( QObject::tr( "DatabaseManager: Executing Query: %s" ) ), qPrintable( query.executedQuery() ) );
+           return ret;
+        }
+
+        //! Wrapper to return the SQLite database last error.
+        /*!
+          \return QSqlError - Returned by the SQLite database.
+        */
+        QSqlError lastError( void )
+        {
+            return _DB.lastError();
+        }
 };
 
 #endif

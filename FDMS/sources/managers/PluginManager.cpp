@@ -119,7 +119,8 @@ bool PluginManager::installPlugins( QList<PluginInfo> lInstallThesePlugins )
 
             if ( pDatabaseObjectPlugin && lInstallThesePlugins.contains( pDatabaseObjectPlugin->getInfo() ) )
             {
-                if ( !Plugin::save( pDatabaseObjectPlugin->getInfo(), calculatePluginHash( pluginsDir.absoluteFilePath( sFileName ) ) ) )
+                if ( !Plugin::save( pDatabaseObjectPlugin->getInfo(), calculatePluginHash( pluginsDir.absoluteFilePath( sFileName ) ) ) /*||
+                     !!pDatabaseObjectPlugin->getInstance()->createTable()*/ )
                 {
                     qDebug( qPrintable( QObject::tr( "PluginManager: Failed to install %s." ) ), qPrintable( pDatabaseObjectPlugin->getInfo().toString() ) );
                     return false;

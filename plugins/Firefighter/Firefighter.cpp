@@ -31,29 +31,30 @@ Firefighter::Firefighter( int iID )
 
 bool Firefighter::createTable( void )
 {
-    /*DatabaseManager *pDBM = getDatabaseManager();
+    DatabaseManager *pDBM = DatabaseManager::getInstance();
     QString queryString;
     QSqlQuery query;
 
-    queryString = "CREATE TABLE Plugins (name TEXT, version TEXT, hash TEXT)";
+    queryString = "CREATE TABLE Firefighters ("
+                  "PI_FirstName TEXT"
+                  ")";
 
     if ( !query.prepare( queryString ) )
     {
-        qDebug( qPrintable( QObject::tr( "Plugin: Could not prepare query '%s' due to: %s" ) ),
+        qDebug( qPrintable( QObject::tr( "Firefighter: Could not prepare query '%s' due to: %s" ) ),
                 qPrintable( queryString ), qPrintable( pDBM->lastError().text() ) );
-        qDebug( "%s", qPrintable( QObject::tr( "Plugin: Could not create table." ) ) );
+        qDebug( "%s", qPrintable( QObject::tr( "Firefighter: Could not create table." ) ) );
         return false;
     }
 
     if ( !pDBM->query( query ) )
     {
-        qDebug( qPrintable( QObject::tr( "Plugin: Could not run query '%s' due to: %s" ) ),
+        qDebug( qPrintable( QObject::tr( "Firefighter: Could not run query '%s' due to: %s" ) ),
                 qPrintable( queryString ), qPrintable( pDBM->lastError().text() ) );
-        qDebug( "%s", qPrintable( QObject::tr( "Plugin: Could not create table." ) ) );
+        qDebug( "%s", qPrintable( QObject::tr( "Firefighter: Could not create table." ) ) );
         return false;
     }
 
-    return true;*/
     return true;
 }
 
@@ -64,7 +65,7 @@ bool Firefighter::verifyTable( void )
 
 bool Firefighter::saveValues( void )
 {
-    /*QSqlTableModel model( 0, getDatabaseManagerConnection() );
+    /*QSqlTableModel model( 0, DatabaseManager::getInstance()->getConnection() );
 
     model.setTable( "Plugins" );
     model.insertRow( 0 );
@@ -74,12 +75,11 @@ bool Firefighter::saveValues( void )
 
     if ( !model.submitAll() )
     {
-        qDebug( qPrintable( QObject::tr( "Plugin: Could not save %s with hash %s due to: %s" ) ),
-                qPrintable( pluginInfo.toString() ), qPrintable( sHash ), qPrintable( model.lastError().text() ) );
+        qDebug( qPrintable( QObject::tr( "Firefighter: Could not save %d" ) ), _iID );
         return false;
     }
-*/
-    qDebug( qPrintable( QObject::tr( "Firefighter: Saved %d" ) ), _iID );
+
+    qDebug( qPrintable( QObject::tr( "Firefighter: Saved %d" ) ), _iID );*/
     return true;
 }
 

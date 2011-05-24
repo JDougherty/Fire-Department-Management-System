@@ -10,7 +10,6 @@ SOURCES += sources/main.cpp \
     sources/managers/PluginManager.cpp \
     sources/managers/SettingManager.cpp \
     sources/wndSetup.cpp \
-    sources/managers/DatabaseManager.cpp \
     sources/database_objects/Plugin.cpp
 	
 HEADERS += \
